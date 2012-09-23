@@ -33,6 +33,7 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.RegistryFactory;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IContributionItem;
+import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.SubContributionItem;
 import org.eclipse.jface.action.SubMenuManager;
@@ -62,7 +63,7 @@ public class MenuAnalyzer {
 	
 	public TranslatableMenuItem createTranslatableMenu() {
 		WorkbenchWindow window = (WorkbenchWindow)PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-		MenuManager menuManager = window.getMenuBarManager();
+		IMenuManager menuManager = window.getMenuBarManager();
 		
 		
 		return createTranslatableMenu(menuManager, null);
