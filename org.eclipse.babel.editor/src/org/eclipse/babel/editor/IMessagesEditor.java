@@ -11,7 +11,7 @@
 package org.eclipse.babel.editor;
 
 public interface IMessagesEditor {
-	String getSelectedKey();
+    String getSelectedKey();
 
-	void setSelectedKey(String key);
+    void setSelectedKey(String key);
 }

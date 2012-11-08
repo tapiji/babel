@@ -17,29 +17,32 @@ import org.eclipse.babel.build.core.ResourceProxy;
 import org.eclipse.babel.build.core.coverage.PluginCoverageInformation;
 import org.eclipse.babel.build.core.coverage.ResourceCoverageInformation;
 
-
 public interface CoverageReport {
-	public static class utils{
-		public static final int calculateCoverageScore(LocaleProxy locale, ResourceProxy resource, PluginCoverageInformation info){
-			ResourceCoverageInformation resourceInfo = info.getResourceCoverage().get(resource.getRelativePath());
-			
-			if(resourceInfo == null){
-				return 0;
-			}
-			
-			Boolean matchingForLocale = resourceInfo.getMatchingForLocale(locale);
-			if(matchingForLocale == null){
-				return 0;
-			}
-			
-			Integer coverage = resourceInfo.getMatchedPercentageForLocale(locale);
-			if(coverage != null){
-				return coverage;
-			}
-			
-			return matchingForLocale ? 100 : 0;
-		}
-	}
-	
-	public void render(OutputStream stream) throws Exception;
+    public static class utils {
+        public static final int calculateCoverageScore(LocaleProxy locale,
+                ResourceProxy resource, PluginCoverageInformation info) {
+            ResourceCoverageInformation resourceInfo = info
+                    .getResourceCoverage().get(resource.getRelativePath());
+
+            if (resourceInfo == null) {
+                return 0;
+            }
+
+            Boolean matchingForLocale = resourceInfo
+                    .getMatchingForLocale(locale);
+            if (matchingForLocale == null) {
+                return 0;
+            }
+
+            Integer coverage = resourceInfo
+                    .getMatchedPercentageForLocale(locale);
+            if (coverage != null) {
+                return coverage;
+            }
+
+            return matchingForLocale ? 100 : 0;
+        }
+    }
+
+    public void render(OutputStream stream) throws Exception;
 }

@@ -14,16 +14,16 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class CoverageReport {
-	private final List<Ignore> ignores = new LinkedList<Ignore>();
-	
-	public Ignore createIgnore(){
-		Ignore ignore = new Ignore();
-		ignores.add(ignore);
-		return ignore;
-	}
-	
-	public List<Ignore> ignores(){
-		return ignores;
-	}
+    private final List<Ignore> ignores = new LinkedList<Ignore>();
+
+    public Ignore createIgnore() {
+        Ignore ignore = new Ignore();
+        ignores.add(ignore);
+        return ignore;
+    }
+
+    public List<Ignore> ignores() {
+        return ignores;
+    }
 
 }

@@ -11,22 +11,22 @@
 package org.eclipse.babel.build.core.exceptions;
 
 public class FailedDeletionException extends Exception {
-	
-	static final long serialVersionUID = 3L;
 
-	public FailedDeletionException() {
-	}
+    static final long serialVersionUID = 3L;
 
-	public FailedDeletionException(String arg0) {
-		super(arg0);
-	}
+    public FailedDeletionException() {
+    }
 
-	public FailedDeletionException(Throwable arg0) {
-		super(arg0);
-	}
+    public FailedDeletionException(String arg0) {
+        super(arg0);
+    }
 
-	public FailedDeletionException(String arg0, Throwable arg1) {
-		super(arg0, arg1);
-	}
+    public FailedDeletionException(Throwable arg0) {
+        super(arg0);
+    }
+
+    public FailedDeletionException(String arg0, Throwable arg1) {
+        super(arg0, arg1);
+    }
 
 }

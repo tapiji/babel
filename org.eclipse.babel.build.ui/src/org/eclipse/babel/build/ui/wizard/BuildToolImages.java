@@ -17,19 +17,21 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.resource.ImageDescriptor;
 
-
 public class BuildToolImages {
-	public final static String ICONS_PATH = "icons/"; //$NON-NLS-1$
-	
-	public static final ImageDescriptor PLUGIN = create(ICONS_PATH, "plugin.gif"); //$NON-NLS-1$
-	public static final ImageDescriptor LOCALE = create(ICONS_PATH, "locale.gif"); //$NON-NLS-1$
+    public final static String ICONS_PATH = "icons/"; //$NON-NLS-1$
 
-	private static ImageDescriptor create(String prefix, String name) {
-		return ImageDescriptor.createFromURL(makeImageURL(prefix, name));
-	}
-	
-	private static URL makeImageURL(String prefix, String name) {
-		String path = "$nl$/" + prefix + name; //$NON-NLS-1$
-		return FileLocator.find(Activator.getDefault().getBundle(), new Path(path), null);
-	}
+    public static final ImageDescriptor PLUGIN = create(ICONS_PATH,
+            "plugin.gif"); //$NON-NLS-1$
+    public static final ImageDescriptor LOCALE = create(ICONS_PATH,
+            "locale.gif"); //$NON-NLS-1$
+
+    private static ImageDescriptor create(String prefix, String name) {
+        return ImageDescriptor.createFromURL(makeImageURL(prefix, name));
+    }
+
+    private static URL makeImageURL(String prefix, String name) {
+        String path = "$nl$/" + prefix + name; //$NON-NLS-1$
+        return FileLocator.find(Activator.getDefault().getBundle(), new Path(
+                path), null);
+    }
 }

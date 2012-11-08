@@ -30,10 +30,10 @@ public class RenameKeyAction extends AbstractTreeAction {
      * 
      */
     public RenameKeyAction(MessagesEditor editor, TreeViewer treeViewer) {
-	super(editor, treeViewer);
-	setText(MessagesEditorPlugin.getString("key.rename") + " ..."); //$NON-NLS-1$
-	setImageDescriptor(UIUtils.getImageDescriptor(UIUtils.IMAGE_RENAME));
-	setToolTipText("TODO put something here"); // TODO put tooltip
+        super(editor, treeViewer);
+        setText(MessagesEditorPlugin.getString("key.rename") + " ..."); //$NON-NLS-1$
+        setImageDescriptor(UIUtils.getImageDescriptor(UIUtils.IMAGE_RENAME));
+        setToolTipText("TODO put something here"); // TODO put tooltip
     }
 
     /**
@@ -41,19 +41,19 @@ public class RenameKeyAction extends AbstractTreeAction {
      */
     @Override
     public void run() {
-	KeyTreeNode node = getNodeSelection();
+        KeyTreeNode node = getNodeSelection();
 
-	// Rename single item
-	RenameKeyProcessor refactoring = new RenameKeyProcessor(node,
-		getBundleGroup());
+        // Rename single item
+        RenameKeyProcessor refactoring = new RenameKeyProcessor(node,
+                getBundleGroup());
 
-	RefactoringWizard wizard = new RenameKeyWizard(node, refactoring);
-	try {
-	    RefactoringWizardOpenOperation operation = new RefactoringWizardOpenOperation(
-		    wizard);
-	    operation.run(getShell(), "Introduce Indirection");
-	} catch (InterruptedException exception) {
-	    // Do nothing
-	}
+        RefactoringWizard wizard = new RenameKeyWizard(node, refactoring);
+        try {
+            RefactoringWizardOpenOperation operation = new RefactoringWizardOpenOperation(
+                    wizard);
+            operation.run(getShell(), "Introduce Indirection");
+        } catch (InterruptedException exception) {
+            // Do nothing
+        }
     }
 }

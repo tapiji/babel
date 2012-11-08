@@ -37,69 +37,73 @@ import org.eclipse.babel.build.core.xml.Element;
 import org.eclipse.babel.build.core.xml.XmlWriter;
 import org.eclipse.babel.build.core.xml.Builder.ToNode;
 
+public class XmlCoverageReport implements CoverageReport {
+    public class ResourceToNode implements ToNode<ResourceProxy> {
 
-public class XmlCoverageReport implements CoverageReport{
-	public class ResourceToNode implements ToNode<ResourceProxy> {
+        private final PluginCoverageInformation info;
+        private final PluginProxy plugin;
 
-		private final PluginCoverageInformation info;
-		private final PluginProxy plugin;
+        public ResourceToNode(PluginCoverageInformation info) {
+            this.info = info;
+            plugin = info.getEclipseArchivePlugin();
+        }
 
-		public ResourceToNode(PluginCoverageInformation info) {
-			this.info = info;
-			plugin = info.getEclipseArchivePlugin();
-		}
+        public Element toNode(final ResourceProxy resource) {
+            if (!config.includeResource(plugin, resource)) {
+                return resource(resource.getRelativePath(), true);
+            }
 
-		public Element toNode(final ResourceProxy resource) {
-			if(!config.includeResource(plugin, resource)){
-				return resource(resource.getRelativePath(), true);
-			}
-			
-			return resource(resource.getRelativePath(),
-				sequence(config.locales(), new ToNode<LocaleProxy>(){
-					public Element toNode(LocaleProxy locale) {
-						int score = CoverageReport.utils.calculateCoverageScore(locale, resource, info);
-						return locale(locale.getName(), score);
-					}
-				}));
-		}
-	}
+            return resource(resource.getRelativePath(),
+                    sequence(config.locales(), new ToNode<LocaleProxy>() {
+                        public Element toNode(LocaleProxy locale) {
+                            int score = CoverageReport.utils
+                                    .calculateCoverageScore(locale, resource,
+                                            info);
+                            return locale(locale.getName(), score);
+                        }
+                    }));
+        }
+    }
 
-	public static class LocaleToNode implements ToNode<LocaleProxy> {
-		public Element toNode(LocaleProxy locale) {
-			return locale(locale.getName());
-		}
-	}
+    public static class LocaleToNode implements ToNode<LocaleProxy> {
+        public Element toNode(LocaleProxy locale) {
+            return locale(locale.getName());
+        }
+    }
 
-	private final Configuration config;
-	private final LanguagePackCoverageReport coverage;
+    private final Configuration config;
+    private final LanguagePackCoverageReport coverage;
 
-	public XmlCoverageReport(Configuration config, LanguagePackCoverageReport coverage){
-		this.config = config;
-		this.coverage = coverage;
-	}
+    public XmlCoverageReport(Configuration config,
+            LanguagePackCoverageReport coverage) {
+        this.config = config;
+        this.coverage = coverage;
+    }
 
-	public Element build() {
-		return coverage(config.timestamp() == null ? new Date().toString() : config.timestamp().toString(),
-				archive(config.eclipseInstall().getLocation().getAbsolutePath()),
-				translations(config.translations().getRootDirectory().getAbsolutePath()),
-				output(config.workingDirectory().getAbsolutePath()),
-				locales(sequence(config.locales(), new LocaleToNode())),
-				plugins(sequence(coverage.getPluginCoverageReports(), new PluginToNode()))
-		);
-	}
+    public Element build() {
+        return coverage(
+                config.timestamp() == null ? new Date().toString() : config
+                        .timestamp().toString(),
+                archive(config.eclipseInstall().getLocation().getAbsolutePath()),
+                translations(config.translations().getRootDirectory()
+                        .getAbsolutePath()),
+                output(config.workingDirectory().getAbsolutePath()),
+                locales(sequence(config.locales(), new LocaleToNode())),
+                plugins(sequence(coverage.getPluginCoverageReports(),
+                        new PluginToNode())));
+    }
 
-	private class PluginToNode implements ToNode<PluginCoverageInformation> {
-		
-		public Element toNode(PluginCoverageInformation info) {
-			PluginProxy plugin = info.getEclipseArchivePlugin();
-			return plugin(plugin.getName(), plugin.getVersion(),
-				sequence(plugin.getResources(), new ResourceToNode(info))
-			);
-		}
-		
-	}
+    private class PluginToNode implements ToNode<PluginCoverageInformation> {
 
-	public void render(OutputStream stream) throws Exception {
-		build().render(new XmlWriter(stream));
-	}
+        public Element toNode(PluginCoverageInformation info) {
+            PluginProxy plugin = info.getEclipseArchivePlugin();
+            return plugin(plugin.getName(), plugin.getVersion(),
+                    sequence(plugin.getResources(), new ResourceToNode(info)));
+        }
+
+    }
+
+    public void render(OutputStream stream) throws Exception {
+        build().render(new XmlWriter(stream));
+    }
 }

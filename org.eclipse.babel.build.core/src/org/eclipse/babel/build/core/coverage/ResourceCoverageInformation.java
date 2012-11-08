@@ -18,51 +18,50 @@ import java.util.Set;
 import org.eclipse.babel.build.core.LocaleProxy;
 import org.eclipse.babel.build.core.ResourceProxy;
 
-
 public class ResourceCoverageInformation {
-	private final ResourceProxy resource;
-	private Map<LocaleProxy, Boolean> matchingByLocale = new HashMap<LocaleProxy, Boolean>();
-	private Map<LocaleProxy, Integer> matchedPercentageForLocale = new HashMap<LocaleProxy, Integer>();
-	
-	public ResourceCoverageInformation(ResourceProxy resource){
-		this.resource = resource;
-	}
+    private final ResourceProxy resource;
+    private Map<LocaleProxy, Boolean> matchingByLocale = new HashMap<LocaleProxy, Boolean>();
+    private Map<LocaleProxy, Integer> matchedPercentageForLocale = new HashMap<LocaleProxy, Integer>();
 
-	public ResourceProxy getResource() {
-		return resource;
-	}
-	
-	public void setMatchingForLocale(LocaleProxy locale, Boolean matched) {
-		this.matchingByLocale.put(locale, matched);
-	}
-	
-	public Boolean getMatchingForLocale(LocaleProxy locale) {
-		return this.matchingByLocale.get(locale);
-	}
-	
-	public Boolean getMatchingForLocale(String locale) {
-		for (LocaleProxy localeFromList: matchingByLocale.keySet()) {
-			if (localeFromList.getName().compareToIgnoreCase(locale) == 0) {
-				return this.matchingByLocale.get(localeFromList);
-			}
-		}
-		
-		return false;
-	}
-	
-	public void setMatchedPercentageForLocale(LocaleProxy locale, Integer value) {
-		this.matchedPercentageForLocale.put(locale, value);
-	}
-	
-	public Integer getMatchedPercentageForLocale(LocaleProxy locale) {
-		return this.matchedPercentageForLocale.get(locale);
-	}
-	
-	public Set<LocaleProxy> getRecordedLocales() {
-		return this.matchingByLocale.keySet();
-	}
-	
-	public Map<LocaleProxy, Boolean> getLocaleMatchMap(){
-		return Collections.unmodifiableMap(matchingByLocale);
-	}
+    public ResourceCoverageInformation(ResourceProxy resource) {
+        this.resource = resource;
+    }
+
+    public ResourceProxy getResource() {
+        return resource;
+    }
+
+    public void setMatchingForLocale(LocaleProxy locale, Boolean matched) {
+        this.matchingByLocale.put(locale, matched);
+    }
+
+    public Boolean getMatchingForLocale(LocaleProxy locale) {
+        return this.matchingByLocale.get(locale);
+    }
+
+    public Boolean getMatchingForLocale(String locale) {
+        for (LocaleProxy localeFromList : matchingByLocale.keySet()) {
+            if (localeFromList.getName().compareToIgnoreCase(locale) == 0) {
+                return this.matchingByLocale.get(localeFromList);
+            }
+        }
+
+        return false;
+    }
+
+    public void setMatchedPercentageForLocale(LocaleProxy locale, Integer value) {
+        this.matchedPercentageForLocale.put(locale, value);
+    }
+
+    public Integer getMatchedPercentageForLocale(LocaleProxy locale) {
+        return this.matchedPercentageForLocale.get(locale);
+    }
+
+    public Set<LocaleProxy> getRecordedLocales() {
+        return this.matchingByLocale.keySet();
+    }
+
+    public Map<LocaleProxy, Boolean> getLocaleMatchMap() {
+        return Collections.unmodifiableMap(matchingByLocale);
+    }
 }

@@ -16,16 +16,17 @@ import org.eclipse.ui.IMemento;
 
 public class LocalizationEditorInputFactory implements IElementFactory {
 
-	public static final String FACTORY_ID = "org.eclipse.pde.nls.ui.LocalizationEditorInputFactory"; //$NON-NLS-1$
+    public static final String FACTORY_ID = "org.eclipse.pde.nls.ui.LocalizationEditorInputFactory"; //$NON-NLS-1$
 
-	public LocalizationEditorInputFactory() {
-	}
+    public LocalizationEditorInputFactory() {
+    }
 
-	/*
-	 * @see org.eclipse.ui.IElementFactory#createElement(org.eclipse.ui.IMemento)
-	 */
-	public IAdaptable createElement(IMemento memento) {
-		return new LocalizationEditorInput();
-	}
+    /*
+     * @see
+     * org.eclipse.ui.IElementFactory#createElement(org.eclipse.ui.IMemento)
+     */
+    public IAdaptable createElement(IMemento memento) {
+        return new LocalizationEditorInput();
+    }
 
 }

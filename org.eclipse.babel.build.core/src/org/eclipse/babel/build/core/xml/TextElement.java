@@ -16,19 +16,19 @@ import org.xml.sax.SAXException;
 /**
  * Implements a Builder text node.
  */
-public class TextElement implements Element{
-	private final String text;
-	
-	public TextElement(String text){
-		this.text = text;
-	}
-	
-	public void render(ContentHandler handler) throws SAXException {
-		char[] ch = text.toCharArray();
-		handler.characters(ch, 0, ch.length);
-	}
+public class TextElement implements Element {
+    private final String text;
 
-	public Element attribute(String name, String value) {
-		throw new UnsupportedOperationException();
-	}
+    public TextElement(String text) {
+        this.text = text;
+    }
+
+    public void render(ContentHandler handler) throws SAXException {
+        char[] ch = text.toCharArray();
+        handler.characters(ch, 0, ch.length);
+    }
+
+    public Element attribute(String name, String value) {
+        throw new UnsupportedOperationException();
+    }
 }

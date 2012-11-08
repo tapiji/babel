@@ -30,27 +30,28 @@ import org.eclipse.swt.widgets.Text;
 
 /**
  * Tree for displaying and navigating through resource bundle keys.
+ * 
  * @author Pascal Essiembre
  */
 public class SideNavTextBoxComposite extends Composite {
 
-        
     /** Whether to synchronize the add text box with tree key selection. */
     private boolean syncAddTextBox = true;
-    
+
     /** Text box to add a new key. */
     private Text addTextBox;
 
     private MessagesEditor editor;
-    
+
     /**
      * Constructor.
-     * @param parent parent composite
-     * @param keyTree key tree
+     * 
+     * @param parent
+     *            parent composite
+     * @param keyTree
+     *            key tree
      */
-    public SideNavTextBoxComposite(
-            Composite parent,
-            final MessagesEditor editor) {
+    public SideNavTextBoxComposite(Composite parent, final MessagesEditor editor) {
         super(parent, SWT.NONE);
         this.editor = editor;
 
@@ -89,9 +90,9 @@ public class SideNavTextBoxComposite extends Composite {
                 String key = addTextBox.getText();
                 if (event.character == SWT.CR && isNewKey(key)) {
                     addKey(key);
-                } else if (key.length() > 0){
+                } else if (key.length() > 0) {
                     NodePathRegexVisitor visitor = new NodePathRegexVisitor(
-                            "^" + key + ".*");  //$NON-NLS-1$//$NON-NLS-2$
+                            "^" + key + ".*"); //$NON-NLS-1$//$NON-NLS-2$
                     editor.getKeyTreeModel().accept(visitor, null);
                     IKeyTreeNode node = visitor.getKeyTreeNode();
                     if (node != null) {
@@ -114,14 +115,14 @@ public class SideNavTextBoxComposite extends Composite {
                 syncAddTextBox = true;
             }
         });
-        
+
     }
-    
+
     private void addKey(String key) {
         editor.getBundleGroup().addMessages(key);
         editor.setSelectedKey(key);
     }
-    
+
     private boolean isNewKey(String key) {
         return !editor.getBundleGroup().isMessageKey(key) && key.length() > 0;
     }

@@ -20,54 +20,61 @@ import org.eclipse.swt.widgets.Text;
 
 public class EditMultiLineEntryDialog extends Dialog {
 
-	private Text textWidget;
-	private String text;
-	private boolean readOnly;
-	
-	protected EditMultiLineEntryDialog(Shell parentShell, String initialInput, boolean readOnly) {
-		super(parentShell);
-		this.readOnly = readOnly;
-		setShellStyle(getShellStyle() | SWT.RESIZE);
-		text = initialInput;
-	}
-	
-	/*
-	 * @see org.eclipse.jface.window.Window#configureShell(org.eclipse.swt.widgets.Shell)
-	 */
-	@Override
-	protected void configureShell(Shell newShell) {
-		super.configureShell(newShell);
-		newShell.setText("Edit Resource Bundle Entry");
-	}
+    private Text textWidget;
+    private String text;
+    private boolean readOnly;
 
-	public String getValue() {
-		return text;
-	}
-	
-	/*
-	 * @see org.eclipse.jface.dialogs.Dialog#createDialogArea(org.eclipse.swt.widgets.Composite)
-	 */
-	@Override
-	protected Control createDialogArea(Composite parent) {
-		Composite composite = (Composite) super.createDialogArea(parent);
-		
-		int readOnly = this.readOnly ? SWT.READ_ONLY : 0;
-		Text text = new Text(composite, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER | readOnly);
-		text.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).hint(350, 150).create());
-		text.setText(text == null ? "" : this.text);
-		
-		textWidget = text;
-		
-		return composite;
-	}
-	
-	/*
-	 * @see org.eclipse.jface.dialogs.Dialog#okPressed()
-	 */
-	@Override
-	protected void okPressed() {
-		text = textWidget.getText();
-		super.okPressed();
-	}
+    protected EditMultiLineEntryDialog(Shell parentShell, String initialInput,
+            boolean readOnly) {
+        super(parentShell);
+        this.readOnly = readOnly;
+        setShellStyle(getShellStyle() | SWT.RESIZE);
+        text = initialInput;
+    }
+
+    /*
+     * @see
+     * org.eclipse.jface.window.Window#configureShell(org.eclipse.swt.widgets
+     * .Shell)
+     */
+    @Override
+    protected void configureShell(Shell newShell) {
+        super.configureShell(newShell);
+        newShell.setText("Edit Resource Bundle Entry");
+    }
+
+    public String getValue() {
+        return text;
+    }
+
+    /*
+     * @see
+     * org.eclipse.jface.dialogs.Dialog#createDialogArea(org.eclipse.swt.widgets
+     * .Composite)
+     */
+    @Override
+    protected Control createDialogArea(Composite parent) {
+        Composite composite = (Composite) super.createDialogArea(parent);
+
+        int readOnly = this.readOnly ? SWT.READ_ONLY : 0;
+        Text text = new Text(composite, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL
+                | SWT.BORDER | readOnly);
+        text.setLayoutData(GridDataFactory.fillDefaults().grab(true, true)
+                .hint(350, 150).create());
+        text.setText(text == null ? "" : this.text);
+
+        textWidget = text;
+
+        return composite;
+    }
+
+    /*
+     * @see org.eclipse.jface.dialogs.Dialog#okPressed()
+     */
+    @Override
+    protected void okPressed() {
+        text = textWidget.getText();
+        super.okPressed();
+    }
 
 }

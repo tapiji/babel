@@ -24,95 +24,101 @@ import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 
 /**
- * A content handler which serialises SAX events to a stream.
- * Useful for serialising XML documents.
+ * A content handler which serialises SAX events to a stream. Useful for
+ * serialising XML documents.
  * 
- * For a higher level XML serialisation library {@link org.eclipse.babel.build.core.xml.Builder}
+ * For a higher level XML serialisation library
+ * {@link org.eclipse.babel.build.core.xml.Builder}
  */
 public class XmlWriter implements ContentHandler {
-	
-	private final PrintWriter out;
-	
-	public XmlWriter(PrintWriter out){
-		this.out = out;
-	}
-	
-	public XmlWriter(Writer out){
-		this(new PrintWriter(out));
-	}
-	
-	
-	public XmlWriter(OutputStream out) {
-		this(new OutputStreamWriter(out));
-	}
 
-	public void characters(char[] ch, int start, int length) throws SAXException {
-		out.write(ch, start, length);
-	}
+    private final PrintWriter out;
 
-	public void endDocument() throws SAXException {
-		out.flush();
-	}
+    public XmlWriter(PrintWriter out) {
+        this.out = out;
+    }
 
-	public void endElement(String uri, String localName, String name) throws SAXException {
-		out.format("</%s>\n", localName);
-	}
+    public XmlWriter(Writer out) {
+        this(new PrintWriter(out));
+    }
 
-	public void endPrefixMapping(String prefix) throws SAXException {
-		throw new UnsupportedOperationException();
-	}
+    public XmlWriter(OutputStream out) {
+        this(new OutputStreamWriter(out));
+    }
 
-	public void ignorableWhitespace(char[] ch, int start, int length) throws SAXException {
-		throw new UnsupportedOperationException();
-	}
+    public void characters(char[] ch, int start, int length)
+            throws SAXException {
+        out.write(ch, start, length);
+    }
 
-	public void processingInstruction(String target, String data) throws SAXException {
-		throw new UnsupportedOperationException();
-	}
+    public void endDocument() throws SAXException {
+        out.flush();
+    }
 
-	public void setDocumentLocator(Locator locator) {
-		throw new UnsupportedOperationException();
-	}
+    public void endElement(String uri, String localName, String name)
+            throws SAXException {
+        out.format("</%s>\n", localName);
+    }
 
-	public void skippedEntity(String name) throws SAXException {
-		throw new UnsupportedOperationException();
-	}
+    public void endPrefixMapping(String prefix) throws SAXException {
+        throw new UnsupportedOperationException();
+    }
 
-	public void startDocument() throws SAXException {
-		out.format("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-	}
+    public void ignorableWhitespace(char[] ch, int start, int length)
+            throws SAXException {
+        throw new UnsupportedOperationException();
+    }
 
-	public void startElement(String uri, String localName, String name, Attributes atts) throws SAXException {
-		List<String> attrs = new LinkedList<String>();
-		int len = atts.getLength();
-		
-		if(len > 0){
-			attrs.add("");
-		}
-		for(int i = 0; i < len; i++){
-			attrs.add(String.format("%s=\"%s\"", atts.getQName(i), atts.getValue(i)));
-		}
-		
-		out.format("<%s%s>", localName, join(" ", attrs));
-	}
+    public void processingInstruction(String target, String data)
+            throws SAXException {
+        throw new UnsupportedOperationException();
+    }
 
-	private <T> String join(String seperator, Iterable<T> parts){
-		StringBuilder builder = new StringBuilder("");
-		for(Iterator<T> it = parts.iterator(); it.hasNext();){
-			T part = it.next();
-			
-			builder.append(part.toString());
-			if(it.hasNext()){
-				builder.append(seperator);
-			}
-		}
-		
-		return builder.toString();
-	}
+    public void setDocumentLocator(Locator locator) {
+        throw new UnsupportedOperationException();
+    }
 
-	public void startPrefixMapping(String prefix, String uri)
-			throws SAXException {
-		throw new UnsupportedOperationException();
-	}
+    public void skippedEntity(String name) throws SAXException {
+        throw new UnsupportedOperationException();
+    }
+
+    public void startDocument() throws SAXException {
+        out.format("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+    }
+
+    public void startElement(String uri, String localName, String name,
+            Attributes atts) throws SAXException {
+        List<String> attrs = new LinkedList<String>();
+        int len = atts.getLength();
+
+        if (len > 0) {
+            attrs.add("");
+        }
+        for (int i = 0; i < len; i++) {
+            attrs.add(String.format("%s=\"%s\"", atts.getQName(i),
+                    atts.getValue(i)));
+        }
+
+        out.format("<%s%s>", localName, join(" ", attrs));
+    }
+
+    private <T> String join(String seperator, Iterable<T> parts) {
+        StringBuilder builder = new StringBuilder("");
+        for (Iterator<T> it = parts.iterator(); it.hasNext();) {
+            T part = it.next();
+
+            builder.append(part.toString());
+            if (it.hasNext()) {
+                builder.append(seperator);
+            }
+        }
+
+        return builder.toString();
+    }
+
+    public void startPrefixMapping(String prefix, String uri)
+            throws SAXException {
+        throw new UnsupportedOperationException();
+    }
 
 }

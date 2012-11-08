@@ -12,8 +12,8 @@ package org.eclipse.pde.nls.internal.ui.dialogs;
 
 public class FilterOptions {
 
-	public boolean filterPlugins; 
-	public String[] pluginPatterns; 
-	public boolean keysWithMissingEntriesOnly; 
+    public boolean filterPlugins;
+    public String[] pluginPatterns;
+    public boolean keysWithMissingEntriesOnly;
 
 }

@@ -14,22 +14,19 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public interface CoverageReport {
-	public static class helper{
-		public static void serialize(OutputStream out){
-			// TODO: stub
-		}
-		
-		public static CoverageReport parse(InputStream in){
-			// TODO: stub
-			return null; 
-		}
-	}
-	/**
-	public List<LocaleProxy> locales();
-	public List<PluginProxy> plugins();
-	public Date timestamp();
-	public EclipseArchive archive();
-	public TranslationArchive translations();
-	public LanguagePack catalogue();
-	*/
+    public static class helper {
+        public static void serialize(OutputStream out) {
+            // TODO: stub
+        }
+
+        public static CoverageReport parse(InputStream in) {
+            // TODO: stub
+            return null;
+        }
+    }
+    /**
+     * public List<LocaleProxy> locales(); public List<PluginProxy> plugins();
+     * public Date timestamp(); public EclipseArchive archive(); public
+     * TranslationArchive translations(); public LanguagePack catalogue();
+     */
 }

@@ -17,7 +17,7 @@ import org.eclipse.jface.viewers.TreeViewer;
 
 /**
  * @author Pascal Essiembre
- *
+ * 
  */
 public class CollapseAllAction extends AbstractTreeAction {
 
@@ -28,9 +28,9 @@ public class CollapseAllAction extends AbstractTreeAction {
     public CollapseAllAction(MessagesEditor editor, TreeViewer treeViewer) {
         super(editor, treeViewer);
         setText(MessagesEditorPlugin.getString("key.collapseAll")); //$NON-NLS-1$
-        setImageDescriptor(
-                UIUtils.getImageDescriptor(UIUtils.IMAGE_COLLAPSE_ALL));
-        setToolTipText("Collapse all"); //TODO put tooltip
+        setImageDescriptor(UIUtils
+                .getImageDescriptor(UIUtils.IMAGE_COLLAPSE_ALL));
+        setToolTipText("Collapse all"); // TODO put tooltip
     }
 
     /**

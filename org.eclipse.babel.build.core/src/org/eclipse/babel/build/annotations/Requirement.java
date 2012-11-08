@@ -11,5 +11,5 @@
 package org.eclipse.babel.build.annotations;
 
 public @interface Requirement {
-	int[]    id();
+    int[] id();
 }

@@ -12,14 +12,14 @@ package org.eclipse.pde.nls.internal.ui.model;
 
 public abstract class ResourceBundleElement {
 
-	private final ResourceBundleElement parent;
+    private final ResourceBundleElement parent;
 
-	public ResourceBundleElement(ResourceBundleElement parent) {
-		this.parent = parent;
-	}
-	
-	public ResourceBundleElement getParent() {
-		return parent;
-	}
+    public ResourceBundleElement(ResourceBundleElement parent) {
+        this.parent = parent;
+    }
+
+    public ResourceBundleElement getParent() {
+        return parent;
+    }
 
 }

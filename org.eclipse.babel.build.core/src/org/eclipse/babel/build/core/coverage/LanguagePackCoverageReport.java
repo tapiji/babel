@@ -18,42 +18,51 @@ import java.util.Map;
 
 import org.eclipse.babel.build.core.LocaleProxy;
 
-
 public class LanguagePackCoverageReport implements CoverageReport {
-	private List<PluginCoverageInformation> pluginCoverageReports = new ArrayList<PluginCoverageInformation>();
-	private Map<LocaleProxy, Integer> matchesPerLocale = new HashMap<LocaleProxy, Integer>();
-	private List<LocaleProxy> locales = new ArrayList<LocaleProxy>();
-	
-	public LanguagePackCoverageReport(Collection<LocaleProxy> locales) {
-		super();
-		this.locales.addAll(locales);
-		initializeMap();
-	}
-	
-	/** Adds coverage information about a single plug-in to overall coverage report. */
-	public void addPluginCoverageToReport(PluginCoverageInformation pluginCoverageInformation) {		
-		this.pluginCoverageReports.add(pluginCoverageInformation);
-		
-		for (LocaleProxy locale : pluginCoverageInformation.getPluginMatchingPerLocale().keySet()) {
-			if (pluginCoverageInformation.getPluginMatchingPerLocale().get(locale)) {
-				this.matchesPerLocale.put(locale, this.matchesPerLocale.get(locale) + 1);
-			}
-		}
-	}
+    private List<PluginCoverageInformation> pluginCoverageReports = new ArrayList<PluginCoverageInformation>();
+    private Map<LocaleProxy, Integer> matchesPerLocale = new HashMap<LocaleProxy, Integer>();
+    private List<LocaleProxy> locales = new ArrayList<LocaleProxy>();
 
-	/** Returns coverage information about each individual plug-in in the Eclipse install. */
-	public List<PluginCoverageInformation> getPluginCoverageReports() {
-		return pluginCoverageReports;
-	}
-	
-	/** Returns number of matched plug-ins for each locale. */
-	public Map<LocaleProxy, Integer> getMatchesPerLocale() {
-		return matchesPerLocale;
-	}
-	
-	private void initializeMap() {
-		for (LocaleProxy locale : locales) {
-			this.matchesPerLocale.put(locale, 0);
-		}
-	}
+    public LanguagePackCoverageReport(Collection<LocaleProxy> locales) {
+        super();
+        this.locales.addAll(locales);
+        initializeMap();
+    }
+
+    /**
+     * Adds coverage information about a single plug-in to overall coverage
+     * report.
+     */
+    public void addPluginCoverageToReport(
+            PluginCoverageInformation pluginCoverageInformation) {
+        this.pluginCoverageReports.add(pluginCoverageInformation);
+
+        for (LocaleProxy locale : pluginCoverageInformation
+                .getPluginMatchingPerLocale().keySet()) {
+            if (pluginCoverageInformation.getPluginMatchingPerLocale().get(
+                    locale)) {
+                this.matchesPerLocale.put(locale,
+                        this.matchesPerLocale.get(locale) + 1);
+            }
+        }
+    }
+
+    /**
+     * Returns coverage information about each individual plug-in in the Eclipse
+     * install.
+     */
+    public List<PluginCoverageInformation> getPluginCoverageReports() {
+        return pluginCoverageReports;
+    }
+
+    /** Returns number of matched plug-ins for each locale. */
+    public Map<LocaleProxy, Integer> getMatchesPerLocale() {
+        return matchesPerLocale;
+    }
+
+    private void initializeMap() {
+        for (LocaleProxy locale : locales) {
+            this.matchesPerLocale.put(locale, 0);
+        }
+    }
 }

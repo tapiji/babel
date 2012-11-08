@@ -14,24 +14,23 @@ import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 
 /**
- * Implements a Builder document element. 
+ * Implements a Builder document element.
  */
 public class Document implements Element {
-	private final Element root;
-	
+    private final Element root;
 
-	public Document(Element root) {
-		this.root = root;
-	}
+    public Document(Element root) {
+        this.root = root;
+    }
 
-	public void render(ContentHandler handler) throws SAXException {
-		handler.startDocument();
-		root.render(handler);
-		handler.endDocument();
-	}
+    public void render(ContentHandler handler) throws SAXException {
+        handler.startDocument();
+        root.render(handler);
+        handler.endDocument();
+    }
 
-	public Element attribute(String name, String value) {
-		root.attribute(name, value);
-		return this;
-	}
+    public Element attribute(String name, String value) {
+        root.attribute(name, value);
+        return this;
+    }
 }

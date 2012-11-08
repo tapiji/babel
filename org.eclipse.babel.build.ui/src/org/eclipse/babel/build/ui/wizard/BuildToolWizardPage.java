@@ -15,26 +15,28 @@ import org.eclipse.pde.core.IModelProviderEvent;
 import org.eclipse.pde.core.IModelProviderListener;
 import org.eclipse.swt.widgets.Composite;
 
-public class BuildToolWizardPage extends WizardPage implements IModelProviderListener{
+public class BuildToolWizardPage extends WizardPage implements
+        IModelProviderListener {
 
-	public BuildToolWizardPage(String pageName) {
-		super(pageName);
-	}
-	
-	public void createControl(Composite parent) {
-	}
-	
-	public void modelsChanged(IModelProviderEvent event) {
-	}
-	
-	public void storeSettings(){}
+    public BuildToolWizardPage(String pageName) {
+        super(pageName);
+    }
 
-	protected <T> T not_null(T... ts) {
-		for(T t : ts){
-			if(t != null){
-				return t;
-			}
-		}
-		return null;
-	}
+    public void createControl(Composite parent) {
+    }
+
+    public void modelsChanged(IModelProviderEvent event) {
+    }
+
+    public void storeSettings() {
+    }
+
+    protected <T> T not_null(T... ts) {
+        for (T t : ts) {
+            if (t != null) {
+                return t;
+            }
+        }
+        return null;
+    }
 }

@@ -24,83 +24,95 @@ import org.eclipse.babel.build.core.exceptions.InvalidFilenameException;
 import org.eclipse.babel.build.core.exceptions.InvalidLocationException;
 import org.eclipse.babel.build.core.exceptions.MissingLocationException;
 
-
 public class TranslationCatalogue {
-	
-	private File rootDirectory;
-	private Set<LocaleProxy> locales = new HashSet<LocaleProxy>();
-	private Set<LocaleProxy> allLocales;
-	
-	private TranslationCatalogueParser catalogueParser;
 
-	public TranslationCatalogue(File root, Collection<LocaleProxy> locales) 
-			throws MissingLocationException, InvalidLocationException, InvalidFilenameException {
-		this.rootDirectory = root.getAbsoluteFile();
-		
-		if (!this.rootDirectory.exists()) {
-			throw new MissingLocationException();
-		} else if (!this.rootDirectory.isDirectory()) {
-			throw new InvalidFilenameException();
-		} 
-		
-		this.locales.addAll(locales);
-		this.allLocales = new HashSet<LocaleProxy>();
-		
-		catalogueParser = new TranslationCatalogueSimpleParser(this.rootDirectory, this.locales);
-		this.allLocales = catalogueParser.findRelevantLocalesInCatalogue();	
-		if (this.locales.isEmpty()) {
-			this.locales = this.allLocales;
-		}
-	}
-	
-	public TranslationCatalogue(File root, Set<LocaleGroup> localeGroups) 
-		throws MissingLocationException, InvalidLocationException, InvalidFilenameException {
-		this.rootDirectory = root.getAbsoluteFile();
-		
-		if (!this.rootDirectory.exists()) {
-			throw new MissingLocationException();
-		} else if (!this.rootDirectory.isDirectory()) {
-			throw new InvalidFilenameException();
-		}
-		
-		this.allLocales = new HashSet<LocaleProxy>();
-		
-		catalogueParser = new TranslationCatalogueBulkParser(this.rootDirectory, localeGroups);
-		this.allLocales = catalogueParser.findRelevantLocalesInCatalogue();
-		this.locales = this.allLocales;
-	}
-	
-	/**
-	 * @param eclipseInstallPlugin
-	 * @return The different versions (one for each locale) of the same plug-in within the catalogue.
-	 */
-	public Map<String, PluginProxy> getPluginForSpecifiedLocales (PluginProxy eclipseInstallPlugin) {
-		return catalogueParser.getPluginForSpecifiedLocales(eclipseInstallPlugin);
-	}
-	
-	/**
-	 * @param eclipseInstallFeature
-	 * @return The different versions (one for each locale) of the same feature within the catalogue.
-	 */
-	public Map<String, PluginProxy> getFeatureForSpecifiedLocales (PluginProxy eclipseInstallFeature) {
-		return catalogueParser.getFeatureForSpecifiedLocales(eclipseInstallFeature);
-	}
-	
-	public ResourceProxy getResourceTranslation(PluginProxy translationCataloguePlugin, ResourceProxy eclipseInstallPluginResource) {
-		for (ResourceProxy candidateTranslatedResource: translationCataloguePlugin.getResources()) {
-			if (candidateTranslatedResource.getRelativePath().
-					equalsIgnoreCase(eclipseInstallPluginResource.getRelativePath())) {
-				return candidateTranslatedResource;
-			}
-		}
-		return null;
-	}
+    private File rootDirectory;
+    private Set<LocaleProxy> locales = new HashSet<LocaleProxy>();
+    private Set<LocaleProxy> allLocales;
 
-	public Set<LocaleProxy> getAllLocales() {
-		return allLocales;
-	}
+    private TranslationCatalogueParser catalogueParser;
 
-	public File getRootDirectory() {
-		return rootDirectory;
-	}
+    public TranslationCatalogue(File root, Collection<LocaleProxy> locales)
+            throws MissingLocationException, InvalidLocationException,
+            InvalidFilenameException {
+        this.rootDirectory = root.getAbsoluteFile();
+
+        if (!this.rootDirectory.exists()) {
+            throw new MissingLocationException();
+        } else if (!this.rootDirectory.isDirectory()) {
+            throw new InvalidFilenameException();
+        }
+
+        this.locales.addAll(locales);
+        this.allLocales = new HashSet<LocaleProxy>();
+
+        catalogueParser = new TranslationCatalogueSimpleParser(
+                this.rootDirectory, this.locales);
+        this.allLocales = catalogueParser.findRelevantLocalesInCatalogue();
+        if (this.locales.isEmpty()) {
+            this.locales = this.allLocales;
+        }
+    }
+
+    public TranslationCatalogue(File root, Set<LocaleGroup> localeGroups)
+            throws MissingLocationException, InvalidLocationException,
+            InvalidFilenameException {
+        this.rootDirectory = root.getAbsoluteFile();
+
+        if (!this.rootDirectory.exists()) {
+            throw new MissingLocationException();
+        } else if (!this.rootDirectory.isDirectory()) {
+            throw new InvalidFilenameException();
+        }
+
+        this.allLocales = new HashSet<LocaleProxy>();
+
+        catalogueParser = new TranslationCatalogueBulkParser(
+                this.rootDirectory, localeGroups);
+        this.allLocales = catalogueParser.findRelevantLocalesInCatalogue();
+        this.locales = this.allLocales;
+    }
+
+    /**
+     * @param eclipseInstallPlugin
+     * @return The different versions (one for each locale) of the same plug-in
+     *         within the catalogue.
+     */
+    public Map<String, PluginProxy> getPluginForSpecifiedLocales(
+            PluginProxy eclipseInstallPlugin) {
+        return catalogueParser
+                .getPluginForSpecifiedLocales(eclipseInstallPlugin);
+    }
+
+    /**
+     * @param eclipseInstallFeature
+     * @return The different versions (one for each locale) of the same feature
+     *         within the catalogue.
+     */
+    public Map<String, PluginProxy> getFeatureForSpecifiedLocales(
+            PluginProxy eclipseInstallFeature) {
+        return catalogueParser
+                .getFeatureForSpecifiedLocales(eclipseInstallFeature);
+    }
+
+    public ResourceProxy getResourceTranslation(
+            PluginProxy translationCataloguePlugin,
+            ResourceProxy eclipseInstallPluginResource) {
+        for (ResourceProxy candidateTranslatedResource : translationCataloguePlugin
+                .getResources()) {
+            if (candidateTranslatedResource.getRelativePath().equalsIgnoreCase(
+                    eclipseInstallPluginResource.getRelativePath())) {
+                return candidateTranslatedResource;
+            }
+        }
+        return null;
+    }
+
+    public Set<LocaleProxy> getAllLocales() {
+        return allLocales;
+    }
+
+    public File getRootDirectory() {
+        return rootDirectory;
+    }
 }

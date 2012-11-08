@@ -13,19 +13,19 @@ package org.eclipse.babel.build.ui.wizard;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 
-public class PluginLabelProvider extends LabelProvider{
+public class PluginLabelProvider extends LabelProvider {
 
-	public PluginLabelProvider() {
-	}
-	
-	@Override
-	public Image getImage(Object element) {
-		//return BuildToolImages.PLUGIN.createImage();
-		return null;
-	}
+    public PluginLabelProvider() {
+    }
 
-	@Override
-	public String getText(Object element) {
-		return element == null ? "" : element.toString(); //$NON-NLS-1$
-	}
+    @Override
+    public Image getImage(Object element) {
+        // return BuildToolImages.PLUGIN.createImage();
+        return null;
+    }
+
+    @Override
+    public String getText(Object element) {
+        return element == null ? "" : element.toString(); //$NON-NLS-1$
+    }
 }

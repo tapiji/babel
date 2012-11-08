@@ -13,14 +13,15 @@ package org.eclipse.babel.build.ui.wizard;
 import org.eclipse.swt.widgets.Shell;
 
 public class LanguagePackFilterDialog extends FilterDialog {
-	
-	public LanguagePackFilterDialog(final Shell parent, final BuildToolWizardConfigurationPage caller) {
-		super(parent, caller);
-		
-		parent.setText(Messages.getString("LanguagePackFilterDialog_Title"));
-	}
-	
-	protected void setChosenFilter(String filter) {
-		fCallingPage.setLanguagePackFilter(filter);
-	}
+
+    public LanguagePackFilterDialog(final Shell parent,
+            final BuildToolWizardConfigurationPage caller) {
+        super(parent, caller);
+
+        parent.setText(Messages.getString("LanguagePackFilterDialog_Title"));
+    }
+
+    protected void setChosenFilter(String filter) {
+        fCallingPage.setLanguagePackFilter(filter);
+    }
 }

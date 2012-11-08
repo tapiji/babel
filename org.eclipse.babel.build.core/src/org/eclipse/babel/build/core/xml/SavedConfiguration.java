@@ -25,85 +25,84 @@ import org.eclipse.babel.build.core.ResourceProxy;
 import org.eclipse.babel.build.core.eclipsetarget.EclipseTarget;
 import org.eclipse.babel.build.core.translationcatalogue.TranslationCatalogue;
 
-
 public class SavedConfiguration implements Configuration {
 
-	public EclipseTarget eclipseInstall() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public EclipseTarget eclipseInstall() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	public Range compatibilityRange() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public Range compatibilityRange() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	public List<Filter> filters() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public List<Filter> filters() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	public boolean includePseudoTranslations() {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    public boolean includePseudoTranslations() {
+        // TODO Auto-generated method stub
+        return false;
+    }
 
-	public boolean includeResource(PluginProxy plugin, ResourceProxy resouce) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    public boolean includeResource(PluginProxy plugin, ResourceProxy resouce) {
+        // TODO Auto-generated method stub
+        return false;
+    }
 
-	public File reportLocation() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public File reportLocation() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	public Date timestamp() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public Date timestamp() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	public TranslationCatalogue translations() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public TranslationCatalogue translations() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	public File workingDirectory() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public File workingDirectory() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	public Set<LocaleProxy> locales() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public Set<LocaleProxy> locales() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	public Set<LocaleGroup> localeGroups() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public Set<LocaleGroup> localeGroups() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	public Set<String> excludeList() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public Set<String> excludeList() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	public void notifyProgress(String fragmentName) {
-		// TODO Auto-generated method stub
-	}
+    public void notifyProgress(String fragmentName) {
+        // TODO Auto-generated method stub
+    }
 
-	public boolean includeXmlReport() {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    public boolean includeXmlReport() {
+        // TODO Auto-generated method stub
+        return false;
+    }
 
-	public boolean longReport() {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    public boolean longReport() {
+        // TODO Auto-generated method stub
+        return false;
+    }
 
-	public String localeExtension() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public String localeExtension() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

@@ -15,33 +15,33 @@ import java.util.Locale;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 
-public class LocaleLabelProvider extends LabelProvider{
-	public LocaleLabelProvider() {
-	}
-	
-	@Override
-	public Image getImage(Object element) {
-		//return BuildToolImages.LOCALE.createImage();
-		return null;
-	}
+public class LocaleLabelProvider extends LabelProvider {
+    public LocaleLabelProvider() {
+    }
 
-	@Override
-	public String getText(Object element) {
-		Locale locale = (Locale) element;
-		String country = locale.getDisplayCountry();
-		String varient = locale.getDisplayVariant();
-		
-		return locale.getDisplayLanguage() + " " + getDisplay(country, varient); //$NON-NLS-1$
-	}
+    @Override
+    public Image getImage(Object element) {
+        // return BuildToolImages.LOCALE.createImage();
+        return null;
+    }
 
-	private String getDisplay(String country, String varient) {
-		if("".equals(country)){
-			return "";
-		}
-		
-		if("".equals(varient)){
-			return String.format("(%s)", country);
-		}
-		return String.format("(%s: %s)", country, varient);
-	}
+    @Override
+    public String getText(Object element) {
+        Locale locale = (Locale) element;
+        String country = locale.getDisplayCountry();
+        String varient = locale.getDisplayVariant();
+
+        return locale.getDisplayLanguage() + " " + getDisplay(country, varient); //$NON-NLS-1$
+    }
+
+    private String getDisplay(String country, String varient) {
+        if ("".equals(country)) {
+            return "";
+        }
+
+        if ("".equals(varient)) {
+            return String.format("(%s)", country);
+        }
+        return String.format("(%s: %s)", country, varient);
+    }
 }

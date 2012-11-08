@@ -11,19 +11,18 @@
 package org.eclipse.babel.build.core;
 
 public class Range {
-	public boolean contains(String version){
-		//TODO: stub
-		return false;
-	}
-	
-	public String toString(){
-		//TODO: stub
-		return "";
-	}
-	
-	
-	public static Range parse(String range){
-		//TODO: stub
-		return null;
-	}
+    public boolean contains(String version) {
+        // TODO: stub
+        return false;
+    }
+
+    public String toString() {
+        // TODO: stub
+        return "";
+    }
+
+    public static Range parse(String range) {
+        // TODO: stub
+        return null;
+    }
 }

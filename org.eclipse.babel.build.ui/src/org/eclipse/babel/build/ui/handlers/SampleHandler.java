@@ -16,10 +16,10 @@ import org.eclipse.core.commands.ExecutionException;
 
 public class SampleHandler extends AbstractHandler {
 
-	public SampleHandler() {
-	}
+    public SampleHandler() {
+    }
 
-	public Object execute(ExecutionEvent event) throws ExecutionException {				
-		return null;
-	}
+    public Object execute(ExecutionEvent event) throws ExecutionException {
+        return null;
+    }
 }

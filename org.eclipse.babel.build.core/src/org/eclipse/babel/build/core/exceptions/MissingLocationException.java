@@ -12,21 +12,21 @@ package org.eclipse.babel.build.core.exceptions;
 
 public class MissingLocationException extends Exception {
 
-	static final long serialVersionUID = 4L;
-	
-	public MissingLocationException() {
-	}
+    static final long serialVersionUID = 4L;
 
-	public MissingLocationException(String message) {
-		super(message);
-	}
+    public MissingLocationException() {
+    }
 
-	public MissingLocationException(Throwable cause) {
-		super(cause);
-	}
+    public MissingLocationException(String message) {
+        super(message);
+    }
 
-	public MissingLocationException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    public MissingLocationException(Throwable cause) {
+        super(cause);
+    }
+
+    public MissingLocationException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
 }

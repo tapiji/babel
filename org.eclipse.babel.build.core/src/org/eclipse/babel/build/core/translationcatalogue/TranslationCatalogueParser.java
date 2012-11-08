@@ -18,25 +18,32 @@ import org.eclipse.babel.build.core.Messages;
 import org.eclipse.babel.build.core.PluginProxy;
 import org.eclipse.babel.build.core.exceptions.InvalidLocationException;
 
-
 public interface TranslationCatalogueParser {
-	public final static String PLUGINS_PATH = Messages.getString("Paths_plugins_directory"); //$NON-NLS-1$
-	public final static String FEATURES_PATH = Messages.getString("Paths_features_directory"); //$NON-NLS-1$
-	
-	/**
-	 * @param eclipseInstallPlugin
-	 * @return The different versions (one for each locale) of the same plug-in within the catalogue.
-	 */
-	public Map<String, PluginProxy> getPluginForSpecifiedLocales (PluginProxy eclipseInstallPlugin);
-	
-	/**
-	 * @param eclipseInstallFeature
-	 * @return The different versions (one for each locale) of the same feature within the catalogue.
-	 */
-	public Map<String, PluginProxy> getFeatureForSpecifiedLocales (PluginProxy eclipseInstallFeature);
-	
-	/**
-	 * Extract the list of all the relevant locales featured in the Translation Catalogue.
-	 */
-	public Set<LocaleProxy> findRelevantLocalesInCatalogue() throws InvalidLocationException;
+    public final static String PLUGINS_PATH = Messages
+            .getString("Paths_plugins_directory"); //$NON-NLS-1$
+    public final static String FEATURES_PATH = Messages
+            .getString("Paths_features_directory"); //$NON-NLS-1$
+
+    /**
+     * @param eclipseInstallPlugin
+     * @return The different versions (one for each locale) of the same plug-in
+     *         within the catalogue.
+     */
+    public Map<String, PluginProxy> getPluginForSpecifiedLocales(
+            PluginProxy eclipseInstallPlugin);
+
+    /**
+     * @param eclipseInstallFeature
+     * @return The different versions (one for each locale) of the same feature
+     *         within the catalogue.
+     */
+    public Map<String, PluginProxy> getFeatureForSpecifiedLocales(
+            PluginProxy eclipseInstallFeature);
+
+    /**
+     * Extract the list of all the relevant locales featured in the Translation
+     * Catalogue.
+     */
+    public Set<LocaleProxy> findRelevantLocalesInCatalogue()
+            throws InvalidLocationException;
 }

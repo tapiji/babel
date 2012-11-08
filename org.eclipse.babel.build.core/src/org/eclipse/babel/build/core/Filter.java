@@ -13,26 +13,27 @@ package org.eclipse.babel.build.core;
 import java.util.regex.Pattern;
 
 public class Filter {
-	private final Pattern pattern;
-	private final String specifier;
+    private final Pattern pattern;
+    private final String specifier;
 
-	public Filter(String pattern) {
-		specifier = pattern;
-		this.pattern = Pattern.compile(pattern);
-	}
+    public Filter(String pattern) {
+        specifier = pattern;
+        this.pattern = Pattern.compile(pattern);
+    }
 
-	public String getPattern(){
-		return specifier;
-	}
+    public String getPattern() {
+        return specifier;
+    }
 
-	public boolean matches(PluginProxy plugin, ResourceProxy resource){
-		String relativePath = resource.getRelativePath();
-		boolean relative = pattern.matcher(relativePath).matches();
-		boolean absolute = pattern.matcher(plugin.getName() + "/" + relativePath).matches();
-		return relative || absolute;
-	}
-	
-	public boolean isInclusive(){
-		return false;
-	}
+    public boolean matches(PluginProxy plugin, ResourceProxy resource) {
+        String relativePath = resource.getRelativePath();
+        boolean relative = pattern.matcher(relativePath).matches();
+        boolean absolute = pattern.matcher(
+                plugin.getName() + "/" + relativePath).matches();
+        return relative || absolute;
+    }
+
+    public boolean isInclusive() {
+        return false;
+    }
 }

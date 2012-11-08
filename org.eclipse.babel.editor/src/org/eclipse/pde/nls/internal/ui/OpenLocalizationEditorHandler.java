@@ -22,21 +22,25 @@ import org.eclipse.ui.handlers.HandlerUtil;
 
 public class OpenLocalizationEditorHandler extends AbstractHandler {
 
-	public OpenLocalizationEditorHandler() {
-	}
+    public OpenLocalizationEditorHandler() {
+    }
 
-	/*
-	 * @see org.eclipse.core.commands.IHandler#execute(org.eclipse.core.commands.ExecutionEvent)
-	 */
-	public Object execute(ExecutionEvent event) throws ExecutionException {
-		try {
-			IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindow(event);
-			IWorkbenchPage page = window.getActivePage();
-			page.openEditor(new LocalizationEditorInput(), LocalizationEditor.ID);
-		} catch (PartInitException e) {
-			throw new RuntimeException(e);
-		}
-		return null;
-	}
+    /*
+     * @see
+     * org.eclipse.core.commands.IHandler#execute(org.eclipse.core.commands.
+     * ExecutionEvent)
+     */
+    public Object execute(ExecutionEvent event) throws ExecutionException {
+        try {
+            IWorkbenchWindow window = HandlerUtil
+                    .getActiveWorkbenchWindow(event);
+            IWorkbenchPage page = window.getActivePage();
+            page.openEditor(new LocalizationEditorInput(),
+                    LocalizationEditor.ID);
+        } catch (PartInitException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
 
 }

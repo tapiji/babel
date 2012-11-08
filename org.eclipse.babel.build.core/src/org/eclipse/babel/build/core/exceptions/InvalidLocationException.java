@@ -11,21 +11,21 @@
 package org.eclipse.babel.build.core.exceptions;
 
 public class InvalidLocationException extends Exception {
-	
-	static final long serialVersionUID = 3L;
 
-	public InvalidLocationException() {
-	}
-	
-	public InvalidLocationException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    static final long serialVersionUID = 3L;
 
-	public InvalidLocationException(Throwable cause) {
-		super(cause);
-	}
+    public InvalidLocationException() {
+    }
 
-	public InvalidLocationException(String message) {
-		super(message);
-	}
+    public InvalidLocationException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public InvalidLocationException(Throwable cause) {
+        super(cause);
+    }
+
+    public InvalidLocationException(String message) {
+        super(message);
+    }
 }

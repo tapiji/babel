@@ -13,13 +13,13 @@ package org.eclipse.babel.build.ant;
 import org.eclipse.babel.build.core.Filter;
 
 public class Ignore {
-	private String pattern;
-	
-	public void setPattern(String pattern){
-		this.pattern = pattern;
-	}
-	
-	public Filter toFilter(){
-		return new Filter(pattern);
-	}
+    private String pattern;
+
+    public void setPattern(String pattern) {
+        this.pattern = pattern;
+    }
+
+    public Filter toFilter() {
+        return new Filter(pattern);
+    }
 }

@@ -22,19 +22,21 @@ import java.util.zip.ZipException;
 import org.eclipse.babel.build.core.Messages;
 import org.eclipse.babel.build.core.ResourceProxy;
 
-
 public interface FragmentEclipseTargetMediator {
-	
-	public final String SLASH = Messages.getString("Characters_entry_separator");	//$NON-NLS-1$
-	public final String JAR_RESOURCE_SUFFIX = Messages.getString("Suffixes_jar_resource_folder");	//$NON-NLS-1$
-	public final String JAR_EXTENSION = Messages.getString("Extensions_jar"); //$NON-NLS-1$
-	public final String ABOUT_FILE = Messages.getString("Paths_about_html");	//$NON-NLS-1$
-	
-	public InputStream getResourceAsStream(ResourceProxy resource) throws ZipException, 
-			IOException, FileNotFoundException, Exception;
-	
-	public Map<String, Set<Object>> extractEclipseTargetProperties()
-			throws ZipException, IOException, FileNotFoundException;
 
-	public boolean writeAboutHtmlFile(File resource, JarOutputStream out) throws Exception;
+    public final String SLASH = Messages
+            .getString("Characters_entry_separator"); //$NON-NLS-1$
+    public final String JAR_RESOURCE_SUFFIX = Messages
+            .getString("Suffixes_jar_resource_folder"); //$NON-NLS-1$
+    public final String JAR_EXTENSION = Messages.getString("Extensions_jar"); //$NON-NLS-1$
+    public final String ABOUT_FILE = Messages.getString("Paths_about_html"); //$NON-NLS-1$
+
+    public InputStream getResourceAsStream(ResourceProxy resource)
+            throws ZipException, IOException, FileNotFoundException, Exception;
+
+    public Map<String, Set<Object>> extractEclipseTargetProperties()
+            throws ZipException, IOException, FileNotFoundException;
+
+    public boolean writeAboutHtmlFile(File resource, JarOutputStream out)
+            throws Exception;
 }

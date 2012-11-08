@@ -11,22 +11,22 @@
 package org.eclipse.babel.build.core.exceptions;
 
 public class InvalidFilenameException extends Exception {
-	
-	static final long serialVersionUID = 3L;
-	
-	public InvalidFilenameException() {
-	}
 
-	public InvalidFilenameException(String arg0) {
-		super(arg0);
-	}
+    static final long serialVersionUID = 3L;
 
-	public InvalidFilenameException(Throwable arg0) {
-		super(arg0);
-	}
+    public InvalidFilenameException() {
+    }
 
-	public InvalidFilenameException(String arg0, Throwable arg1) {
-		super(arg0, arg1);
-	}
+    public InvalidFilenameException(String arg0) {
+        super(arg0);
+    }
+
+    public InvalidFilenameException(Throwable arg0) {
+        super(arg0);
+    }
+
+    public InvalidFilenameException(String arg0, Throwable arg1) {
+        super(arg0, arg1);
+    }
 
 }
