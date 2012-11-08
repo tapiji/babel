@@ -7,17 +7,19 @@
  *
  * Contributors:
  *    Pascal Essiembre - initial API and implementation
+ *    Alexej Strelzow - TapJI integration, messagesBundleId
  ******************************************************************************/
 package org.eclipse.babel.editor.bundle;
 
+import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Locale;
 
-import org.eclipse.babel.core.message.MessageException;
-import org.eclipse.babel.core.message.MessagesBundle;
+import org.eclipse.babel.core.message.internal.MessageException;
+import org.eclipse.babel.core.message.internal.MessagesBundle;
 import org.eclipse.babel.core.message.resource.IMessagesResource;
-import org.eclipse.babel.core.message.resource.PropertiesIFileResource;
+import org.eclipse.babel.core.message.resource.internal.PropertiesIFileResource;
 import org.eclipse.babel.core.message.resource.ser.PropertiesDeserializer;
 import org.eclipse.babel.core.message.resource.ser.PropertiesSerializer;
 import org.eclipse.babel.core.message.strategy.IMessagesBundleGroupStrategy;
@@ -29,7 +31,12 @@ import org.eclipse.babel.editor.util.UIUtils;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.IPackageFragment;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
@@ -87,11 +94,35 @@ public class DefaultBundleGroupStrategy implements IMessagesBundleGroupStrategy 
     }
 
     /**
-     * @see org.eclipse.babel.core.message.strategy.IMessagesBundleGroupStrategy
+     * @see org.eclipse.babel.core.message.internal.strategy.IMessagesBundleGroupStrategy
      *          #createMessagesBundleGroupName()
      */
     public String createMessagesBundleGroupName() {
-        return baseName + "[...]." + file.getFileExtension(); //$NON-NLS-1$
+    	return getProjectName()+"*.properties";
+    }
+    
+    public String createMessagesBundleId() {
+    	return getResourceBundleId(file);
+    }
+    
+    public static String getResourceBundleId (IResource resource) {
+		String packageFragment = "";
+
+		IJavaElement propertyFile = JavaCore.create(resource.getParent());
+		if (propertyFile != null && propertyFile instanceof IPackageFragment)
+			packageFragment = ((IPackageFragment) propertyFile).getElementName();
+		
+		return (packageFragment.length() > 0 ? packageFragment  + "." : "") + 
+				getResourceBundleName(resource);
+	}
+    
+    public static String getResourceBundleName(IResource res) {
+        String name = res.getName();
+    	String regex = "^(.*?)" //$NON-NLS-1$
+                + "((_[a-z]{2,3})|(_[a-z]{2,3}_[A-Z]{2})" //$NON-NLS-1$
+                + "|(_[a-z]{2,3}_[A-Z]{2}_\\w*))?(\\." //$NON-NLS-1$
+                + res.getFileExtension() + ")$"; //$NON-NLS-1$
+        return name.replaceFirst(regex, "$1"); //$NON-NLS-1$
     }
 
     /**
@@ -138,8 +169,22 @@ public class DefaultBundleGroupStrategy implements IMessagesBundleGroupStrategy 
      * @see org.eclipse.babel.core.bundle.IBundleGroupStrategy#createBundle(java.util.Locale)
      */
     public MessagesBundle createMessagesBundle(Locale locale) {
-        // TODO Auto-generated method stub
-        return null;
+    	// create new empty locale file
+    	IFile openedFile = getOpenedFile();
+    	IPath path = openedFile.getProjectRelativePath();
+    	String localeStr = locale != null ? "_" + locale.toString() : "";
+    	String newFilename = getBaseName()+localeStr+"."+openedFile.getFileExtension();
+        IFile newFile = openedFile.getProject().getFile(path.removeLastSegments(1).addTrailingSeparator()+newFilename);
+        
+        if (! newFile.exists()) {
+        	try {
+        		// create new ifile with an empty input stream
+				newFile.create(new ByteArrayInputStream(new byte[0]), IResource.NONE, null);
+			} catch (CoreException e) {
+				e.printStackTrace();
+			} 
+        }
+    	return createBundle(locale, newFile);
     }
     
     /**
@@ -160,14 +205,14 @@ public class DefaultBundleGroupStrategy implements IMessagesBundleGroupStrategy 
             	//site is null during the build.
                 messagesResource = new PropertiesIFileResource(
                         locale,
-                        new PropertiesSerializer(prefs),
-                        new PropertiesDeserializer(prefs),
+                        new PropertiesSerializer(prefs.getSerializerConfig()),
+                        new PropertiesDeserializer(prefs.getDeserializerConfig()),
                         (IFile) resource, MessagesEditorPlugin.getDefault());
             } else {
                 messagesResource = new EclipsePropertiesEditorResource(
                         locale,
-                        new PropertiesSerializer(prefs),
-                        new PropertiesDeserializer(prefs),
+                        new PropertiesSerializer(prefs.getSerializerConfig()),
+                        new PropertiesDeserializer(prefs.getDeserializerConfig()),
                         createEditor(resource, locale));
             }
             return new MessagesBundle(messagesResource);
@@ -191,6 +236,12 @@ public class DefaultBundleGroupStrategy implements IMessagesBundleGroupStrategy 
         
         TextEditor textEditor = null;
         if (resource != null && resource instanceof IFile) {
+        	try {
+				resource.refreshLocal(IResource.DEPTH_ZERO, null);
+			} catch (CoreException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
             IEditorInput newEditorInput = 
                     new FileEditorInput((IFile) resource);
             textEditor = null;
@@ -214,11 +265,15 @@ public class DefaultBundleGroupStrategy implements IMessagesBundleGroupStrategy 
     	return file;
     }
 
-    /**
+    /** 
      * @return The base name of the resource bundle.
      */
     protected String getBaseName() {
     	return baseName;
+    }
+    
+    public String getProjectName() {
+    	return ResourcesPlugin.getWorkspace().getRoot().getProject(file.getFullPath().segments()[0]).getName();
     }
         
 }

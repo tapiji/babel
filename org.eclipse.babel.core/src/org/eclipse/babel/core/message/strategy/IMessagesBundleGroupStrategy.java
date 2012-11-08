@@ -7,13 +7,14 @@
  *
  * Contributors:
  *    Pascal Essiembre - initial API and implementation
+ *    Alexej Strelzow - TapJI integration, messagesBundleId
  ******************************************************************************/
 package org.eclipse.babel.core.message.strategy;
 
 import java.util.Locale;
 
-import org.eclipse.babel.core.message.MessageException;
-import org.eclipse.babel.core.message.MessagesBundle;
+import org.eclipse.babel.core.message.internal.MessageException;
+import org.eclipse.babel.core.message.internal.MessagesBundle;
 import org.eclipse.babel.core.message.resource.IMessagesResource;
 
 
@@ -38,6 +39,8 @@ public interface IMessagesBundleGroupStrategy {
      */
     String createMessagesBundleGroupName();
     
+    String createMessagesBundleId();
+    
     /**
      * Load all bundles making up a messages bundle group from the underlying
      * source.
@@ -57,5 +60,6 @@ public interface IMessagesBundleGroupStrategy {
      * @throws MessageException problem creating a new messages bundle
      */
     MessagesBundle createMessagesBundle(Locale locale) throws MessageException;
-        
+    
+    String getProjectName();
 }

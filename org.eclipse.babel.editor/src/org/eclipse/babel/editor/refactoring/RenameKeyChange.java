@@ -13,8 +13,8 @@ package org.eclipse.babel.editor.refactoring;
 import java.text.MessageFormat;
 import java.util.Collection;
 
-import org.eclipse.babel.core.message.MessagesBundleGroup;
-import org.eclipse.babel.core.message.tree.KeyTreeNode;
+import org.eclipse.babel.core.message.internal.MessagesBundleGroup;
+import org.eclipse.babel.core.message.tree.internal.KeyTreeNode;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -120,9 +120,9 @@ public class RenameKeyChange extends Change {
 			pm.beginTask("Rename resource bundle key", 1);
 
 			// Find the root - we will need this later
-			KeyTreeNode root = fKeyTreeNode.getParent();
+			KeyTreeNode root = (KeyTreeNode) fKeyTreeNode.getParent();
 			while (root.getName() != null) {
-				root = root.getParent();
+				root = (KeyTreeNode) root.getParent();
 			}
 			
 			if (fRenameChildKeys) {
@@ -146,7 +146,7 @@ public class RenameKeyChange extends Change {
 			String segments [] = fNewName.split("\\.");
 			KeyTreeNode renamedKey = root;
 			for (String segment : segments) {
-				renamedKey = renamedKey.getChild(segment);
+				renamedKey = (KeyTreeNode) renamedKey.getChild(segment);
 			}
 			
 			assert(renamedKey != null);

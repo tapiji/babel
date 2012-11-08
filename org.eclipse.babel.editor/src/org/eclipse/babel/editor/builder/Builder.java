@@ -18,8 +18,10 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.babel.core.message.MessagesBundle;
-import org.eclipse.babel.core.message.MessagesBundleGroup;
+import org.eclipse.babel.core.message.IMessagesBundle;
+import org.eclipse.babel.core.message.internal.MessagesBundle;
+import org.eclipse.babel.core.message.internal.MessagesBundleGroup;
+import org.eclipse.babel.core.message.manager.RBManager;
 import org.eclipse.babel.editor.bundle.MessagesBundleGroupFactory;
 import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
 import org.eclipse.babel.editor.resource.validator.FileMarkerStrategy;
@@ -62,6 +64,7 @@ public class Builder extends IncrementalProjectBuilder {
 				break;
 			case IResourceDelta.REMOVED:
                 System.out.println("RBE DELTA Removed"); //$NON-NLS-1$
+                RBManager.getInstance(delta.getResource().getProject()).notifyResourceRemoved(delta.getResource());
 				// handle removed resource
 				break;
 			case IResourceDelta.CHANGED:
@@ -134,7 +137,7 @@ public class Builder extends IncrementalProjectBuilder {
 				if (_alreadBuiltMessageBundle != null) {
 					for (MessagesBundleGroup msgGrp : _alreadBuiltMessageBundle.values()) {
 						try {
-							msgGrp.dispose();
+//							msgGrp.dispose(); // TODO: [alst] do we need this really?
 						} catch (Throwable t) {
 							//FIXME: remove this debugging:
 							System.err.println(
@@ -167,6 +170,8 @@ public class Builder extends IncrementalProjectBuilder {
 	 * @param resource The resource currently validated.
 	 */
 	void checkBundleResource(IResource resource) {
+		if (true)
+		return; // TODO [alst] 
         if (resource instanceof IFile && resource.getName().endsWith(
                 ".properties")) { //$NON-NLS-1$ //TODO have customized?
             IFile file = (IFile) resource;
@@ -190,14 +195,14 @@ public class Builder extends IncrementalProjectBuilder {
             		//cheaper than creating a group for each on of those
             		//files.
             		boolean validateEntireGroup = false;
-                	for (MessagesBundle msgBundle : msgBundleGrp.getMessagesBundles()) {
-            			Object src = msgBundle.getResource().getSource();
+                	for (IMessagesBundle msgBundle : msgBundleGrp.getMessagesBundles()) {
+            			Object src = ((MessagesBundle)msgBundle).getResource().getSource();
             			//System.err.println(src + " -> " + msgBundleGrp);
             			if (src instanceof IFile) {//when it is a read-only thing we don't index it.
 	            			_alreadBuiltMessageBundle.put((IFile)src, msgBundleGrp);
 	            			if (!validateEntireGroup && src == resource) {
-	            				if (msgBundle.getLocale() == null
-	            						|| msgBundle.getLocale().equals(UIUtils.ROOT_LOCALE)) {
+	            				if (((MessagesBundle)msgBundle).getLocale() == null
+	            						|| ((MessagesBundle)msgBundle).getLocale().equals(UIUtils.ROOT_LOCALE)) {
 	            					//ok the default properties have been changed.
 	            					//make sure that all resources in this bundle group
 	            					//are validated too:
@@ -213,8 +218,8 @@ public class Builder extends IncrementalProjectBuilder {
             			}
             		}
             		if (validateEntireGroup) {
-                    	for (MessagesBundle msgBundle : msgBundleGrp.getMessagesBundles()) {
-			    			Object src = msgBundle.getResource().getSource();
+                    	for (IMessagesBundle msgBundle : msgBundleGrp.getMessagesBundles()) {
+			    			Object src = ((MessagesBundle)msgBundle).getResource().getSource();
 			    			_resourcesToValidate.add(src);
                    		}
             		}

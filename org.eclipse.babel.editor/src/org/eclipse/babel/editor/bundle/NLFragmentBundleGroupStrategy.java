@@ -25,9 +25,9 @@ import java.util.Locale;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-import org.eclipse.babel.core.message.MessagesBundle;
-import org.eclipse.babel.core.message.resource.PropertiesIFileResource;
-import org.eclipse.babel.core.message.resource.PropertiesReadOnlyResource;
+import org.eclipse.babel.core.message.internal.MessagesBundle;
+import org.eclipse.babel.core.message.resource.internal.PropertiesIFileResource;
+import org.eclipse.babel.core.message.resource.internal.PropertiesReadOnlyResource;
 import org.eclipse.babel.core.message.resource.ser.PropertiesDeserializer;
 import org.eclipse.babel.core.message.resource.ser.PropertiesSerializer;
 import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
@@ -134,7 +134,7 @@ public class NLFragmentBundleGroupStrategy extends NLPluginBundleGroupStrategy {
     }
 
     /**
-     * @see org.eclipse.babel.core.message.strategy.IMessagesBundleGroupStrategy
+     * @see org.eclipse.babel.core.message.internal.strategy.IMessagesBundleGroupStrategy
      *          #createMessagesBundleGroupName()
      */
     public String createMessagesBundleGroupName() {
@@ -175,8 +175,8 @@ public class NLFragmentBundleGroupStrategy extends NLPluginBundleGroupStrategy {
 						return new MessagesBundle(
 						        new PropertiesReadOnlyResource(
 									UIUtils.ROOT_LOCALE, 
-	                                new PropertiesSerializer(prefs),
-	                                new PropertiesDeserializer(prefs),
+	                                new PropertiesSerializer(prefs.getSerializerConfig()),
+	                                new PropertiesDeserializer(prefs.getDeserializerConfig()),
 	                                jarredProps[0], jarredProps[1]));
 					}
 					newEditorInput = new DummyEditorInput(jarredProps[0], 
@@ -195,8 +195,8 @@ public class NLFragmentBundleGroupStrategy extends NLPluginBundleGroupStrategy {
 					        MsgEditorPreferences.getInstance();
 					return new MessagesBundle(new PropertiesIFileResource(
 								UIUtils.ROOT_LOCALE, 
-                                new PropertiesSerializer(prefs),
-                                new PropertiesDeserializer(prefs), file,
+                                new PropertiesSerializer(prefs.getSerializerConfig()),
+                                new PropertiesDeserializer(prefs.getDeserializerConfig()), file,
                                 MessagesEditorPlugin.getDefault()));
 				} else {
 					//during the build if the file does not exist. skip.
@@ -250,8 +250,8 @@ public class NLFragmentBundleGroupStrategy extends NLPluginBundleGroupStrategy {
 						return new MessagesBundle(
 						        new PropertiesReadOnlyResource(
 									UIUtils.ROOT_LOCALE, 
-	                                new PropertiesSerializer(prefs),
-	                                new PropertiesDeserializer(prefs),
+	                                new PropertiesSerializer(prefs.getSerializerConfig()),
+	                                new PropertiesDeserializer(prefs.getDeserializerConfig()),
 	                                contents, resourceLocationLabel));
 	            	}
 	                newEditorInput = new DummyEditorInput(contents, 
@@ -290,8 +290,8 @@ public class NLFragmentBundleGroupStrategy extends NLPluginBundleGroupStrategy {
             
             EclipsePropertiesEditorResource readOnly =
                  new EclipsePropertiesEditorResource(UIUtils.ROOT_LOCALE, 
-                        new PropertiesSerializer(prefs),
-                        new PropertiesDeserializer(prefs), textEditor);
+                        new PropertiesSerializer(prefs.getSerializerConfig()),
+                        new PropertiesDeserializer(prefs.getDeserializerConfig()), textEditor);
             if (resourceLocationLabel != null) {
             	readOnly.setResourceLocationLabel(resourceLocationLabel);
             }

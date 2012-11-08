@@ -10,8 +10,9 @@
  ******************************************************************************/
 package org.eclipse.babel.editor.resource.validator;
 
-import org.eclipse.babel.core.message.checks.DuplicateValueCheck;
-import org.eclipse.babel.core.message.checks.MissingValueCheck;
+import org.eclipse.babel.core.message.checks.internal.DuplicateValueCheck;
+import org.eclipse.babel.core.message.checks.internal.MissingValueCheck;
+import org.eclipse.babel.core.message.internal.MessagesBundle;
 import org.eclipse.babel.core.util.BabelUtils;
 import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
 import org.eclipse.babel.editor.preferences.MsgEditorPreferences;
@@ -31,8 +32,8 @@ public class FileMarkerStrategy implements IValidationMarkerStrategy {
      */
     public void markFailed(ValidationFailureEvent event) {
         if (event.getCheck() instanceof MissingValueCheck) {
-            addMarker((IResource) event.getBundleGroup().getMessagesBundle(
-                    event.getLocale()).getResource().getSource(),
+            MessagesBundle bundle = (MessagesBundle) event.getBundleGroup().getMessagesBundle(event.getLocale());
+            addMarker((IResource) bundle.getResource().getSource(),
 //            addMarker(event.getResource(),
                     event.getKey(),
                     "Key \"" + event.getKey() //$NON-NLS-1$
@@ -44,8 +45,8 @@ public class FileMarkerStrategy implements IValidationMarkerStrategy {
             String duplicates = BabelUtils.join(
                     ((DuplicateValueCheck) event.getCheck())
                             .getDuplicateKeys(), ", ");
-            addMarker((IResource) event.getBundleGroup().getMessagesBundle(
-                    event.getLocale()).getResource().getSource(),
+            MessagesBundle bundle = (MessagesBundle) event.getBundleGroup().getMessagesBundle(event.getLocale());
+            addMarker((IResource) bundle.getResource().getSource(),
 //            addMarker(event.getResource(),
                     event.getKey(),
                     "Key \"" + event.getKey() //$NON-NLS-1$

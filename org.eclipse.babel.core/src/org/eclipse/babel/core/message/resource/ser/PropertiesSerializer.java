@@ -13,8 +13,9 @@ package org.eclipse.babel.core.message.resource.ser;
 import java.util.Arrays;
 import java.util.Properties;
 
-import org.eclipse.babel.core.message.Message;
-import org.eclipse.babel.core.message.MessagesBundle;
+import org.eclipse.babel.core.message.IMessage;
+import org.eclipse.babel.core.message.IMessagesBundle;
+import org.eclipse.babel.core.message.internal.MessagesBundle;
 
 /**
  * Class responsible for serializing a {@link MessagesBundle} into
@@ -71,7 +72,7 @@ public class PropertiesSerializer {
      * @param messagesBundle the bundle used to generate the string
      * @return the generated string
      */
-    public String serialize(MessagesBundle messagesBundle) {
+    public String serialize(IMessagesBundle messagesBundle) {
         String lineBreak = SYSTEM_LINE_SEP;
         int numOfLineBreaks = config.getGroupSepBlankLineCount();
         StringBuffer text = new StringBuffer();
@@ -96,7 +97,7 @@ public class PropertiesSerializer {
         }
         for (int i = 0; i < keys.length; i++) {
 			String key = keys[i];
-            Message message = messagesBundle.getMessage(key);
+            IMessage message = messagesBundle.getMessage(key);
             String value = message.getValue(); 
             String comment = message.getComment();    
             
@@ -356,7 +357,7 @@ public class PropertiesSerializer {
      * @return position
      */
     private int getEqualIndex(
-    		String key, String group, MessagesBundle messagesBundle) {
+    		String key, String group, IMessagesBundle messagesBundle) {
         int equalIndex = -1;
         boolean alignEquals = config.isAlignEqualsEnabled();
         boolean groupKeys = config.isGroupKeysEnabled();

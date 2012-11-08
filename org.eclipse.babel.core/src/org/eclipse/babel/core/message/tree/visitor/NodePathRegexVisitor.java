@@ -13,7 +13,8 @@ package org.eclipse.babel.core.message.tree.visitor;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.babel.core.message.tree.KeyTreeNode;
+import org.eclipse.babel.core.message.tree.IKeyTreeNode;
+import org.eclipse.babel.core.message.tree.IKeyTreeVisitor;
 
 /**
  * Visitor for finding keys matching the given regular expression.
@@ -22,7 +23,7 @@ import org.eclipse.babel.core.message.tree.KeyTreeNode;
 public class NodePathRegexVisitor implements IKeyTreeVisitor {
 
     /** Holder for matching keys. */
-    private List<KeyTreeNode> nodes = new ArrayList<KeyTreeNode>();
+    private List<IKeyTreeNode> nodes = new ArrayList<IKeyTreeNode>();
     private final String regex;
     
     /**
@@ -34,10 +35,10 @@ public class NodePathRegexVisitor implements IKeyTreeVisitor {
     }
 
     /**
-     * @see org.eclipse.babel.core.message.tree.visitor.IKeyTreeVisitor
-     *      #visitKeyTreeNode(org.eclipse.babel.core.message.tree.KeyTreeNode)
+     * @see org.eclipse.babel.core.message.internal.tree.visitor.IKeyTreeVisitor
+     *      #visitKeyTreeNode(org.eclipse.babel.core.message.internal.tree.internal.KeyTreeNode)
      */
-    public void visitKeyTreeNode(KeyTreeNode node) {
+    public void visitKeyTreeNode(IKeyTreeNode node) {
         if (node.getMessageKey().matches(regex)) {
             nodes.add(node);
         }
@@ -47,7 +48,7 @@ public class NodePathRegexVisitor implements IKeyTreeVisitor {
      * Gets matching key tree nodes.
      * @return matching key tree nodes
      */
-    public List<KeyTreeNode> getKeyTreeNodes() {
+    public List<IKeyTreeNode> getKeyTreeNodes() {
         return nodes;
     }
 
@@ -57,7 +58,7 @@ public class NodePathRegexVisitor implements IKeyTreeVisitor {
      */
     public List<String> getKeyTreeNodePaths() {
         List<String> paths = new ArrayList<String>(nodes.size());
-        for (KeyTreeNode node : nodes) {
+        for (IKeyTreeNode node : nodes) {
             paths.add(node.getMessageKey());
         }
         return paths;
@@ -68,7 +69,7 @@ public class NodePathRegexVisitor implements IKeyTreeVisitor {
      * Gets the first item matched.
      * @return first item matched, or <code>null</code> if none was found
      */
-    public KeyTreeNode getKeyTreeNode() {
+    public IKeyTreeNode getKeyTreeNode() {
         if (nodes.size() > 0) {
             return nodes.get(0);
         }

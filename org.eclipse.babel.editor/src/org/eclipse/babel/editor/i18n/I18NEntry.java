@@ -7,16 +7,20 @@
  *
  * Contributors:
  *    Pascal Essiembre - initial API and implementation
+ *    Alexej Strelzow - updateKey
  ******************************************************************************/
 package org.eclipse.babel.editor.i18n;
 
 import java.util.Locale;
 
-import org.eclipse.babel.core.message.Message;
-import org.eclipse.babel.core.message.MessagesBundleGroup;
+import org.eclipse.babel.core.message.IMessage;
+import org.eclipse.babel.core.message.IMessagesBundle;
+import org.eclipse.babel.core.message.IMessagesBundleGroup;
+import org.eclipse.babel.core.message.internal.Message;
+import org.eclipse.babel.core.message.manager.RBManager;
 import org.eclipse.babel.core.util.BabelUtils;
-import org.eclipse.babel.editor.MessagesEditor;
-import org.eclipse.babel.editor.MessagesEditorChangeAdapter;
+import org.eclipse.babel.editor.internal.MessagesEditor;
+import org.eclipse.babel.editor.internal.MessagesEditorChangeAdapter;
 import org.eclipse.babel.editor.util.UIUtils;
 import org.eclipse.babel.editor.widgets.NullableText;
 import org.eclipse.swt.SWT;
@@ -40,7 +44,8 @@ import org.eclipse.ui.editors.text.TextEditor;
 public class I18NEntry extends Composite {
 
     private final MessagesEditor editor;
-    private final MessagesBundleGroup messagesBundleGroup;
+    private final String bundleGroupId;
+    private final String projectName;
     private final Locale locale;
 
     private boolean expanded = true;
@@ -60,7 +65,8 @@ public class I18NEntry extends Composite {
         super(parent, SWT.NONE);
         this.editor = editor;
         this.locale = locale;
-        this.messagesBundleGroup = editor.getBundleGroup();
+        this.bundleGroupId = editor.getBundleGroup().getResourceBundleId();
+        this.projectName = editor.getBundleGroup().getProjectName();
         
         GridLayout gridLayout = new GridLayout(1, false);        
         gridLayout.horizontalSpacing = 0;
@@ -147,12 +153,15 @@ public class I18NEntry extends Composite {
     }
     
     public boolean isEditable() {
-    	return ((TextEditor) messagesBundleGroup.
-        	getMessagesBundle(locale).getResource().getSource()).isEditable();
+    	IMessagesBundleGroup messagesBundleGroup = RBManager.getInstance(projectName).getMessagesBundleGroup(bundleGroupId);
+        IMessagesBundle bundle = messagesBundleGroup.getMessagesBundle(locale);
+    	return ((TextEditor) bundle.getResource().getSource()).isEditable();
     }
     
     public String getResourceLocationLabel() {
-    	return messagesBundleGroup.getMessagesBundle(locale).getResource().getResourceLocationLabel();
+    	IMessagesBundleGroup messagesBundleGroup = RBManager.getInstance(projectName).getMessagesBundleGroup(bundleGroupId);
+    	IMessagesBundle bundle = messagesBundleGroup.getMessagesBundle(locale);
+    	return bundle.getResource().getResourceLocationLabel();
     }
     
 //    /*default*/ Text getTextBox() {
@@ -236,35 +245,43 @@ public class I18NEntry extends Composite {
         
         editor.addChangeListener(new MessagesEditorChangeAdapter() {
             public void selectedKeyChanged(String oldKey, String newKey) {
-                boolean isKey =
-                        newKey != null && messagesBundleGroup.isMessageKey(newKey);
-                textBox.setEnabled(isKey);
-                if (isKey) {
-                    Message entry = messagesBundleGroup.getMessage(
-                            newKey, locale);
-                    if (entry == null || entry.getValue() == null) {
-                        textBox.setText(null);
-//                        commentedCheckbox.setSelection(false);
-                    } else {
-//                        commentedCheckbox.setSelection(bundleEntry.isCommented());
-                        textBox.setText(entry.getValue());
-                    }
-                } else {
-                    textBox.setText(null);
-                }
+            	updateKey(newKey);
             }
         });
 
     }
+    
+	void updateKey(String key) {
+		IMessagesBundleGroup messagesBundleGroup = RBManager.getInstance(
+				projectName).getMessagesBundleGroup(bundleGroupId);
+		boolean isKey = key != null && messagesBundleGroup.isMessageKey(key);
+		textBox.setEnabled(isKey);
+		if (isKey) {
+			IMessage entry = messagesBundleGroup.getMessage(key, locale);
+			if (entry == null || entry.getValue() == null) {
+				textBox.setText(null);
+				// commentedCheckbox.setSelection(false);
+			} else {
+				// commentedCheckbox.setSelection(bundleEntry.isCommented());
+				textBox.setText(entry.getValue());
+			}
+		} else {
+			textBox.setText(null);
+		}
+	}
 
     private void updateModel() {
         if (editor.getSelectedKey() != null) {
             if (!BabelUtils.equals(focusGainedText, textBox.getText())) {
+            	IMessagesBundleGroup messagesBundleGroup = RBManager.getInstance(projectName).getMessagesBundleGroup(bundleGroupId);
                 String key = editor.getSelectedKey();
-                Message entry = messagesBundleGroup.getMessage(key, locale);
+                IMessage entry = messagesBundleGroup.getMessage(key, locale);
                 if (entry == null) {
                     entry = new Message(key, locale);
-                    messagesBundleGroup.getMessagesBundle(locale).addMessage(entry);
+                    IMessagesBundle messagesBundle = messagesBundleGroup.getMessagesBundle(locale);
+                    if (messagesBundle != null) {
+                    	messagesBundle.addMessage(entry);
+                    }
                 }
                 entry.setText(textBox.getText());
             }

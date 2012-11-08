@@ -16,8 +16,10 @@ import java.util.Collection;
 import java.util.Locale;
 import java.util.Properties;
 
-import org.eclipse.babel.core.message.Message;
-import org.eclipse.babel.core.message.MessagesBundle;
+import org.eclipse.babel.core.message.IMessage;
+import org.eclipse.babel.core.message.IMessagesBundle;
+import org.eclipse.babel.core.message.internal.Message;
+import org.eclipse.babel.core.message.internal.MessagesBundle;
 import org.eclipse.babel.core.util.BabelUtils;
 
 /**
@@ -52,8 +54,9 @@ public class PropertiesDeserializer {
      * @param messagesBundle the target {@link MessagesBundle}
      * @param properties the string containing the properties to parse
      */
-    public void deserialize(MessagesBundle messagesBundle, String properties) {
+    public void deserialize(IMessagesBundle messagesBundle, String properties) {
         Locale locale = messagesBundle.getLocale();
+        
         Collection<String> oldKeys =
         		new ArrayList<String>(Arrays.asList(messagesBundle.getKeys()));
         Collection<String> newKeys = new ArrayList<String>();
@@ -114,7 +117,7 @@ public class PropertiesDeserializer {
                     value = value.substring(1);
                 }
                 
-                if (config.isUnicodeUnescapeEnabled()) {
+                if (this.config != null && config.isUnicodeUnescapeEnabled()) {
                     key = convertEncodedToUnicode(key);
                     value = convertEncodedToUnicode(value);
                 } else {
@@ -123,7 +126,7 @@ public class PropertiesDeserializer {
                     value = value.replaceAll(
                             "\\\\n", "\n");  //$NON-NLS-1$//$NON-NLS-2$
                 }
-                Message entry = messagesBundle.getMessage(key);
+                IMessage entry = messagesBundle.getMessage(key);
                 if (entry == null) {
                     entry = new Message(key, locale);
                     messagesBundle.addMessage(entry);
@@ -249,4 +252,5 @@ public class PropertiesDeserializer {
         }
         return buf.toString();
     }
+    
 }

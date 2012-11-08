@@ -18,7 +18,7 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.eclipse.babel.core.message.MessagesBundleGroup;
+import org.eclipse.babel.core.message.internal.MessagesBundleGroup;
 import org.eclipse.babel.editor.preferences.MsgEditorPreferences;
 import org.eclipse.babel.editor.util.UIUtils;
 import org.eclipse.core.resources.IContainer;
@@ -62,9 +62,11 @@ public final class MessagesBundleGroupFactory {
 
     	//check we are inside an eclipse plugin project where NL is supported at runtime:
 		IProject proj = file.getProject();
-		if (proj == null || !UIUtils.hasNature(proj, UIUtils.PDE_NATURE)) { //$NON-NLS-1$
-			return createDefaultBundleGroup(site, file);
-		}
+		try {
+		    if (proj == null || !proj.hasNature(UIUtils.PDE_NATURE)) { //$NON-NLS-1$
+		    	return createDefaultBundleGroup(site, file);
+		    }
+		} catch (CoreException e) { }
 
     	IFolder nl = getNLFolder(file);
     	

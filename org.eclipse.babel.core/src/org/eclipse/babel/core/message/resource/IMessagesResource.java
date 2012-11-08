@@ -12,56 +12,75 @@ package org.eclipse.babel.core.message.resource;
 
 import java.util.Locale;
 
-import org.eclipse.babel.core.message.MessagesBundle;
+import org.eclipse.babel.core.message.IMessagesBundle;
+import org.eclipse.babel.core.message.IMessagesResourceChangeListener;
+import org.eclipse.babel.core.message.internal.MessagesBundle;
 
 /**
  * Class abstracting the underlying native storage mechanism for persisting
- * internationalised text messages.  
+ * internationalised text messages.
+ * 
  * @author Pascal Essiembre
  */
 public interface IMessagesResource {
 
 	/**
 	 * Gets the resource locale.
+	 * 
 	 * @return locale
 	 */
-    Locale getLocale();
-    /**
-     * Gets the underlying object abstracted by this resource (e.g. a File).
-     * @return source object
-     */
-    Object getSource();
-    /**
-     * Serializes a {@link MessagesBundle} instance to its native format.
-     * @param messagesBundle the MessagesBundle to serialize
-     */
-    void serialize(MessagesBundle messagesBundle);
-    /**
-     * Deserializes a {@link MessagesBundle} instance from its native format.
-     * @param messagesBundle the MessagesBundle to deserialize
-     */
-    void deserialize(MessagesBundle messagesBundle);
-    /**
-     * Adds a messages resource listener.  Implementors are required to notify
-     * listeners of changes within the native implementation.
-     * @param listener the listener
-     */
-    void addMessagesResourceChangeListener(
-    		IMessagesResourceChangeListener listener);
-    /**
-     * Removes a messages resource listener.
-     * @param listener the listener
-     */
-    void removeMessagesResourceChangeListener(
-    		IMessagesResourceChangeListener listener);
-    /**
-     * @return The resource location label. or null if unknown.
-     */
-    String getResourceLocationLabel();
-    
-    /**
-     * Called when the group it belongs to is disposed.
-     */
-    void dispose();
-    
+	Locale getLocale();
+
+	/**
+	 * Gets the underlying object abstracted by this resource (e.g. a File).
+	 * 
+	 * @return source object
+	 */
+	Object getSource();
+
+	/**
+	 * Serializes a {@link MessagesBundle} instance to its native format.
+	 * 
+	 * @param messagesBundle
+	 *            the MessagesBundle to serialize
+	 */
+	void serialize(IMessagesBundle messagesBundle);
+
+	/**
+	 * Deserializes a {@link MessagesBundle} instance from its native format.
+	 * 
+	 * @param messagesBundle
+	 *            the MessagesBundle to deserialize
+	 */
+	void deserialize(IMessagesBundle messagesBundle);
+
+	/**
+	 * Adds a messages resource listener. Implementors are required to notify
+	 * listeners of changes within the native implementation.
+	 * 
+	 * @param listener
+	 *            the listener
+	 */
+	void addMessagesResourceChangeListener(
+	        IMessagesResourceChangeListener listener);
+
+	/**
+	 * Removes a messages resource listener.
+	 * 
+	 * @param listener
+	 *            the listener
+	 */
+	void removeMessagesResourceChangeListener(
+	        IMessagesResourceChangeListener listener);
+
+	/**
+	 * @return The resource location label. or null if unknown.
+	 */
+	String getResourceLocationLabel();
+
+	/**
+	 * Called when the group it belongs to is disposed.
+	 */
+	void dispose();
+
 }

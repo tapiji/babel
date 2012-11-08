@@ -7,19 +7,17 @@
  *
  * Contributors:
  *    Pascal Essiembre - initial API and implementation
+ *    Alexej Strelzow - TapJI integration -> DirtyHack
  ******************************************************************************/
 package org.eclipse.babel.editor.resource;
 
 import java.util.Locale;
 
-import org.eclipse.babel.core.message.resource.AbstractPropertiesResource;
+import org.eclipse.babel.core.configuration.DirtyHack;
+import org.eclipse.babel.core.message.resource.internal.AbstractPropertiesResource;
 import org.eclipse.babel.core.message.resource.ser.PropertiesDeserializer;
 import org.eclipse.babel.core.message.resource.ser.PropertiesSerializer;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.jface.text.DocumentEvent;
-import org.eclipse.jface.text.IDocument;
-import org.eclipse.jface.text.IDocumentListener;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.editors.text.TextEditor;
@@ -67,20 +65,20 @@ public class EclipsePropertiesEditorResource extends AbstractPropertiesResource 
 //        };
 //        ResourcesPlugin.getWorkspace().addResourceChangeListener(rcl);        
         
-        
-        IDocument document = textEditor.getDocumentProvider().getDocument(
-                textEditor.getEditorInput());
-        System.out.println("DOCUMENT:" + document);
-        document.addDocumentListener(new IDocumentListener() {
-            public void documentAboutToBeChanged(DocumentEvent event) {
-                //do nothing
-                System.out.println("DOCUMENT ABOUT to CHANGE:");
-            }
-            public void documentChanged(DocumentEvent event) {
-                System.out.println("DOCUMENT CHANGED:");
-                fireResourceChange(EclipsePropertiesEditorResource.this);
-            }
-        });
+        // [alst] do we really need this? It causes an endless loop!
+//        IDocument document = textEditor.getDocumentProvider().getDocument(
+//                textEditor.getEditorInput());
+//        System.out.println("DOCUMENT:" + document);
+//        document.addDocumentListener(new IDocumentListener() {
+//            public void documentAboutToBeChanged(DocumentEvent event) {
+//                //do nothing
+//                System.out.println("DOCUMENT ABOUT to CHANGE:");
+//            }
+//            public void documentChanged(DocumentEvent event) {
+//                System.out.println("DOCUMENT CHANGED:");
+////                fireResourceChange(EclipsePropertiesEditorResource.this);
+//            }
+//        });
         
 //        IDocumentProvider docProvider = textEditor.getDocumentProvider();
 ////        PropertiesFileDocumentProvider
@@ -137,12 +135,15 @@ public class EclipsePropertiesEditorResource extends AbstractPropertiesResource 
     	 * we are on the UI thread.  This may not be the best place to do
     	 * this???
     	 */
-    	Display.getDefault().asyncExec(new Runnable() {
-			public void run() {
-		        textEditor.getDocumentProvider().getDocument(
-		                textEditor.getEditorInput()).set(content);
-			}
-		});
+    	// [alst] muss 2x speichern wenn async exec
+//    	Display.getDefault().asyncExec(new Runnable() {
+//			public void run() {
+		if (DirtyHack.isEditorModificationEnabled()) {
+			textEditor.getDocumentProvider()
+					.getDocument(textEditor.getEditorInput()).set(content);
+		}
+//			}
+//		});
     }
 
     /**

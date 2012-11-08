@@ -10,8 +10,10 @@
  ******************************************************************************/
 package org.eclipse.babel.core.message.checks;
 
-import org.eclipse.babel.core.message.Message;
-import org.eclipse.babel.core.message.MessagesBundleGroup;
+import org.eclipse.babel.core.message.IMessage;
+import org.eclipse.babel.core.message.IMessagesBundleGroup;
+import org.eclipse.babel.core.message.internal.Message;
+import org.eclipse.babel.core.message.internal.MessagesBundleGroup;
 
 /**
  * All purpose {@link Message} testing.   Use this interface to establish 
@@ -27,5 +29,5 @@ public interface IMessageCheck {
 	 * @param message the message being tested
 	 * @return <code>true</code> if condition is successfully tested
 	 */
-    boolean checkKey(MessagesBundleGroup messagesBundleGroup, Message message);
+    boolean checkKey(IMessagesBundleGroup messagesBundleGroup, IMessage message);
 }

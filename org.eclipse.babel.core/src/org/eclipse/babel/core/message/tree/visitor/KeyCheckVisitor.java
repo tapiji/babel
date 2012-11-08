@@ -13,8 +13,10 @@ package org.eclipse.babel.core.message.tree.visitor;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.eclipse.babel.core.message.MessagesBundleGroup;
-import org.eclipse.babel.core.message.tree.KeyTreeNode;
+import org.eclipse.babel.core.message.internal.MessagesBundleGroup;
+import org.eclipse.babel.core.message.tree.IKeyTreeNode;
+import org.eclipse.babel.core.message.tree.IKeyTreeVisitor;
+import org.eclipse.babel.core.message.tree.internal.KeyTreeNode;
 
 
 /**
@@ -29,8 +31,8 @@ public class KeyCheckVisitor implements IKeyTreeVisitor {
     private IKeyCheck keyCheck;
     private final MessagesBundleGroup messagesBundleGroup;
     
-    private final Collection<KeyTreeNode> passedNodes = new ArrayList<KeyTreeNode>();
-    private final Collection<KeyTreeNode> failedNodes = new ArrayList<KeyTreeNode>();
+    private final Collection<IKeyTreeNode> passedNodes = new ArrayList<IKeyTreeNode>();
+    private final Collection<IKeyTreeNode> failedNodes = new ArrayList<IKeyTreeNode>();
     
     /**
      * Constructor.
@@ -50,11 +52,11 @@ public class KeyCheckVisitor implements IKeyTreeVisitor {
     }
     
     /**
-     * @see org.eclipse.babel.core.message.tree.visitor.IKeyTreeVisitor
+     * @see org.eclipse.babel.core.message.internal.tree.visitor.IKeyTreeVisitor
      *      #visitKeyTreeNode(
-     *              org.eclipse.babel.core.message.tree.KeyTreeNode)
+     *              org.eclipse.babel.core.message.internal.tree.internal.KeyTreeNode)
      */
-    public void visitKeyTreeNode(KeyTreeNode node) {
+    public void visitKeyTreeNode(IKeyTreeNode node) {
         if (keyCheck == null) {
             return;
         }

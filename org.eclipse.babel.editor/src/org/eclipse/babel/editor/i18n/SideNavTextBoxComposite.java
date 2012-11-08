@@ -10,10 +10,10 @@
  ******************************************************************************/
 package org.eclipse.babel.editor.i18n;
 
-import org.eclipse.babel.core.message.tree.KeyTreeNode;
+import org.eclipse.babel.core.message.tree.IKeyTreeNode;
 import org.eclipse.babel.core.message.tree.visitor.NodePathRegexVisitor;
-import org.eclipse.babel.editor.MessagesEditor;
-import org.eclipse.babel.editor.MessagesEditorChangeAdapter;
+import org.eclipse.babel.editor.internal.MessagesEditor;
+import org.eclipse.babel.editor.internal.MessagesEditorChangeAdapter;
 import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
@@ -93,7 +93,7 @@ public class SideNavTextBoxComposite extends Composite {
                     NodePathRegexVisitor visitor = new NodePathRegexVisitor(
                             "^" + key + ".*");  //$NON-NLS-1$//$NON-NLS-2$
                     editor.getKeyTreeModel().accept(visitor, null);
-                    KeyTreeNode node = visitor.getKeyTreeNode();
+                    IKeyTreeNode node = visitor.getKeyTreeNode();
                     if (node != null) {
                         syncAddTextBox = false;
                         editor.setSelectedKey(node.getMessageKey());

@@ -10,12 +10,12 @@
  ******************************************************************************/
 package org.eclipse.babel.editor.i18n;
 
-import org.eclipse.babel.editor.MessagesEditor;
-import org.eclipse.babel.editor.tree.KeyTreeContributor;
+import org.eclipse.babel.editor.internal.MessagesEditor;
 import org.eclipse.babel.editor.tree.actions.CollapseAllAction;
 import org.eclipse.babel.editor.tree.actions.ExpandAllAction;
 import org.eclipse.babel.editor.tree.actions.FlatModelAction;
 import org.eclipse.babel.editor.tree.actions.TreeModelAction;
+import org.eclipse.babel.editor.tree.internal.KeyTreeContributor;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -72,12 +72,26 @@ public class SideNavComposite extends Composite {
         
         //TODO have two toolbars, one left-align, and one right, with drop
         //down menu
-        
+//        initListener();
         
 //        createTopSection();
         createKeyTree();
         new SideNavTextBoxComposite(this, editor);
     }
+
+//    private void initListener() {
+//        IResourceChangeListener listener = new IResourceChangeListener() {
+//            
+//            public void resourceChanged(IResourceChangeEvent event) {
+//                if (!Boolean.valueOf(System.getProperty("dirty"))) {
+//                    createKeyTree();
+//                }
+//            }
+//        };
+//        
+//        ResourcesPlugin.getWorkspace().addResourceChangeListener(listener, IResourceChangeEvent.PRE_DELETE | IResourceChangeEvent.POST_CHANGE);
+//        
+//    }
 
     /**
      * Gets the tree viewer.

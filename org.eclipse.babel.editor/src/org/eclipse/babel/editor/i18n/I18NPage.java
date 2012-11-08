@@ -7,6 +7,7 @@
  *
  * Contributors:
  *    Pascal Essiembre - initial API and implementation
+ *    Alexej Strelzow - TapiJI integration, fixed issues 37, 48
  ******************************************************************************/
 package org.eclipse.babel.editor.i18n;
 
@@ -15,10 +16,18 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import org.eclipse.babel.core.message.IMessagesBundle;
+import org.eclipse.babel.core.message.manager.IMessagesEditorListener;
+import org.eclipse.babel.core.message.manager.RBManager;
 import org.eclipse.babel.editor.IMessagesEditorChangeListener;
-import org.eclipse.babel.editor.MessagesEditor;
-import org.eclipse.babel.editor.MessagesEditorChangeAdapter;
+import org.eclipse.babel.editor.internal.MessagesEditor;
+import org.eclipse.babel.editor.internal.MessagesEditorChangeAdapter;
 import org.eclipse.babel.editor.util.UIUtils;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.ScrolledComposite;
@@ -32,7 +41,7 @@ import org.eclipse.ui.IWorkbenchPart;
  * at once for all supported locales.
  * @author Pascal Essiembre
  */
-public class I18NPage extends ScrolledComposite {
+public class I18NPage extends ScrolledComposite implements ISelectionProvider {
 
     /** Minimum height of text fields. */
     private static final int TEXT_MIN_HEIGHT = 90;
@@ -41,6 +50,7 @@ public class I18NPage extends ScrolledComposite {
     private final SideNavComposite keysComposite;
     private final Composite valuesComposite;
     private final Map<Locale,I18NEntry> entryComposites = new HashMap<Locale,I18NEntry>(); 
+    private Composite entriesComposite;
     
 //    private Composite parent;
     private boolean keyTreeVisible = true;
@@ -92,7 +102,27 @@ public class I18NPage extends ScrolledComposite {
         setExpandHorizontal(true);
         setExpandVertical(true);
         setMinWidth(400);
-
+        
+        RBManager instance = RBManager.getInstance(editor.getBundleGroup().getProjectName());
+        instance.addMessagesEditorListener(new IMessagesEditorListener() {
+			
+			public void onSave() {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			public void onModify() {
+				// TODO Auto-generated method stub
+			}
+			
+			public void onResourceChanged(IMessagesBundle bundle) {
+				I18NEntry i18nEntry = entryComposites.get(bundle.getLocale());
+				if (i18nEntry != null && !getSelection().isEmpty()) {
+					i18nEntry.updateKey(String.valueOf(((IStructuredSelection)getSelection()).getFirstElement()));
+				}
+			}
+			
+		});
     }
     
     /**
@@ -127,7 +157,7 @@ public class I18NPage extends ScrolledComposite {
         scrolledComposite.setExpandVertical(true);
         scrolledComposite.setSize(SWT.DEFAULT, 100);
 
-        final Composite entriesComposite =
+        entriesComposite =
                 new Composite(scrolledComposite, SWT.BORDER);
         scrolledComposite.setContent(entriesComposite);
         scrolledComposite.setMinSize(entriesComposite.computeSize(
@@ -141,10 +171,7 @@ public class I18NPage extends ScrolledComposite {
         locales = UIUtils.filterLocales(locales);
         for (int i = 0; i < locales.length; i++) {
             Locale locale = locales[i];
-            I18NEntry i18NEntry = new I18NEntry(
-                    entriesComposite, editor, locale);
-//            entryComposite.addFocusListener(localBehaviour);
-            entryComposites.put(locale, i18NEntry);
+            addI18NEntry(editor, locale);
         }
         
         editor.addChangeListener(new MessagesEditorChangeAdapter() {
@@ -158,6 +185,14 @@ public class I18NPage extends ScrolledComposite {
         
         
         return scrolledComposite;
+    }
+    
+    public void addI18NEntry(MessagesEditor editor, Locale locale) {
+    	I18NEntry i18NEntry = new I18NEntry(
+                entriesComposite, editor, locale);
+//      entryComposite.addFocusListener(localBehaviour);
+        entryComposites.put(locale, i18NEntry);
+        entriesComposite.layout();
     }
     
     public void selectLocale(Locale locale) {
@@ -175,5 +210,26 @@ public class I18NPage extends ScrolledComposite {
 //                textBox.clearSelection();
 //            }
         }
+    }
+
+    public void addSelectionChangedListener(ISelectionChangedListener listener) {
+        keysComposite.getTreeViewer().addSelectionChangedListener(listener);
+        
+    }
+
+    public ISelection getSelection() {
+        return keysComposite.getTreeViewer().getSelection();
+    }
+
+    public void removeSelectionChangedListener(ISelectionChangedListener listener) {
+        keysComposite.getTreeViewer().removeSelectionChangedListener(listener);
+    }
+
+    public void setSelection(ISelection selection) {
+        keysComposite.getTreeViewer().setSelection(selection);
+    }
+    
+    public TreeViewer getTreeViewer() {
+    	return keysComposite.getTreeViewer();
     }
 }
