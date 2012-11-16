@@ -2,5 +2,4 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension-point id="babelConfiguration" name="babelConfiguration.exsd" schema="schema/babelConfiguration.exsd"/>
-
 </plugin>
