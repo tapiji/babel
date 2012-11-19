@@ -30,8 +30,8 @@
 	<target name="getMapFiles"  unless="skipMaps">
 		<mkdir dir="${buildDirectory}/maps" />
 		<exec executable="git" dir="${buildDirectory}/maps" output="${buildDirectory}/maps/maps.tar">
-			<arg line="archive -format=tar" />
-			<arg line="-remote=git.eclipse.org/gitroot/babel/plugins.git" />
+			<arg line="archive --format=tar" />
+			<arg line="--remote=git.eclipse.org/gitroot/babel/plugins.git" />
 			<arg line="master org.eclipse.babel.tapiji.tools.build/maps" />
 		</exec>
 		<untar src="${buildDirectory}/maps/maps.tar" dest="${buildDirectory}/maps" />
