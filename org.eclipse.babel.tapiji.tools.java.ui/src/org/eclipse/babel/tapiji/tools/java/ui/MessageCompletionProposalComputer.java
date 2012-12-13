@@ -5,8 +5,9 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  * 
- * Contributors:
- *     Martin Reiterer - initial API and implementation
+ *  *  * Contributors:
+ * 	   Martin Reiterer - initial API and implementation
+ *     Alexej Strelzow - integrated refactoring mechanism
  ******************************************************************************/
 package org.eclipse.babel.tapiji.tools.java.ui;
 
@@ -20,6 +21,7 @@ import org.eclipse.babel.tapiji.tools.core.ui.ResourceBundleManager;
 import org.eclipse.babel.tapiji.tools.core.ui.builder.InternationalizationNature;
 import org.eclipse.babel.tapiji.tools.java.ui.autocompletion.CreateResourceBundleProposal;
 import org.eclipse.babel.tapiji.tools.java.ui.autocompletion.InsertResourceBundleReferenceProposal;
+import org.eclipse.babel.tapiji.tools.java.ui.autocompletion.KeyRefactoringProposal;
 import org.eclipse.babel.tapiji.tools.java.ui.autocompletion.MessageCompletionProposal;
 import org.eclipse.babel.tapiji.tools.java.ui.autocompletion.NewResourceBundleEntryProposal;
 import org.eclipse.babel.tapiji.tools.java.ui.autocompletion.NoActionProposal;
@@ -71,11 +73,6 @@ public class MessageCompletionProposalComputer implements
             int tokenOffset = coreContext.getOffset();
             boolean isStringLiteral = coreContext.getTokenKind() == CompletionContext.TOKEN_KIND_STRING_LITERAL;
 
-            if (coreContext.getTokenKind() == CompletionContext.TOKEN_KIND_NAME
-                    && (tokenEnd + 1) - tokenStart > 0) {
-                return completions;
-            }
-
             if (cu == null) {
                 manager = ResourceBundleManager.getManager(javaContext
                         .getCompilationUnit().getResource().getProject());
@@ -88,6 +85,22 @@ public class MessageCompletionProposalComputer implements
                 cu = ASTutilsUI.getCompilationUnit(resource);
 
                 cu.accept(csav);
+            }
+
+            if (coreContext.getTokenKind() == CompletionContext.TOKEN_KIND_NAME
+                    && (tokenEnd + 1) - tokenStart > 0) {
+
+                // Cal10n extension
+                String[] metaData = ASTutils.getCal10nEnumLiteralDataAtPos(
+                        manager.getProject().getName(), cu, tokenOffset - 1);
+
+                if (metaData != null) {
+                    completions.add(new KeyRefactoringProposal(tokenOffset,
+                            metaData[1], manager.getProject().getName(),
+                            metaData[0], metaData[2]));
+                }
+
+                return completions;
             }
 
             if (tokenStart < 0) {
@@ -211,12 +224,16 @@ public class MessageCompletionProposalComputer implements
             boolean hit = false;
             // If a part of a String has already been entered
             for (String key : bundleGroup.getMessageKeys()) {
-                if (key.toLowerCase().startsWith(fullToken)) {
+                if (key.toLowerCase().startsWith(fullToken.toLowerCase())) {
                     if (!key.equals(fullToken)) {
                         completions.add(new MessageCompletionProposal(
                                 tokenStart, tokenEnd - tokenStart, key, false));
                     } else {
                         hit = true;
+                        // Refactoring function
+                        completions.add(new KeyRefactoringProposal(tokenStart,
+                                fullToken, manager.getProject().getName(),
+                                bundleName, null));
                     }
                 }
             }

@@ -561,6 +561,7 @@ public class PropertyKeySelectionTree extends Composite implements
     private void hookDoubleClickAction() {
         treeViewer.addDoubleClickListener(new IDoubleClickListener() {
 
+            @Override
             public void doubleClick(DoubleClickEvent event) {
                 doubleClickAction.run();
             }
@@ -581,6 +582,7 @@ public class PropertyKeySelectionTree extends Composite implements
 
         treeViewer.getControl().addKeyListener(new KeyAdapter() {
 
+            @Override
             public void keyPressed(KeyEvent event) {
                 if (event.character == SWT.DEL && event.stateMask == 0) {
                     deleteSelectedItems();
@@ -617,6 +619,7 @@ public class PropertyKeySelectionTree extends Composite implements
 
         Display.getDefault().asyncExec(new Runnable() {
 
+            @Override
             public void run() {
                 refreshViewer(event, true);
             }
@@ -712,6 +715,25 @@ public class PropertyKeySelectionTree extends Composite implements
         EditorUtils.openEditor(site.getPage(),
                 manager.getRandomFile(resourceBundle),
                 EditorUtils.RESOURCE_BUNDLE_EDITOR, key);
+    }
+
+    public void refactorSelectedItem() {
+        String key = "";
+        String bundleId = "";
+        ISelection selection = treeViewer.getSelection();
+        if (selection instanceof IStructuredSelection) {
+            IStructuredSelection structSel = (IStructuredSelection) selection;
+            if (structSel.getFirstElement() instanceof IKeyTreeNode) {
+                IKeyTreeNode keyTreeNode = (IKeyTreeNode) structSel
+                        .getFirstElement();
+                key = keyTreeNode.getMessageKey();
+                bundleId = keyTreeNode.getMessagesBundleGroup()
+                        .getResourceBundleId();
+
+                RBManager.getRefactorService().openRefactorDialog(projectName,
+                        bundleId, key, null);
+            }
+        }
     }
 
     public void deleteSelectedItems() {

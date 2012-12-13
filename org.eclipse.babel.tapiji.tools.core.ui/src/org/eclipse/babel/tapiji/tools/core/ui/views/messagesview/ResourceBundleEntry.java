@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.eclipse.babel.tapiji.tools.core.ui.views.messagesview;
 
+import org.eclipse.babel.editor.util.UIUtils;
 import org.eclipse.babel.tapiji.tools.core.ui.widgets.PropertyKeySelectionTree;
 import org.eclipse.jface.action.ContributionItem;
 import org.eclipse.jface.viewers.ISelection;
@@ -33,6 +34,7 @@ public class ResourceBundleEntry extends ContributionItem implements
     // Menu-Items
     private MenuItem addItem;
     private MenuItem editItem;
+    private MenuItem refactorItem;
     private MenuItem removeItem;
 
     public ResourceBundleEntry() {
@@ -76,6 +78,24 @@ public class ResourceBundleEntry extends ContributionItem implements
                 @Override
                 public void widgetSelected(SelectionEvent e) {
                     parentView.editSelectedItem();
+                }
+
+                @Override
+                public void widgetDefaultSelected(SelectionEvent e) {
+
+                }
+            });
+
+            // MenuItem for refactoring the currently selected entry
+            refactorItem = new MenuItem(menu, SWT.NONE, index + 2);
+            refactorItem.setText("Refactor ...");
+            refactorItem.setImage(UIUtils.getImageDescriptor(
+                    UIUtils.IMAGE_REFACTORING).createImage());
+            refactorItem.addSelectionListener(new SelectionListener() {
+
+                @Override
+                public void widgetSelected(SelectionEvent e) {
+                    parentView.refactorSelectedItem();
                 }
 
                 @Override

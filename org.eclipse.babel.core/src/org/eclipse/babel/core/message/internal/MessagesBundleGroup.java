@@ -314,6 +314,7 @@ public class MessagesBundleGroup extends AbstractMessageModel implements
      * @param targetKey
      *            the new message name
      */
+    @Override
     public void renameMessageKeys(String sourceKey, String targetKey) {
         for (IMessagesBundle msgBundle : localeBundles.values()) {
             msgBundle.renameMessageKey(sourceKey, targetKey);

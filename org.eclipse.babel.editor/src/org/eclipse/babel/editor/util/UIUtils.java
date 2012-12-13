@@ -75,6 +75,8 @@ public final class UIUtils {
     public static final String IMAGE_ADD = "add.png"; //$NON-NLS-1$
     /** Name of edit icon. */
     public static final String IMAGE_RENAME = "rename.gif"; //$NON-NLS-1$
+    /** Name of refactoring icon. */
+    public static final String IMAGE_REFACTORING = "refactoring.png"; //$NON-NLS-1$
     /** Name of "view left" icon. */
     public static final String IMAGE_VIEW_LEFT = "viewLeft.gif"; //$NON-NLS-1$
     /** Name of locale icon. */
@@ -124,6 +126,7 @@ public final class UIUtils {
     public static final void sortLocales(Locale[] locales) {
         List<Locale> localesList = new ArrayList<Locale>(Arrays.asList(locales));
         Comparator<Locale> comp = new Comparator<Locale>() {
+            @Override
             public int compare(Locale l1, Locale l2) {
                 if (ROOT_LOCALE.equals(l1)) {
                     return -1;

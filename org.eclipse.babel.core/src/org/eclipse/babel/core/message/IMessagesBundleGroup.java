@@ -187,4 +187,14 @@ public interface IMessagesBundleGroup {
      *            The key of messages to remove
      */
     void removeMessagesAddParentKey(String key);
+
+    /**
+     * Renames a key in all messages bundles forming this group.
+     * 
+     * @param sourceKey
+     *            the message key to rename
+     * @param targetKey
+     *            the new message name
+     */
+    void renameMessageKeys(String sourceKey, String targetKey);
 }
