@@ -20,15 +20,17 @@ import java.util.Observer;
 import org.eclipse.babel.core.message.checks.IMessageCheck;
 import org.eclipse.babel.core.message.checks.internal.DuplicateValueCheck;
 import org.eclipse.babel.core.message.checks.internal.MissingValueCheck;
+import org.eclipse.babel.editor.IMessagesEditorChangeListener;
 import org.eclipse.babel.editor.i18n.actions.ShowDuplicateAction;
 import org.eclipse.babel.editor.i18n.actions.ShowMissingAction;
-import org.eclipse.babel.editor.internal.MessagesEditor;
+import org.eclipse.babel.editor.internal.AbstractMessagesEditor;
 import org.eclipse.babel.editor.internal.MessagesEditorChangeAdapter;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
@@ -44,9 +46,19 @@ public class EntryRightBanner extends Composite {
     private Label warningIcon;
     private final Map actionByMarkerIds = new HashMap();
     private final ToolBarManager toolBarMgr = new ToolBarManager(SWT.FLAT);
-    private final MessagesEditor editor;
-    private final I18NEntry i18nEntry;
+    private final AbstractMessagesEditor editor;
+    private final AbstractI18NEntry i18nEntry;
     private final Locale locale;
+    private final Observer observer = new Observer() {
+        public void update(Observable o, Object arg) {
+            updateMarkers();
+        }
+    };
+    private final IMessagesEditorChangeListener msgEditorChangeListener = new MessagesEditorChangeAdapter() {
+        public void selectedKeyChanged(String oldKey, String newKey) {
+            updateMarkers();
+        }
+    };
 
     /**
      * Constructor.
@@ -56,7 +68,7 @@ public class EntryRightBanner extends Composite {
      * @param keyTree
      *            key tree
      */
-    public EntryRightBanner(Composite parent, final I18NEntry i18nEntry) {
+    public EntryRightBanner(Composite parent, final AbstractI18NEntry i18nEntry) {
         super(parent, SWT.NONE);
         this.i18nEntry = i18nEntry;
         this.locale = i18nEntry.getLocale();
@@ -82,17 +94,8 @@ public class EntryRightBanner extends Composite {
         toolBarMgr.createControl(this);
         toolBarMgr.update(true);
 
-        editor.addChangeListener(new MessagesEditorChangeAdapter() {
-            public void selectedKeyChanged(String oldKey, String newKey) {
-                updateMarkers();
-
-            }
-        });
-        editor.getMarkers().addObserver(new Observer() {
-            public void update(Observable o, Object arg) {
-                updateMarkers();
-            }
-        });
+        editor.addChangeListener(msgEditorChangeListener);
+        editor.getMarkers().addObserver(observer);
     }
 
     /**
@@ -100,8 +103,13 @@ public class EntryRightBanner extends Composite {
      * @param colon
      */
     private void updateMarkers() {
-        PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable() {
+        Display display = toolBarMgr.getControl().getDisplay();
+        // [RAP] only update markers, which belong to this UIThread
+        if (display.equals(Display.getCurrent()) && !isDisposed()) {
+            display.asyncExec(new Runnable() {
             public void run() {
+                    if (isDisposed())
+                        return;
                 // if (!PlatformUI.getWorkbench().getDisplay().isDisposed()
                 // && !editor.getMarkerManager().isDisposed()) {
                 boolean isMarked = false;
@@ -129,6 +137,7 @@ public class EntryRightBanner extends Composite {
             }
             // }
         });
+        }
 
     }
 
@@ -143,4 +152,10 @@ public class EntryRightBanner extends Composite {
         return null;
     }
 
+    @Override
+    public void dispose() {
+        editor.removeChangeListener(msgEditorChangeListener);
+        editor.getMarkers().deleteObserver(observer);
+        super.dispose();
+    }
 }

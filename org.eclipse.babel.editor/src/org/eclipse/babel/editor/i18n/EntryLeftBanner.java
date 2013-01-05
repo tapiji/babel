@@ -41,7 +41,7 @@ public class EntryLeftBanner extends Composite {
      * @param keyTree
      *            key tree
      */
-    public EntryLeftBanner(Composite parent, final I18NEntry i18NEntry) {
+    public EntryLeftBanner(Composite parent, final AbstractI18NEntry i18NEntry) {
         super(parent, SWT.NONE);
 
         RowLayout layout = new RowLayout();

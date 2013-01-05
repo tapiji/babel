@@ -22,6 +22,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 
+import org.eclipse.babel.editor.compat.SwtRapCompatibilityFormToolkit;
 import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -415,7 +416,7 @@ public class LocalizationEditor extends EditorPart {
     private ExportAction exportAction;
 
     // Form
-    protected FormToolkit toolkit = new FormToolkit(Display.getCurrent());
+    protected SwtRapCompatibilityFormToolkit toolkit = new SwtRapCompatibilityFormToolkit(Display.getCurrent());
     private Form form;
     private Image formImage;
 

@@ -182,15 +182,19 @@ public class MessagesEditorPlugin extends AbstractUIPlugin implements
         };
         ResourcesPlugin.getWorkspace().addResourceChangeListener(
                 resourceChangeListener);
-
+        try {
         Display.getDefault().asyncExec(new Runnable() {
 
             public void run() {
-                Display.getDefault()
-                        .addFilter(SWT.KeyUp, new UndoKeyListener());
+                    Display.getDefault().addFilter(SWT.KeyUp,
+                            new UndoKeyListener());
 
             }
         });
+        } catch (NullPointerException e) {
+            // TODO [RAP] Non UI-Thread, no default display available, in RAP
+            // multiple clients and displays
+        }
     }
 
     /**

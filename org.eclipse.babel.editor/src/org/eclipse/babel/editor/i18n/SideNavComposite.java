@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.eclipse.babel.editor.i18n;
 
-import org.eclipse.babel.editor.internal.MessagesEditor;
+import org.eclipse.babel.editor.internal.AbstractMessagesEditor;
 import org.eclipse.babel.editor.tree.actions.CollapseAllAction;
 import org.eclipse.babel.editor.tree.actions.ExpandAllAction;
 import org.eclipse.babel.editor.tree.actions.FlatModelAction;
@@ -35,7 +35,9 @@ public class SideNavComposite extends Composite {
     /** Key Tree Viewer. */
     private TreeViewer treeViewer;
 
-    private MessagesEditor editor;
+    private AbstractMessagesEditor editor;
+
+    private SideNavTextBoxComposite textBoxComp;
 
     /**
      * Constructor.
@@ -45,7 +47,8 @@ public class SideNavComposite extends Composite {
      * @param keyTree
      *            key tree
      */
-    public SideNavComposite(Composite parent, final MessagesEditor editor) {
+    public SideNavComposite(Composite parent,
+            final AbstractMessagesEditor editor) {
         super(parent, SWT.BORDER);
         this.editor = editor;
 
@@ -77,7 +80,7 @@ public class SideNavComposite extends Composite {
 
         // createTopSection();
         createKeyTree();
-        new SideNavTextBoxComposite(this, editor);
+        textBoxComp = new SideNavTextBoxComposite(this, editor);
     }
 
     // private void initListener() {
@@ -128,4 +131,7 @@ public class SideNavComposite extends Composite {
 
     }
 
+    public SideNavTextBoxComposite getSidNavTextBoxComposite() {
+        return textBoxComp;
+    }
 }

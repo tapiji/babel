@@ -8,7 +8,7 @@
  * Contributors:
  *    Pascal Essiembre - initial API and implementation
  *    Alexej Strelzow - TapJI integration, bug fixes & enhancements
- *    				  - issue 35, 36, 48, 73
+ *                    - issue 35, 36, 48, 73
  ******************************************************************************/
 package org.eclipse.babel.editor.internal;
 
@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.Locale;
 
 import org.eclipse.babel.core.message.IMessagesBundle;
+import org.eclipse.babel.core.message.internal.IMessagesBundleGroupListener;
+import org.eclipse.babel.core.message.internal.IMessagesBundleListener;
 import org.eclipse.babel.core.message.internal.MessageException;
 import org.eclipse.babel.core.message.internal.MessagesBundle;
 import org.eclipse.babel.core.message.internal.MessagesBundleGroup;
@@ -47,6 +49,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
@@ -65,38 +68,38 @@ import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 /**
  * Multi-page editor for editing resource bundles.
  */
-public class MessagesEditor extends MultiPageEditorPart implements IGotoMarker,
-        IMessagesEditor {
+public abstract class AbstractMessagesEditor extends MultiPageEditorPart
+        implements IGotoMarker, IMessagesEditor {
 
     /** Editor ID, as defined in plugin.xml. */
     public static final String EDITOR_ID = "org.eclilpse.babel.editor.editor.MessagesEditor"; //$NON-NLS-1$
 
-    private String selectedKey;
-    private List<IMessagesEditorChangeListener> changeListeners = new ArrayList<IMessagesEditorChangeListener>(
+    protected String selectedKey;
+    protected List<IMessagesEditorChangeListener> changeListeners = new ArrayList<IMessagesEditorChangeListener>(
             2);
 
     /** MessagesBundle group. */
-    private MessagesBundleGroup messagesBundleGroup;
+    protected MessagesBundleGroup messagesBundleGroup;
 
     /** Page with key tree and text fields for all locales. */
-    private I18NPage i18nPage;
-    private final List<Locale> localesIndex = new ArrayList<Locale>();
-    private final List<ITextEditor> textEditorsIndex = new ArrayList<ITextEditor>();
+    protected I18NPage i18nPage;
+    protected final List<Locale> localesIndex = new ArrayList<Locale>();
+    protected final List<ITextEditor> textEditorsIndex = new ArrayList<ITextEditor>();
 
-    private MessagesBundleGroupOutline outline;
+    protected MessagesBundleGroupOutline outline;
 
-    private MessagesEditorMarkers markers;
+    protected MessagesEditorMarkers markers;
 
-    private AbstractKeyTreeModel keyTreeModel;
+    protected AbstractKeyTreeModel keyTreeModel;
 
-    private IFile file; // init
+    protected IFile file; // init
 
-    private boolean updateSelectedKey;
+    protected boolean updateSelectedKey;
 
     /**
      * Creates a multi-page editor example.
      */
-    public MessagesEditor() {
+    public AbstractMessagesEditor() {
         super();
         outline = new MessagesBundleGroupOutline(this);
     }
@@ -131,20 +134,8 @@ public class MessagesEditor extends MultiPageEditorPart implements IGotoMarker,
             } catch (MessageException e) {
                 throw new PartInitException("Cannot create bundle group.", e); //$NON-NLS-1$
             }
-            // register bundle group listener to refresh editor when new a
-            // bundle is added
             messagesBundleGroup
-                    .addMessagesBundleGroupListener(new MessagesBundleGroupAdapter() {
-                        @Override
-                        public void messagesBundleAdded(
-                                MessagesBundle messagesBundle) {
-                            addMessagesBundle(messagesBundle,
-                                    messagesBundle.getLocale());
-                            // refresh i18n page
-                            i18nPage.addI18NEntry(MessagesEditor.this,
-                                    messagesBundle.getLocale());
-                        }
-                    });
+                    .addMessagesBundleGroupListener(getMsgBundleGroupListner());
             markers = new MessagesEditorMarkers(messagesBundleGroup);
             setPartName(messagesBundleGroup.getName());
             setTitleImage(UIUtils.getImage(UIUtils.IMAGE_RESOURCE_BUNDLE));
@@ -157,6 +148,7 @@ public class MessagesEditor extends MultiPageEditorPart implements IGotoMarker,
             throw new PartInitException(
                     "Invalid Input: Must be IFileEditorInput"); //$NON-NLS-1$
         }
+        initRAP();
     }
 
     // public RBEMarkerManager getMarkerManager() {
@@ -184,29 +176,56 @@ public class MessagesEditor extends MultiPageEditorPart implements IGotoMarker,
             Locale locale = locales[i];
             MessagesBundle messagesBundle = (MessagesBundle) messagesBundleGroup
                     .getMessagesBundle(locale);
-            addMessagesBundle(messagesBundle, locale);
+            createMessagesBundlePage(messagesBundle);
         }
     }
 
     /**
-     * Creates a new text editor for the messages bundle and locale, which gets
-     * added to a new page
+     * Creates a new text editor for the messages bundle, which gets added to a new page
      */
-    private void addMessagesBundle(MessagesBundle messagesBundle, Locale locale) {
+    protected void createMessagesBundlePage(MessagesBundle messagesBundle) {
         try {
             IMessagesResource resource = messagesBundle.getResource();
-            TextEditor textEditor = (TextEditor) resource.getSource();
+            final TextEditor textEditor = (TextEditor) resource.getSource();
             int index = addPage(textEditor, textEditor.getEditorInput());
             setPageText(index,
                     UIUtils.getDisplayName(messagesBundle.getLocale()));
             setPageImage(index, UIUtils.getImage(UIUtils.IMAGE_PROPERTIES_FILE));
-            localesIndex.add(locale);
-            textEditorsIndex.add(textEditor);
+            localesIndex.add(messagesBundle.getLocale());
+            textEditorsIndex.add(textEditor);            
         } catch (PartInitException e) {
             ErrorDialog.openError(getSite().getShell(),
                     "Error creating text editor page.", //$NON-NLS-1$
                     null, e.getStatus());
         }
+    }
+
+    /**
+     * Adds a new messages bundle to an opened messages editor. Creates a new text edtor page
+     * and a new entry in the i18n page for the given locale and messages bundle.
+     */
+    protected void addMessagesBundle(MessagesBundle messagesBundle) {
+        createMessagesBundlePage(messagesBundle);
+        i18nPage.addI18NEntry(messagesBundle.getLocale());
+    }
+    
+    /**
+     * Removes the text editor page + the entry from the i18n page of the given locale and messages bundle.
+     */
+    protected void removeMessagesBundle(MessagesBundle messagesBundle) {
+        IMessagesResource resource = messagesBundle.getResource();
+        final TextEditor textEditor = (TextEditor) resource.getSource();
+        // index + 1 because of i18n page
+        int pageIndex = textEditorsIndex.indexOf(textEditor) + 1;
+        removePage(pageIndex);
+
+        textEditorsIndex.remove(textEditor);
+        localesIndex.remove(messagesBundle.getLocale());
+
+        textEditor.dispose();
+
+        // remove entry from i18n page
+        i18nPage.removeI18NEntry(messagesBundle.getLocale());        
     }
 
     /**
@@ -256,7 +275,7 @@ public class MessagesEditor extends MultiPageEditorPart implements IGotoMarker,
         // // maybe new init?
     }
 
-    private void refreshKeyTreeModel() {
+    protected void refreshKeyTreeModel() {
         String selectedKey = getSelectedKey(); // memorize
 
         if (messagesBundleGroup == null) {
@@ -384,8 +403,10 @@ public class MessagesEditor extends MultiPageEditorPart implements IGotoMarker,
                 FileEditorInput input = (FileEditorInput) editor
                         .getEditorInput();
                 try {
+                    IFile file = input.getFile();
+                    file.refreshLocal(IResource.DEPTH_ZERO, null);
                     BufferedReader reader = new BufferedReader(
-                            new InputStreamReader(input.getFile().getContents()));
+                            new InputStreamReader(file.getContents()));
                     String line = "";
                     int selectionIndex = 0;
                     boolean found = false;
@@ -428,15 +449,15 @@ public class MessagesEditor extends MultiPageEditorPart implements IGotoMarker,
         return false;
     }
 
-    private void closeIfAreadyOpen(IEditorSite site, IFile file) {
+    protected void closeIfAreadyOpen(IEditorSite site, IFile file) {
         IWorkbenchPage[] pages = site.getWorkbenchWindow().getPages();
         for (int i = 0; i < pages.length; i++) {
             IWorkbenchPage page = pages[i];
             IEditorReference[] editors = page.getEditorReferences();
             for (int j = 0; j < editors.length; j++) {
                 IEditorPart editor = editors[j].getEditor(false);
-                if (editor instanceof MessagesEditor) {
-                    MessagesEditor rbe = (MessagesEditor) editor;
+                if (editor instanceof AbstractMessagesEditor) {
+                    AbstractMessagesEditor rbe = (AbstractMessagesEditor) editor;
                     if (rbe.isBundleMember(file)) {
                         page.closeEditor(editor, true);
                     }
@@ -457,6 +478,8 @@ public class MessagesEditor extends MultiPageEditorPart implements IGotoMarker,
         for (ITextEditor textEditor : textEditorsIndex) {
             textEditor.dispose();
         }
+
+        disposeRAP();
     }
 
     /**
@@ -564,4 +587,28 @@ public class MessagesEditor extends MultiPageEditorPart implements IGotoMarker,
         int index = localesIndex.indexOf(locale);
         return textEditorsIndex.get(index);
     }
+
+    // Needed for RAP, otherwise super implementation of getTitleImage always
+    // returns
+    // same image with same device and same session context, and when this
+    // session ends
+    // -> NPE at org.eclipse.swt.graphics.Image.getImageData(Image.java:348)
+    @Override
+    public Image getTitleImage() {
+        // create new image with current display
+        return UIUtils.getImageDescriptor(UIUtils.IMAGE_RESOURCE_BUNDLE)
+                .createImage();
+    }
+
+    public void setTitleName(String name) {
+        setPartName(name);
+    }
+
+    abstract public void setEnabled(boolean enabled);
+
+    abstract protected void initRAP();
+
+    abstract protected void disposeRAP();
+
+    abstract protected IMessagesBundleGroupListener getMsgBundleGroupListner();
 }

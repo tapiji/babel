@@ -16,6 +16,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.io.Reader;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -27,12 +29,15 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
+import org.eclipse.babel.editor.compat.SwtRapCompatibilitySWT;
 import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
 import org.eclipse.babel.editor.preferences.MsgEditorPreferences;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -75,9 +80,9 @@ public final class UIUtils {
     public static final String IMAGE_ADD = "add.png"; //$NON-NLS-1$
     /** Name of edit icon. */
     public static final String IMAGE_RENAME = "rename.gif"; //$NON-NLS-1$
+    /** Name of "view left" icon. */
     /** Name of refactoring icon. */
     public static final String IMAGE_REFACTORING = "refactoring.png"; //$NON-NLS-1$
-    /** Name of "view left" icon. */
     public static final String IMAGE_VIEW_LEFT = "viewLeft.gif"; //$NON-NLS-1$
     /** Name of locale icon. */
     public static final String IMAGE_LOCALE = "locale.gif"; //$NON-NLS-1$
@@ -101,13 +106,13 @@ public final class UIUtils {
     public static final String IMAGE_ERROR = "error_co.gif"; //$NON-NLS-1$
 
     /** Image registry. */
-    private static final ImageRegistry imageRegistry =
+    private static ImageRegistry imageRegistry;
     // TODO: REMOVE this comment eventually:
     // necessary to specify the display otherwise Display.getCurrent()
     // is called and will return null if this is not the UI-thread.
     // this happens if the builder is called and initialize this class:
     // the thread will not be the UI-thread.
-    new ImageRegistry(PlatformUI.getWorkbench().getDisplay());
+    // new ImageRegistry(PlatformUI.getWorkbench().getDisplay());
 
     public static final String PDE_NATURE = "org.eclipse.pde.PluginNature"; //$NON-NLS-1$
     public static final String JDT_JAVA_NATURE = "org.eclipse.jdt.core.javanature"; //$NON-NLS-1$
@@ -126,7 +131,6 @@ public final class UIUtils {
     public static final void sortLocales(Locale[] locales) {
         List<Locale> localesList = new ArrayList<Locale>(Arrays.asList(locales));
         Comparator<Locale> comp = new Comparator<Locale>() {
-            @Override
             public int compare(Locale l1, Locale l2) {
                 if (ROOT_LOCALE.equals(l1)) {
                     return -1;
@@ -443,6 +447,35 @@ public final class UIUtils {
      * @return image
      */
     public static Image getImage(String imageName) {
+        Image image = null;
+        try {
+            // [RAP] In RAP multiple displays could exist (multiple user),
+            // therefore image needs to be created every time with the current
+            // display
+            Method getImageRAP = Class.forName(
+                    "org.eclipse.babel.editor.util.UIUtilsRAP").getMethod(
+                    "getImage", String.class);
+            image = (Image) getImageRAP.invoke(null, imageName);
+        } catch (Exception e) {
+            // RAP fragment not running --> invoke rcp version
+            image = getImageRCP(imageName);
+        }
+
+        return image;
+    }
+
+    /**
+     * Gets an image from image registry or creates a new one if it the first
+     * time.
+     * 
+     * @param imageName
+     *            image name
+     * @return image
+     */
+    private static Image getImageRCP(String imageName) {
+        if (imageRegistry == null)
+            imageRegistry = new ImageRegistry(PlatformUI.getWorkbench()
+                    .getDisplay());
         Image image = imageRegistry.get(imageName);
         if (image == null) {
             image = getImageDescriptor(imageName).createImage();
@@ -535,7 +568,7 @@ public final class UIUtils {
             ComponentOrientation orientation = ComponentOrientation
                     .getOrientation(locale);
             if (orientation == ComponentOrientation.RIGHT_TO_LEFT) {
-                return SWT.RIGHT_TO_LEFT;
+                return SwtRapCompatibilitySWT.RIGHT_TO_LEFT;
             }
         }
         return SWT.LEFT_TO_RIGHT;
@@ -563,11 +596,11 @@ public final class UIUtils {
         if (!projDescr.exists()) {
             return false;// a corrupted project
         }
-
         // <classpathentry kind="src" path="src"/>
         InputStream in = null;
         try {
-            in = ((IFile) projDescr).getContents();
+            projDescr.refreshLocal(IResource.DEPTH_ZERO, null);
+            in = projDescr.getContents();
             // supposedly in utf-8. should not really matter for us
             Reader r = new InputStreamReader(in, "UTF-8");
             LineNumberReader lnr = new LineNumberReader(r);

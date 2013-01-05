@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.eclipse.babel.editor.tree.internal;
 
+import java.lang.reflect.Constructor;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -19,19 +20,22 @@ import org.eclipse.babel.core.message.tree.internal.AbstractKeyTreeModel;
 import org.eclipse.babel.core.message.tree.internal.IKeyTreeModelListener;
 import org.eclipse.babel.core.message.tree.internal.KeyTreeNode;
 import org.eclipse.babel.editor.IMessagesEditorChangeListener;
-import org.eclipse.babel.editor.internal.MessagesEditor;
+import org.eclipse.babel.editor.internal.AbstractMessagesEditor;
 import org.eclipse.babel.editor.internal.MessagesEditorChangeAdapter;
 import org.eclipse.babel.editor.internal.MessagesEditorMarkers;
 import org.eclipse.babel.editor.tree.IKeyTreeContributor;
+import org.eclipse.babel.editor.tree.actions.AbstractRenameKeyAction;
 import org.eclipse.babel.editor.tree.actions.AddKeyAction;
 import org.eclipse.babel.editor.tree.actions.DeleteKeyAction;
-import org.eclipse.babel.editor.tree.actions.RenameKeyAction;
+import org.eclipse.babel.editor.tree.actions.RefactorKeyAction;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
@@ -52,14 +56,14 @@ import org.eclipse.swt.widgets.Tree;
  */
 public class KeyTreeContributor implements IKeyTreeContributor {
 
-    private MessagesEditor editor;
+    private AbstractMessagesEditor editor;
     private AbstractKeyTreeModel treeModel;
     private TreeType treeType;
 
     /**
      * 
      */
-    public KeyTreeContributor(final MessagesEditor editor) {
+    public KeyTreeContributor(final AbstractMessagesEditor editor) {
         super();
         this.editor = editor;
         this.treeModel = new AbstractKeyTreeModel(editor.getBundleGroup());
@@ -101,6 +105,10 @@ public class KeyTreeContributor implements IKeyTreeContributor {
         // Set input model
         treeViewer.setInput(treeModel);
         treeViewer.expandAll();
+
+        treeViewer.setColumnProperties(new String[] { "column1" });
+        treeViewer.setCellEditors(new CellEditor[] { new TextCellEditor(
+                treeViewer.getTree()) });
     }
 
     private class OnlyUnsuedAndMissingKey extends ViewerFilter implements
@@ -166,11 +174,15 @@ public class KeyTreeContributor implements IKeyTreeContributor {
     private void contributeMarkers(final TreeViewer treeViewer) {
         editor.getMarkers().addObserver(new Observer() {
             public void update(Observable o, Object arg) {
-                Display.getDefault().asyncExec(new Runnable() {
+                Display display = treeViewer.getTree().getDisplay();
+                // [RAP] only refresh tree viewer in this UIThread
+                if (display.equals(Display.getCurrent())) {
+                    display.asyncExec(new Runnable() {
                     public void run() {
                         treeViewer.refresh();
                     }
                 });
+            }
             }
         });
         // editor.addChangeListener(new MessagesEditorChangeAdapter() {
@@ -242,7 +254,9 @@ public class KeyTreeContributor implements IKeyTreeContributor {
             public void nodeAdded(KeyTreeNode node) {
                 Display.getDefault().asyncExec(new Runnable() {
                     public void run() {
+                        if (!editor.getI18NPage().isDisposed()) {
                         treeViewer.refresh(true);
+                    }
                     }
                 });
             };
@@ -253,7 +267,9 @@ public class KeyTreeContributor implements IKeyTreeContributor {
             public void nodeRemoved(KeyTreeNode node) {
                 Display.getDefault().asyncExec(new Runnable() {
                     public void run() {
+                        if (!editor.getI18NPage().isDisposed()) {
                         treeViewer.refresh(true);
+                    }
                     }
                 });
             };
@@ -340,8 +356,24 @@ public class KeyTreeContributor implements IKeyTreeContributor {
         final IAction deleteAction = new DeleteKeyAction(editor, treeViewer);
         menuManager.add(deleteAction);
         // Rename
-        final IAction renameAction = new RenameKeyAction(editor, treeViewer);
+        // final IAction renameAction = new RenameKeyAction(editor, treeViewer);
+        AbstractRenameKeyAction renameKeyAction = null;
+        try {
+            Class<?> clazz = Class
+                    .forName(AbstractRenameKeyAction.INSTANCE_CLASS);
+            Constructor<?> cons = clazz.getConstructor(
+                    AbstractMessagesEditor.class, TreeViewer.class);
+            renameKeyAction = (AbstractRenameKeyAction) cons.newInstance(
+                    editor, treeViewer);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        final IAction renameAction = renameKeyAction;
         menuManager.add(renameAction);
+
+        // Refactor
+        final IAction refactorAction = new RefactorKeyAction(editor, treeViewer);
+        menuManager.add(refactorAction);
 
         menuManager.update(true);
         tree.setMenu(menu);
