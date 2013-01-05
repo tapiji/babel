@@ -114,6 +114,8 @@ Contributors:
   </build>
   <modules>
     <module>org.eclipse.babel.core</module>
+    <module>org.eclipse.babel.editor.swt</module>
+    <module>org.eclipse.babel.editor.swt.compat</module>
     <module>org.eclipse.babel.editor</module>
     <module>org.eclipse.babel.tapiji.tools.core</module>
     <module>org.eclipse.babel.tapiji.tools.core.ui</module>
