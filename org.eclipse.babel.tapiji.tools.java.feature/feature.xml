@@ -31,6 +31,20 @@
          unpack="false"/>
 
    <plugin
+         id="org.eclipse.babel.editor.swt"
+         download-size="0"
+         install-size="0"
+         version="0.8.0.qualifier"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.babel.editor.swt.compat"
+         download-size="0"
+         install-size="0"
+         version="0.8.0.qualifier"
+         unpack="false"/>
+
+   <plugin
          id="org.eclipse.babel.editor.nls"
          download-size="0"
          install-size="0"
