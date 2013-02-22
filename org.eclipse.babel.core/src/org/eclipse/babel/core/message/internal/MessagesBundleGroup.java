@@ -34,7 +34,7 @@ import org.eclipse.babel.core.util.BabelUtils;
 
 /**
  * Grouping of all messages bundle of the same kind.
- * 
+ *
  * @author Pascal Essiembre (pascal@essiembre.com)
  */
 public class MessagesBundleGroup extends AbstractMessageModel implements
@@ -62,7 +62,7 @@ public class MessagesBundleGroup extends AbstractMessageModel implements
 
     /**
      * Creates a new messages bundle group.
-     * 
+     *
      * @param groupStrategy
      *            a IMessagesBundleGroupStrategy instance
      */
@@ -111,7 +111,7 @@ public class MessagesBundleGroup extends AbstractMessageModel implements
 
     /**
      * Gets the messages bundle matching given locale.
-     * 
+     *
      * @param locale
      *            locale of bundle to retreive
      * @return a bundle
@@ -126,7 +126,7 @@ public class MessagesBundleGroup extends AbstractMessageModel implements
      * being a context-specific concrete underlying implementation of a
      * <code>MessagesBundle</code> as per defined in
      * <code>IMessageResource</code>.
-     * 
+     *
      * @param source
      *            the source object to match
      * @return a messages bundle
@@ -145,7 +145,7 @@ public class MessagesBundleGroup extends AbstractMessageModel implements
     /**
      * Adds an empty <code>MessagesBundle</code> to this group for the given
      * locale.
-     * 
+     *
      * @param locale
      *            locale for the new bundle added
      */
@@ -162,7 +162,7 @@ public class MessagesBundleGroup extends AbstractMessageModel implements
 
     /**
      * Gets all messages associated with the given message key.
-     * 
+     *
      * @param key
      *            a message key
      * @return messages
@@ -181,7 +181,7 @@ public class MessagesBundleGroup extends AbstractMessageModel implements
 
     /**
      * Gets the message matching given key and locale.
-     * 
+     *
      * @param locale
      *            locale for which to retrieve the message
      * @param key
@@ -199,7 +199,7 @@ public class MessagesBundleGroup extends AbstractMessageModel implements
 
     /**
      * Adds a messages bundle to this group.
-     * 
+     *
      * @param messagesBundle
      *            bundle to add
      * @throws MessageException
@@ -211,7 +211,7 @@ public class MessagesBundleGroup extends AbstractMessageModel implements
 
     /**
      * Adds a messages bundle to this group.
-     * 
+     *
      * @param locale
      *            The locale of the bundle
      * @param messagesBundle
@@ -250,7 +250,7 @@ public class MessagesBundleGroup extends AbstractMessageModel implements
 
     /**
      * Removes the {@link IMessagesBundle} from the group.
-     * 
+     *
      * @param messagesBundle
      *            The bundle to remove.
      */
@@ -281,10 +281,14 @@ public class MessagesBundleGroup extends AbstractMessageModel implements
         }
     }
 
+    public void removeMessagesBundle(Locale locale) {
+        removeMessagesBundle(getMessagesBundle(locale));
+    }
+
     /**
      * Gets this messages bundle group name. That is the name, which is used for
      * the tab of the MultiPageEditorPart
-     * 
+     *
      * @return bundle group name
      */
     @Override
@@ -295,7 +299,7 @@ public class MessagesBundleGroup extends AbstractMessageModel implements
     /**
      * Adds an empty message to every messages bundle of this group with the
      * given.
-     * 
+     *
      * @param key
      *            message key
      */
@@ -308,7 +312,7 @@ public class MessagesBundleGroup extends AbstractMessageModel implements
 
     /**
      * Renames a key in all messages bundles forming this group.
-     * 
+     *
      * @param sourceKey
      *            the message key to rename
      * @param targetKey
@@ -323,7 +327,7 @@ public class MessagesBundleGroup extends AbstractMessageModel implements
 
     /**
      * Removes messages matching the given key from all messages bundle.
-     * 
+     *
      * @param key
      *            key of messages to remove
      */
@@ -337,7 +341,7 @@ public class MessagesBundleGroup extends AbstractMessageModel implements
     /**
      * Removes messages matching the given key from all messages bundle and add
      * it's parent key to bundles.
-     * 
+     *
      * @param key
      *            key of messages to remove
      */
@@ -350,7 +354,7 @@ public class MessagesBundleGroup extends AbstractMessageModel implements
 
     /**
      * Sets whether messages matching the <code>key</code> are active or not.
-     * 
+     *
      * @param key
      *            key of messages
      */
@@ -366,7 +370,7 @@ public class MessagesBundleGroup extends AbstractMessageModel implements
     /**
      * Duplicates each messages matching the <code>sourceKey</code> to the
      * <code>newKey</code>.
-     * 
+     *
      * @param sourceKey
      *            original key
      * @param targetKey
@@ -385,7 +389,7 @@ public class MessagesBundleGroup extends AbstractMessageModel implements
 
     /**
      * Returns a collection of all bundles in this group.
-     * 
+     *
      * @return the bundles in this group
      */
     @Override
@@ -395,7 +399,7 @@ public class MessagesBundleGroup extends AbstractMessageModel implements
 
     /**
      * Gets all keys from all messages bundles.
-     * 
+     *
      * @return all keys from all messages bundles
      */
     @Override
@@ -405,7 +409,7 @@ public class MessagesBundleGroup extends AbstractMessageModel implements
 
     /**
      * Whether the given key is found in this messages bundle group.
-     * 
+     *
      * @param key
      *            the key to find
      * @return <code>true</code> if the key exists in this bundle group.
@@ -417,7 +421,7 @@ public class MessagesBundleGroup extends AbstractMessageModel implements
 
     /**
      * Gets the number of messages bundles in this group.
-     * 
+     *
      * @return the number of messages bundles in this group
      */
     @Override
@@ -487,10 +491,10 @@ public class MessagesBundleGroup extends AbstractMessageModel implements
 
     /**
      * Returns true if the supplied key is already existing in this group.
-     * 
+     *
      * @param key
      *            The key that shall be tested.
-     * 
+     *
      * @return true <=> The key is already existing.
      */
     @Override
@@ -510,7 +514,7 @@ public class MessagesBundleGroup extends AbstractMessageModel implements
 
     /**
      * Is the given key found in this bundle group.
-     * 
+     *
      * @param key
      *            the key to find
      * @return <code>true</code> if the key exists in this bundle group.
@@ -524,7 +528,7 @@ public class MessagesBundleGroup extends AbstractMessageModel implements
      * Gets the unique id of the bundle group. That is usually:
      * <directory>"."<default-filename>. The default filename is without the
      * suffix (e.g. _en, or _en_GB).
-     * 
+     *
      * @return The unique identifier for the resource bundle group
      */
     @Override
@@ -534,7 +538,7 @@ public class MessagesBundleGroup extends AbstractMessageModel implements
 
     /**
      * Gets the name of the project, the resource bundle group is in.
-     * 
+     *
      * @return The project name
      */
     @Override
