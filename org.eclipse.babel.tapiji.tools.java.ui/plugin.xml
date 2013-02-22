@@ -12,14 +12,14 @@
       <hover
             activate="true"
             class="org.eclipse.babel.tapiji.tools.java.ui.ConstantStringHover"
-            description="hovers constant strings"
+            description="%hover.description"
             id="org.eclipse.babel.tapiji.tools.java.ui.ConstantStringHover"
-            label="Constant Strings">
+            label="%hover.label">
       </hover>
    </extension>
    <extension
          id="org.eclipse.babel.tapiji.tools.java.ui.MessageCompletionProcessor"
-         name="org.eclipse.babel.tapiji.tools.java.ui.MessageCompletionProcessor"
+         name="%extension.name"
          point="org.eclipse.jdt.ui.javaCompletionProposalComputer">
       <javaCompletionProposalComputer
             activate="true"

@@ -38,7 +38,7 @@
       <menuContribution
             locationURI="org.eclipse.babel.runtime.menuContribution1">
          <menu
-               label="label">
+               label="%menu.label">
             <command
                   commandId="org.eclipse.babel.runtime.command1"
                   style="push">
