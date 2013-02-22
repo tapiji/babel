@@ -218,7 +218,7 @@ Contributors:
     <module>org.eclipse.babel.tapiji.tools.java</module>
     <module>org.eclipse.babel.tapiji.tools.java.feature</module>
     <module>org.eclipse.babel.tapiji.tools.java.ui</module>
-    <module>org.eclipse.babel.tapiji.tools.rbmanager</module>
+    <module>org.eclipse.babel.tapiji.tools.rbmanager.ui</module>
     <module>org.eclipse.babel.editor.nls</module>
     <module>org.eclipse.babel.tapiji.tools.target</module>
     <module>org.eclipse.babel.core.pdeutils</module>
