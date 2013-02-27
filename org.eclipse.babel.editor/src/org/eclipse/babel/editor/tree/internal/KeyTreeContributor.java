@@ -52,7 +52,7 @@ import org.eclipse.swt.widgets.Tree;
 
 /**
  * @author Pascal Essiembre
- * 
+ *
  */
 public class KeyTreeContributor implements IKeyTreeContributor {
 
@@ -61,7 +61,7 @@ public class KeyTreeContributor implements IKeyTreeContributor {
     private TreeType treeType;
 
     /**
-     * 
+     *
      */
     public KeyTreeContributor(final AbstractMessagesEditor editor) {
         super();
@@ -71,7 +71,7 @@ public class KeyTreeContributor implements IKeyTreeContributor {
     }
 
     /**
-     * 
+     *
      */
     public void contribute(final TreeViewer treeViewer) {
 
@@ -116,7 +116,7 @@ public class KeyTreeContributor implements IKeyTreeContributor {
 
         /*
          * (non-Javadoc)
-         * 
+         *
          * @see
          * org.eclipse.jface.viewers.ViewerFilter#select(org.eclipse.jface.viewers
          * .Viewer, java.lang.Object, java.lang.Object)
@@ -167,7 +167,7 @@ public class KeyTreeContributor implements IKeyTreeContributor {
 
     /**
      * Contributes markers.
-     * 
+     *
      * @param treeViewer
      *            tree viewer
      */
@@ -221,7 +221,7 @@ public class KeyTreeContributor implements IKeyTreeContributor {
 
     /**
      * Contributes double-click support, expanding/collapsing nodes.
-     * 
+     *
      * @param treeViewer
      *            tree viewer
      */
@@ -244,7 +244,7 @@ public class KeyTreeContributor implements IKeyTreeContributor {
 
     /**
      * Contributes key synchronization between editor and tree selected keys.
-     * 
+     *
      * @param treeViewer
      *            tree viewer
      */
@@ -292,7 +292,7 @@ public class KeyTreeContributor implements IKeyTreeContributor {
 
     /**
      * Contributes key synchronization between editor and tree selected keys.
-     * 
+     *
      * @param treeViewer
      *            tree viewer
      */
@@ -338,7 +338,7 @@ public class KeyTreeContributor implements IKeyTreeContributor {
 
     /**
      * Contributes actions to the tree.
-     * 
+     *
      * @param treeViewer
      *            tree viewer
      */
@@ -355,21 +355,6 @@ public class KeyTreeContributor implements IKeyTreeContributor {
         // Delete
         final IAction deleteAction = new DeleteKeyAction(editor, treeViewer);
         menuManager.add(deleteAction);
-        // Rename
-        // final IAction renameAction = new RenameKeyAction(editor, treeViewer);
-        AbstractRenameKeyAction renameKeyAction = null;
-        try {
-            Class<?> clazz = Class
-                    .forName(AbstractRenameKeyAction.INSTANCE_CLASS);
-            Constructor<?> cons = clazz.getConstructor(
-                    AbstractMessagesEditor.class, TreeViewer.class);
-            renameKeyAction = (AbstractRenameKeyAction) cons.newInstance(
-                    editor, treeViewer);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        final IAction renameAction = renameKeyAction;
-        menuManager.add(renameAction);
 
         // Refactor
         final IAction refactorAction = new RefactorKeyAction(editor, treeViewer);
@@ -383,8 +368,6 @@ public class KeyTreeContributor implements IKeyTreeContributor {
             public void keyReleased(KeyEvent event) {
                 if (event.character == SWT.DEL) {
                     deleteAction.run();
-                } else if (event.keyCode == SWT.F2) {
-                    renameAction.run();
                 }
             }
         });

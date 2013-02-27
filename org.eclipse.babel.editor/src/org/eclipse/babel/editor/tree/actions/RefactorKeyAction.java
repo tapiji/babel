@@ -35,7 +35,7 @@ public class RefactorKeyAction extends AbstractTreeAction {
     public RefactorKeyAction(AbstractMessagesEditor editor,
             TreeViewer treeViewer) {
         super(editor, treeViewer);
-        setText(MessagesEditorPlugin.getString("key.refactor") + " ..."); //$NON-NLS-1$
+        setText(MessagesEditorPlugin.getString("key.rename") + " ..."); //$NON-NLS-1$
         setImageDescriptor(UIUtils
                 .getImageDescriptor(UIUtils.IMAGE_REFACTORING));
         setToolTipText("Refactor the name of the key");
