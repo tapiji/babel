@@ -2,10 +2,7 @@
 <feature
       id="org.eclipse.babel.tapiji.tools.java.feature"
       label="Babel Internationalization Tools for Java"
-      version="0.0.2.qualifier"
-      os="linux,win32"
-      nl="en"
-      arch="x86,x86_64">
+      version="0.0.2.qualifier">
 
    <description url="http://www.eclipse.org/babel/">
       %description
