@@ -146,7 +146,6 @@ public class I18nBuilder extends IncrementalProjectBuilder {
                 .getConfiguration();
 
         int work = resources.size();
-        int actWork = 0;
         if (monitor == null) {
             monitor = new NullProgressMonitor();
         }

@@ -25,10 +25,12 @@ import org.eclipse.babel.tapiji.tools.core.ui.dialogs.RemoveLanguageDialoge;
 import org.eclipse.babel.tapiji.tools.core.ui.utils.LanguageUtils;
 import org.eclipse.babel.tapiji.tools.core.ui.utils.RBFileUtils;
 import org.eclipse.babel.tapiji.tools.core.util.FragmentProjectUtils;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jface.action.ContributionItem;
@@ -240,24 +242,46 @@ public class InternationalizationMenu extends ContributionItem {
         }
     }
 
-    protected void updateStateExclude(MenuItem menuItem) {
-        Collection<IResource> resources = getSelectedResources();
-        // TODO check resource type
+    private ISelection getActiveSelection() {
+        final IWorkbenchWindow window = PlatformUI.getWorkbench()
+                .getActiveWorkbenchWindow();
+        return window.getActivePage().getSelection();
+    }
 
-        menuItem.setEnabled(resources.size() > 0 && internationalizationEnabled);
-        ResourceBundleManager manager = null;
-        excludeMode = false;
+    private void updateStateExclude(MenuItem menuItem) {
+        final ISelection selection = getActiveSelection();
+        final boolean isPackageFragment = isSelectionWithRootType(
+                IPackageFragment.class, selection);
+        final boolean isCompilationUnit = isSelectionWithRootType(
+                ICompilationUnit.class,
+                selection);
+        final boolean isFile = isSelectionWithRootType(IFile.class,
+                selection);
 
-        for (IResource res : resources) {
-            if (manager == null || (manager.getProject() != res.getProject())) {
-                manager = ResourceBundleManager.getManager(res.getProject());
-            }
-            try {
-                if (!ResourceBundleManager.isResourceExcluded(res)) {
-                    excludeMode = true;
+        if ((isPackageFragment || isCompilationUnit || isFile)
+                && internationalizationEnabled) {
+
+            final Collection<IResource> resources = getSelectedResources(selection);
+            menuItem.setEnabled(resources.size() > 0);
+
+            ResourceBundleManager manager = null;
+            excludeMode = false;
+
+            for (IResource res : resources) {
+                if (manager == null || (manager.getProject() != res.getProject())) {
+                    manager = ResourceBundleManager.getManager(res.getProject());
                 }
-            } catch (Exception e) {
+                try {
+                    if (!ResourceBundleManager.isResourceExcluded(res)) {
+                        excludeMode = true;
+                    }
+                } catch (Exception e) {
+                    // empty
+                }
             }
+        } else {
+            excludeMode = true;
+            menuItem.setEnabled(false);
         }
 
         if (!excludeMode) {
@@ -267,11 +291,23 @@ public class InternationalizationMenu extends ContributionItem {
         }
     }
 
-    private Collection<IResource> getSelectedResources() {
-        Collection<IResource> resources = new HashSet<IResource>();
-        IWorkbenchWindow window = PlatformUI.getWorkbench()
-                .getActiveWorkbenchWindow();
-        ISelection selection = window.getActivePage().getSelection();
+    private boolean isSelectionWithRootType(
+            final Class<? extends IAdaptable> type,
+            final ISelection selection) {
+        if (selection instanceof IStructuredSelection) {
+            System.out.println(((IStructuredSelection) selection)
+                    .getFirstElement().getClass());
+            return type.isAssignableFrom(((IStructuredSelection) selection)
+                    .getFirstElement().getClass());
+        }
+
+        return false;
+    }
+
+    private Collection<IResource> getSelectedResources(
+            final ISelection selection) {
+        final Collection<IResource> resources = new HashSet<IResource>();
+
         if (selection instanceof IStructuredSelection) {
             for (Iterator<?> iter = ((IStructuredSelection) selection)
                     .iterator(); iter.hasNext();) {
@@ -291,7 +327,7 @@ public class InternationalizationMenu extends ContributionItem {
     }
 
     protected void runExclude() {
-        final Collection<IResource> selectedResources = getSelectedResources();
+        final Collection<IResource> selectedResources = getSelectedResources(getActiveSelection());
 
         IWorkbench wb = PlatformUI.getWorkbench();
         IProgressService ps = wb.getProgressService();
