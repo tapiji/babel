@@ -16,7 +16,6 @@ import org.eclipse.babel.core.message.internal.MessagesBundleGroup;
 import org.eclipse.babel.core.message.tree.internal.KeyTreeNode;
 import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.mapping.IResourceChangeDescriptionFactory;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -27,14 +26,13 @@ import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.ltk.core.refactoring.participants.CheckConditionsContext;
 import org.eclipse.ltk.core.refactoring.participants.RefactoringParticipant;
 import org.eclipse.ltk.core.refactoring.participants.RenameProcessor;
-import org.eclipse.ltk.core.refactoring.participants.ResourceChangeChecker;
 import org.eclipse.ltk.core.refactoring.participants.SharableParticipants;
 
 /**
  * A rename processor for {@link IResource}. The processor will rename the
  * resource and load rename participants if references should be renamed as
  * well.
- * 
+ *
  * @since 3.4
  */
 public class RenameKeyProcessor extends RenameProcessor {
@@ -52,7 +50,7 @@ public class RenameKeyProcessor extends RenameProcessor {
 
     /**
      * Creates a new rename resource processor.
-     * 
+     *
      * @param keyNode
      *            the resource to rename.
      * @param messagesBundleGroup
@@ -72,7 +70,7 @@ public class RenameKeyProcessor extends RenameProcessor {
 
     /**
      * Returns the new key node
-     * 
+     *
      * @return the new key node
      */
     public KeyTreeNode getNewKeyTreeNode() {
@@ -81,7 +79,7 @@ public class RenameKeyProcessor extends RenameProcessor {
 
     /**
      * Returns the new resource name
-     * 
+     *
      * @return the new resource name
      */
     public String getNewResourceName() {
@@ -90,7 +88,7 @@ public class RenameKeyProcessor extends RenameProcessor {
 
     /**
      * Sets the new resource name
-     * 
+     *
      * @param newName
      *            the new resource name
      */
@@ -101,7 +99,7 @@ public class RenameKeyProcessor extends RenameProcessor {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.eclipse.ltk.core.refactoring.participants.RefactoringProcessor#
      * checkInitialConditions(org.eclipse.core.runtime.IProgressMonitor)
      */
@@ -116,7 +114,7 @@ public class RenameKeyProcessor extends RenameProcessor {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.eclipse.ltk.core.refactoring.participants.RefactoringProcessor#
      * checkFinalConditions(org.eclipse.core.runtime.IProgressMonitor,
      * org.eclipse.ltk.core.refactoring.participants.CheckConditionsContext)
@@ -128,12 +126,13 @@ public class RenameKeyProcessor extends RenameProcessor {
             fRenameArguments = new RenameKeyArguments(getNewResourceName(),
                     fRenameChildKeys, false);
 
-            ResourceChangeChecker checker = (ResourceChangeChecker) context
-                    .getChecker(ResourceChangeChecker.class);
-            IResourceChangeDescriptionFactory deltaFactory = checker
-                    .getDeltaFactory();
-
             // TODO figure out what we want to do here....
+
+            //ResourceChangeChecker checker = (ResourceChangeChecker) context
+            //        .getChecker(ResourceChangeChecker.class);
+            //IResourceChangeDescriptionFactory deltaFactory = checker
+            //        .getDeltaFactory();
+
             // ResourceModifications.buildMoveDelta(deltaFactory, fKeyNode,
             // fRenameArguments);
 
@@ -147,7 +146,7 @@ public class RenameKeyProcessor extends RenameProcessor {
      * Validates if the a name is valid. This method does not change the name
      * settings on the refactoring. It is intended to be used in a wizard to
      * validate user input.
-     * 
+     *
      * @param newName
      *            the name to validate
      * @return returns the resulting status of the validation
@@ -208,7 +207,7 @@ public class RenameKeyProcessor extends RenameProcessor {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.eclipse.ltk.core.refactoring.participants.RefactoringProcessor#
      * createChange(org.eclipse.core.runtime.IProgressMonitor)
      */
@@ -227,7 +226,7 @@ public class RenameKeyProcessor extends RenameProcessor {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.eclipse.ltk.core.refactoring.participants.RefactoringProcessor#
      * getElements()
      */
@@ -237,7 +236,7 @@ public class RenameKeyProcessor extends RenameProcessor {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.eclipse.ltk.core.refactoring.participants.RefactoringProcessor#
      * getIdentifier()
      */
@@ -247,7 +246,7 @@ public class RenameKeyProcessor extends RenameProcessor {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.eclipse.ltk.core.refactoring.participants.RefactoringProcessor#
      * getProcessorName()
      */
@@ -257,7 +256,7 @@ public class RenameKeyProcessor extends RenameProcessor {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.eclipse.ltk.core.refactoring.participants.RefactoringProcessor#
      * isApplicable()
      */
@@ -269,7 +268,7 @@ public class RenameKeyProcessor extends RenameProcessor {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.eclipse.ltk.core.refactoring.participants.RefactoringProcessor#
      * loadParticipants(org.eclipse.ltk.core.refactoring.RefactoringStatus,
      * org.eclipse.ltk.core.refactoring.participants.SharableParticipants)
@@ -288,7 +287,7 @@ public class RenameKeyProcessor extends RenameProcessor {
     /**
      * Returns <code>true</code> if the refactoring processor also renames the
      * child keys
-     * 
+     *
      * @return <code>true</code> if the refactoring processor also renames the
      *         child keys
      */
@@ -299,7 +298,7 @@ public class RenameKeyProcessor extends RenameProcessor {
     /**
      * Specifies if the refactoring processor also updates the child keys. The
      * default behaviour is to update the child keys.
-     * 
+     *
      * @param renameChildKeys
      *            <code>true</code> if the refactoring processor should also
      *            rename the child keys

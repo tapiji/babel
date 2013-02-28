@@ -4,7 +4,7 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     Martin Reiterer - initial API and implementation
  ******************************************************************************/
@@ -43,7 +43,7 @@ public class Activator extends Plugin {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext
      * )
@@ -59,7 +59,7 @@ public class Activator extends Plugin {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext
      * )
@@ -72,7 +72,7 @@ public class Activator extends Plugin {
 
     /**
      * Returns the shared instance
-     * 
+     *
      * @return the shared instance
      */
     public static Activator getDefault() {
@@ -82,7 +82,7 @@ public class Activator extends Plugin {
     /**
      * Returns the string from the plugin's resource bundle, or 'key' if not
      * found.
-     * 
+     *
      * @param key
      *            the key for which to fetch a localized text
      * @return localized string corresponding to key
@@ -99,7 +99,7 @@ public class Activator extends Plugin {
     /**
      * Returns the string from the plugin's resource bundle, or 'key' if not
      * found.
-     * 
+     *
      * @param key
      *            the key for which to fetch a localized text
      * @param arg1
@@ -107,13 +107,13 @@ public class Activator extends Plugin {
      * @return localized string corresponding to key
      */
     public static String getString(String key, String arg1) {
-        return MessageFormat.format(getString(key), new String[] { arg1 });
+        return MessageFormat.format(getString(key), new Object[] { arg1 });
     }
 
     /**
      * Returns the string from the plugin's resource bundle, or 'key' if not
      * found.
-     * 
+     *
      * @param key
      *            the key for which to fetch a localized text
      * @param arg1
@@ -124,13 +124,13 @@ public class Activator extends Plugin {
      */
     public static String getString(String key, String arg1, String arg2) {
         return MessageFormat
-                .format(getString(key), new String[] { arg1, arg2 });
+                .format(getString(key), new Object[] { arg1, arg2 });
     }
 
     /**
      * Returns the string from the plugin's resource bundle, or 'key' if not
      * found.
-     * 
+     *
      * @param key
      *            the key for which to fetch a localized text
      * @param arg1
@@ -143,13 +143,13 @@ public class Activator extends Plugin {
      */
     public static String getString(String key, String arg1, String arg2,
             String arg3) {
-        return MessageFormat.format(getString(key), new String[] { arg1, arg2,
+        return MessageFormat.format(getString(key), new Object[] { arg1, arg2,
                 arg3 });
     }
 
     /**
      * Returns the plugin's resource bundle.
-     * 
+     *
      * @return resource bundle
      */
     protected ResourceBundle getResourceBundle() {

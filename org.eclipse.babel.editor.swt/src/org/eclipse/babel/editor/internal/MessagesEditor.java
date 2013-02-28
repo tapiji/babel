@@ -17,7 +17,6 @@ package org.eclipse.babel.editor.internal;
 import org.eclipse.babel.core.message.internal.IMessagesBundleGroupListener;
 import org.eclipse.babel.core.message.internal.MessagesBundle;
 import org.eclipse.babel.core.message.internal.MessagesBundleGroupAdapter;
-import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.texteditor.ITextEditor;
 
 public class MessagesEditor extends AbstractMessagesEditor {
