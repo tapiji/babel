@@ -56,4 +56,6 @@ public class RefactorKeyAction extends AbstractTreeAction {
                 bundleId, key, null);
 
     }
+    
+    
 }

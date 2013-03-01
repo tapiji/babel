@@ -28,7 +28,6 @@ public abstract class AbstractRenameKeyAction extends AbstractTreeAction {
         super(editor, treeViewer);
         setText(MessagesEditorPlugin.getString("key.rename") + " ..."); //$NON-NLS-1$
         setImageDescriptor(UIUtils.getImageDescriptor(UIUtils.IMAGE_RENAME));
-        setToolTipText("TODO put something here"); // TODO put tooltip
     }
 
     /**
