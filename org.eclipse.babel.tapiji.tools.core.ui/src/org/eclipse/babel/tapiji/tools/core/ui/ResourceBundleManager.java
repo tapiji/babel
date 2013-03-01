@@ -665,9 +665,15 @@ public class ResourceBundleManager {
         IFile res = null;
         Set<IResource> resSet = resources.get(resourceBundle);
 
+        // get normalized simple resource bundle name
+        String normalizedResourceBundleName = resourceBundle;
+        if (normalizedResourceBundleName.contains(".")) {
+        	normalizedResourceBundleName = normalizedResourceBundleName.substring(resourceBundle.lastIndexOf(".")+1);
+        }
+        
         if (resSet != null) {
             for (IResource resource : resSet) {
-                Locale refLoc = NameUtils.getLocaleByName(resourceBundle,
+                Locale refLoc = NameUtils.getLocaleByName(normalizedResourceBundleName,
                         resource.getName());
                 if (refLoc == null
                         && l == null

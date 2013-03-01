@@ -150,8 +150,6 @@ public class RBFileUtils extends Action {
         }
 
         final IFile file = rbManager.getResourceBundleFile(rbId, locale);
-        final String filename = file.getName();
-
         new Job("remove properties-file") {
             @Override
             protected IStatus run(IProgressMonitor monitor) {
@@ -176,11 +174,11 @@ public class RBFileUtils extends Action {
      * @param locale
      * @return
      */
-    public static void removeLanguageFromProject(IProject project, Locale locale) {
-        ResourceBundleManager rbManager = ResourceBundleManager
+    public static void removeLanguageFromProject(final IProject project, final Locale locale) {
+        final ResourceBundleManager rbManager = ResourceBundleManager
                 .getManager(project);
 
-        for (String rbId : rbManager.getResourceBundleIdentifiers()) {
+        for (final String rbId : rbManager.getResourceBundleIdentifiers()) {
             removeFileFromResourceBundle(project, rbId, locale);
         }
 
