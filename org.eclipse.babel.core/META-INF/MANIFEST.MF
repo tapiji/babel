@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Babel Core Plug-in
 Bundle-SymbolicName: org.eclipse.babel.core;singleton:=true
-Bundle-Version: 0.9.0.qualifier
+Bundle-Version: 0.9.0.B1
 Export-Package: org.eclipse.babel.core.configuration;uses:="org.eclipse.babel.core.message.resource.ser",
  org.eclipse.babel.core.factory,
  org.eclipse.babel.core.message,

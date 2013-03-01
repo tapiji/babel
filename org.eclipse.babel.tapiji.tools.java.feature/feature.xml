@@ -2,7 +2,7 @@
 <feature
       id="org.eclipse.babel.tapiji.tools.java.feature"
       label="%featureName"
-      version="0.9.0.qualifier"
+      version="0.9.0.B1"
       provider-name="%providerName">
 
    <description url="http://www.eclipse.org/babel/">
@@ -25,63 +25,63 @@
          id="org.eclipse.babel.core"
          download-size="0"
          install-size="0"
-         version="0.9.0.qualifier"
+         version="0.9.0.B1"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.babel.editor"
          download-size="0"
          install-size="0"
-         version="0.9.0.qualifier"
+         version="0.9.0.B1"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.babel.editor.swt"
          download-size="0"
          install-size="0"
-         version="0.9.0.qualifier"
+         version="0.9.0.B1"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.babel.editor.swt.compat"
          download-size="0"
          install-size="0"
-         version="0.9.0.qualifier"
+         version="0.9.0.B1"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.babel.editor.nls"
          download-size="0"
          install-size="0"
-         version="0.9.0.qualifier"
+         version="0.9.0.B1"
          fragment="true"/>
 
    <plugin
          id="org.eclipse.babel.tapiji.tools.core"
          download-size="0"
          install-size="0"
-         version="0.9.0.qualifier"
+         version="0.9.0.B1"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.babel.tapiji.tools.core.ui"
          download-size="0"
          install-size="0"
-         version="0.9.0.qualifier"
+         version="0.9.0.B1"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.babel.tapiji.tools.java"
          download-size="0"
          install-size="0"
-         version="0.9.0.qualifier"
+         version="0.9.0.B1"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.babel.tapiji.tools.java.ui"
          download-size="0"
          install-size="0"
-         version="0.9.0.qualifier"
+         version="0.9.0.B1"
          unpack="false"/>
 
    <plugin
