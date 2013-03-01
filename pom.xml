@@ -82,7 +82,7 @@ Contributors:
             <artifact>
               <groupId>org.eclipse.babel.plugins</groupId>
               <artifactId>org.eclipse.babel.tapiji.tools.target</artifactId>
-              <version>0.0.2-SNAPSHOT</version>
+              <version>0.9.0.B1</version>
             </artifact>
           </target>
           <!-- configure the p2 target environments for multi-platform build -->
