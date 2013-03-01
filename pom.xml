@@ -80,9 +80,9 @@ Contributors:
         <configuration>
           <target>
             <artifact>
-              <groupId>org.eclipse.babel.plugins</groupId>
+              <groupId>${project.groupId}</groupId>
               <artifactId>org.eclipse.babel.tapiji.tools.target</artifactId>
-              <version>0.9.0.B1</version>
+              <version>${project.version}</version>
             </artifact>
           </target>
           <!-- configure the p2 target environments for multi-platform build -->
