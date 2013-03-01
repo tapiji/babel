@@ -116,7 +116,7 @@ public class KeyRefactoringProposal implements IJavaCompletionProposal {
      */
     @Override
     public String getDisplayString() {
-        return "Refactor this key...";
+        return "Rename resource key";
     }
 
     /**
@@ -124,7 +124,7 @@ public class KeyRefactoringProposal implements IJavaCompletionProposal {
      */
     @Override
     public Image getImage() {
-        return UIUtils.getImageDescriptor(UIUtils.IMAGE_REFACTORING)
+    	return UIUtils.getImageDescriptor(UIUtils.IMAGE_REFACTORING)
                 .createImage();
     }
 
@@ -141,7 +141,7 @@ public class KeyRefactoringProposal implements IJavaCompletionProposal {
      */
     @Override
     public int getRelevance() {
-        return 100;
+        return 1097;
     }
 
 }

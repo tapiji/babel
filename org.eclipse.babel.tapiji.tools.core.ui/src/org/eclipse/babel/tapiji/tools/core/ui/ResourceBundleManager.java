@@ -665,9 +665,15 @@ public class ResourceBundleManager {
         IFile res = null;
         Set<IResource> resSet = resources.get(resourceBundle);
 
+        // get normalized simple resource bundle name
+        String normalizedResourceBundleName = resourceBundle;
+        if (normalizedResourceBundleName.contains(".")) {
+        	normalizedResourceBundleName = normalizedResourceBundleName.substring(resourceBundle.lastIndexOf(".")+1);
+        }
+        
         if (resSet != null) {
             for (IResource resource : resSet) {
-                Locale refLoc = NameUtils.getLocaleByName(resourceBundle,
+                Locale refLoc = NameUtils.getLocaleByName(normalizedResourceBundleName,
                         resource.getName());
                 if (refLoc == null
                         && l == null
@@ -790,8 +796,9 @@ public class ResourceBundleManager {
             if (!rb_l.isEmpty()) {
                 Object[] bundlelocales = rb_l.toArray();
                 for (Object l : bundlelocales) {
-                    /* TODO check if useful to add the default */
-                    if (!locales.contains(l)) {
+                    /* TODO check if useful to add the default. For now the default is not
+                     * being used and is ignored as it is null */
+                    if (l != null && !locales.contains(l)) {
                         locales.add((Locale) l);
                     }
                 }
