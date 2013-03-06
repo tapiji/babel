@@ -35,7 +35,7 @@ import org.eclipse.core.runtime.Path;
  * MessagesBundleGroup strategy for standard Java properties file structure.
  * That is, all *.properties files of the same base name within the same
  * directory. This implementation works on files outside the Eclipse workspace.
- * 
+ *
  * @author Pascal Essiembre
  */
 public class PropertiesFileGroupStrategy implements
@@ -59,7 +59,7 @@ public class PropertiesFileGroupStrategy implements
 
     /**
      * Constructor.
-     * 
+     *
      * @param file
      *            file from which to derive the group
      */
@@ -130,7 +130,7 @@ public class PropertiesFileGroupStrategy implements
 
     /**
      * Creates a resource bundle for an existing resource.
-     * 
+     *
      * @param locale
      *            locale for which to create a bundle
      * @param resource
@@ -152,14 +152,20 @@ public class PropertiesFileGroupStrategy implements
     }
 
     public String createMessagesBundleId() {
-        String path = file.getAbsolutePath();
-        int index = path.indexOf("src");
-        String pathBeforeSrc = path.substring(0, index - 1);
-        int lastIndexOf = pathBeforeSrc.lastIndexOf(File.separatorChar);
-        String projectName = path.substring(lastIndexOf + 1, index - 1);
-        String relativeFilePath = path.substring(index, path.length());
+        final String path = file.getAbsolutePath();
+        final int index = path.indexOf("src");
+        final String pathBeforeSrc = path.substring(0, Math.max(index - 1, 0));
+        final int lastIndexOf = pathBeforeSrc.lastIndexOf(File.separatorChar);
+        final String relativeFilePath = path.substring(Math.max(index, 0),
+                Math.max(path.length(), 0));
+        String projectName = path.substring(Math.max(lastIndexOf + 1, 0),
+                Math.max(index - 1, 0));
 
-        IFile f = ResourcesPlugin.getWorkspace().getRoot()
+        if (projectName.equals("")) {
+            projectName = "no_project";
+        }
+
+        final IFile f = ResourcesPlugin.getWorkspace().getRoot()
                 .getProject(projectName).getFile(relativeFilePath);
 
         return NameUtils.getResourceBundleId(f);

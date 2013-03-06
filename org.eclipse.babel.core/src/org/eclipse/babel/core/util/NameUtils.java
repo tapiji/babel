@@ -4,7 +4,7 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     Alexej Strelzow - initial API and implementation
  ******************************************************************************/
@@ -19,7 +19,7 @@ import org.eclipse.jdt.core.JavaCore;
 
 /**
  * Contains methods, which return names/IDs or Objects by name.
- * 
+ *
  * @author Alexej Strelzow
  */
 public class NameUtils {
@@ -27,11 +27,15 @@ public class NameUtils {
     public static String getResourceBundleId(IResource resource) {
         String packageFragment = "";
 
-        IJavaElement propertyFile = JavaCore.create(resource.getParent());
-        if (propertyFile != null && propertyFile instanceof IPackageFragment)
-            packageFragment = ((IPackageFragment) propertyFile)
-                    .getElementName();
-
+        try {
+            IJavaElement propertyFile = JavaCore.create(resource.getParent());
+            if (propertyFile != null
+                    && propertyFile instanceof IPackageFragment)
+                packageFragment = ((IPackageFragment) propertyFile)
+                        .getElementName();
+        } catch (NoClassDefFoundError e) {
+            // do nothing
+        }
         return (packageFragment.length() > 0 ? packageFragment + "." : "")
                 + getResourceBundleName(resource);
     }

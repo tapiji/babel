@@ -46,7 +46,7 @@ import org.eclipse.ui.part.FileEditorInput;
 /**
  * MessagesBundle group strategy for standard properties file structure. That
  * is, all *.properties files of the same base name within the same directory.
- * 
+ *
  * @author Pascal Essiembre
  */
 public class DefaultBundleGroupStrategy implements IMessagesBundleGroupStrategy {
@@ -69,7 +69,7 @@ public class DefaultBundleGroupStrategy implements IMessagesBundleGroupStrategy 
 
     /**
      * Constructor.
-     * 
+     *
      * @param site
      *            editor site
      * @param file
@@ -107,11 +107,15 @@ public class DefaultBundleGroupStrategy implements IMessagesBundleGroupStrategy 
     public static String getResourceBundleId(IResource resource) {
         String packageFragment = "";
 
-        IJavaElement propertyFile = JavaCore.create(resource.getParent());
-        if (propertyFile != null && propertyFile instanceof IPackageFragment)
-            packageFragment = ((IPackageFragment) propertyFile)
-                    .getElementName();
-
+        try {
+            IJavaElement propertyFile = JavaCore.create(resource.getParent());
+            if (propertyFile != null
+                    && propertyFile instanceof IPackageFragment)
+                packageFragment = ((IPackageFragment) propertyFile)
+                        .getElementName();
+        } catch (NoClassDefFoundError e) {
+            // do nothing
+        }
         return (packageFragment.length() > 0 ? packageFragment + "." : "")
                 + getResourceBundleName(resource);
     }
@@ -167,7 +171,7 @@ public class DefaultBundleGroupStrategy implements IMessagesBundleGroupStrategy 
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.eclipse.babel.core.bundle.IBundleGroupStrategy#createBundle(java.
      * util.Locale)
@@ -198,7 +202,7 @@ public class DefaultBundleGroupStrategy implements IMessagesBundleGroupStrategy 
 
     /**
      * Creates a resource bundle for an existing resource.
-     * 
+     *
      * @param locale
      *            locale for which to create a bundle
      * @param resource
@@ -236,7 +240,7 @@ public class DefaultBundleGroupStrategy implements IMessagesBundleGroupStrategy 
 
     /**
      * Creates an Eclipse editor.
-     * 
+     *
      * @param site
      * @param resource
      * @param locale
