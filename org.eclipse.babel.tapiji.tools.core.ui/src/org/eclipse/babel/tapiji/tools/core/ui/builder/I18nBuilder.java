@@ -20,7 +20,7 @@ import org.eclipse.babel.core.configuration.ConfigurationManager;
 import org.eclipse.babel.core.configuration.IConfiguration;
 import org.eclipse.babel.tapiji.tools.core.Logger;
 import org.eclipse.babel.tapiji.tools.core.extensions.ILocation;
-import org.eclipse.babel.tapiji.tools.core.extensions.IMarkerConstants;
+import org.eclipse.babel.tapiji.tools.core.extensions.MarkerConstants;
 import org.eclipse.babel.tapiji.tools.core.model.exception.NoSuchResourceAuditorException;
 import org.eclipse.babel.tapiji.tools.core.ui.ResourceBundleManager;
 import org.eclipse.babel.tapiji.tools.core.ui.analyzer.ResourceFinder;
@@ -232,7 +232,7 @@ public class I18nBuilder extends IncrementalProjectBuilder {
                                                 new String[] { problem
                                                         .getLiteral() }),
                                 problem,
-                                IMarkerConstants.CAUSE_CONSTANT_LITERAL, "",
+                                MarkerConstants.CAUSE_CONSTANT_LITERAL, "",
                                 (ILocation) problem.getData(), ra
                                         .getContextId());
             }
@@ -251,7 +251,7 @@ public class I18nBuilder extends IncrementalProjectBuilder {
                                                                 .getData())
                                                                 .getLiteral() }),
                                 brokenLiteral,
-                                IMarkerConstants.CAUSE_BROKEN_REFERENCE,
+                                MarkerConstants.CAUSE_BROKEN_REFERENCE,
                                 brokenLiteral.getLiteral(),
                                 (ILocation) brokenLiteral.getData(), ra
                                         .getContextId());
@@ -268,7 +268,7 @@ public class I18nBuilder extends IncrementalProjectBuilder {
                                                 new String[] { brokenLiteral
                                                         .getLiteral() }),
                                 brokenLiteral,
-                                IMarkerConstants.CAUSE_BROKEN_RB_REFERENCE,
+                                MarkerConstants.CAUSE_BROKEN_RB_REFERENCE,
                                 brokenLiteral.getLiteral(),
                                 (ILocation) brokenLiteral.getData(), ra
                                         .getContextId());
@@ -297,7 +297,7 @@ public class I18nBuilder extends IncrementalProjectBuilder {
                                                             problem.getFile()
                                                                     .getName() }),
                                     problem,
-                                    IMarkerConstants.CAUSE_UNSPEZIFIED_KEY,
+                                    MarkerConstants.CAUSE_UNSPEZIFIED_KEY,
                                     problem.getLiteral(), "",
                                     (ILocation) problem.getData(), ra
                                             .getContextId());
@@ -323,7 +323,7 @@ public class I18nBuilder extends IncrementalProjectBuilder {
                                                                     .getName(),
                                                             problem.getLiteral() }),
                                     problem,
-                                    IMarkerConstants.CAUSE_SAME_VALUE,
+                                    MarkerConstants.CAUSE_SAME_VALUE,
                                     problem.getLiteral(),
                                     sameValues.get(problem).getFile().getName(),
                                     (ILocation) problem.getData(), ra
@@ -344,7 +344,7 @@ public class I18nBuilder extends IncrementalProjectBuilder {
                                                                             .getFile()),
                                                             problem.getLiteral() }),
                                     problem,
-                                    IMarkerConstants.CAUSE_MISSING_LANGUAGE,
+                                    MarkerConstants.CAUSE_MISSING_LANGUAGE,
                                     problem.getLiteral(), "",
                                     (ILocation) problem.getData(), ra
                                             .getContextId());

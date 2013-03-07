@@ -14,6 +14,6 @@ import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceExclusionEvent;
 
 public interface IResourceExclusionListener {
 
-    public void exclusionChanged(ResourceExclusionEvent event);
+    void exclusionChanged(ResourceExclusionEvent event);
 
 }

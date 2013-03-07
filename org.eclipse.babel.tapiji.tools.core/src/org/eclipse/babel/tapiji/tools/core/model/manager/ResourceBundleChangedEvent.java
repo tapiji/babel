@@ -24,7 +24,7 @@ public class ResourceBundleChangedEvent {
     private String bundle = "";
     private int type = -1;
 
-    public ResourceBundleChangedEvent(int type, String bundle, IProject project) {
+    public ResourceBundleChangedEvent(final int type, final String bundle, final IProject project) {
         this.type = type;
         this.bundle = bundle;
         this.project = project;
@@ -34,7 +34,7 @@ public class ResourceBundleChangedEvent {
         return project;
     }
 
-    public void setProject(IProject project) {
+    public void setProject(final IProject project) {
         this.project = project;
     }
 
@@ -42,7 +42,7 @@ public class ResourceBundleChangedEvent {
         return bundle;
     }
 
-    public void setBundle(String bundle) {
+    public void setBundle(final String bundle) {
         this.bundle = bundle;
     }
 
@@ -50,7 +50,7 @@ public class ResourceBundleChangedEvent {
         return type;
     }
 
-    public void setType(int type) {
+    public void setType(final int type) {
         this.type = type;
     }
 }

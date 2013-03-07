@@ -16,12 +16,12 @@ public class ResourceExclusionEvent {
 
     private Collection<Object> changedResources;
 
-    public ResourceExclusionEvent(Collection<Object> changedResources) {
+    public ResourceExclusionEvent(final Collection<Object> changedResources) {
         super();
         this.changedResources = changedResources;
     }
 
-    public void setChangedResources(Collection<Object> changedResources) {
+    public void setChangedResources(final Collection<Object> changedResources) {
         this.changedResources = changedResources;
     }
 

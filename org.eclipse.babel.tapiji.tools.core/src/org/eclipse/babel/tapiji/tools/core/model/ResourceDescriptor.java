@@ -19,7 +19,7 @@ public class ResourceDescriptor implements IResourceDescriptor {
     private String absolutePath;
     private String bundleId;
 
-    public ResourceDescriptor(IResource resource) {
+    public ResourceDescriptor(final IResource resource) {
         projectName = resource.getProject().getName();
         relativePath = resource.getProjectRelativePath().toString();
         absolutePath = resource.getRawLocation().toString();
@@ -49,7 +49,7 @@ public class ResourceDescriptor implements IResourceDescriptor {
     }
 
     @Override
-    public boolean equals(Object other) {
+    public boolean equals(final Object other) {
         if (!(other instanceof ResourceDescriptor))
             return false;
 
@@ -57,17 +57,17 @@ public class ResourceDescriptor implements IResourceDescriptor {
     }
 
     @Override
-    public void setAbsolutePath(String absPath) {
+    public void setAbsolutePath(final String absPath) {
         this.absolutePath = absPath;
     }
 
     @Override
-    public void setProjectName(String projName) {
+    public void setProjectName(final String projName) {
         this.projectName = projName;
     }
 
     @Override
-    public void setRelativePath(String relPath) {
+    public void setRelativePath(final String relPath) {
         this.relativePath = relPath;
     }
 
@@ -77,7 +77,7 @@ public class ResourceDescriptor implements IResourceDescriptor {
     }
 
     @Override
-    public void setBundleId(String bundleId) {
+    public void setBundleId(final String bundleId) {
         this.bundleId = bundleId;
     }
 

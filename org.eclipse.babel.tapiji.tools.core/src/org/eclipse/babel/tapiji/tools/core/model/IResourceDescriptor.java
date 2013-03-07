@@ -12,20 +12,20 @@ package org.eclipse.babel.tapiji.tools.core.model;
 
 public interface IResourceDescriptor {
 
-    public void setProjectName(String projName);
+    void setProjectName(String projName);
 
-    public void setRelativePath(String relPath);
+    void setRelativePath(String relPath);
 
-    public void setAbsolutePath(String absPath);
+    void setAbsolutePath(String absPath);
 
-    public void setBundleId(String bundleId);
+    void setBundleId(String bundleId);
 
-    public String getProjectName();
+    String getProjectName();
 
-    public String getRelativePath();
+    String getRelativePath();
 
-    public String getAbsolutePath();
+    String getAbsolutePath();
 
-    public String getBundleId();
+    String getBundleId();
 
 }

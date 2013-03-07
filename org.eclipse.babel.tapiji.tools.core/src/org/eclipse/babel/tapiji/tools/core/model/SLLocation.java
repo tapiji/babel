@@ -21,10 +21,10 @@ public class SLLocation implements Serializable, ILocation {
     private IFile file = null;
     private int startPos = -1;
     private int endPos = -1;
-    private String literal;
+    private final String literal;
     private Serializable data;
 
-    public SLLocation(IFile file, int startPos, int endPos, String literal) {
+    public SLLocation(final IFile file, final int startPos, final int endPos, final String literal) {
         super();
         this.file = file;
         this.startPos = startPos;
@@ -36,7 +36,7 @@ public class SLLocation implements Serializable, ILocation {
         return file;
     }
 
-    public void setFile(IFile file) {
+    public void setFile(final IFile file) {
         this.file = file;
     }
 
@@ -44,7 +44,7 @@ public class SLLocation implements Serializable, ILocation {
         return startPos;
     }
 
-    public void setStartPos(int startPos) {
+    public void setStartPos(final int startPos) {
         this.startPos = startPos;
     }
 
@@ -52,7 +52,7 @@ public class SLLocation implements Serializable, ILocation {
         return endPos;
     }
 
-    public void setEndPos(int endPos) {
+    public void setEndPos(final int endPos) {
         this.endPos = endPos;
     }
 
@@ -64,7 +64,7 @@ public class SLLocation implements Serializable, ILocation {
         return data;
     }
 
-    public void setData(Serializable data) {
+    public void setData(final Serializable data) {
         this.data = data;
     }
 

@@ -12,25 +12,27 @@ package org.eclipse.babel.tapiji.tools.core.util;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.jface.action.Action;
 
-public class RBFileUtils extends Action {
-    public static final String PROPERTIES_EXT = "properties";
+public final class RBFileUtils {
 
-    /**
-     * Checks whether a RB-file has a problem-marker
-     */
-    public static boolean hasResourceBundleMarker(IResource r) {
-        try {
-            if (r.findMarkers(EditorUtils.RB_MARKER_ID, true,
-                    IResource.DEPTH_INFINITE).length > 0) {
-                return true;
-            } else {
-                return false;
-            }
-        } catch (CoreException e) {
-            return false;
-        }
-    }
+	private RBFileUtils() {
+
+	}
+
+	/**
+	 * Checks whether a RB-file has a problem-marker
+	 */
+	public static boolean hasResourceBundleMarker(final IResource resource) {
+		boolean hasRBMarker;
+		
+		try {
+			hasRBMarker = resource.findMarkers(EditorUtils.RB_MARKER_ID, true,
+					IResource.DEPTH_INFINITE).length > 0;
+		} catch (CoreException e) {
+			hasRBMarker = false;
+		}
+		
+		return hasRBMarker;
+	}
 
 }

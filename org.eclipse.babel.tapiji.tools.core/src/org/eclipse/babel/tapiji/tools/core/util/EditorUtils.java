@@ -16,7 +16,7 @@ import java.text.MessageFormat;
 
 import org.eclipse.core.resources.IMarker;
 
-public class EditorUtils {
+public final class EditorUtils {
 
     /** Marker constants **/
     public static final String MARKER_ID = "org.eclipse.babel.tapiji.tools.core.ui.StringLiteralAuditMarker";
@@ -31,15 +31,19 @@ public class EditorUtils {
     public static final String MESSAGE_SAME_VALUE = "''{0}'' and ''{1}'' have the same translation for the key ''{2}''";
     public static final String MESSAGE_MISSING_LANGUAGE = "ResourceBundle ''{0}'' lacks a translation for ''{1}''";
 
-    public static String getFormattedMessage(String pattern, Object[] arguments) {
+    private EditorUtils() {
+    }
+    
+    public static String getFormattedMessage(final String pattern, final Object[] arguments) {
         String formattedMessage = "";
 
-        MessageFormat formatter = new MessageFormat(pattern);
+        final MessageFormat formatter = new MessageFormat(pattern);
         formattedMessage = formatter.format(arguments);
 
         return formattedMessage;
     }
 
+    // TODO refactor
     public static IMarker[] concatMarkerArray(IMarker[] ms, IMarker[] ms_to_add) {
         IMarker[] old_ms = ms;
         ms = new IMarker[old_ms.length + ms_to_add.length];

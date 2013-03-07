@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.babel.tapiji.tools.core.extensions.ILocation;
-import org.eclipse.babel.tapiji.tools.core.extensions.IMarkerConstants;
+import org.eclipse.babel.tapiji.tools.core.extensions.MarkerConstants;
 import org.eclipse.babel.tapiji.tools.core.model.SLLocation;
 import org.eclipse.babel.tapiji.tools.core.ui.ResourceBundleManager;
 import org.eclipse.babel.tapiji.tools.core.ui.extensions.I18nResourceAuditor;
@@ -101,12 +101,12 @@ public class JavaResourceAuditor extends I18nResourceAuditor {
         List<IMarkerResolution> resolutions = new ArrayList<IMarkerResolution>();
 
         switch (marker.getAttribute("cause", -1)) {
-        case IMarkerConstants.CAUSE_CONSTANT_LITERAL:
+        case MarkerConstants.CAUSE_CONSTANT_LITERAL:
             resolutions.add(new IgnoreStringFromInternationalization());
             resolutions.add(new ExcludeResourceFromInternationalization());
             resolutions.add(new ExportToResourceBundleResolution());
             break;
-        case IMarkerConstants.CAUSE_BROKEN_REFERENCE:
+        case MarkerConstants.CAUSE_BROKEN_REFERENCE:
             String dataName = marker.getAttribute("bundleName", "");
             int dataStart = marker.getAttribute("bundleStart", 0);
             int dataEnd = marker.getAttribute("bundleEnd", 0);
@@ -142,7 +142,7 @@ public class JavaResourceAuditor extends I18nResourceAuditor {
             }
 
             break;
-        case IMarkerConstants.CAUSE_BROKEN_RB_REFERENCE:
+        case MarkerConstants.CAUSE_BROKEN_RB_REFERENCE:
             String bname = marker.getAttribute("key", "");
 
             Set<IResource> bundleResources = ResourceBundleManager.getManager(

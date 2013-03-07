@@ -29,13 +29,15 @@ public class FileUtils {
         return readFileAsString(resource.getRawLocation().toFile());
     }
 
-    protected static String readFileAsString(File filePath) {
+    public static String readFileAsString(final File filePath) {
         String content = "";
 
-        if (!filePath.exists())
+        if (!filePath.exists()) {
             return content;
+        }
+        
         try {
-            BufferedReader fileReader = new BufferedReader(new FileReader(
+            final BufferedReader fileReader = new BufferedReader(new FileReader(
                     filePath));
             String line = "";
 
@@ -67,13 +69,14 @@ public class FileUtils {
      * @throws CoreException
      * @throws OperationCanceledException
      */
-    public synchronized void saveTextFile(IFile file, String editorContent)
+    public synchronized void saveTextFile(final IFile file, final String editorContent)
             throws CoreException, OperationCanceledException {
         try {
             file.setContents(
                     new ByteArrayInputStream(editorContent.getBytes()), false,
                     true, null);
         } catch (Exception e) {
+        	// TODO use logger
             e.printStackTrace();
         }
     }

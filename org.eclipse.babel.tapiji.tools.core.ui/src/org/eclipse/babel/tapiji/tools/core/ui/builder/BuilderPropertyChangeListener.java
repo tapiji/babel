@@ -11,7 +11,7 @@
 package org.eclipse.babel.tapiji.tools.core.ui.builder;
 
 import org.eclipse.babel.tapiji.tools.core.Logger;
-import org.eclipse.babel.tapiji.tools.core.extensions.IMarkerConstants;
+import org.eclipse.babel.tapiji.tools.core.extensions.MarkerConstants;
 import org.eclipse.babel.tapiji.tools.core.ui.preferences.TapiJIPreferences;
 import org.eclipse.babel.tapiji.tools.core.ui.utils.EditorUtils;
 import org.eclipse.core.resources.IMarker;
@@ -49,16 +49,16 @@ public class BuilderPropertyChangeListener implements IPropertyChangeListener {
             if (event.getProperty().equals(
                     TapiJIPreferences.AUDIT_UNSPEZIFIED_KEY)) {
                 deleteMarkersByCause(EditorUtils.RB_MARKER_ID,
-                        IMarkerConstants.CAUSE_UNSPEZIFIED_KEY);
+                        MarkerConstants.CAUSE_UNSPEZIFIED_KEY);
             }
             if (event.getProperty().equals(TapiJIPreferences.AUDIT_SAME_VALUE)) {
                 deleteMarkersByCause(EditorUtils.RB_MARKER_ID,
-                        IMarkerConstants.CAUSE_SAME_VALUE);
+                        MarkerConstants.CAUSE_SAME_VALUE);
             }
             if (event.getProperty().equals(
                     TapiJIPreferences.AUDIT_MISSING_LANGUAGE)) {
                 deleteMarkersByCause(EditorUtils.RB_MARKER_ID,
-                        IMarkerConstants.CAUSE_MISSING_LANGUAGE);
+                        MarkerConstants.CAUSE_MISSING_LANGUAGE);
             }
         }
 

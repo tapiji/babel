@@ -28,7 +28,7 @@ import org.eclipse.babel.core.configuration.IConfiguration;
 import org.eclipse.babel.core.message.IMessage;
 import org.eclipse.babel.core.message.IMessagesBundleGroup;
 import org.eclipse.babel.tapiji.tools.core.extensions.ILocation;
-import org.eclipse.babel.tapiji.tools.core.extensions.IMarkerConstants;
+import org.eclipse.babel.tapiji.tools.core.extensions.MarkerConstants;
 import org.eclipse.babel.tapiji.tools.core.ui.ResourceBundleManager;
 import org.eclipse.babel.tapiji.tools.core.ui.extensions.I18nRBAuditor;
 import org.eclipse.babel.tapiji.tools.core.ui.utils.RBFileUtils;
@@ -248,7 +248,7 @@ public class ResourceBundleAuditor extends I18nRBAuditor {
         List<IMarkerResolution> resolutions = new ArrayList<IMarkerResolution>();
 
         switch (marker.getAttribute("cause", -1)) {
-        case IMarkerConstants.CAUSE_MISSING_LANGUAGE:
+        case MarkerConstants.CAUSE_MISSING_LANGUAGE:
             Locale l = new Locale(marker.getAttribute(LANGUAGE_ATTRIBUTE, "")); // TODO
             // change
             // Name
