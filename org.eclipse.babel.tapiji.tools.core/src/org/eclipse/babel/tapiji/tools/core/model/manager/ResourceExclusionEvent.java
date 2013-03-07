@@ -12,20 +12,22 @@ package org.eclipse.babel.tapiji.tools.core.model.manager;
 
 import java.util.Collection;
 
+import org.eclipse.core.resources.IResource;
+
 public class ResourceExclusionEvent {
 
-    private Collection<Object> changedResources;
+    private Collection<IResource> changedResources;
 
-    public ResourceExclusionEvent(final Collection<Object> changedResources) {
+    public ResourceExclusionEvent(final Collection<IResource> changedResources) {
         super();
         this.changedResources = changedResources;
     }
 
-    public void setChangedResources(final Collection<Object> changedResources) {
+    public void setChangedResources(final Collection<IResource> changedResources) {
         this.changedResources = changedResources;
     }
 
-    public Collection<Object> getChangedResources() {
+    public Collection<IResource> getChangedResources() {
         return changedResources;
     }
 

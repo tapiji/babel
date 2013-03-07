@@ -50,24 +50,24 @@ import org.eclipse.core.runtime.Platform;
  * 
  * @author Alexej Strelzow
  */
-public class RBManager {
+public final class RBManager {
 
     private static Map<IProject, RBManager> managerMap = new HashMap<IProject, RBManager>();
 
     /** <package>.<resourceBundleName> , IMessagesBundleGroup */
-    private Map<String, IMessagesBundleGroup> resourceBundles;
+    private final Map<String, IMessagesBundleGroup> resourceBundles;
 
     private static RBManager INSTANCE;
 
-    private List<IMessagesEditorListener> editorListeners;
+    private final List<IMessagesEditorListener> editorListeners;
 
-    private List<IResourceDeltaListener> resourceListeners;
+    private final List<IResourceDeltaListener> resourceListeners;
 
     private IProject project;
 
     private static final String TAPIJI_NATURE = "org.eclipse.babel.tapiji.tools.core.ui.nature";
 
-    private static Logger logger = Logger.getLogger(RBManager.class
+    final static Logger logger = Logger.getLogger(RBManager.class
             .getSimpleName());
 
     private static IRefactoringService refactorService;
