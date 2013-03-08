@@ -97,7 +97,7 @@ public class EditorUtils {
         try {
             if (resource != null && resource.exists()) {
                 resource.deleteMarkers(MARKER_ID, false,
-                        IResource.DEPTH_INFINITE);
+                        IResource.DEPTH_ZERO);
                 deleteAllAuditRBMarkersFromRB(resource);
             }
         } catch (CoreException e) {

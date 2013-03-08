@@ -414,8 +414,9 @@ public class ResourceBundleManager {
 		// return !this.isResourceExisting(rbName, key);
 	}
 
-	protected void excludeSingleResource(IResource res) {
-		IResourceDescriptor rd = new ResourceDescriptor(res);
+	private boolean excludeSingleResource(IResource res) {
+		boolean rbRemoved = false;
+		final IResourceDescriptor rd = new ResourceDescriptor(res);
 		org.eclipse.babel.tapiji.tools.core.ui.utils.EditorUtils
 				.deleteAuditMarkersForResource(res);
 
@@ -434,23 +435,12 @@ public class ResourceBundleManager {
 				resSet.remove(res);
 
 				if (!resSet.isEmpty()) {
-					
-					if (bundleName.equals("org.example.com")) {
-						Logger.logInfo("adding bundle with id: " + bundleName);
-					}
-					
 					resources.put(bundleName, resSet);
 					unloadResource(bundleName, res);
 				} else {
 					rd.setBundleId(bundleName);
 					unloadResourceBundle(bundleName);
-					try {
-						res.getProject().build(
-								IncrementalProjectBuilder.FULL_BUILD,
-								BUILDER_ID, null, null);
-					} catch (CoreException e) {
-						Logger.logError(e);
-					}
+					rbRemoved = true;
 				}
 
 				fireResourceBundleChangedEvent(getResourceBundleId(res),
@@ -459,6 +449,8 @@ public class ResourceBundleManager {
 								bundleName, res.getProject()));
 			}
 		}
+		
+		return rbRemoved;
 	}
 
 	public void excludeResource(IResource res, IProgressMonitor monitor) {
@@ -486,11 +478,20 @@ public class ResourceBundleManager {
 					"Exclude resources from Internationalization context",
 					resourceSubTree.size());
 			try {
+				boolean rbRemoved = false;
 				for (IResource resource : resourceSubTree) {
-					excludeSingleResource(resource);
-					org.eclipse.babel.tapiji.tools.core.ui.utils.EditorUtils
-							.deleteAuditMarkersForResource(resource);
+					rbRemoved |= excludeSingleResource(resource);
 					monitor.worked(1);
+				}
+				
+				if (rbRemoved) {
+					try {
+						res.getProject().build(
+								IncrementalProjectBuilder.FULL_BUILD,
+								BUILDER_ID, null, null);
+					} catch (CoreException e) {
+						Logger.logError(e);
+					}
 				}
 			} catch (Exception e) {
 				Logger.logError(e);
