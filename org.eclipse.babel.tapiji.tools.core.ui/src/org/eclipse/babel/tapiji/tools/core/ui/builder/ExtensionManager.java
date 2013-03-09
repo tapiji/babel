@@ -26,55 +26,71 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.util.IPropertyChangeListener;
 
-public class ExtensionManager {
+public final class ExtensionManager {
 
-    // list of registered extension plug-ins
-    private static List<I18nAuditor> extensions = null;
+	// list of registered extension plug-ins
+	private List<I18nAuditor> extensions = null;
 
-    // change listener for builder property change events
-    private static IPropertyChangeListener propertyChangeListener = null;
+	// change listener for builder property change events
+	private IPropertyChangeListener propertyChangeListener = null;
 
-    // file-endings supported by the registered extension plug-ins
-    private static Set<String> supportedFileEndings = new HashSet<String>();
+	// file-endings supported by the registered extension plug-ins
+	private Set<String> supportedFileEndings = new HashSet<String>();
+	
+	// singleton instance
+	private static ExtensionManager INSTANCE = null;
+	
+	private ExtensionManager() {
+		initExtensionManager();
+	}
+	
+	public static ExtensionManager getExtensionManager() {
+		if (INSTANCE == null) {
+			INSTANCE = new ExtensionManager();
+		}
+		
+		return INSTANCE;
+	}
 
-    public static List<I18nAuditor> getRegisteredI18nAuditors() {
-        if (extensions == null) {
-            extensions = new ArrayList<I18nAuditor>();
+	private void initExtensionManager() {
+		extensions = new ArrayList<I18nAuditor>();
 
-            // init default auditors
-            extensions.add(new RBAuditor());
+		// init default auditors
+		extensions.add(new RBAuditor());
 
-            // lookup registered auditor extensions
-            IConfigurationElement[] config = Platform
-                    .getExtensionRegistry()
-                    .getConfigurationElementsFor(Activator.BUILDER_EXTENSION_ID);
+		// lookup registered auditor extensions
+		IConfigurationElement[] config = Platform
+				.getExtensionRegistry()
+				.getConfigurationElementsFor(Activator.BUILDER_EXTENSION_ID);
 
-            try {
-                for (IConfigurationElement e : config) {
-                    addExtensionPlugIn((I18nAuditor) e
-                            .createExecutableExtension("class"));
-                }
-            } catch (CoreException ex) {
-                Logger.logError(ex);
-            }
-        }
+		try {
+			for (IConfigurationElement e : config) {
+				addExtensionPlugIn((I18nAuditor) e
+						.createExecutableExtension("class"));
+			}
+		} catch (CoreException ex) {
+			Logger.logError(ex);
+		}
+	}
+	
+	public List<I18nAuditor> getRegisteredI18nAuditors() {
+		
+		// init builder property change listener
+		if (propertyChangeListener == null) {
+			propertyChangeListener = new BuilderPropertyChangeListener();
+			TapiJIPreferences.addPropertyChangeListener(propertyChangeListener);
+		}
 
-        // init builder property change listener
-        if (propertyChangeListener == null) {
-            propertyChangeListener = new BuilderPropertyChangeListener();
-            TapiJIPreferences.addPropertyChangeListener(propertyChangeListener);
-        }
+		return extensions;
+	}
 
-        return extensions;
-    }
+	public Set<String> getSupportedFileEndings() {
+		return supportedFileEndings;
+	}
 
-    public static Set<String> getSupportedFileEndings() {
-        return supportedFileEndings;
-    }
-
-    private static void addExtensionPlugIn(I18nAuditor extension) {
-        I18nAuditor a = extension;
-        extensions.add(a);
-        supportedFileEndings.addAll(Arrays.asList(a.getFileEndings()));
-    }
+	private void addExtensionPlugIn(I18nAuditor extension) {
+		I18nAuditor a = extension;
+		extensions.add(a);
+		supportedFileEndings.addAll(Arrays.asList(a.getFileEndings()));
+	}
 }

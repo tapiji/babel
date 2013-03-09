@@ -67,8 +67,7 @@ public final class RBManager {
 
     private static final String TAPIJI_NATURE = "org.eclipse.babel.tapiji.tools.core.ui.nature";
 
-    final static Logger logger = Logger.getLogger(RBManager.class
-            .getSimpleName());
+    final static Logger logger = Logger.getLogger(RBManager.class.getName());
 
     private static IRefactoringService refactorService;
 

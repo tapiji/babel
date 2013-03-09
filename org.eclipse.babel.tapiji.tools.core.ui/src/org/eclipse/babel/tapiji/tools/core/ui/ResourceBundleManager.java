@@ -219,7 +219,7 @@ public class ResourceBundleManager {
 		if (bundleName.equals("org.example.com")) {
 			Logger.logInfo("adding bundle with id: " + bundleName);
 		}
-		
+
 		resources.put(bundleName, res);
 		allBundles.put(bundleName, new HashSet<IResource>(res));
 		bundleNames.put(bundleName, getResourceBundleName(resource));
@@ -449,7 +449,7 @@ public class ResourceBundleManager {
 								bundleName, res.getProject()));
 			}
 		}
-		
+
 		return rbRemoved;
 	}
 
@@ -483,7 +483,7 @@ public class ResourceBundleManager {
 					rbRemoved |= excludeSingleResource(resource);
 					monitor.worked(1);
 				}
-				
+
 				if (rbRemoved) {
 					try {
 						res.getProject().build(
@@ -526,7 +526,9 @@ public class ResourceBundleManager {
 							// check if the changed resource is a resource
 							// bundle
 							if (org.eclipse.babel.tapiji.tools.core.ui.utils.RBFileUtils
-									.isResourceBundleFile(resource) && !changedResourceBundles.contains(resource)) {
+									.isResourceBundleFile(resource)
+									&& !changedResourceBundles
+											.contains(resource)) {
 								changedResourceBundles.add(resource);
 							}
 							changedResources.add(resource);
@@ -562,14 +564,18 @@ public class ResourceBundleManager {
 
 			for (IResource rbResource : changedResourceBundles) {
 				String bundleName = getResourceBundleId(rbResource);
-				//fullBuildRequired &= !resources.containsKey(bundleName);
+
+				// TODO check if fullbuild needs only be triggered if a complete
+				// bundle was excluded
+				// fullBuildRequired &= !resources.containsKey(bundleName);
 
 				this.addBundleResource(rbResource);
 
 				Logger.logInfo("Including resource bundle '"
 						+ rbResource.getFullPath().toOSString() + "'");
-				
-				RBManager.getInstance(rbResource.getProject()).addBundleResource(rbResource);
+				RBManager.getInstance(rbResource.getProject())
+						.addBundleResource(rbResource);
+
 				fireResourceBundleChangedEvent(getResourceBundleId(rbResource),
 						new ResourceBundleChangedEvent(
 								ResourceBundleChangedEvent.INCLUDED,
@@ -583,6 +589,20 @@ public class ResourceBundleManager {
 							null, null);
 				} catch (CoreException e) {
 					Logger.logError(e);
+				}
+			} else {
+				// trigger incremental build of included resources
+				for (IResource changedResource : changedResources) {
+					try {
+						Logger.logInfo(String.format(
+								"trigger rebuild for resource: %s",
+								changedResource));
+						changedResource.touch(monitor);
+					} catch (CoreException e) {
+						Logger.logError(String.format(
+								"error during rebuild of resource: %s",
+								changedResource), e);
+					}
 				}
 			}
 

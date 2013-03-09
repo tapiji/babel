@@ -104,7 +104,7 @@ public class ResourceBundle extends ResourceBundleElement {
 
         if (resource instanceof IFile) {
             if (debug) {
-                System.out.println("Loading " + resource + "...");
+               System.out.println("Loading " + resource + "...");
             }
             IFile file = (IFile) resource;
             InputStream inputStream = file.getContents();

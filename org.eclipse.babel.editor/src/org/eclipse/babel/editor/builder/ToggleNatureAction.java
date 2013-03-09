@@ -10,6 +10,9 @@
  ******************************************************************************/
 package org.eclipse.babel.editor.builder;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.eclipse.babel.core.util.BabelUtils;
 import org.eclipse.babel.editor.util.UIUtils;
 import org.eclipse.core.resources.IProject;
@@ -24,6 +27,8 @@ import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
 
 public class ToggleNatureAction implements IObjectActionDelegate {
+	
+	private static final Logger LOGGER = Logger.getLogger(ToggleNatureAction.class.getName());
 
     /**
      * Method call during the start up of the plugin or during a change of the
@@ -145,7 +150,7 @@ public class ToggleNatureAction implements IObjectActionDelegate {
             String[] newNatures = new String[natures.length + 1];
             System.arraycopy(natures, 0, newNatures, 0, natures.length);
             newNatures[natures.length] = Nature.NATURE_ID;
-            System.out.println("New natures: "
+            LOGGER.log(Level.INFO, "New natures: "
                     + BabelUtils.join(newNatures, ", "));
             description.setNatureIds(newNatures);
             project.setDescription(description, null);

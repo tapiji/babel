@@ -13,6 +13,8 @@ package org.eclipse.babel.editor.tree.internal;
 import java.lang.reflect.Constructor;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.eclipse.babel.core.message.tree.IKeyTreeNode;
 import org.eclipse.babel.core.message.tree.TreeType;
@@ -20,6 +22,7 @@ import org.eclipse.babel.core.message.tree.internal.AbstractKeyTreeModel;
 import org.eclipse.babel.core.message.tree.internal.IKeyTreeModelListener;
 import org.eclipse.babel.core.message.tree.internal.KeyTreeNode;
 import org.eclipse.babel.editor.IMessagesEditorChangeListener;
+import org.eclipse.babel.editor.builder.Builder;
 import org.eclipse.babel.editor.internal.AbstractMessagesEditor;
 import org.eclipse.babel.editor.internal.MessagesEditorChangeAdapter;
 import org.eclipse.babel.editor.internal.MessagesEditorMarkers;
@@ -60,6 +63,8 @@ import org.eclipse.ui.PlatformUI;
  *
  */
 public class KeyTreeContributor implements IKeyTreeContributor {
+	
+	private static final Logger LOGGER = Logger.getLogger(KeyTreeContributor.class.getName());
 
     private AbstractMessagesEditor editor;
     private AbstractKeyTreeModel treeModel;
@@ -310,7 +315,7 @@ public class KeyTreeContributor implements IKeyTreeContributor {
                 if (selection != null && selection.getFirstElement() != null) {
                     KeyTreeNode node = (KeyTreeNode) selection
                             .getFirstElement();
-                    System.out.println("viewer key/hash:"
+                    LOGGER.log(Level.INFO, "viewer key/hash:"
                             + node.getMessageKey() + "/" + node.hashCode());
                     editor.setSelectedKey(node.getMessageKey());
                 } else {

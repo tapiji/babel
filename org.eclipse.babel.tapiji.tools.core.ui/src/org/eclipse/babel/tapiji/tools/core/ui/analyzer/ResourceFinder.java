@@ -34,6 +34,8 @@ public class ResourceFinder implements IResourceVisitor, IResourceDeltaVisitor {
 
     @Override
     public boolean visit(IResource resource) throws CoreException {
+    	Logger.logInfo(String.format("resource finder is visiting resource %s", resource));
+    	
         if (I18nBuilder.isResourceAuditable(resource, supportedExtensions)) {
             Logger.logInfo("Audit necessary for resource '"
                     + resource.getFullPath().toOSString() + "'");

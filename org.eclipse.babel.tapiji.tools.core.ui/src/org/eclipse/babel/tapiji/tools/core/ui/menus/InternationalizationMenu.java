@@ -295,8 +295,6 @@ public class InternationalizationMenu extends ContributionItem {
             final Class<? extends IAdaptable> type,
             final ISelection selection) {
         if (selection instanceof IStructuredSelection) {
-            System.out.println(((IStructuredSelection) selection)
-                    .getFirstElement().getClass());
             return type.isAssignableFrom(((IStructuredSelection) selection)
                     .getFirstElement().getClass());
         }
