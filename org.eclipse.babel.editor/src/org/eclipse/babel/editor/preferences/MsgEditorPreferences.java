@@ -43,11 +43,7 @@ import org.eclipse.ui.internal.misc.StringMatcher;
  * 
  * @author Pascal Essiembre (pascal@essiembre.com)
  */
-public final class MsgEditorPreferences implements /*
-                                                    * IPropertiesSerializerConfig,
-                                                    * IPropertiesDeserializerConfig
-                                                    * ,
-                                                    */IPropertyChangeListener {
+public final class MsgEditorPreferences implements IPropertyChangeListener {
 
     /**
      * the corresponding validation message with such a preference should not be
@@ -205,7 +201,7 @@ public final class MsgEditorPreferences implements /*
     /**
      * Constructor.
      */
-    private MsgEditorPreferences() {
+	private MsgEditorPreferences() {
         super();
     }
 

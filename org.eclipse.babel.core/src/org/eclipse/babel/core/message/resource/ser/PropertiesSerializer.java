@@ -57,7 +57,12 @@ public class PropertiesSerializer {
      */
     public PropertiesSerializer(IPropertiesSerializerConfig config) {
         super();
-        this.config = config;
+        
+        if (config == null) {
+        	this.config = new DefaultPropertiesSerializerConfig();
+        } else {
+        	this.config = config;
+        }
     }
 
     /**

@@ -30,7 +30,7 @@ import org.eclipse.core.resources.IResource;
 public class MessagesBundleGroupFactory {
 
     public static IMessagesBundleGroup createBundleGroup(IResource resource) {
-
+    	
         File ioFile = new File(resource.getRawLocation().toFile().getPath());
 
         return new MessagesBundleGroup(new PropertiesFileGroupStrategy(ioFile,

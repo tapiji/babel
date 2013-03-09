@@ -90,7 +90,7 @@ public class ConfigurationManager {
      * @param serializerConfig
      *            The config for serialization
      */
-    public void setSerializerConfig(IPropertiesSerializerConfig serializerConfig) {
+	public void setSerializerConfig(IPropertiesSerializerConfig serializerConfig) {
         this.serializerConfig = serializerConfig;
     }
 

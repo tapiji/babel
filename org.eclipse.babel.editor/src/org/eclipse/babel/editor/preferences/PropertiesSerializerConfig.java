@@ -57,7 +57,7 @@ public class PropertiesSerializerConfig implements IPropertiesSerializerConfig {
      * @return how many blank lines between groups
      */
     public int getGroupSepBlankLineCount() {
-        return PREFS.getInt(MsgEditorPreferences.GROUP_SEP_BLANK_LINE_COUNT);
+		return PREFS.getInt(MsgEditorPreferences.GROUP_SEP_BLANK_LINE_COUNT);
     }
 
     /**
