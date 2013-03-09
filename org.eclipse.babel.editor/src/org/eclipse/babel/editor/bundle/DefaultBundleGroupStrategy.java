@@ -97,7 +97,7 @@ public class DefaultBundleGroupStrategy implements IMessagesBundleGroupStrategy 
      *      #createMessagesBundleGroupName()
      */
     public String createMessagesBundleGroupName() {
-        return getProjectName() + "*.properties";
+        return getResourceBundleId(file);
     }
 
     public String createMessagesBundleId() {
