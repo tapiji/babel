@@ -65,9 +65,11 @@ public class IncludeResource implements IMarkerResolution2 {
                             .getManager(marker.getResource().getProject());
                     pm.beginTask("Including resources to Internationalization",
                             bundleResources.size());
+                    int i = 0;
                     for (IResource resource : bundleResources) {
-                        manager.includeResource(resource, pm);
+                        manager.includeResource(resource, pm, i != (bundleResources.size()-1));
                         pm.worked(1);
+                        i++;
                     }
                     pm.done();
                 }

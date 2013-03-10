@@ -40,6 +40,7 @@ import org.eclipse.babel.tapiji.tools.core.model.manager.ResourceExclusionEvent;
 import org.eclipse.babel.tapiji.tools.core.ui.analyzer.ResourceBundleDetectionVisitor;
 import org.eclipse.babel.tapiji.tools.core.util.FragmentProjectUtils;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceVisitor;
@@ -214,7 +215,6 @@ public class ResourceBundleManager {
 			res = resources.get(bundleName);
 		}
 
-		
 		res.add(resource);
 		resources.put(bundleName, res);
 		allBundles.put(bundleName, new HashSet<IResource>(res));
@@ -223,7 +223,7 @@ public class ResourceBundleManager {
 		// notify RBManager instance
 		RBManager.getInstance(resource.getProject())
 				.addBundleResource(resource);
-		
+
 		// Fire resource changed event
 		ResourceBundleChangedEvent event = new ResourceBundleChangedEvent(
 				ResourceBundleChangedEvent.ADDED, bundleName,
@@ -503,7 +503,8 @@ public class ResourceBundleManager {
 		}
 	}
 
-	public void includeResource(IResource res, IProgressMonitor monitor) {
+	public void includeResource(IResource res, IProgressMonitor monitor,
+			boolean preventBuild) {
 		if (monitor == null) {
 			monitor = new NullProgressMonitor();
 		}
@@ -547,6 +548,38 @@ public class ResourceBundleManager {
 						monitor.worked(1);
 					}
 
+					// check if parent resource exclusion marker can be removed
+					// too
+					final IResource parentResource = res.getParent();
+					if (parentResource instanceof IFolder
+							&& excludedResources
+									.contains(new ResourceDescriptor(
+											parentResource))) {
+						final Collection<IResource> childResources = new HashSet<IResource>();
+
+						parentResource.accept(new IResourceVisitor() {
+
+							@Override
+							public boolean visit(IResource resource)
+									throws CoreException {
+								if (excludedResources
+										.contains(new ResourceDescriptor(
+												resource))
+										&& !resource.equals(parentResource)) {
+									childResources.add(resource);
+									return false;
+								}
+								return true;
+							}
+						});
+
+						if (childResources.size() == 0) {
+							excludedResources.remove(new ResourceDescriptor(
+									(IResource) parentResource));
+							changedResources.add(parentResource);
+							monitor.worked(1);
+						}
+					}
 				} catch (Exception e) {
 					Logger.logError(e);
 				} finally {
@@ -568,10 +601,10 @@ public class ResourceBundleManager {
 				// TODO check if fullbuild needs only be triggered if a complete
 				// bundle was excluded
 				// fullBuildRequired &= !resources.containsKey(bundleName);
-				
-				//RBManager.getInstance(rbResource.getProject())
-				//		.addBundleResource(rbResource);
-				
+
+				// RBManager.getInstance(rbResource.getProject())
+				// .addBundleResource(rbResource);
+
 				this.addBundleResource(rbResource);
 				Logger.logInfo("Including resource bundle '"
 						+ rbResource.getFullPath().toOSString() + "'");
@@ -582,26 +615,28 @@ public class ResourceBundleManager {
 								bundleName, rbResource.getProject()));
 			}
 
-			if (fullBuildRequired) {
-				try {
-					resource.getProject().build(
-							IncrementalProjectBuilder.FULL_BUILD, BUILDER_ID,
-							null, null);
-				} catch (CoreException e) {
-					Logger.logError(e);
-				}
-			} else {
-				// trigger incremental build of included resources
-				for (IResource changedResource : changedResources) {
+			if (!preventBuild) {
+				if (fullBuildRequired) {
 					try {
-						Logger.logInfo(String.format(
-								"trigger rebuild for resource: %s",
-								changedResource));
-						changedResource.touch(monitor);
+						resource.getProject().build(
+								IncrementalProjectBuilder.FULL_BUILD,
+								BUILDER_ID, null, null);
 					} catch (CoreException e) {
-						Logger.logError(String.format(
-								"error during rebuild of resource: %s",
-								changedResource), e);
+						Logger.logError(e);
+					}
+				} else {
+					// trigger incremental build of included resources
+					for (IResource changedResource : changedResources) {
+						try {
+							Logger.logInfo(String.format(
+									"trigger rebuild for resource: %s",
+									changedResource));
+							changedResource.touch(monitor);
+						} catch (CoreException e) {
+							Logger.logError(String.format(
+									"error during rebuild of resource: %s",
+									changedResource), e);
+						}
 					}
 				}
 			}

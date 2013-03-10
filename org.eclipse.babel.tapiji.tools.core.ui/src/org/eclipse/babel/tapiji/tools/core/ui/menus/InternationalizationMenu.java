@@ -338,6 +338,7 @@ public class InternationalizationMenu extends ContributionItem {
                     pm.beginTask("Including resources to Internationalization",
                             selectedResources.size());
 
+                    int i = 0;
                     for (IResource res : selectedResources) {
                         if (manager == null
                                 || (manager.getProject() != res.getProject())) {
@@ -347,9 +348,10 @@ public class InternationalizationMenu extends ContributionItem {
                         if (excludeMode) {
                             manager.excludeResource(res, pm);
                         } else {
-                            manager.includeResource(res, pm);
+                            manager.includeResource(res, pm, i < (selectedResources.size()-1));
                         }
                         pm.worked(1);
+                        i++;
                     }
                     pm.done();
                 }
