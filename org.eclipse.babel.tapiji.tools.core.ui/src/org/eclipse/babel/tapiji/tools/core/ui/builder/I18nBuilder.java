@@ -106,12 +106,6 @@ public class I18nBuilder extends IncrementalProjectBuilder {
 	private void incrementalBuild(IProgressMonitor monitor,
 			IResourceDelta resDelta) throws CoreException {
 		try {
-			for (final IResourceDelta changedResource : resDelta
-					.getAffectedChildren()) {
-				Logger.logInfo(String.format(" - %s",
-						changedResource.getResource()));
-			}
-
 			// inspect resource delta
 			Logger.logInfo(String
 					.format("looking for resources with the following file endings: %s",
@@ -119,8 +113,22 @@ public class I18nBuilder extends IncrementalProjectBuilder {
 			ResourceFinder csrav = new ResourceFinder(
 					extensionManager.getSupportedFileEndings());
 			resDelta.accept(csrav);
-
-			auditResources(csrav.getResources(), monitor, getProject());
+			
+			switch (resDelta.getKind()) {
+			case IResourceDelta.ADDED:
+			case IResourceDelta.CHANGED:
+				for (final IResourceDelta changedResource : resDelta
+						.getAffectedChildren()) {
+					Logger.logInfo(String.format(" - %s",
+							changedResource.getResource()));
+				}
+				auditResources(csrav.getResources(), monitor, getProject());
+				break;
+				
+			case IResourceDelta.REMOVED:
+				// TODO notify extension plugins
+				break;
+			}
 		} catch (CoreException e) {
 			Logger.logError(e);
 		}

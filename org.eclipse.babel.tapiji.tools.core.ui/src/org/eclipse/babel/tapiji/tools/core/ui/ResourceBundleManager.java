@@ -206,13 +206,19 @@ public class ResourceBundleManager {
 			return;
 		}
 
-		String bundleName = getResourceBundleId(resource);
-		Set<IResource> res;
+		final String bundleName = getResourceBundleId(resource);
+		final Set<IResource> res;
 
 		if (!resources.containsKey(bundleName)) {
 			res = new HashSet<IResource>();
 		} else {
 			res = resources.get(bundleName);
+		}
+
+		// check if the resource bundle manager is already aware of this
+		// resource
+		if (res.contains(resource)) {
+			return;
 		}
 
 		res.add(resource);

@@ -36,28 +36,30 @@ public final class ExtensionManager {
 
 	// file-endings supported by the registered extension plug-ins
 	private Set<String> supportedFileEndings = new HashSet<String>();
-	
+
 	// singleton instance
 	private static ExtensionManager INSTANCE = null;
-	
+
 	private ExtensionManager() {
 		initExtensionManager();
 	}
-	
+
 	public static ExtensionManager getExtensionManager() {
 		if (INSTANCE == null) {
 			INSTANCE = new ExtensionManager();
 		}
-		
+
 		return INSTANCE;
 	}
 
 	private void initExtensionManager() {
 		extensions = new ArrayList<I18nAuditor>();
 
+		// init default auditors
+		extensions.add(new RBAuditor());
+
 		// lookup registered auditor extensions
-		IConfigurationElement[] config = Platform
-				.getExtensionRegistry()
+		IConfigurationElement[] config = Platform.getExtensionRegistry()
 				.getConfigurationElementsFor(Activator.BUILDER_EXTENSION_ID);
 
 		try {
@@ -69,9 +71,9 @@ public final class ExtensionManager {
 			Logger.logError(ex);
 		}
 	}
-	
+
 	public List<I18nAuditor> getRegisteredI18nAuditors() {
-		
+
 		// init builder property change listener
 		if (propertyChangeListener == null) {
 			propertyChangeListener = new BuilderPropertyChangeListener();
