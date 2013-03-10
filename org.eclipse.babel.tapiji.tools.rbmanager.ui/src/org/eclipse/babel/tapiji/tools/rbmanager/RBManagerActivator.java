@@ -19,7 +19,7 @@ import org.osgi.framework.BundleContext;
  */
 public class RBManagerActivator extends AbstractUIPlugin {
     // The plug-in ID
-    public static final String PLUGIN_ID = "org.eclipse.babel.tapiji.tools.rbmanager"; //$NON-NLS-1$
+    public static final String PLUGIN_ID = "org.eclipse.babel.tapiji.tools.rbmanager.ui"; //$NON-NLS-1$
     // The shared instance
     private static RBManagerActivator plugin;
 
