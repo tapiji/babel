@@ -113,7 +113,7 @@ public class KeyRefactoringSummaryDialog extends KeyRefactoringDialog {
     @Override
     protected void configureShell(Shell newShell) {
         super.configureShell(newShell);
-        newShell.setText("Key refactoring summary");
+        newShell.setText("Rename summary");
     }
 
     /**
@@ -132,7 +132,7 @@ public class KeyRefactoringSummaryDialog extends KeyRefactoringDialog {
     public void create() {
         super.create();
         DialogConfiguration config = getConfig();
-        this.setTitle("Summary of the key refactoring: "
+        this.setTitle("Summary of key renaming: "
                 + config.getPreselectedKey() + " -> " + config.getNewKey());
         this.setMessage("The resource bundle " + config.getPreselectedBundle()
                 + " and " + changeSet.size() + " files of the project "

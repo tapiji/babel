@@ -222,7 +222,7 @@ public class KeyRefactoringDialog extends TitleAreaDialog {
     @Override
     protected void configureShell(Shell newShell) {
         super.configureShell(newShell);
-        newShell.setText("Key refactoring");
+        newShell.setText("Rename resource key");
     }
 
     /**
@@ -232,7 +232,7 @@ public class KeyRefactoringDialog extends TitleAreaDialog {
     public void create() {
         // TODO Auto-generated method stub
         super.create();
-        this.setTitle("Key refactoring");
+        this.setTitle("Rename resource key");
         this.setMessage("Please, specify the name of the new key. \r\n"
                 + "The new value will automatically replace the old ones.");
     }

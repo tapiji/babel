@@ -88,7 +88,7 @@ public class ResourceBundleEntry extends ContributionItem implements
 
             // MenuItem for refactoring the currently selected entry
             refactorItem = new MenuItem(menu, SWT.NONE, index + 2);
-            refactorItem.setText("Refactor ...");
+            refactorItem.setText("Rename ...");
             refactorItem.setImage(UIUtils.getImageDescriptor(
                     UIUtils.IMAGE_REFACTORING).createImage());
             refactorItem.addSelectionListener(new SelectionListener() {
