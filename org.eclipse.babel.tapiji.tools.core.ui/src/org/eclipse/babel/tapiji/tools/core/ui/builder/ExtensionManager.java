@@ -55,9 +55,6 @@ public final class ExtensionManager {
 	private void initExtensionManager() {
 		extensions = new ArrayList<I18nAuditor>();
 
-		// init default auditors
-		extensions.add(new RBAuditor());
-
 		// lookup registered auditor extensions
 		IConfigurationElement[] config = Platform
 				.getExtensionRegistry()

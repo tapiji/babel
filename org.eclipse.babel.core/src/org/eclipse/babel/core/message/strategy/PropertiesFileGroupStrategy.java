@@ -177,15 +177,14 @@ public class PropertiesFileGroupStrategy implements
         if (this.file.getAbsolutePath().contains(path.toOSString())) {
             fullPath = new Path(this.file.getAbsolutePath());
         } else {
-            fullPath = new Path(path.toOSString() + this.file.getAbsolutePath());
+            fullPath = new Path(/*path.toOSString() +*/ this.file.getAbsolutePath());
         }
 
         IFile file = ResourcesPlugin.getWorkspace().getRoot()
                 .getFileForLocation(fullPath);
 
         if (file != null) {
-            return ResourcesPlugin.getWorkspace().getRoot()
-                    .getProject(file.getFullPath().segments()[0]).getName();
+            return ResourcesPlugin.getWorkspace().getRoot().getProject(file.getFullPath().segments()[0]).getName();
         } else {
             return null;
         }

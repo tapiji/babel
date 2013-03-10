@@ -120,9 +120,6 @@ public class I18nBuilder extends IncrementalProjectBuilder {
 					extensionManager.getSupportedFileEndings());
 			resDelta.accept(csrav);
 
-			Logger.logInfo(String.format(
-					"Audit triggered for derived resources: %s",
-					csrav.getResources()));
 			auditResources(csrav.getResources(), monitor, getProject());
 		} catch (CoreException e) {
 			Logger.logError(e);

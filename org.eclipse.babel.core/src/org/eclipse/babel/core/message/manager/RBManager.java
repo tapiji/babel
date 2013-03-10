@@ -395,7 +395,7 @@ public final class RBManager {
             INSTANCE = new RBManager();
             INSTANCE.project = project;
             managerMap.put(project, INSTANCE);
-            INSTANCE.detectResourceBundles();
+            //INSTANCE.detectResourceBundles();
 
             refactorService = getRefactoringService();
         }
@@ -522,6 +522,7 @@ public final class RBManager {
     /**
      * Detects all resource bundles, which we want to work with.
      */
+    @Deprecated
     protected void detectResourceBundles() {
         try {
             project.accept(new ResourceBundleDetectionVisitor(this));
@@ -555,7 +556,7 @@ public final class RBManager {
             MessagesBundleGroupFactory.createBundleGroup(resource);
 
             logger.log(Level.INFO, "addBundleResource (passive loading): "
-                    + resource.getName());
+                    + resourceBundleId + " (" + resource.getName() + ")");
         }
     }
 

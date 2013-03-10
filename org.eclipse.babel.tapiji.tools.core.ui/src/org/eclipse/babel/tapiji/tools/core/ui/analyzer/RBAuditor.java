@@ -21,6 +21,7 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.ui.IMarkerResolution;
 
+@Deprecated
 public class RBAuditor extends I18nResourceAuditor {
 
     @Override

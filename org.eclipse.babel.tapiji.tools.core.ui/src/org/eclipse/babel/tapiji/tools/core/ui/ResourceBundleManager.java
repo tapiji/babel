@@ -214,16 +214,16 @@ public class ResourceBundleManager {
 			res = resources.get(bundleName);
 		}
 
+		
 		res.add(resource);
-
-		if (bundleName.equals("org.example.com")) {
-			Logger.logInfo("adding bundle with id: " + bundleName);
-		}
-
 		resources.put(bundleName, res);
 		allBundles.put(bundleName, new HashSet<IResource>(res));
 		bundleNames.put(bundleName, getResourceBundleName(resource));
 
+		// notify RBManager instance
+		RBManager.getInstance(resource.getProject())
+				.addBundleResource(resource);
+		
 		// Fire resource changed event
 		ResourceBundleChangedEvent event = new ResourceBundleChangedEvent(
 				ResourceBundleChangedEvent.ADDED, bundleName,
@@ -568,13 +568,13 @@ public class ResourceBundleManager {
 				// TODO check if fullbuild needs only be triggered if a complete
 				// bundle was excluded
 				// fullBuildRequired &= !resources.containsKey(bundleName);
-
+				
+				//RBManager.getInstance(rbResource.getProject())
+				//		.addBundleResource(rbResource);
+				
 				this.addBundleResource(rbResource);
-
 				Logger.logInfo("Including resource bundle '"
 						+ rbResource.getFullPath().toOSString() + "'");
-				RBManager.getInstance(rbResource.getProject())
-						.addBundleResource(rbResource);
 
 				fireResourceBundleChangedEvent(getResourceBundleId(rbResource),
 						new ResourceBundleChangedEvent(
