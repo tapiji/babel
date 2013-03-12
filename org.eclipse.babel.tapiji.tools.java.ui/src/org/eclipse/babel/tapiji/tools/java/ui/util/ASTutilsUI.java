@@ -38,18 +38,12 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
-import org.eclipse.jdt.core.IOpenable;
 import org.eclipse.jdt.core.ITypeRoot;
 import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.AST;
-import org.eclipse.jdt.core.dom.AnonymousClassDeclaration;
 import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.eclipse.jdt.core.dom.ExpressionStatement;
 import org.eclipse.jdt.core.dom.ImportDeclaration;
-import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
-import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
 import org.eclipse.jdt.ui.SharedASTProvider;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
@@ -98,33 +92,35 @@ public class ASTutilsUI {
         	createRBReference = true;
         }
 
-        //try {
+        try {
             reference = ASTutils.createResourceReference(resourceBundleId, key,
                     null, resource, startPos, variableName, ast, rewriter, cu);
 
-            if (startPos > 0 && document.get().charAt(startPos - 1) == '\"') {
-                startPos--;
-                endPos++;
+            if (reference != null) {
+	            if (startPos > 0 && document.get().charAt(startPos - 1) == '\"') {
+	                startPos--;
+	                endPos++;
+	            }
+	
+	            if ((startPos + endPos) < document.getLength()
+	                    && document.get().charAt(startPos + endPos) == '\"') {
+	                endPos++;
+	            }
+	
+	            if ((startPos + endPos) < document.getLength()
+	                    && document.get().charAt(startPos + endPos - 1) == ';') {
+	                endPos--;
+	            }
+	
+	            document.replace(startPos, endPos, reference);
+
             }
-
-            if ((startPos + endPos) < document.getLength()
-                    && document.get().charAt(startPos + endPos) == '\"') {
-                endPos++;
-            }
-
-            if ((startPos + endPos) < document.getLength()
-                    && document.get().charAt(startPos + endPos - 1) == ';') {
-                endPos--;
-            }
-
-            //document.replace(startPos, endPos, reference);
-
             // create non-internationalisation-comment
             //ASTutils.createReplaceNonInternationalisationComment(cu, document,
             //        startPos);
-        //} catch (BadLocationException e) {
-        //    e.printStackTrace();
-        //}
+        } catch (BadLocationException e) {
+            e.printStackTrace();
+        }
 
         if (createRBReference) {
             ASTutils.createResourceBundleReference(resource, startPos,
@@ -167,12 +163,14 @@ public class ASTutilsUI {
         reference = ASTutils.createResourceReference(resourceBundleId, key,
                 locale, resource, offset, variableName, ast, rewriter, cu);
 
-        //try {
-		//	document.replace(offset, length, reference);
-		//} catch (BadLocationException e) {
-		//	Logger.logError(e);
-		//	return null;
-		//}
+        if (reference != null) {
+	        try {
+				document.replace(offset, length, reference);
+			} catch (BadLocationException e) {
+				Logger.logError(e);
+				return null;
+			}
+        }
         // create non-internationalisation-comment
         //ASTutils.createReplaceNonInternationalisationComment(cu, document,
         //        offset);

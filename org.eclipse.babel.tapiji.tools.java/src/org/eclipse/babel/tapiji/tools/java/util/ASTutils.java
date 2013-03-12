@@ -559,17 +559,20 @@ public class ASTutils {
 		final MethodInvocation methodInvocation = referenceResource(ast, accessorName,
 				key, locale);
 
-		astRewrite.replace(literal, methodInvocation, null);
-		
-		String exp = methodInvocation.toString();
-
-		// remove semicolon and line break at the end of this expression
-		// statement
-		if (exp.endsWith(";\n")) {
-		    exp = exp.substring(0, exp.length() - 2);
+		if (literal != null) {
+			astRewrite.replace(literal, methodInvocation, null);
+			return null;
+		} else {
+			String exp = methodInvocation.toString();
+	
+			// remove semicolon and line break at the end of this expression
+			// statement
+			if (exp.endsWith(";\n")) {
+			    exp = exp.substring(0, exp.length() - 2);
+			}
+	
+			return exp;
 		}
-
-		return exp;
 	}
 
 	private static int findNonInternationalisationPosition(CompilationUnit cu,
