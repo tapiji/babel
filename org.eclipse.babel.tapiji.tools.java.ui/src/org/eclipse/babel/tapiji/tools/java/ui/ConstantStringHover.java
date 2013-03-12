@@ -44,7 +44,7 @@ public class ConstantStringHover implements IJavaEditorTextHover {
             return;
         }
 
-        CompilationUnit cu = ASTutilsUI.getCompilationUnit(typeRoot);
+        CompilationUnit cu = ASTutilsUI.getAstRoot(typeRoot);
 
         if (cu == null) {
             return;

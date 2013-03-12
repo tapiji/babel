@@ -4,7 +4,7 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     Martin Reiterer - initial API and implementation
  ******************************************************************************/
@@ -38,7 +38,8 @@ public class IgnoreStringFromInternationalization implements IMarkerResolution2 
     public void run(IMarker marker) {
         IResource resource = marker.getResource();
 
-        CompilationUnit cu = ASTutilsUI.getCompilationUnit(resource);
+        CompilationUnit cu = ASTutilsUI.getAstRoot(ASTutilsUI
+                .getCompilationUnit(resource));
 
         ITextFileBufferManager bufferManager = FileBuffers
                 .getTextFileBufferManager();

@@ -4,7 +4,7 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     Martin Reiterer - initial API and implementation
  ******************************************************************************/
@@ -44,7 +44,7 @@ public class JavaResourceAuditor extends I18nResourceAuditor {
     public JavaResourceAuditor() {
         this.reset();
     }
-    
+
     @Override
     public String[] getFileEndings() {
         return new String[] { "java" };
@@ -58,7 +58,8 @@ public class JavaResourceAuditor extends I18nResourceAuditor {
                 resource.getProject().getName());
 
         // get a reference to the shared AST of the loaded CompilationUnit
-        CompilationUnit cu = ASTutilsUI.getCompilationUnit(resource);
+        CompilationUnit cu = ASTutilsUI.getAstRoot(ASTutilsUI
+                .getCompilationUnit(resource));
         if (cu == null) {
             System.out.println("Cannot audit resource: "
                     + resource.getFullPath());

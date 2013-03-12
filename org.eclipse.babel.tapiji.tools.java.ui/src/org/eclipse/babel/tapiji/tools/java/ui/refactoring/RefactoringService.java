@@ -4,7 +4,7 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     Alexej Strelzow - initial API and implementation
  ******************************************************************************/
@@ -27,7 +27,7 @@ import org.eclipse.swt.widgets.Display;
 
 /**
  * Service class, which can be used to execute key refactorings.
- * 
+ *
  * @author Alexej Strelzow
  */
 public class RefactoringService implements IRefactoringService {
@@ -74,7 +74,8 @@ public class RefactoringService implements IRefactoringService {
     public void openRefactorDialog(IFile file, int selectionOffset) {
 
         String projectName = file.getProject().getName();
-        CompilationUnit cu = ASTutilsUI.getCompilationUnit(file);
+        CompilationUnit cu = ASTutilsUI.getAstRoot(ASTutilsUI
+                .getCompilationUnit(file));
 
         StringLiteral literal = ASTutils.getStringLiteralAtPos(cu,
                 selectionOffset);

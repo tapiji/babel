@@ -4,7 +4,7 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     Martin Reiterer - initial API and implementation
  *     Alexej Strelzow - seperation of ui/non-ui (methods moved from ASTUtils)
@@ -37,15 +37,17 @@ import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.ICompilationUnit;
-import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.ITypeRoot;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.ImportDeclaration;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.jdt.ui.SharedASTProvider;
 import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.text.edits.MalformedTreeException;
@@ -53,20 +55,12 @@ import org.eclipse.text.edits.TextEdit;
 
 public class ASTutilsUI {
 
-    public static CompilationUnit getCompilationUnit(IResource resource) {
-        IJavaElement je = JavaCore.create(resource,
+    public static ICompilationUnit getCompilationUnit(IResource resource) {
+        return (ICompilationUnit) JavaCore.create(resource,
                 JavaCore.create(resource.getProject()));
-        // get the type of the currently loaded resource
-        ITypeRoot typeRoot = ((ICompilationUnit) je);
-
-        if (typeRoot == null) {
-            return null;
-        }
-
-        return getCompilationUnit(typeRoot);
     }
 
-    public static CompilationUnit getCompilationUnit(ITypeRoot typeRoot) {
+    public static CompilationUnit getAstRoot(ITypeRoot typeRoot) {
         // get a reference to the shared AST of the loaded CompilationUnit
         CompilationUnit cu = SharedASTProvider.getAST(typeRoot,
         // do not wait for AST creation
@@ -78,68 +72,84 @@ public class ASTutilsUI {
     public static String insertNewBundleRef(IDocument document,
             IResource resource, int startPos, int endPos,
             String resourceBundleId, String key) {
-    	boolean createRBReference = false;
+        boolean createRBReference = false;
         String reference = "";
 
-        CompilationUnit cu = getCompilationUnit(resource);
-        AST ast = cu.getAST();
-        ASTRewrite rewriter = ASTRewrite.create(ast);
-
-        String variableName = ASTutils.resolveRBReferenceVar(document,
-                resource, startPos, resourceBundleId, cu);
-        if (variableName == null) {
-        	variableName = ASTutils.getNonExistingRBRefName(resourceBundleId, cu);
-        	createRBReference = true;
-        }
-
         try {
-            reference = ASTutils.createResourceReference(resourceBundleId, key,
-                    null, resource, startPos, variableName, ast, rewriter, cu);
+            // creation of DOM/AST from a ICompilationUnit
+            ICompilationUnit cu = getCompilationUnit(resource);
+            CompilationUnit astRoot = getAstRoot(cu);
+            AST ast = astRoot.getAST();
 
-            if (reference != null) {
-	            if (startPos > 0 && document.get().charAt(startPos - 1) == '\"') {
-	                startPos--;
-	                endPos++;
-	            }
-	
-	            if ((startPos + endPos) < document.getLength()
-	                    && document.get().charAt(startPos + endPos) == '\"') {
-	                endPos++;
-	            }
-	
-	            if ((startPos + endPos) < document.getLength()
-	                    && document.get().charAt(startPos + endPos - 1) == ';') {
-	                endPos--;
-	            }
-	
-	            document.replace(startPos, endPos, reference);
+            ASTRewrite rewriter = ASTRewrite.create(ast);
+            final String source = cu.getSource();
+            document = new Document(source);
 
+            String variableName = ASTutils.resolveRBReferenceVar(document,
+                    resource, startPos, resourceBundleId, astRoot);
+            if (variableName == null) {
+                variableName = ASTutils.getNonExistingRBRefName(
+                        resourceBundleId, astRoot);
+                createRBReference = true;
             }
-            // create non-internationalisation-comment
-            //ASTutils.createReplaceNonInternationalisationComment(cu, document,
-            //        startPos);
-        } catch (BadLocationException e) {
-            e.printStackTrace();
+
+            try {
+                reference = ASTutils.createResourceReference(resourceBundleId,
+                        key, null, resource, startPos, variableName, ast,
+                        rewriter, astRoot);
+
+                if (reference != null) {
+                    if (startPos > 0
+                            && document.get().charAt(startPos - 1) == '\"') {
+                        startPos--;
+                        endPos++;
+                    }
+
+                    if ((startPos + endPos) < document.getLength()
+                            && document.get().charAt(startPos + endPos) == '\"') {
+                        endPos++;
+                    }
+
+                    if ((startPos + endPos) < document.getLength()
+                            && document.get().charAt(startPos + endPos - 1) == ';') {
+                        endPos--;
+                    }
+
+                    document.replace(startPos, endPos, reference);
+
+                }
+                // create non-internationalisation-comment
+                ASTutils.createReplaceNonInternationalisationComment(astRoot,
+                        document, startPos);
+            } catch (BadLocationException e) {
+                e.printStackTrace();
+            }
+
+            if (createRBReference) {
+                ASTutils.createResourceBundleReference(resource, startPos,
+                        document, resourceBundleId, null, true, variableName,
+                        astRoot, ast, rewriter);
+            }
+
+            // computation of the text edits
+            TextEdit edits = rewriter.rewriteAST(document, null);
+
+            // computation of the new source code
+            try {
+                edits.apply(document);
+                String newSource = document.get();
+
+                // update of the compilation unit
+                cu.getBuffer().setContents(newSource);
+            } catch (MalformedTreeException e) {
+                Logger.logError(e);
+            } catch (BadLocationException e) {
+                Logger.logError(e);
+            }
+        } catch (JavaModelException e) {
+            Logger.logError(e);
         }
 
-        if (createRBReference) {
-            ASTutils.createResourceBundleReference(resource, startPos,
-                    document, resourceBundleId, null, true, variableName, cu, ast, rewriter);
-        }
-
-        // computation of the text edits
-        TextEdit edits = rewriter.rewriteAST(document, null);
-
-        // computation of the new source code
-        try {
-			edits.apply(document);
-		} catch (MalformedTreeException e) {
-			Logger.logError(e);
-		} catch (BadLocationException e) {
-			Logger.logError(e);
-		}
-        
-        
         return reference;
     }
 
@@ -149,52 +159,72 @@ public class ASTutilsUI {
         boolean createRBReference = false;
         String reference = "";
 
-        CompilationUnit cu = getCompilationUnit(resource);
-        AST ast = cu.getAST();
-        ASTRewrite rewriter = ASTRewrite.create(ast);
-
-        String variableName = ASTutils.resolveRBReferenceVar(document,
-                resource, offset, resourceBundleId, cu);
-        if (variableName == null) {
-        	variableName = ASTutils.getNonExistingRBRefName(resourceBundleId, cu);
-        	createRBReference = true;
-        }
-
-        reference = ASTutils.createResourceReference(resourceBundleId, key,
-                locale, resource, offset, variableName, ast, rewriter, cu);
-
-        if (reference != null) {
-	        try {
-				document.replace(offset, length, reference);
-			} catch (BadLocationException e) {
-				Logger.logError(e);
-				return null;
-			}
-        }
-        // create non-internationalisation-comment
-        //ASTutils.createReplaceNonInternationalisationComment(cu, document,
-        //        offset);
-
-        // TODO retrieve cu in the same way as in createResourceReference
-        // the current version does not parse method bodies
-
-        if (createRBReference) {
-            ASTutils.createResourceBundleReference(resource, offset, document,
-                    resourceBundleId, locale, true, variableName, cu, ast, rewriter);
-        }
-        
-        // computation of the text edits
-        TextEdit edits = rewriter.rewriteAST(document, null);
-
-        // computation of the new source code
         try {
-			edits.apply(document);
-		} catch (MalformedTreeException e) {
-			Logger.logError(e);
-		} catch (BadLocationException e) {
-			Logger.logError(e);
-		}
-        
+
+            ICompilationUnit cu = getCompilationUnit(resource);
+
+            // creation of DOM/AST from a ICompilationUnit
+            CompilationUnit astRoot = getAstRoot(cu);
+            AST ast = astRoot.getAST();
+
+            ASTRewrite rewriter = ASTRewrite.create(ast);
+            final String source = cu.getSource();
+            document = new Document(source);
+
+            String variableName = ASTutils.resolveRBReferenceVar(document,
+                    resource, offset, resourceBundleId, astRoot);
+
+            if (variableName == null) {
+                variableName = ASTutils.getNonExistingRBRefName(
+                        resourceBundleId, astRoot);
+                createRBReference = true;
+            }
+
+            reference = ASTutils.createResourceReference(resourceBundleId, key,
+                    locale, resource, offset, variableName, ast, rewriter,
+                    astRoot);
+
+            if (reference != null) {
+                try {
+                    document.replace(offset, length, reference);
+                } catch (BadLocationException e) {
+                    Logger.logError(e);
+                    return null;
+                }
+            }
+            // create non-internationalisation-comment
+            ASTutils.createReplaceNonInternationalisationComment(astRoot,
+                    document, offset);
+
+            // TODO retrieve cu in the same way as in createResourceReference
+            // the current version does not parse method bodies
+
+            if (createRBReference) {
+                ASTutils.createResourceBundleReference(resource, offset,
+                        document, resourceBundleId, locale, true, variableName,
+                        astRoot, ast, rewriter);
+            }
+
+            // computation of the text edits
+            TextEdit edits = rewriter.rewriteAST(document, null);
+
+            // computation of the new source code
+            try {
+                edits.apply(document);
+                String newSource = document.get();
+
+                // update of the compilation unit
+                cu.getBuffer().setContents(newSource);
+            } catch (MalformedTreeException e) {
+                Logger.logError(e);
+            } catch (BadLocationException e) {
+                Logger.logError(e);
+            }
+
+        } catch (JavaModelException e) {
+            Logger.logError(e);
+        }
+
         return reference;
     }
 
@@ -202,7 +232,7 @@ public class ASTutilsUI {
      * Performs the refactoring of messages key. The key can be a {@link String}
      * or an Enumeration! If it is an enumeration, then the enumPath needs to be
      * provided!
-     * 
+     *
      * @param projectName
      *            The name of the project, where the resource bundle file is in
      * @param resourceBundleId
@@ -236,7 +266,7 @@ public class ASTutilsUI {
                  * java.util.ResourceBundle or ch.qos.cal10n.MessageConveyor
                  * will be changed. An exception is the enum file, which gets
                  * referenced by the Cal10n framework.
-                 * 
+                 *
                  * {@inheritDoc}
                  */
                 @Override
@@ -246,7 +276,8 @@ public class ASTutilsUI {
                         return true;
                     }
 
-                    final CompilationUnit cu = getCompilationUnit(resource);
+                    final ICompilationUnit icu = getCompilationUnit(resource);
+                    final CompilationUnit cu = getAstRoot(icu);
 
                     // step 1: import filter
                     for (Object obj : cu.imports()) {
@@ -279,7 +310,7 @@ public class ASTutilsUI {
         if (enumPath != null) { // Cal10n support, change the enum file
             IFile file = project.getFile(enumPath.substring(project.getName()
                     .length() + 1));
-            final CompilationUnit enumCu = getCompilationUnit(file);
+            final CompilationUnit enumCu = getAstRoot(getCompilationUnit(file));
 
             Cal10nEnumRefactoringVisitor enumVisitor = new Cal10nEnumRefactoringVisitor(
                     enumCu, oldKey, newKey, changeSet);
