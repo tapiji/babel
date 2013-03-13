@@ -54,7 +54,7 @@ public class IgnoreStringFromInternationalization implements IMarkerResolution2 
             int position = marker.getAttribute(IMarker.CHAR_START, 0);
 
             ASTutils.createReplaceNonInternationalisationComment(cu, document,
-                    position);
+                    position, 1);
             textFileBuffer.commit(null, false);
 
         } catch (JavaModelException e) {

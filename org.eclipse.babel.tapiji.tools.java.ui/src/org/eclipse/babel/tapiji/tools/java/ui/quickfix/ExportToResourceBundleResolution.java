@@ -23,9 +23,14 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IMarkerResolution2;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.texteditor.ITextEditor;
 
 public class ExportToResourceBundleResolution implements IMarkerResolution2 {
 
@@ -83,7 +88,8 @@ public class ExportToResourceBundleResolution implements IMarkerResolution2 {
                     .insertNewBundleRef(document, resource, startPos, endPos,
                             dialog.getSelectedResourceBundle(),
                             dialog.getSelectedKey());
-
+            
+            document.replace(startPos, 0, "");
             textFileBuffer.commit(null, false);
         } catch (Exception e) {
             e.printStackTrace();

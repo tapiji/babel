@@ -422,14 +422,14 @@ public class ASTutils {
 	}
 
 	public static void createReplaceNonInternationalisationComment(
-			CompilationUnit cu, IDocument doc, int position) {
+			CompilationUnit cu, IDocument doc, int position, int nonNlsOffset) {
 		int i = findNonInternationalisationPosition(cu, doc, position);
 
 		IRegion reg;
 		try {
 			reg = doc.getLineInformationOfOffset(position);
 			doc.replace(reg.getOffset() + reg.getLength(), 0, " //$NON-NLS-"
-					+ i + "$");
+					+ (i + nonNlsOffset) + "$");
 		} catch (BadLocationException e) {
 			Logger.logError(e);
 		}
@@ -590,7 +590,7 @@ public class ASTutils {
 
 		List<StringLiteral> strings = lsfinder.getStrings();
 
-		return strings.size() + 1;
+		return strings.size();
 	}
 
 	public static boolean existsNonInternationalisationComment(
@@ -637,7 +637,7 @@ public class ASTutils {
 				// ignore string which is on given position
 			} else if (commentFrag.matches("^\\$non-nls-\\d+\\$$")) {
 				int iString = findNonInternationalisationPosition(cu, doc,
-						literal.getStartPosition());
+						literal.getStartPosition())+1;
 				int iComment = new Integer(commentFrag.substring(9, 10));
 				if (iString == iComment) {
 					return true;
@@ -887,6 +887,7 @@ public class ASTutils {
 			try {
 				if (line == document.getLineOfOffset(node.getStartPosition())
 						&& node.getStartPosition() < position) {
+					Logger.logInfo(node.getLiteralValue());
 					strings.add(node);
 					return true;
 				}

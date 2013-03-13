@@ -53,7 +53,7 @@ public class NewResourceBundleEntryProposal implements IJavaCompletionProposal {
     @Override
     public void apply(IDocument document) {
 
-        CreateResourceBundleEntryDialog dialog = new CreateResourceBundleEntryDialog(
+        final CreateResourceBundleEntryDialog dialog = new CreateResourceBundleEntryDialog(
                 Display.getDefault().getActiveShell());
 
         DialogConfiguration config = dialog.new DialogConfiguration();
@@ -74,13 +74,13 @@ public class NewResourceBundleEntryProposal implements IJavaCompletionProposal {
 
         try {
             if (!bundleContext) {
-                reference = ASTutilsUI.insertNewBundleRef(document, resource,
+                reference = ASTutilsUI.insertNewBundleRef(null, resource,
                         startPos, endPos - startPos, resourceBundleId, key);
             } else {
                 document.replace(startPos, endPos - startPos, key);
                 reference = key + "\"";
             }
-            ResourceBundleManager.rebuildProject(resource);
+            //ResourceBundleManager.rebuildProject(resource);
         } catch (Exception e) {
             Logger.logError(e);
         }

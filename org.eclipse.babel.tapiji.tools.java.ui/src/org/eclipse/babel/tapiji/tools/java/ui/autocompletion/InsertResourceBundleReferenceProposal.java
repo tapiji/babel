@@ -58,7 +58,7 @@ public class InsertResourceBundleReferenceProposal implements
 		String key = dialog.getSelectedResource();
 		Locale locale = dialog.getSelectedLocale();
 
-		reference = ASTutilsUI.insertExistingBundleRef(document, resource,
+		reference = ASTutilsUI.insertExistingBundleRef(null, resource,
 				offset, length, resourceBundleId, key, locale);
 	}
 
