@@ -34,13 +34,17 @@
          point="org.eclipse.ui.perspectiveExtensions">
       <perspectiveExtension
             targetID="org.eclipse.ui.resourcePerspective">
-         <view
+         
+		<view
+               id="org.eclipse.babel.tapiji.tools.core.views.MessagesView"
+               minimized="false"
+               moveable="true"
                ratio="0.5"
-               relative="org.eclipse.ui.views.TaskList"
-               id="org.eclipse.babel.editor.views.ResourceBundleView"
-               relationship="right">
+               relationship="stack"
+               relative="org.eclipse.mylyn.tasks.ui.views.tasks"
+               visible="true">
          </view>
-      </perspectiveExtension>
+      </perspectiveExtension> 
    </extension>
    <extension
          point="org.eclipse.core.runtime.preferences">
