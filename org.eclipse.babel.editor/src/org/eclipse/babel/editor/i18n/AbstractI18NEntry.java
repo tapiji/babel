@@ -8,6 +8,7 @@
  * Contributors:
  *    Pascal Essiembre - initial API and implementation
  *    Alexej Strelzow - updateKey
+ *    Samir Soyer     - passing Locale to NullableText
  ******************************************************************************/
 package org.eclipse.babel.editor.i18n;
 
@@ -32,6 +33,8 @@ import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.TraverseEvent;
 import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.layout.GridData;
@@ -182,7 +185,7 @@ public abstract class AbstractI18NEntry extends Composite {
      */
     private void createTextbox() {
         textBox = new NullableText(this, SWT.MULTI | SWT.WRAP | SWT.H_SCROLL
-                | SWT.V_SCROLL | SWT.BORDER);
+                | SWT.V_SCROLL | SWT.BORDER, locale);
         textBox.setEnabled(false);
         textBox.setOrientation(UIUtils.getOrientation(locale));
 
@@ -212,8 +215,17 @@ public abstract class AbstractI18NEntry extends Composite {
             }
         });
 
-        // Handle dirtyness
-        textBox.addKeyListener(getKeyListener());
+		// Handle dirtyness
+		textBox.addKeyListener(getKeyListener());
+		textBox.getTextBox().addModifyListener(new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent e) {
+				if (textBox.isDirty()) {
+					updateModel();
+					textBox.setDirty(false);
+				}
+			}
+		});
 
         editor.addChangeListener(msgEditorUpdateKey);
     }

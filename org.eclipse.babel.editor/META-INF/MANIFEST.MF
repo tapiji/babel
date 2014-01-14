@@ -36,6 +36,11 @@ Export-Package: org.eclipse.babel.editor,
  org.eclipse.babel.editor.api,
  org.eclipse.babel.editor.util,
  org.eclipse.babel.editor.widgets,
+ org.eclipse.babel.editor.widgets.suggestion,
+ org.eclipse.babel.editor.widgets.suggestion.exception,
+ org.eclipse.babel.editor.widgets.suggestion.model,
+ org.eclipse.babel.editor.widgets.suggestion.provider,
  org.eclipse.babel.editor.wizards
 Import-Package: org.eclipse.ui.forms.widgets
 Bundle-ActivationPolicy: lazy
+Bundle-ClassPath: .

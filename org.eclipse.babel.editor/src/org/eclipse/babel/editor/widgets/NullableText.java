@@ -7,17 +7,23 @@
  *
  * Contributors:
  *    Pascal Essiembre - initial API and implementation
+ *    Samir Soyer      - Suggestion Bubble
  ******************************************************************************/
 package org.eclipse.babel.editor.widgets;
 
+import java.util.Locale;
 import java.util.Stack;
 
 import org.eclipse.babel.editor.util.UIUtils;
+import org.eclipse.babel.editor.widgets.suggestion.SuggestionBubble;
+import org.eclipse.babel.editor.widgets.suggestion.provider.SuggestionProviderUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -38,6 +44,9 @@ public class NullableText extends Composite {
     private final Text text;
     private final Color defaultColor;
     private final Color nullColor;
+    private Locale locale;
+    private boolean dirty;
+    private boolean suggestionBubbleOn;
 
     private boolean isnull;
 
@@ -60,7 +69,7 @@ public class NullableText extends Composite {
     /**
      * Constructor.
      */
-    public NullableText(Composite parent, int style) {
+    public NullableText(Composite parent, int style, Locale locale) {
         super(parent, SWT.NONE);
         text = new Text(this, style);
         text.setData("UNDO", new Stack<String>());
@@ -78,7 +87,28 @@ public class NullableText extends Composite {
         setLayoutData(gd);
 
         initComponents();
-    }
+		this.locale = locale;
+
+		suggestionBubbleOn = !SuggestionProviderUtils.getSuggetionProviders()
+				.isEmpty();
+
+		if (suggestionBubbleOn) {
+			if (locale != null) {
+				new SuggestionBubble(text, locale.getLanguage());
+			} else {
+				text.addModifyListener(new ModifyListener() {
+					@Override
+					public void modifyText(ModifyEvent e) {
+						SuggestionBubble.setDefaultText(text.getText());
+					}
+				});
+			}
+		}
+	}
+
+	public Text getTextBox() {
+		return this.text;
+	}
 
     public void setOrientation(int orientation) {
         text.setOrientation(orientation);
@@ -86,16 +116,58 @@ public class NullableText extends Composite {
 
     public void setText(String text) {
         isnull = text == null;
+
+		if (locale == null && suggestionBubbleOn) {
+			SuggestionBubble.setDefaultText(text);
+		}
+
         if (isnull) {
             this.text.setText(""); //$NON-NLS-1$x
             renderNull();
         } else {
             this.text.setText(text);
+
             renderNormal();
         }
+
         Stack<String> undoCache = (Stack<String>) this.text.getData("UNDO");
         undoCache.push(this.text.getText());
     }
+
+	/**
+	 * Sets this <code>NullableText</code> to dirty or vice versa
+	 *
+	 * @param dirty
+	 */
+	public void setDirty(boolean dirty) {
+		this.dirty = dirty;
+	}
+
+	/**
+	 * This method returns whether the content of this
+	 * <code> NullableText</code> have changed since the last save.
+	 *
+	 * @return <code>true</code> if this NullableText is dirty;
+	 *         <code>false</code> otherwise.
+	 */
+	public boolean isDirty() {
+		return dirty;
+	}
+
+	/**
+	 * Applies the string to <code>NullableText</code> and makes it dirty,
+	 * depending on the value of <code> dirty </code>
+	 *
+	 * @param text
+	 *            is the string to be applied to <code> NullableText </code>
+	 * @param dirty
+	 *            whether setting text should make this
+	 *            <code>NullableText</code> dirty.
+	 */
+	public void setText(String text, boolean dirty) {
+		this.dirty = dirty;
+		setText(text);
+	}
 
     public String getText() {
         if (isnull) {

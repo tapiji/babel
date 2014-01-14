@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.eclipse.babel.editor.plugin;
 
+import org.eclipse.babel.editor.widgets.suggestion.lookup.SuggestionProviderLoader;
 import org.eclipse.ui.IStartup;
 
 /**
@@ -22,6 +23,7 @@ public class Startup implements IStartup {
      * @see org.eclipse.ui.IStartup#earlyStartup()
      */
     public void earlyStartup() {
+		SuggestionProviderLoader.registerProviders();
         // done.
         // System.out.println("Starting up.  "
         // + "TODO: Register nature with every project and listen for new "
