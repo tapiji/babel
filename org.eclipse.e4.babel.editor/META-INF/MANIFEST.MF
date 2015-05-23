@@ -8,5 +8,8 @@ Require-Bundle: org.eclipse.e4.ui.model.workbench;bundle-version="1.1.0.v2014051
  org.eclipse.e4.core.di,
  org.eclipselabs.e4.tapiji.logger,
  org.eclipselabs.e4.tapiji.utils,
- org.eclipse.jface
+ org.eclipse.jface,
+ org.eclipse.e4.ui.di;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Import-Package: javax.annotation,
+ javax.inject
