@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="ASCII"?>
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_6pdaoAFPEeWM9o-YRkDifQ">
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_VFA28AFREeWM9o-YRkDifQ" featurename="commands" parentElementId="org.eclipselabs.e4.tapiji.translator.application">
+    <elements xsi:type="commands:Command" xmi:id="_0KndAAFREeWM9o-YRkDifQ" elementId="org.eclipse.e4.babel.editor.command.keyTreeVisibility" commandName="Key tree visibility"/>
+    <elements xsi:type="commands:Command" xmi:id="_2v6EQAFREeWM9o-YRkDifQ" elementId="org.eclipse.e4.babel.editor.command.keyMissing" commandName="Key missing"/>
+    <elements xsi:type="commands:Command" xmi:id="_62Sq0AFREeWM9o-YRkDifQ" elementId="org.eclipse.e4.babel.editor.command.key" commandName="Key"/>
+    <elements xsi:type="commands:Command" xmi:id="_8uwBQAFREeWM9o-YRkDifQ" elementId="org.eclipse.e4.babel.editor.command.keyUnused" commandName="Key unused"/>
+    <elements xsi:type="commands:Command" xmi:id="__QBEIAFREeWM9o-YRkDifQ" elementId="org.eclipse.e4.babel.editor.command.keyMissingUnused" commandName="Key missing unused"/>
+    <elements xsi:type="commands:Command" xmi:id="_A1vEwAFSEeWM9o-YRkDifQ" elementId="org.eclipse.e4.babel.editor.command.newLocale" commandName="New locale"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_qw8X4AFREeWM9o-YRkDifQ" featurename="handlers" parentElementId="org.eclipselabs.e4.tapiji.translator.application">
+    <elements xsi:type="commands:Handler" xmi:id="_DAGqkAFSEeWM9o-YRkDifQ" elementId="org.eclipse.e4.babel.editor.handler.keyTreeVisibility" contributionURI="bundleclass://org.eclipse.e4.babel.editor/org.eclipse.e4.babel.editor.ui.handler.toolbar.KeyTreeVisibleHandler" command="_0KndAAFREeWM9o-YRkDifQ"/>
+    <elements xsi:type="commands:Handler" xmi:id="_Ld_c4AFSEeWM9o-YRkDifQ" elementId="org.eclipse.e4.babel.editor.handler.keyMissing" contributionURI="bundleclass://org.eclipse.e4.babel.editor/org.eclipse.e4.babel.editor.ui.handler.toolbar.KeyMissingHandler" command="_2v6EQAFREeWM9o-YRkDifQ"/>
+    <elements xsi:type="commands:Handler" xmi:id="_OWWxIAFSEeWM9o-YRkDifQ" elementId="org.eclipse.e4.babel.editor.handler.key" contributionURI="bundleclass://org.eclipse.e4.babel.editor/org.eclipse.e4.babel.editor.ui.handler.toolbar.KeyHandler" command="_62Sq0AFREeWM9o-YRkDifQ"/>
+    <elements xsi:type="commands:Handler" xmi:id="_RGsKwAFSEeWM9o-YRkDifQ" elementId="org.eclipse.e4.babel.editor.handler.keyUnused" contributionURI="bundleclass://org.eclipse.e4.babel.editor/org.eclipse.e4.babel.editor.ui.handler.toolbar.KeyUnusedHandler" command="_8uwBQAFREeWM9o-YRkDifQ"/>
+    <elements xsi:type="commands:Handler" xmi:id="_T3KuUAFSEeWM9o-YRkDifQ" elementId="org.eclipse.e4.babel.editor.handler.keyMissingUnused" contributionURI="bundleclass://org.eclipse.e4.babel.editor/org.eclipse.e4.babel.editor.ui.handler.toolbar.KeyMissingUnusedHandler" command="__QBEIAFREeWM9o-YRkDifQ"/>
+    <elements xsi:type="commands:Handler" xmi:id="_WlR6YAFSEeWM9o-YRkDifQ" elementId="org.eclipse.e4.babel.editor.handler.newLocale" contributionURI="bundleclass://org.eclipse.e4.babel.editor/org.eclipse.e4.babel.editor.ui.handler.toolbar.NewLocaleHandler" command="_A1vEwAFSEeWM9o-YRkDifQ"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_sebNYAFREeWM9o-YRkDifQ" featurename="children" parentElementId="org.eclipselabs.e4.tapiji.translator.trimbar.main">
+    <elements xsi:type="menu:ToolBar" xmi:id="_cV8RcAFSEeWM9o-YRkDifQ" elementId="org.eclipse.e4.babel.editor.toolbar.main">
+      <children xsi:type="menu:HandledToolItem" xmi:id="_f3-NwAFSEeWM9o-YRkDifQ" elementId="org.eclipse.e4.babel.editor.handledtoolitem.keyTreeVisibility" label="Show/hide key tree" iconURI="platform:/plugin/org.eclipselabs.e4.tapiji.resource/images/16x16/key_tree_contract.png" tooltip="Show/hide key tree" command="_0KndAAFREeWM9o-YRkDifQ"/>
+      <children xsi:type="menu:HandledToolItem" xmi:id="_n0uB4AFSEeWM9o-YRkDifQ" elementId="org.eclipse.e4.babel.editor.handledtoolitem.newLocale" label="New Locale" iconURI="platform:/plugin/org.eclipselabs.e4.tapiji.resource/images/16x16/new_locale.png" tooltip="New Locale" command="_A1vEwAFSEeWM9o-YRkDifQ"/>
+      <children xsi:type="menu:HandledToolItem" xmi:id="_rpukkAFSEeWM9o-YRkDifQ" elementId="org.eclipse.e4.babel.editor.handledtoolitem.keys" label="Keys" iconURI="platform:/plugin/org.eclipselabs.e4.tapiji.resource/images/16x16/key.png" tooltip="Keys" command="_62Sq0AFREeWM9o-YRkDifQ"/>
+      <children xsi:type="menu:HandledToolItem" xmi:id="_xns-4AFSEeWM9o-YRkDifQ" elementId="org.eclipse.e4.babel.editor.handledtoolitem.keyMissing" label="Key missing" iconURI="platform:/plugin/org.eclipselabs.e4.tapiji.resource/images/16x16/key_missing.png" tooltip="Key missing" command="_2v6EQAFREeWM9o-YRkDifQ"/>
+      <children xsi:type="menu:HandledToolItem" xmi:id="_6X3M8AFSEeWM9o-YRkDifQ" elementId="org.eclipse.e4.babel.editor.handledtoolitem.keyUnused" label="Key Unused" iconURI="platform:/plugin/org.eclipselabs.e4.tapiji.resource/images/16x16/key_unused.png" tooltip="Key Unused" command="_8uwBQAFREeWM9o-YRkDifQ"/>
+      <children xsi:type="menu:HandledToolItem" xmi:id="_81zPAAFSEeWM9o-YRkDifQ" elementId="org.eclipse.e4.babel.editor.handledtoolitem.keyMissingUnused" label="Key missing unused" iconURI="platform:/plugin/org.eclipselabs.e4.tapiji.resource/images/16x16/key_missing_unused.png" tooltip="Key missing unused" command="__QBEIAFREeWM9o-YRkDifQ"/>
+    </elements>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_v2VkYAFREeWM9o-YRkDifQ" featurename="children" parentElementId="org.eclipselabs.e4.tapiji.translator.partsashcontainer.main"/>
+</fragment:ModelFragments>
