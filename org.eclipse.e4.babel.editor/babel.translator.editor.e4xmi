@@ -16,41 +16,15 @@
     <elements xsi:type="commands:Handler" xmi:id="_T3KuUAFSEeWM9o-YRkDifQ" elementId="org.eclipse.e4.babel.editor.handler.keyMissingUnused" contributionURI="bundleclass://org.eclipse.e4.babel.editor/org.eclipse.e4.babel.editor.ui.handler.toolbar.KeyMissingUnusedHandler" command="__QBEIAFREeWM9o-YRkDifQ"/>
     <elements xsi:type="commands:Handler" xmi:id="_WlR6YAFSEeWM9o-YRkDifQ" elementId="org.eclipse.e4.babel.editor.handler.newLocale" contributionURI="bundleclass://org.eclipse.e4.babel.editor/org.eclipse.e4.babel.editor.ui.handler.toolbar.NewLocaleHandler" command="_A1vEwAFSEeWM9o-YRkDifQ"/>
   </fragments>
-  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_sebNYAFREeWM9o-YRkDifQ" featurename="children" parentElementId="org.eclipselabs.e4.tapiji.translator.trimbar.main">
-    <elements xsi:type="menu:ToolBar" xmi:id="_cV8RcAFSEeWM9o-YRkDifQ" elementId="org.eclipse.e4.babel.editor.toolbar.main">
-      <children xsi:type="menu:HandledToolItem" xmi:id="_f3-NwAFSEeWM9o-YRkDifQ" elementId="org.eclipse.e4.babel.editor.handledtoolitem.keyTreeVisibility" label="Show/hide key tree" iconURI="platform:/plugin/org.eclipselabs.e4.tapiji.resource/images/16x16/key_tree_contract.png" tooltip="Show/hide key tree" command="_0KndAAFREeWM9o-YRkDifQ"/>
-      <children xsi:type="menu:HandledToolItem" xmi:id="_n0uB4AFSEeWM9o-YRkDifQ" elementId="org.eclipse.e4.babel.editor.handledtoolitem.newLocale" label="New Locale" iconURI="platform:/plugin/org.eclipselabs.e4.tapiji.resource/images/16x16/new_locale.png" tooltip="New Locale" command="_A1vEwAFSEeWM9o-YRkDifQ"/>
-      <children xsi:type="menu:HandledToolItem" xmi:id="_rpukkAFSEeWM9o-YRkDifQ" elementId="org.eclipse.e4.babel.editor.handledtoolitem.keys" label="Keys" iconURI="platform:/plugin/org.eclipselabs.e4.tapiji.resource/images/16x16/key.png" tooltip="Keys" command="_62Sq0AFREeWM9o-YRkDifQ"/>
-      <children xsi:type="menu:HandledToolItem" xmi:id="_xns-4AFSEeWM9o-YRkDifQ" elementId="org.eclipse.e4.babel.editor.handledtoolitem.keyMissing" label="Key missing" iconURI="platform:/plugin/org.eclipselabs.e4.tapiji.resource/images/16x16/key_missing.png" tooltip="Key missing" command="_2v6EQAFREeWM9o-YRkDifQ"/>
-      <children xsi:type="menu:HandledToolItem" xmi:id="_6X3M8AFSEeWM9o-YRkDifQ" elementId="org.eclipse.e4.babel.editor.handledtoolitem.keyUnused" label="Key Unused" iconURI="platform:/plugin/org.eclipselabs.e4.tapiji.resource/images/16x16/key_unused.png" tooltip="Key Unused" command="_8uwBQAFREeWM9o-YRkDifQ"/>
-      <children xsi:type="menu:HandledToolItem" xmi:id="_81zPAAFSEeWM9o-YRkDifQ" elementId="org.eclipse.e4.babel.editor.handledtoolitem.keyMissingUnused" label="Key missing unused" iconURI="platform:/plugin/org.eclipselabs.e4.tapiji.resource/images/16x16/key_missing_unused.png" tooltip="Key missing unused" command="__QBEIAFREeWM9o-YRkDifQ"/>
-    </elements>
-  </fragments>
-  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_v2VkYAFREeWM9o-YRkDifQ" featurename="children" parentElementId="org.eclipselabs.e4.tapiji.translator.partsashcontainer.main" positionInList="first">
-    <elements xsi:type="basic:PartStack" xmi:id="_Mp-psAFkEeWabIFOKnDnoA" elementId="org.eclipse.e4.babel.editor.partstack.1">
-      <children xsi:type="basic:CompositePart" xmi:id="_PMKSkAFkEeWabIFOKnDnoA" elementId="org.eclipse.e4.babel.editor.compositepart.1">
-        <children xsi:type="basic:PartSashContainer" xmi:id="_iluIQAFkEeWabIFOKnDnoA" elementId="org.eclipse.e4.babel.editor.partsashcontainer.0" horizontal="true">
-          <children xsi:type="basic:Part" xmi:id="_P_EWMAFkEeWabIFOKnDnoA" elementId="org.eclipse.e4.babel.editor.part.0" contributionURI="bundleclass://org.eclipse.e4.babel.editor/org.eclipse.e4.babel.editor.ui.editor.part.TreeViewerPart">
-            <handlers xmi:id="_5QcwkAFgEeWabIFOKnDnoA" elementId="org.eclipse.e4.babel.editor.handler.addKey" contributionURI="bundleclass://org.eclipse.e4.babel.editor/org.eclipse.e4.babel.editor.ui.handler.tree.AddKeyHandler" command="_onrngAFgEeWabIFOKnDnoA"/>
-            <handlers xmi:id="_Bs70sAFhEeWabIFOKnDnoA" elementId="org.eclipse.e4.babel.editor.handler.renameKey" contributionURI="bundleclass://org.eclipse.e4.babel.editor/org.eclipse.e4.babel.editor.ui.handler.tree.RenameKeyHandler" command="__sNTEAFgEeWabIFOKnDnoA"/>
-            <handlers xmi:id="_H8JI8AFhEeWabIFOKnDnoA" elementId="org.eclipse.e4.babel.editor.handler.deleteKey" contributionURI="bundleclass://org.eclipse.e4.babel.editor/org.eclipse.e4.babel.editor.ui.handler.tree.DeleteKeyHandler" command="_GaX0MAFhEeWabIFOKnDnoA"/>
-            <handlers xmi:id="_Nd_n8AFhEeWabIFOKnDnoA" elementId="org.eclipse.e4.babel.editor.handler.expandAll" contributionURI="bundleclass://org.eclipse.e4.babel.editor/org.eclipse.e4.babel.editor.ui.handler.tree.ExpandAllHandler" command="_KrAi8AFhEeWabIFOKnDnoA"/>
-            <handlers xmi:id="_SHxPcAFhEeWabIFOKnDnoA" elementId="org.eclipse.e4.babel.editor.handler.collapseAll" contributionURI="bundleclass://org.eclipse.e4.babel.editor/org.eclipse.e4.babel.editor.ui.handler.tree.CollapseAllHandler" command="_QZFgEAFhEeWabIFOKnDnoA"/>
-            <handlers xmi:id="_aQtsgAFhEeWabIFOKnDnoA" elementId="org.eclipse.e4.babel.editor.handler.copyKey" contributionURI="bundleclass://org.eclipse.e4.babel.editor/org.eclipse.e4.babel.editor.ui.handler.tree.CopyHandler" command="_Y_pGMAFhEeWabIFOKnDnoA"/>
-            <menus xsi:type="menu:PopupMenu" xmi:id="_UvdUUAFqEeWabIFOKnDnoA" elementId="org.eclipse.e4.babel.editor.popupmenu.treePopupMenu" label="">
-              <children xsi:type="menu:HandledMenuItem" xmi:id="_jCVkEAFqEeWabIFOKnDnoA" elementId="org.eclipse.e4.babel.editor.handledmenuitem.addKey" label="New" tooltip="New" command="_onrngAFgEeWabIFOKnDnoA"/>
-              <children xsi:type="menu:HandledMenuItem" xmi:id="_p8ItcAFqEeWabIFOKnDnoA" elementId="org.eclipse.e4.babel.editor.handledmenuitem.renameKey" label="Rename key" tooltip="Rename Key" command="__sNTEAFgEeWabIFOKnDnoA"/>
-              <children xsi:type="menu:HandledMenuItem" xmi:id="_tX3NcAFqEeWabIFOKnDnoA" elementId="org.eclipse.e4.babel.editor.handledmenuitem.deleteKey" label="Delete key" tooltip="Delete key" command="_GaX0MAFhEeWabIFOKnDnoA"/>
-              <children xsi:type="menu:HandledMenuItem" xmi:id="_yHb68AFqEeWabIFOKnDnoA" elementId="org.eclipse.e4.babel.editor.handledmenuitem.copyKey" label="Copy key" tooltip="Copy key" command="_Y_pGMAFhEeWabIFOKnDnoA"/>
-              <children xsi:type="menu:MenuSeparator" xmi:id="_3At-EAFqEeWabIFOKnDnoA" elementId="org.eclipse.e4.babel.editor.menuseparator.0"/>
-              <children xsi:type="menu:HandledMenuItem" xmi:id="_3nqCQAFqEeWabIFOKnDnoA" elementId="org.eclipse.e4.babel.editor.handledmenuitem.collapseAll" label="Collapse all" tooltip="Collapse all" command="_QZFgEAFhEeWabIFOKnDnoA"/>
-              <children xsi:type="menu:HandledMenuItem" xmi:id="_6tw3kAFqEeWabIFOKnDnoA" elementId="org.eclipse.e4.babel.editor.handledmenuitem.expandAll" label="Expand all" tooltip="Expand all" command="_KrAi8AFhEeWabIFOKnDnoA"/>
-            </menus>
-          </children>
-          <children xsi:type="basic:Part" xmi:id="_QWFvEAFkEeWabIFOKnDnoA" elementId="org.eclipse.e4.babel.editor.part.1" contributionURI="bundleclass://org.eclipse.e4.babel.editor/org.eclipse.e4.babel.editor.ui.editor.part.I18nPart"/>
-        </children>
-        <children xsi:type="basic:Part" xmi:id="_5ecS0AFsEeWabIFOKnDnoA" elementId="org.eclipse.e4.babel.editor.part.2" contributionURI="bundleclass://org.eclipse.e4.babel.editor/org.eclipse.e4.babel.editor.ui.editor.part.TreeViewerPart"/>
-        <children xsi:type="basic:Part" xmi:id="_5zhyAAFsEeWabIFOKnDnoA" elementId="org.eclipse.e4.babel.editor.part.3" contributionURI="bundleclass://org.eclipse.e4.babel.editor/org.eclipse.e4.babel.editor.ui.editor.part.TreeViewerPart"/>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_sebNYAFREeWM9o-YRkDifQ" featurename="trimContributions" parentElementId="org.eclipselabs.e4.tapiji.translator.application" positionInList="">
+    <elements xsi:type="menu:TrimContribution" xmi:id="_YEUpAAIHEeWtdqVY5JMCaQ" elementId="org.eclipse.e4.babel.editor.trimcontribution.toolbar" parentId="org.eclipselabs.e4.tapiji.translator.trimbar.main" positionInParent="">
+      <children xsi:type="menu:ToolBar" xmi:id="_bL424AIHEeWtdqVY5JMCaQ" elementId="org.eclipse.e4.babel.editor.toolbar.main">
+        <children xsi:type="menu:HandledToolItem" xmi:id="_f3-NwAFSEeWM9o-YRkDifQ" elementId="org.eclipse.e4.babel.editor.handledtoolitem.keyTreeVisibility" label="Show/hide key tree" iconURI="platform:/plugin/org.eclipselabs.e4.tapiji.resource/icons/16x16/key_tree_contract.png" tooltip="Show/hide key tree" command="_0KndAAFREeWM9o-YRkDifQ"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_n0uB4AFSEeWM9o-YRkDifQ" elementId="org.eclipse.e4.babel.editor.handledtoolitem.newLocale" label="New Locale" iconURI="platform:/plugin/org.eclipselabs.e4.tapiji.resource/icons/16x16/new_locale.png" tooltip="New Locale" command="_A1vEwAFSEeWM9o-YRkDifQ"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_rpukkAFSEeWM9o-YRkDifQ" elementId="org.eclipse.e4.babel.editor.handledtoolitem.keys" label="Keys" iconURI="platform:/plugin/org.eclipselabs.e4.tapiji.resource/icons/16x16/key.png" tooltip="Keys" command="_62Sq0AFREeWM9o-YRkDifQ"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_xns-4AFSEeWM9o-YRkDifQ" elementId="org.eclipse.e4.babel.editor.handledtoolitem.keyMissing" label="Key missing" iconURI="platform:/plugin/org.eclipselabs.e4.tapiji.resource/icons/16x16/key_missing.png" tooltip="Key missing" command="_2v6EQAFREeWM9o-YRkDifQ"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_6X3M8AFSEeWM9o-YRkDifQ" elementId="org.eclipse.e4.babel.editor.handledtoolitem.keyUnused" label="Key Unused" iconURI="platform:/plugin/org.eclipselabs.e4.tapiji.resource/icons/16x16/key_unused.png" tooltip="Key Unused" command="_8uwBQAFREeWM9o-YRkDifQ"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_81zPAAFSEeWM9o-YRkDifQ" elementId="org.eclipse.e4.babel.editor.handledtoolitem.keyMissingUnused" label="Key missing unused" iconURI="platform:/plugin/org.eclipselabs.e4.tapiji.resource/icons/16x16/key_missing_unused.png" tooltip="Key missing unused" command="__QBEIAFREeWM9o-YRkDifQ"/>
       </children>
     </elements>
   </fragments>
@@ -61,5 +35,11 @@
     <elements xsi:type="commands:Command" xmi:id="_KrAi8AFhEeWabIFOKnDnoA" elementId="org.eclipse.e4.babel.editor.command.expandAll" commandName="Expand all"/>
     <elements xsi:type="commands:Command" xmi:id="_QZFgEAFhEeWabIFOKnDnoA" elementId="org.eclipse.e4.babel.editor.command.collapseAll" commandName="Collapse all"/>
     <elements xsi:type="commands:Command" xmi:id="_Y_pGMAFhEeWabIFOKnDnoA" elementId="org.eclipse.e4.babel.editor.command.copyKey" commandName="Copy key"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_kb9P4AIOEeWtdqVY5JMCaQ" featurename="children" parentElementId="org.eclipselabs.e4.tapiji.translator.partsashcontainer.main" positionInList="first">
+    <elements xsi:type="basic:PartStack" xmi:id="_ZUFC4AIWEeWtdqVY5JMCaQ" elementId="org.eclipse.e4.babel.editor.partstack.0">
+      <children xsi:type="basic:Part" xmi:id="_jNYgIAJfEeWDo4Scw8eeMw" elementId="org.eclipse.e4.babel.editor.part.dsadad" contributionURI="bundleclass://org.eclipse.e4.babel.editor/org.eclipse.e4.babel.editor.ui.editor.ResourceBundleEditor" label="dsadad" iconURI="platform:/plugin/org.eclipse.babel.editor/icons/unused_translation.png" tooltip="dasdasdasd" closeable="true"/>
+      <children xsi:type="basic:Part" xmi:id="_st6bMAJfEeWDo4Scw8eeMw" elementId="org.eclipse.e4.babel.editor.part.dsasdad" contributionURI="bundleclass://org.eclipse.e4.babel.editor/org.eclipse.e4.babel.editor.ui.editor.ResourceBundleEditor" label="dsasdad" iconURI="platform:/plugin/org.eclipse.babel.editor/icons/warned_translation.png" tooltip="asdasdasd" closeable="true"/>
+    </elements>
   </fragments>
 </fragment:ModelFragments>

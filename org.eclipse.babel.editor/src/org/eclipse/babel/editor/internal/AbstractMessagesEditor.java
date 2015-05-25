@@ -12,6 +12,7 @@
  ******************************************************************************/
 package org.eclipse.babel.editor.internal;
 
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -19,14 +20,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
-
 import org.eclipse.babel.core.message.IMessagesBundle;
 import org.eclipse.babel.core.message.internal.IMessagesBundleGroupListener;
-import org.eclipse.babel.core.message.internal.IMessagesBundleListener;
 import org.eclipse.babel.core.message.internal.MessageException;
 import org.eclipse.babel.core.message.internal.MessagesBundle;
 import org.eclipse.babel.core.message.internal.MessagesBundleGroup;
-import org.eclipse.babel.core.message.internal.MessagesBundleGroupAdapter;
 import org.eclipse.babel.core.message.manager.RBManager;
 import org.eclipse.babel.core.message.resource.IMessagesResource;
 import org.eclipse.babel.core.message.tree.internal.AbstractKeyTreeModel;
@@ -65,18 +63,17 @@ import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
+
 /**
  * Multi-page editor for editing resource bundles.
  */
-public abstract class AbstractMessagesEditor extends MultiPageEditorPart
-        implements IGotoMarker, IMessagesEditor {
+public abstract class AbstractMessagesEditor extends MultiPageEditorPart implements IGotoMarker, IMessagesEditor {
 
     /** Editor ID, as defined in plugin.xml. */
     public static final String EDITOR_ID = "org.eclilpse.babel.editor.editor.MessagesEditor"; //$NON-NLS-1$
 
     protected String selectedKey;
-    protected List<IMessagesEditorChangeListener> changeListeners = new ArrayList<IMessagesEditorChangeListener>(
-            2);
+    protected List<IMessagesEditorChangeListener> changeListeners = new ArrayList<IMessagesEditorChangeListener>(2);
 
     /** MessagesBundle group. */
     protected MessagesBundleGroup messagesBundleGroup;
@@ -115,27 +112,22 @@ public abstract class AbstractMessagesEditor extends MultiPageEditorPart
      * checks that the input is an instance of <code>IFileEditorInput</code>.
      */
     @Override
-    public void init(IEditorSite site, IEditorInput editorInput)
-            throws PartInitException {
-
+    public void init(IEditorSite site, IEditorInput editorInput) throws PartInitException {
+        super.init(site, editorInput);
         if (editorInput instanceof IFileEditorInput) {
             file = ((IFileEditorInput) editorInput).getFile();
-            if (MsgEditorPreferences.getInstance()
-                    .isBuilderSetupAutomatically()) {
+            if (MsgEditorPreferences.getInstance().isBuilderSetupAutomatically()) {
                 IProject p = file.getProject();
                 if (p != null && p.isAccessible()) {
-                    ToggleNatureAction
-                            .addOrRemoveNatureOnProject(p, true, true);
+                    ToggleNatureAction.addOrRemoveNatureOnProject(p, true, true);
                 }
             }
             try {
-                messagesBundleGroup = MessagesBundleGroupFactory
-                        .createBundleGroup(site, file);
+                messagesBundleGroup = MessagesBundleGroupFactory.createBundleGroup(site, file);
             } catch (MessageException e) {
                 throw new PartInitException("Cannot create bundle group.", e); //$NON-NLS-1$
             }
-            messagesBundleGroup
-                    .addMessagesBundleGroupListener(getMsgBundleGroupListner());
+            messagesBundleGroup.addMessagesBundleGroupListener(getMsgBundleGroupListner());
             markers = new MessagesEditorMarkers(messagesBundleGroup);
             setPartName(messagesBundleGroup.getName());
             setTitleImage(UIUtils.getImage(UIUtils.IMAGE_RESOURCE_BUNDLE));
@@ -145,8 +137,7 @@ public abstract class AbstractMessagesEditor extends MultiPageEditorPart
             keyTreeModel = new AbstractKeyTreeModel(messagesBundleGroup);
             // markerManager = new RBEMarkerManager(this);
         } else {
-            throw new PartInitException(
-                    "Invalid Input: Must be IFileEditorInput"); //$NON-NLS-1$
+            throw new PartInitException("Invalid Input: Must be IFileEditorInput"); //$NON-NLS-1$
         }
         initRAP();
     }
@@ -174,8 +165,7 @@ public abstract class AbstractMessagesEditor extends MultiPageEditorPart
         locales = UIUtils.filterLocales(locales);
         for (int i = 0; i < locales.length; i++) {
             Locale locale = locales[i];
-            MessagesBundle messagesBundle = (MessagesBundle) messagesBundleGroup
-                    .getMessagesBundle(locale);
+            MessagesBundle messagesBundle = (MessagesBundle) messagesBundleGroup.getMessagesBundle(locale);
             createMessagesBundlePage(messagesBundle);
         }
     }
@@ -188,15 +178,13 @@ public abstract class AbstractMessagesEditor extends MultiPageEditorPart
             IMessagesResource resource = messagesBundle.getResource();
             final TextEditor textEditor = (TextEditor) resource.getSource();
             int index = addPage(textEditor, textEditor.getEditorInput());
-            setPageText(index,
-                    UIUtils.getDisplayName(messagesBundle.getLocale()));
+            setPageText(index, UIUtils.getDisplayName(messagesBundle.getLocale()));
             setPageImage(index, UIUtils.getImage(UIUtils.IMAGE_PROPERTIES_FILE));
             localesIndex.add(messagesBundle.getLocale());
-            textEditorsIndex.add(textEditor);            
+            textEditorsIndex.add(textEditor);
         } catch (PartInitException e) {
-            ErrorDialog.openError(getSite().getShell(),
-                    "Error creating text editor page.", //$NON-NLS-1$
-                    null, e.getStatus());
+            ErrorDialog.openError(getSite().getShell(), "Error creating text editor page.", //$NON-NLS-1$
+                            null, e.getStatus());
         }
     }
 
@@ -208,7 +196,7 @@ public abstract class AbstractMessagesEditor extends MultiPageEditorPart
         createMessagesBundlePage(messagesBundle);
         i18nPage.addI18NEntry(messagesBundle.getLocale());
     }
-    
+
     /**
      * Removes the text editor page + the entry from the i18n page of the given locale and messages bundle.
      */
@@ -225,15 +213,15 @@ public abstract class AbstractMessagesEditor extends MultiPageEditorPart
         textEditor.dispose();
 
         // remove entry from i18n page
-        i18nPage.removeI18NEntry(messagesBundle.getLocale());        
+        i18nPage.removeI18NEntry(messagesBundle.getLocale());
     }
 
     /**
      * Called when the editor's pages need to be reloaded. For example when the
      * filters of locale is changed.
      * <p>
-     * Currently this only reloads the index page. TODO: remove and add the new
-     * locales? it actually looks quite hard to do.
+     * Currently this only reloads the index page. TODO: remove and add the new locales? it actually looks quite hard to
+     * do.
      * </p>
      */
     public void reloadDisplayedContents() {
@@ -265,8 +253,7 @@ public abstract class AbstractMessagesEditor extends MultiPageEditorPart
 
         updateSelectedKey = true;
 
-        RBManager instance = RBManager.getInstance(messagesBundleGroup
-                .getProjectName());
+        RBManager instance = RBManager.getInstance(messagesBundleGroup.getProjectName());
 
         refreshKeyTreeModel(); // keeps editor and I18NPage in sync
 
@@ -279,8 +266,7 @@ public abstract class AbstractMessagesEditor extends MultiPageEditorPart
         String selectedKey = getSelectedKey(); // memorize
 
         if (messagesBundleGroup == null) {
-            messagesBundleGroup = MessagesBundleGroupFactory.createBundleGroup(
-                    (IEditorSite) getSite(), file);
+            messagesBundleGroup = MessagesBundleGroupFactory.createBundleGroup((IEditorSite) getSite(), file);
         }
 
         AbstractKeyTreeModel oldModel = this.keyTreeModel;
@@ -316,7 +302,7 @@ public abstract class AbstractMessagesEditor extends MultiPageEditorPart
     /**
      * Change current page based on locale. If there is no editors associated
      * with current locale, do nothing.
-     * 
+     *
      * @param locale
      *            locale used to identify the page to change to
      */
@@ -330,6 +316,7 @@ public abstract class AbstractMessagesEditor extends MultiPageEditorPart
     /**
      * @see org.eclipse.ui.ide.IGotoMarker#gotoMarker(org.eclipse.core.resources.IMarker)
      */
+    @Override
     public void gotoMarker(IMarker marker) {
         // String key = marker.getAttribute(RBEMarker.KEY, "");
         // if (key != null && key.length() > 0) {
@@ -341,8 +328,7 @@ public abstract class AbstractMessagesEditor extends MultiPageEditorPart
         IResource resource = marker.getResource();
         Locale[] locales = messagesBundleGroup.getLocales();
         for (int i = 0; i < locales.length; i++) {
-            IMessagesResource messagesResource = ((MessagesBundle) messagesBundleGroup
-                    .getMessagesBundle(locales[i])).getResource();
+            IMessagesResource messagesResource = ((MessagesBundle) messagesBundleGroup.getMessagesBundle(locales[i])).getResource();
             if (messagesResource instanceof EclipsePropertiesEditorResource) {
                 EclipsePropertiesEditorResource propFile = (EclipsePropertiesEditorResource) messagesResource;
                 if (resource.equals(propFile.getResource())) {
@@ -350,8 +336,7 @@ public abstract class AbstractMessagesEditor extends MultiPageEditorPart
                     // try to open the master i18n page and select the
                     // corresponding key.
                     try {
-                        String key = (String) marker
-                                .getAttribute(IMarker.LOCATION);
+                        String key = (String) marker.getAttribute(IMarker.LOCATION);
                         if (key != null && key.length() > 0) {
                             getI18NPage().selectLocale(locales[i]);
                             setActivePage(0);
@@ -381,10 +366,8 @@ public abstract class AbstractMessagesEditor extends MultiPageEditorPart
             setSelection(newPageIndex);
         } else if (newPageIndex == 0 && updateSelectedKey) {
             // TODO: find better way
-            for (IMessagesBundle bundle : messagesBundleGroup
-                    .getMessagesBundles()) {
-                RBManager.getInstance(messagesBundleGroup.getProjectName())
-                        .fireResourceChanged(bundle);
+            for (IMessagesBundle bundle : messagesBundleGroup.getMessagesBundles()) {
+                RBManager.getInstance(messagesBundleGroup.getProjectName()).fireResourceChanged(bundle);
             }
             updateSelectedKey = false;
         }
@@ -400,13 +383,11 @@ public abstract class AbstractMessagesEditor extends MultiPageEditorPart
         String selectedKey = getSelectedKey();
         if (selectedKey != null) {
             if (editor.getEditorInput() instanceof FileEditorInput) {
-                FileEditorInput input = (FileEditorInput) editor
-                        .getEditorInput();
+                FileEditorInput input = (FileEditorInput) editor.getEditorInput();
                 try {
                     IFile file = input.getFile();
                     file.refreshLocal(IResource.DEPTH_ZERO, null);
-                    BufferedReader reader = new BufferedReader(
-                            new InputStreamReader(file.getContents()));
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(file.getContents()));
                     String line = "";
                     int selectionIndex = 0;
                     boolean found = false;
@@ -414,8 +395,7 @@ public abstract class AbstractMessagesEditor extends MultiPageEditorPart
                     while ((line = reader.readLine()) != null) {
                         int index = line.indexOf('=');
                         if (index != -1) {
-                            if (selectedKey.equals(line.substring(0, index)
-                                    .trim())) {
+                            if (selectedKey.equals(line.substring(0, index).trim())) {
                                 found = true;
                                 break;
                             }
@@ -439,7 +419,7 @@ public abstract class AbstractMessagesEditor extends MultiPageEditorPart
 
     /**
      * Is the given file a member of this resource bundle.
-     * 
+     *
      * @param file
      *            file to test
      * @return <code>true</code> if file is part of bundle
@@ -485,6 +465,7 @@ public abstract class AbstractMessagesEditor extends MultiPageEditorPart
     /**
      * @return Returns the selectedKey.
      */
+    @Override
     public String getSelectedKey() {
         return selectedKey;
     }
@@ -493,10 +474,9 @@ public abstract class AbstractMessagesEditor extends MultiPageEditorPart
      * @param selectedKey
      *            The selectedKey to set.
      */
+    @Override
     public void setSelectedKey(String activeKey) {
-        if ((selectedKey == null && activeKey != null)
-                || (selectedKey != null && activeKey == null)
-                || (selectedKey != null && !selectedKey.equals(activeKey))) {
+        if ((selectedKey == null && activeKey != null) || (selectedKey != null && activeKey == null) || (selectedKey != null && !selectedKey.equals(activeKey))) {
             String oldKey = this.selectedKey;
             this.selectedKey = activeKey;
             for (IMessagesEditorChangeListener listener : changeListeners) {
@@ -520,6 +500,7 @@ public abstract class AbstractMessagesEditor extends MultiPageEditorPart
     /**
      * @return Returns the messagesBundleGroup.
      */
+    @Override
     public MessagesBundleGroup getBundleGroup() {
         return messagesBundleGroup;
     }
@@ -536,9 +517,7 @@ public abstract class AbstractMessagesEditor extends MultiPageEditorPart
      *            The keyTreeModel to set.
      */
     public void setKeyTreeModel(AbstractKeyTreeModel newKeyTreeModel) {
-        if ((this.keyTreeModel == null && newKeyTreeModel != null)
-                || (keyTreeModel != null && newKeyTreeModel == null)
-                || (!keyTreeModel.equals(newKeyTreeModel))) {
+        if ((this.keyTreeModel == null && newKeyTreeModel != null) || (keyTreeModel != null && newKeyTreeModel == null) || (!keyTreeModel.equals(newKeyTreeModel))) {
             AbstractKeyTreeModel oldModel = this.keyTreeModel;
             this.keyTreeModel = newKeyTreeModel;
             for (IMessagesEditorChangeListener listener : changeListeners) {
@@ -552,8 +531,7 @@ public abstract class AbstractMessagesEditor extends MultiPageEditorPart
     }
 
     /**
-     * one of the SHOW_* constants defined in the
-     * {@link IMessagesEditorChangeListener}
+     * one of the SHOW_* constants defined in the {@link IMessagesEditorChangeListener}
      */
     private int showOnlyMissingAndUnusedKeys = IMessagesEditorChangeListener.SHOW_ALL;
 
@@ -596,14 +574,15 @@ public abstract class AbstractMessagesEditor extends MultiPageEditorPart
     @Override
     public Image getTitleImage() {
         // create new image with current display
-        return UIUtils.getImageDescriptor(UIUtils.IMAGE_RESOURCE_BUNDLE)
-                .createImage();
+        return UIUtils.getImageDescriptor(UIUtils.IMAGE_RESOURCE_BUNDLE).createImage();
     }
 
+    @Override
     public void setTitleName(String name) {
         setPartName(name);
     }
 
+    @Override
     abstract public void setEnabled(boolean enabled);
 
     abstract protected void initRAP();
