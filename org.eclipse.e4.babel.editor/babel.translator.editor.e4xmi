@@ -7,6 +7,7 @@
     <elements xsi:type="commands:Command" xmi:id="_8uwBQAFREeWM9o-YRkDifQ" elementId="org.eclipse.e4.babel.editor.command.keyUnused" commandName="Key unused"/>
     <elements xsi:type="commands:Command" xmi:id="__QBEIAFREeWM9o-YRkDifQ" elementId="org.eclipse.e4.babel.editor.command.keyMissingUnused" commandName="Key missing unused"/>
     <elements xsi:type="commands:Command" xmi:id="_A1vEwAFSEeWM9o-YRkDifQ" elementId="org.eclipse.e4.babel.editor.command.newLocale" commandName="New locale"/>
+    <elements xsi:type="commands:Command" xmi:id="_mhMOcAV5EeWlfcvoOaUVLQ" elementId="org.eclipse.e4.babel.editor.command.openResourceBundle" commandName="Open Resource Bundle"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_qw8X4AFREeWM9o-YRkDifQ" featurename="handlers" parentElementId="org.eclipselabs.e4.tapiji.translator.application">
     <elements xsi:type="commands:Handler" xmi:id="_DAGqkAFSEeWM9o-YRkDifQ" elementId="org.eclipse.e4.babel.editor.handler.keyTreeVisibility" contributionURI="bundleclass://org.eclipse.e4.babel.editor/org.eclipse.e4.babel.editor.ui.handler.toolbar.KeyTreeVisibleHandler" command="_0KndAAFREeWM9o-YRkDifQ"/>
@@ -15,9 +16,10 @@
     <elements xsi:type="commands:Handler" xmi:id="_RGsKwAFSEeWM9o-YRkDifQ" elementId="org.eclipse.e4.babel.editor.handler.keyUnused" contributionURI="bundleclass://org.eclipse.e4.babel.editor/org.eclipse.e4.babel.editor.ui.handler.toolbar.KeyUnusedHandler" command="_8uwBQAFREeWM9o-YRkDifQ"/>
     <elements xsi:type="commands:Handler" xmi:id="_T3KuUAFSEeWM9o-YRkDifQ" elementId="org.eclipse.e4.babel.editor.handler.keyMissingUnused" contributionURI="bundleclass://org.eclipse.e4.babel.editor/org.eclipse.e4.babel.editor.ui.handler.toolbar.KeyMissingUnusedHandler" command="__QBEIAFREeWM9o-YRkDifQ"/>
     <elements xsi:type="commands:Handler" xmi:id="_WlR6YAFSEeWM9o-YRkDifQ" elementId="org.eclipse.e4.babel.editor.handler.newLocale" contributionURI="bundleclass://org.eclipse.e4.babel.editor/org.eclipse.e4.babel.editor.ui.handler.toolbar.NewLocaleHandler" command="_A1vEwAFSEeWM9o-YRkDifQ"/>
+    <elements xsi:type="commands:Handler" xmi:id="_qjci8AV5EeWlfcvoOaUVLQ" elementId="org.eclipse.e4.babel.editor.handler.openResourceBundle" contributionURI="bundleclass://org.eclipse.e4.babel.editor/org.eclipse.e4.babel.editor.ui.handler.window.OpenResourceBundleHandler" command="_mhMOcAV5EeWlfcvoOaUVLQ"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_sebNYAFREeWM9o-YRkDifQ" featurename="trimContributions" parentElementId="org.eclipselabs.e4.tapiji.translator.application" positionInList="">
-    <elements xsi:type="menu:TrimContribution" xmi:id="_YEUpAAIHEeWtdqVY5JMCaQ" elementId="org.eclipse.e4.babel.editor.trimcontribution.toolbar" parentId="org.eclipselabs.e4.tapiji.translator.trimbar.main" positionInParent="">
+    <elements xsi:type="menu:TrimContribution" xmi:id="_YEUpAAIHEeWtdqVY5JMCaQ" elementId="org.eclipse.e4.babel.editor.trimcontribution.toolbar" parentId="org.eclipselabs.e4.tapiji.translator.trimbar.main" positionInParent="org.eclipselabs.e4.tapiji.translator.handledmenuitem.openGlosssary">
       <children xsi:type="menu:ToolBar" xmi:id="_bL424AIHEeWtdqVY5JMCaQ" elementId="org.eclipse.e4.babel.editor.toolbar.main">
         <children xsi:type="menu:HandledToolItem" xmi:id="_f3-NwAFSEeWM9o-YRkDifQ" elementId="org.eclipse.e4.babel.editor.handledtoolitem.keyTreeVisibility" label="Show/hide key tree" iconURI="platform:/plugin/org.eclipselabs.e4.tapiji.resource/icons/16x16/key_tree_contract.png" tooltip="Show/hide key tree" command="_0KndAAFREeWM9o-YRkDifQ"/>
         <children xsi:type="menu:HandledToolItem" xmi:id="_n0uB4AFSEeWM9o-YRkDifQ" elementId="org.eclipse.e4.babel.editor.handledtoolitem.newLocale" label="New Locale" iconURI="platform:/plugin/org.eclipselabs.e4.tapiji.resource/icons/16x16/new_locale.png" tooltip="New Locale" command="_A1vEwAFSEeWM9o-YRkDifQ"/>
@@ -40,6 +42,11 @@
     <elements xsi:type="basic:PartStack" xmi:id="_ZUFC4AIWEeWtdqVY5JMCaQ" elementId="org.eclipse.e4.babel.editor.partstack.0">
       <children xsi:type="basic:Part" xmi:id="_jNYgIAJfEeWDo4Scw8eeMw" elementId="org.eclipse.e4.babel.editor.part.dsadad" contributionURI="bundleclass://org.eclipse.e4.babel.editor/org.eclipse.e4.babel.editor.ui.editor.ResourceBundleEditor" label="dsadad" iconURI="platform:/plugin/org.eclipse.babel.editor/icons/unused_translation.png" tooltip="dasdasdasd" closeable="true"/>
       <children xsi:type="basic:Part" xmi:id="_st6bMAJfEeWDo4Scw8eeMw" elementId="org.eclipse.e4.babel.editor.part.dsasdad" contributionURI="bundleclass://org.eclipse.e4.babel.editor/org.eclipse.e4.babel.editor.ui.editor.ResourceBundleEditor" label="dsasdad" iconURI="platform:/plugin/org.eclipse.babel.editor/icons/warned_translation.png" tooltip="asdasdasd" closeable="true"/>
+    </elements>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_x4on0AV5EeWlfcvoOaUVLQ" featurename="menuContributions" parentElementId="org.eclipselabs.e4.tapiji.translator.application" positionInList="">
+    <elements xsi:type="menu:MenuContribution" xmi:id="_vRqwIAV6EeWlfcvoOaUVLQ" elementId="org.eclipse.e4.babel.editor.menucontribution.openResourceBundle" positionInParent="after=org.eclipselabs.e4.tapiji.translator.handledmenuitem.openGlosssary" parentId="org.eclipselabs.e4.tapiji.translator.menu.file">
+      <children xsi:type="menu:HandledMenuItem" xmi:id="_tjOb4AV7EeWlfcvoOaUVLQ" elementId="org.eclipse.e4.babel.editor.handledmenuitem.openResourceBundle" label="Open Resource Bundle" tooltip="Open Resource Bundle" command="_mhMOcAV5EeWlfcvoOaUVLQ"/>
     </elements>
   </fragments>
 </fragment:ModelFragments>
