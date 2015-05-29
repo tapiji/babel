@@ -12,8 +12,9 @@ Require-Bundle: org.eclipse.e4.core.di,
  org.eclipselabs.e4.tapiji.resource,
  org.eclipse.e4.tools.services,
  org.eclipse.core.runtime,
- org.eclipse.e4.ui.workbench
+ org.eclipse.e4.ui.workbench,
+ org.eclipse.text,
+ org.eclipse.jface.text;bundle-version="3.9.2",
+ org.eclipse.e4.ui.model.workbench
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Import-Package: javax.annotation,
- javax.inject,
- org.eclipse.ui.part
+Export-Package: org.eclipse.e4.babel.editor.ui.editor.interfaces

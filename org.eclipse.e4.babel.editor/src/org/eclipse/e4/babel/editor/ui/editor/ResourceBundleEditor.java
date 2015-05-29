@@ -3,7 +3,6 @@ package org.eclipse.e4.babel.editor.ui.editor;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.e4.tools.services.IResourcePool;
 import org.eclipse.e4.ui.services.EMenuService;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -15,11 +14,10 @@ import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipselabs.e4.tapiji.logger.Log;
 
 
-public class ResourceBundleEditor extends MultiPageEditorPart {
+public class ResourceBundleEditor {
 
 
     private static final String TAG = ResourceBundleEditor.class.getSimpleName();
@@ -197,29 +195,5 @@ public class ResourceBundleEditor extends MultiPageEditorPart {
          * treeViewer.setInput(keyTree);
          */
 
-    }
-
-    @Override
-    protected void createPages() {
-        Log.d(TAG, "createPages");
-
-    }
-
-    @Override
-    public void doSave(IProgressMonitor monitor) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void doSaveAs() {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public boolean isSaveAsAllowed() {
-        // TODO Auto-generated method stub
-        return false;
     }
 }
