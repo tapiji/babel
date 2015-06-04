@@ -1,6 +1,7 @@
 package org.eclipse.e4.babel.editor.ui.editor.composite;
 
 
+import org.eclipse.e4.ui.services.EMenuService;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -25,13 +26,12 @@ public class TreeViewerComposite extends Composite {
     private static final String BOTTOM_MENU_ID = "org.eclipse.e4.babel.editor.toolbar.toolbar";
     private static final String TREE_VIEWER_MENU_ID = "org.eclipse.e4.babel.editor.popupmenu.treePopupMenu";
 
-
-    public static TreeViewerComposite create(final Composite sashForm) {
-        return new TreeViewerComposite(sashForm);
+    public static TreeViewerComposite create(final Composite sashForm, EMenuService menuService) {
+        return new TreeViewerComposite(sashForm, menuService);
     }
 
 
-    private TreeViewerComposite(final Composite sashForm) {
+    private TreeViewerComposite(final Composite sashForm, EMenuService menuService) {
         super(sashForm, SWT.NONE);
         Log.d(TAG, "treeViewerPart");
 
@@ -84,6 +84,7 @@ public class TreeViewerComposite extends Composite {
         tree.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
         tree.setBounds(0, 0, 83, 83);
 
+
         final Composite composite_2 = new Composite(this, SWT.NONE);
         final GridLayout gl_composite_2 = new GridLayout(3, false);
         gl_composite_2.horizontalSpacing = 0;
@@ -101,6 +102,9 @@ public class TreeViewerComposite extends Composite {
         btnNewButton_3.setLayoutData(gd_btnNewButton_3);
         btnNewButton_3.setBounds(0, 0, 83, 29);
         btnNewButton_3.setText("New Button");
+
+
+        menuService.registerContextMenu(treeViewer.getControl(), TREE_VIEWER_MENU_ID);
 
 
     }

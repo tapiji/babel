@@ -7,7 +7,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipselabs.e4.tapiji.logger.Log;
 import org.eclipselabs.e4.tapiji.resource.ITapijiResourceProvider;
 
 
@@ -29,9 +28,7 @@ public final class I18nComposite extends ScrolledComposite implements BundleEntr
         final Composite comp = new Composite(this, SWT.BORDER);
         comp.setLayout(new GridLayout(1, false));
 
-
         for (int i = 0; i < 8; i++) {
-            Log.d(TAG, "ITER" + i);
             final BundleEntryComposite entry = BundleEntryComposite.create(comp, resourceProvider);
             entry.addListener(this);
             bundleEntries.add(entry);
@@ -53,9 +50,9 @@ public final class I18nComposite extends ScrolledComposite implements BundleEntr
         if (null != activeBundleEntry) {
             final int index = bundleEntries.indexOf(activeBundleEntry);
             if ((index >= 0) && (index != (bundleEntries.size() - 1))) {
-                bundleEntries.get(index + 1).setFocusTextView();
+                setFocusForNextComposite(bundleEntries.get(index + 1));
             } else if (index == (bundleEntries.size() - 1)) {
-                bundleEntries.get(0).setFocusTextView();
+                setFocusForNextComposite(bundleEntries.get(0));
             }
         }
     }
@@ -65,11 +62,16 @@ public final class I18nComposite extends ScrolledComposite implements BundleEntr
         if (null != activeBundleEntry) {
             final int index = bundleEntries.indexOf(activeBundleEntry);
             if (index > 0) {
-                bundleEntries.get(index - 1).setFocusTextView();
+                setFocusForNextComposite(bundleEntries.get(index - 1));
             } else if (index == 0) {
-                bundleEntries.get(bundleEntries.size() - 1).setFocusTextView();
+                setFocusForNextComposite(bundleEntries.get(bundleEntries.size() - 1));
             }
         }
+    }
+
+    private void setFocusForNextComposite(final BundleEntryComposite nextFocusComposite) {
+        nextFocusComposite.setFocusTextView();
+        setOrigin(getOrigin().x, nextFocusComposite.getLocation().y);
     }
 
     @Override

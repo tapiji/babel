@@ -39,31 +39,40 @@ public class ResourceBundleEditor {
 
     private CTabFolder tabFolder;
 
+    @Inject
+    private ITapijiResourceProvider resourceProvider;
+
     @PostConstruct
-    public void createControl(final Composite parent, final Shell shell, final EPartService partService, final ITapijiResourceProvider resourceProvider) {
+    public void createControl(final Composite parent, final Shell shell, final EPartService partService) {
         Log.d(TAG, "treeViewerPart");
 
-        tabFolder = createTabFolder(parent);
+        this.tabFolder = createTabFolder(parent);
 
+        final SashForm sashForm = new SashForm(tabFolder, SWT.SMOOTH);
 
-        final SashForm sashForm = new SashForm(tabFolder, SWT.NONE);
-
-        TreeViewerComposite.create(sashForm);
+        TreeViewerComposite.create(sashForm, menuService);
         I18nComposite.create(sashForm, resourceProvider);
 
         sashForm.setWeights(new int[] {25, 75});
+        createFirstTab(sashForm);
 
+        createTabs();
 
+        tabFolder.setSelection(0);
+    }
+
+    private void createFirstTab(final SashForm sashForm) {
         final CTabItem firstTabItem = createItem(0, sashForm);
         firstTabItem.setText("Eigenschaften");
         firstTabItem.setImage(resourceProvider.loadImage(TapijiResourceConstants.IMG_RESOURCE_BUNDLE));
+    }
 
+    private void createTabs() {
         for (int i = 1; i < 4; i++) {
             final CTabItem tabItem = createItem(i, new BundleTextEditorComposite(tabFolder));
             tabItem.setText("Chinesisch");
             tabItem.setImage(resourceProvider.loadImage(TapijiResourceConstants.IMG_RESOURCE_PROPERTY));
         }
-        tabFolder.setSelection(0);
     }
 
     private CTabFolder createTabFolder(final Composite parent) {

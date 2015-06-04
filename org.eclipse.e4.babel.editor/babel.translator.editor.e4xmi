@@ -49,6 +49,15 @@
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_iDlHUAYAEeWu8upNcCFJKA" featurename="descriptors" parentElementId="org.eclipselabs.e4.tapiji.translator.application">
     <elements xsi:type="basic_1:PartDescriptor" xmi:id="_5MZdAAYAEeWu8upNcCFJKA" elementId="org.eclipse.e4.babel.editor.partdescriptor.resourceBundleEditor" label="Resource Bundle Editor" iconURI="platform:/plugin/org.eclipselabs.e4.tapiji.resource/icons/16x16/resource_bundle.png" tooltip="Resource Bundle Editor" allowMultiple="true" closeable="true" contributionURI="bundleclass://org.eclipse.e4.babel.editor/org.eclipse.e4.babel.editor.ui.editor.ResourceBundleEditor">
       <tags>View</tags>
+      <menus xsi:type="menu:PopupMenu" xmi:id="_hfgZoArREeWcNJjDxdFiBQ" elementId="org.eclipse.e4.babel.editor.popupmenu.treePopupMenu">
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_oT7TwArREeWcNJjDxdFiBQ" elementId="org.eclipse.e4.babel.editor.handledmenuitem.new" label="New" command="_onrngAFgEeWabIFOKnDnoA"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_syOEAArREeWcNJjDxdFiBQ" elementId="org.eclipse.e4.babel.editor.handledmenuitem.rename" label="Rename" command="__sNTEAFgEeWabIFOKnDnoA"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_0sB44ArREeWcNJjDxdFiBQ" elementId="org.eclipse.e4.babel.editor.handledmenuitem.delete" label="Delete" command="_GaX0MAFhEeWabIFOKnDnoA"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_2-kjQArREeWcNJjDxdFiBQ" elementId="org.eclipse.e4.babel.editor.handledmenuitem.copy" label="Copy" command="_Y_pGMAFhEeWabIFOKnDnoA"/>
+        <children xsi:type="menu:MenuSeparator" xmi:id="_5NpC4ArREeWcNJjDxdFiBQ" elementId="org.eclipse.e4.babel.editor.menuseparator.0"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_5hkEcArREeWcNJjDxdFiBQ" elementId="org.eclipse.e4.babel.editor.handledmenuitem.expandAll" label="Expand all" command="_KrAi8AFhEeWabIFOKnDnoA"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_-IPUoArREeWcNJjDxdFiBQ" elementId="org.eclipse.e4.babel.editor.handledmenuitem.collapseAll" label="Collapse all" command="_QZFgEAFhEeWabIFOKnDnoA"/>
+      </menus>
     </elements>
   </fragments>
 </fragment:ModelFragments>

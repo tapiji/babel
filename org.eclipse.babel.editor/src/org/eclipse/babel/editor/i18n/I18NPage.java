@@ -11,19 +11,18 @@
  ******************************************************************************/
 package org.eclipse.babel.editor.i18n;
 
+
 import java.lang.reflect.Constructor;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-
 import org.eclipse.babel.core.message.IMessagesBundle;
 import org.eclipse.babel.core.message.manager.IMessagesEditorListener;
 import org.eclipse.babel.core.message.manager.RBManager;
 import org.eclipse.babel.editor.IMessagesEditorChangeListener;
 import org.eclipse.babel.editor.internal.AbstractMessagesEditor;
 import org.eclipse.babel.editor.internal.MessagesEditorChangeAdapter;
-import org.eclipse.babel.editor.tree.actions.AbstractRenameKeyAction;
 import org.eclipse.babel.editor.util.UIUtils;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -33,17 +32,17 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.ScrolledComposite;
-import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IWorkbenchPart;
 
+
 /**
  * Internationalization page where one can edit all resource bundle entries at
  * once for all supported locales.
- * 
+ *
  * @author Pascal Essiembre
  */
 public class I18NPage extends ScrolledComposite implements ISelectionProvider {
@@ -65,7 +64,7 @@ public class I18NPage extends ScrolledComposite implements ISelectionProvider {
 
     /**
      * Constructor.
-     * 
+     *
      * @param parent
      *            parent component.
      * @param style
@@ -73,35 +72,37 @@ public class I18NPage extends ScrolledComposite implements ISelectionProvider {
      * @param resourceMediator
      *            resource manager
      */
-    public I18NPage(Composite parent, int style,
-            final AbstractMessagesEditor editor) {
+    public I18NPage(Composite parent, int style, final AbstractMessagesEditor editor) {
         super(parent, style);
         this.editor = editor;
         sashForm = new SashForm(this, SWT.SMOOTH);
-        sashForm.setBackground(UIUtils
-                .getSystemColor(SWT.COLOR_TITLE_BACKGROUND_GRADIENT));
+        sashForm.setBackground(UIUtils.getSystemColor(SWT.COLOR_TITLE_BACKGROUND_GRADIENT));
         editor.getEditorSite().getPage().addPartListener(new IPartListener() {
+
+            @Override
             public void partActivated(IWorkbenchPart part) {
                 if (part == editor) {
-                    sashForm.setBackground(UIUtils
-                            .getSystemColor(SWT.COLOR_TITLE_BACKGROUND_GRADIENT));
+                    sashForm.setBackground(UIUtils.getSystemColor(SWT.COLOR_TITLE_BACKGROUND_GRADIENT));
                 }
             }
 
+            @Override
             public void partDeactivated(IWorkbenchPart part) {
                 if (part == editor) {
-                    sashForm.setBackground(UIUtils
-                            .getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
+                    sashForm.setBackground(UIUtils.getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 
                 }
             }
 
+            @Override
             public void partBroughtToTop(IWorkbenchPart part) {
             }
 
+            @Override
             public void partClosed(IWorkbenchPart part) {
             }
 
+            @Override
             public void partOpened(IWorkbenchPart part) {
             }
         });
@@ -112,39 +113,37 @@ public class I18NPage extends ScrolledComposite implements ISelectionProvider {
 
         valuesComposite = createValuesComposite(sashForm);
 
-        sashForm.setWeights(new int[] { 25, 75 });
+        sashForm.setWeights(new int[] {25, 75});
 
         setExpandHorizontal(true);
         setExpandVertical(true);
         setMinWidth(400);
 
-        RBManager instance = RBManager.getInstance(editor.getBundleGroup()
-                .getProjectName());
+        RBManager instance = RBManager.getInstance(editor.getBundleGroup().getProjectName());
         instance.addMessagesEditorListener(new IMessagesEditorListener() {
 
+            @Override
             public void onSave() {
                 // TODO Auto-generated method stub
 
             }
 
+            @Override
             public void onModify() {
                 // TODO Auto-generated method stub
             }
 
+            @Override
             public void onResourceChanged(IMessagesBundle bundle) {
                 // [RAP] only update tree, which belongs to this UIThread
                 if (!keysComposite.isDisposed()) {
-                    Display display = keysComposite.getTreeViewer().getTree()
-                            .getDisplay();
+                    Display display = keysComposite.getTreeViewer().getTree().getDisplay();
                     if (display.equals(Display.getCurrent())) {
-                        AbstractI18NEntry i18nEntry = entryComposites.get(bundle
-                                .getLocale());
-                if (i18nEntry != null && !getSelection().isEmpty()) {
-                    i18nEntry.updateKey(String
-                            .valueOf(((IStructuredSelection) getSelection())
-                                    .getFirstElement()));
-                }
-            }
+                        AbstractI18NEntry i18nEntry = entryComposites.get(bundle.getLocale());
+                        if (i18nEntry != null && !getSelection().isEmpty()) {
+                            i18nEntry.updateKey(String.valueOf(((IStructuredSelection) getSelection()).getFirstElement()));
+                        }
+                    }
                 }
             }
 
@@ -154,6 +153,7 @@ public class I18NPage extends ScrolledComposite implements ISelectionProvider {
     /**
      * @see org.eclipse.swt.widgets.Widget#dispose()
      */
+    @Override
     public void dispose() {
         keysComposite.dispose();
         super.dispose();
@@ -166,8 +166,7 @@ public class I18NPage extends ScrolledComposite implements ISelectionProvider {
         } else {
             sashForm.setMaximizedControl(valuesComposite);
         }
-        for (IMessagesEditorChangeListener listener : editor
-                .getChangeListeners()) {
+        for (IMessagesEditorChangeListener listener : editor.getChangeListeners()) {
             listener.keyTreeVisibleChanged(visible);
         }
     }
@@ -177,16 +176,14 @@ public class I18NPage extends ScrolledComposite implements ISelectionProvider {
     }
 
     private Composite createValuesComposite(SashForm parent) {
-        final ScrolledComposite scrolledComposite = new ScrolledComposite(
-                parent, SWT.V_SCROLL | SWT.H_SCROLL);
+        final ScrolledComposite scrolledComposite = new ScrolledComposite(parent, SWT.V_SCROLL | SWT.H_SCROLL);
         scrolledComposite.setExpandHorizontal(true);
         scrolledComposite.setExpandVertical(true);
         scrolledComposite.setSize(SWT.DEFAULT, 100);
 
         entriesComposite = new Composite(scrolledComposite, SWT.BORDER);
         scrolledComposite.setContent(entriesComposite);
-        scrolledComposite.setMinSize(entriesComposite.computeSize(SWT.DEFAULT,
-                editor.getBundleGroup().getLocales().length * TEXT_MIN_HEIGHT));
+        scrolledComposite.setMinSize(entriesComposite.computeSize(SWT.DEFAULT, editor.getBundleGroup().getLocales().length * TEXT_MIN_HEIGHT));
 
         entriesComposite.setLayout(new GridLayout(1, false));
         Locale[] locales = editor.getBundleGroup().getLocales();
@@ -198,9 +195,10 @@ public class I18NPage extends ScrolledComposite implements ISelectionProvider {
         }
 
         editor.addChangeListener(new MessagesEditorChangeAdapter() {
+
+            @Override
             public void selectedKeyChanged(String oldKey, String newKey) {
-                boolean isKey = newKey != null
-                        && editor.getBundleGroup().isMessageKey(newKey);
+                boolean isKey = newKey != null && editor.getBundleGroup().isMessageKey(newKey);
                 // scrolledComposite.setBackground(isKey);
             }
         });
@@ -212,10 +210,8 @@ public class I18NPage extends ScrolledComposite implements ISelectionProvider {
         AbstractI18NEntry i18NEntry = null;
         try {
             Class<?> clazz = Class.forName(AbstractI18NEntry.INSTANCE_CLASS);
-            Constructor<?> cons = clazz.getConstructor(Composite.class,
-                    AbstractMessagesEditor.class, Locale.class);
-            i18NEntry = (AbstractI18NEntry) cons.newInstance(entriesComposite,
-                    editor, locale);
+            Constructor<?> cons = clazz.getConstructor(Composite.class, AbstractMessagesEditor.class, Locale.class);
+            i18NEntry = (AbstractI18NEntry) cons.newInstance(entriesComposite, editor, locale);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -249,20 +245,23 @@ public class I18NPage extends ScrolledComposite implements ISelectionProvider {
         }
     }
 
+    @Override
     public void addSelectionChangedListener(ISelectionChangedListener listener) {
         keysComposite.getTreeViewer().addSelectionChangedListener(listener);
 
     }
 
+    @Override
     public ISelection getSelection() {
         return keysComposite.getTreeViewer().getSelection();
     }
 
-    public void removeSelectionChangedListener(
-            ISelectionChangedListener listener) {
+    @Override
+    public void removeSelectionChangedListener(ISelectionChangedListener listener) {
         keysComposite.getTreeViewer().removeSelectionChangedListener(listener);
     }
 
+    @Override
     public void setSelection(ISelection selection) {
         keysComposite.getTreeViewer().setSelection(selection);
     }
@@ -278,16 +277,6 @@ public class I18NPage extends ScrolledComposite implements ISelectionProvider {
             entry.setEnabled(enabled);
     }
 
-    public void setEnabled(boolean enabled, Locale locale) {
-        // super.setEnabled(enabled);
-        for (AbstractI18NEntry entry : entryComposites.values()) {
-            if (locale == entry.getLocale()
-                    || (locale != null && locale.equals(entry.getLocale()))) {
-                entry.setEnabled(enabled);
-                break;
-            }
-        }
-    }
 
     public SideNavTextBoxComposite getSidNavTextBoxComposite() {
         return keysComposite.getSidNavTextBoxComposite();
