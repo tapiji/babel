@@ -1,6 +1,7 @@
 package org.eclipse.e4.babel.editor.ui.editor.composite;
 
 
+import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.TextViewer;
 import org.eclipse.jface.text.TextViewerUndoManager;
 import org.eclipse.swt.SWT;
@@ -33,7 +34,7 @@ final class BundleEntryComposite extends Composite implements KeyListener, Trave
     private final TextViewer textView;
     private IBundleEntryComposite listener;
     private boolean expanded;
-    private final GridData gd_styledText;
+    private final GridData textViewStyleData;
     private final GridData data;
     private final ITapijiResourceProvider resourceProvider;
     private final Label expandIcon;
@@ -113,13 +114,16 @@ final class BundleEntryComposite extends Composite implements KeyListener, Trave
         data = new GridData(SWT.FILL, SWT.FILL, true, true, 3, 2);
         composite_2.setLayoutData(data);
 
-        textView = new TextViewer(composite_2, SWT.BORDER);
+        textView = new TextViewer(composite_2, SWT.MULTI | SWT.WRAP | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
+        textView.setDocument(new Document());
         textView.setUndoManager(undoManager);
-        final StyledText textViewStyle = textView.getTextWidget();
-        gd_styledText = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
-        gd_styledText.minimumHeight = 40;
+        textView.activatePlugins();
 
-        textViewStyle.setLayoutData(gd_styledText);
+        final StyledText textViewStyle = textView.getTextWidget();
+        textViewStyleData = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+        textViewStyleData.minimumHeight = 40;
+
+        textViewStyle.setLayoutData(textViewStyleData);
         textViewStyle.addFocusListener(this);
         textViewStyle.addTraverseListener(this);
         textViewStyle.addKeyListener(this);
