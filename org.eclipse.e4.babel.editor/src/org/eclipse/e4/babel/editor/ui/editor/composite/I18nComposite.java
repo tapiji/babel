@@ -18,11 +18,11 @@ public final class I18nComposite extends ScrolledComposite implements BundleEntr
 
     private BundleEntryComposite activeBundleEntry;
 
-    public static I18nComposite create(final Composite sashForm, ITapijiResourceProvider resourceProvider) {
+    public static I18nComposite create(final Composite sashForm, final ITapijiResourceProvider resourceProvider) {
         return new I18nComposite(sashForm, resourceProvider, SWT.V_SCROLL | SWT.H_SCROLL);
     }
 
-    private I18nComposite(final Composite sashForm, ITapijiResourceProvider resourceProvider, final int style) {
+    private I18nComposite(final Composite sashForm, final ITapijiResourceProvider resourceProvider, final int style) {
         super(sashForm, style);
 
 
@@ -52,9 +52,9 @@ public final class I18nComposite extends ScrolledComposite implements BundleEntr
     public void setNextFocusDown() {
         if (null != activeBundleEntry) {
             final int index = bundleEntries.indexOf(activeBundleEntry);
-            if (index >= 0 && index != (bundleEntries.size() - 1)) {
+            if ((index >= 0) && (index != (bundleEntries.size() - 1))) {
                 bundleEntries.get(index + 1).setFocusTextView();
-            } else if (index == bundleEntries.size() - 1) {
+            } else if (index == (bundleEntries.size() - 1)) {
                 bundleEntries.get(0).setFocusTextView();
             }
         }
@@ -73,7 +73,7 @@ public final class I18nComposite extends ScrolledComposite implements BundleEntr
     }
 
     @Override
-    public void onFocusChange(BundleEntryComposite bundleEntry) {
+    public void onFocusChange(final BundleEntryComposite bundleEntry) {
         activeBundleEntry = bundleEntry;
     }
 }

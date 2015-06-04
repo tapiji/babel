@@ -12,15 +12,15 @@ import org.eclipse.swt.widgets.Composite;
 
 public class MessageBundleTextEditor {
 
-    private IDocumentInput input;
+    private final IDocumentInput input;
 
     @Inject
-    public MessageBundleTextEditor(Composite parent, IDocumentInput input) {
+    public MessageBundleTextEditor(final Composite parent, final IDocumentInput input) {
         this.input = input;
         parent.setLayout(new FillLayout());
 
-        int styles = SWT.V_SCROLL | SWT.H_SCROLL | SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION;
-        TextViewer viewer = new TextViewer(parent, styles);
+        final int styles = SWT.V_SCROLL | SWT.H_SCROLL | SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION;
+        final TextViewer viewer = new TextViewer(parent, styles);
         viewer.setDocument(input.getDocument());
     }
 

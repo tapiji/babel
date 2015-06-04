@@ -13,22 +13,22 @@ public class BundleTextEditorComposite extends Composite {
 
     private static final int VERTICAL_RULER_WIDTH = 12;
 
-    public BundleTextEditorComposite(CTabFolder tabFolder) {
+    public BundleTextEditorComposite(final CTabFolder tabFolder) {
         super(tabFolder, SWT.NONE);
         createControl(tabFolder);
     }
 
 
-    public void createControl(Composite sashForm) {
+    public void createControl(final Composite sashForm) {
 
         //      Composite parent = new Composite(this, SWT.NONE);
         setLayout(new FillLayout());
 
-        int styles = SWT.V_SCROLL | SWT.H_SCROLL | SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION;
-        VerticalRuler verticalRuler = new VerticalRuler(VERTICAL_RULER_WIDTH);
+        final int styles = SWT.V_SCROLL | SWT.H_SCROLL | SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION;
+        final VerticalRuler verticalRuler = new VerticalRuler(VERTICAL_RULER_WIDTH);
 
 
-        SourceViewer viewer = new SourceViewer(this, verticalRuler, styles);
+        final SourceViewer viewer = new SourceViewer(this, verticalRuler, styles);
 
     }
 }

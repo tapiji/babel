@@ -40,13 +40,13 @@ public class ResourceBundleEditor {
     private CTabFolder tabFolder;
 
     @PostConstruct
-    public void createControl(Composite parent, Shell shell, EPartService partService, ITapijiResourceProvider resourceProvider) {
+    public void createControl(final Composite parent, final Shell shell, final EPartService partService, final ITapijiResourceProvider resourceProvider) {
         Log.d(TAG, "treeViewerPart");
 
         tabFolder = createTabFolder(parent);
 
 
-        SashForm sashForm = new SashForm(tabFolder, SWT.NONE);
+        final SashForm sashForm = new SashForm(tabFolder, SWT.NONE);
 
         TreeViewerComposite.create(sashForm);
         I18nComposite.create(sashForm, resourceProvider);
@@ -54,25 +54,25 @@ public class ResourceBundleEditor {
         sashForm.setWeights(new int[] {25, 75});
 
 
-        CTabItem firstTabItem = createItem(0, sashForm);
+        final CTabItem firstTabItem = createItem(0, sashForm);
         firstTabItem.setText("Eigenschaften");
         firstTabItem.setImage(resourceProvider.loadImage(TapijiResourceConstants.IMG_RESOURCE_BUNDLE));
 
         for (int i = 1; i < 4; i++) {
-            CTabItem tabItem = createItem(i, new BundleTextEditorComposite(tabFolder));
+            final CTabItem tabItem = createItem(i, new BundleTextEditorComposite(tabFolder));
             tabItem.setText("Chinesisch");
             tabItem.setImage(resourceProvider.loadImage(TapijiResourceConstants.IMG_RESOURCE_PROPERTY));
         }
         tabFolder.setSelection(0);
     }
 
-    private CTabFolder createTabFolder(Composite parent) {
+    private CTabFolder createTabFolder(final Composite parent) {
         final CTabFolder tabFolder = new CTabFolder(parent, SWT.BOTTOM | SWT.FLAT);
         return tabFolder;
     }
 
-    private CTabItem createItem(int index, Control control) {
-        CTabItem item = new CTabItem(tabFolder, SWT.NONE, index);
+    private CTabItem createItem(final int index, final Control control) {
+        final CTabItem item = new CTabItem(tabFolder, SWT.NONE, index);
         item.setControl(control);
         return item;
     }
