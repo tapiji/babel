@@ -8,19 +8,21 @@ import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipselabs.e4.tapiji.logger.Log;
+import org.eclipselabs.e4.tapiji.resource.ITapijiResourceProvider;
 
 
 public final class I18nComposite extends ScrolledComposite implements BundleEntryComposite.IBundleEntryComposite {
 
     private static final String TAG = I18nComposite.class.getSimpleName();
-    private final List<BundleEntryComposite> bundleEntryComposite = new ArrayList<>();
-    private BundleEntryComposite activeBundleEntryComposite;
+    private final List<BundleEntryComposite> bundleEntries = new ArrayList<>();
 
-    public static I18nComposite create(final Composite sashForm) {
-        return new I18nComposite(sashForm, SWT.V_SCROLL | SWT.H_SCROLL);
+    private BundleEntryComposite activeBundleEntry;
+
+    public static I18nComposite create(final Composite sashForm, ITapijiResourceProvider resourceProvider) {
+        return new I18nComposite(sashForm, resourceProvider, SWT.V_SCROLL | SWT.H_SCROLL);
     }
 
-    private I18nComposite(final Composite sashForm, final int style) {
+    private I18nComposite(final Composite sashForm, ITapijiResourceProvider resourceProvider, final int style) {
         super(sashForm, style);
 
 
@@ -28,10 +30,11 @@ public final class I18nComposite extends ScrolledComposite implements BundleEntr
         comp.setLayout(new GridLayout(1, false));
 
 
-        for (int i = 0; i < 2; i++) {
-            final BundleEntryComposite entry = BundleEntryComposite.create(comp);
+        for (int i = 0; i < 8; i++) {
+            Log.d(TAG, "ITER" + i);
+            final BundleEntryComposite entry = BundleEntryComposite.create(comp, resourceProvider);
             entry.addListener(this);
-            bundleEntryComposite.add(BundleEntryComposite.create(comp));
+            bundleEntries.add(entry);
         }
         this.setContent(comp);
         this.setMinSize(comp.computeSize(SWT.DEFAULT, SWT.DEFAULT));
@@ -47,20 +50,30 @@ public final class I18nComposite extends ScrolledComposite implements BundleEntr
 
     @Override
     public void setNextFocusDown() {
-        Log.d(TAG, "NextFocusDown");
-        if (null != activeBundleEntryComposite) {
-            final int index = bundleEntryComposite.indexOf(activeBundleEntryComposite);
-            Log.d(TAG, "INDEX: " + index);
+        if (null != activeBundleEntry) {
+            final int index = bundleEntries.indexOf(activeBundleEntry);
+            if (index >= 0 && index != (bundleEntries.size() - 1)) {
+                bundleEntries.get(index + 1).setFocusTextView();
+            } else if (index == bundleEntries.size() - 1) {
+                bundleEntries.get(0).setFocusTextView();
+            }
         }
     }
 
     @Override
     public void setNextFocusUp() {
-
+        if (null != activeBundleEntry) {
+            final int index = bundleEntries.indexOf(activeBundleEntry);
+            if (index > 0) {
+                bundleEntries.get(index - 1).setFocusTextView();
+            } else if (index == 0) {
+                bundleEntries.get(bundleEntries.size() - 1).setFocusTextView();
+            }
+        }
     }
 
     @Override
-    public void onFocusChange(BundleEntryComposite bundleEntryComposite) {
-        activeBundleEntryComposite = bundleEntryComposite;
+    public void onFocusChange(BundleEntryComposite bundleEntry) {
+        activeBundleEntry = bundleEntry;
     }
 }

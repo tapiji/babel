@@ -9,6 +9,8 @@ import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.TraverseEvent;
@@ -19,15 +21,22 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
 import org.eclipselabs.e4.tapiji.logger.Log;
+import org.eclipselabs.e4.tapiji.resource.ITapijiResourceProvider;
+import org.eclipselabs.e4.tapiji.resource.TapijiResourceConstants;
 
 
-final class BundleEntryComposite extends Composite implements KeyListener, TraverseListener, SelectionListener, FocusListener {
+final class BundleEntryComposite extends Composite implements KeyListener, TraverseListener, SelectionListener, FocusListener, MouseListener {
 
     private static final int UNDO_LEVEL = 20;
     private static final String TAG = BundleEntryComposite.class.getSimpleName();
     private final TextViewerUndoManager undoManager = new TextViewerUndoManager(UNDO_LEVEL);
     private TextViewer textViewer;
     private IBundleEntryComposite listener;
+    private boolean expanded;
+    private GridData gd_styledText;
+    private GridData data;
+    private ITapijiResourceProvider resourceProvider;
+    private Label expandIcon;
 
     public interface IBundleEntryComposite {
 
@@ -41,8 +50,9 @@ final class BundleEntryComposite extends Composite implements KeyListener, Trave
 
     }
 
-    private BundleEntryComposite(final Composite parent, final int style) {
+    private BundleEntryComposite(final Composite parent, ITapijiResourceProvider resourceProvider, final int style) {
         super(parent, style);
+        this.resourceProvider = resourceProvider;
 
         setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
         GridLayout gridLayout = new GridLayout(3, false);
@@ -56,23 +66,24 @@ final class BundleEntryComposite extends Composite implements KeyListener, Trave
         gl_composite.marginHeight = 0;
         composite.setLayout(gl_composite);
 
-        Label lblNewLabel = new Label(composite, SWT.NONE);
-        lblNewLabel.setText("New Label");
+        expandIcon = new Label(composite, SWT.FLAT);
+        expandIcon.setImage(resourceProvider.loadImage(TapijiResourceConstants.IMG_COLLAPSE));
+        expandIcon.addMouseListener(this);
 
 
         Link localeName = new Link(composite, SWT.NONE);
-        GridData localeNameLayoutData = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-        localeNameLayoutData.horizontalIndent = 5;
-        localeName.setLayoutData(localeNameLayoutData);
+        localeName.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
         localeName.setText("<a>Albanien</a>");
         localeName.addSelectionListener(this);
 
+        Label localeImage = new Label(composite, SWT.NONE);
+        GridData localeImageDataLayout = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+        localeImageDataLayout.horizontalIndent = 5;
+        localeImageDataLayout.heightHint = 16;
+        localeImage.setLayoutData(localeImageDataLayout);
+        localeImage.setImage(resourceProvider.loadImage(TapijiResourceConstants.IMG_FOLDER_FLAGS + "AT.png"));
 
-        Label lblNewLabel_2 = new Label(composite, SWT.NONE);
-        GridData gd_lblNewLabel_2 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-        gd_lblNewLabel_2.horizontalIndent = 5;
-        lblNewLabel_2.setLayoutData(gd_lblNewLabel_2);
-        lblNewLabel_2.setText("New Label");
+
         new Label(this, SWT.NONE);
 
         Composite composite_1 = new Composite(this, SWT.NONE);
@@ -91,22 +102,26 @@ final class BundleEntryComposite extends Composite implements KeyListener, Trave
         lblNewLabel_1.setLayoutData(gd_lblNewLabel_1);
         lblNewLabel_1.setText("New Label");
 
+
         Composite composite_2 = new Composite(this, SWT.NONE);
+
         GridLayout gl_composite_2 = new GridLayout(1, false);
         gl_composite_2.marginHeight = 0;
         gl_composite_2.marginWidth = 0;
         gl_composite_2.verticalSpacing = 0;
         composite_2.setLayout(gl_composite_2);
-        composite_2.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 2));
+        data = new GridData(SWT.FILL, SWT.FILL, true, true, 3, 2);
+        composite_2.setLayoutData(data);
 
-        TextViewer textViewer = new TextViewer(composite_2, SWT.BORDER);
+        textViewer = new TextViewer(composite_2, SWT.BORDER);
         StyledText styledText = textViewer.getTextWidget();
-        GridData gd_styledText = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+        gd_styledText = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
         gd_styledText.minimumHeight = 40;
         styledText.setLayoutData(gd_styledText);
         styledText.addFocusListener(this);
         styledText.addTraverseListener(this);
         styledText.addKeyListener(this);
+
     }
 
     private static boolean isKeyCombination(final KeyEvent event, final int mask, final int keyCode) {
@@ -153,8 +168,18 @@ final class BundleEntryComposite extends Composite implements KeyListener, Trave
         }
     }
 
-    public static BundleEntryComposite create(final Composite parent) {
-        return new BundleEntryComposite(parent, SWT.BORDER);
+    public static BundleEntryComposite create(final Composite parent, ITapijiResourceProvider resourceProvider) {
+        return new BundleEntryComposite(parent, resourceProvider, SWT.NONE);
+    }
+
+    private void expandTextView(boolean expand) {
+        if (expand) {
+            textViewer.getTextWidget().setVisible(false);
+            expandIcon.setImage(resourceProvider.loadImage(TapijiResourceConstants.IMG_EXPAND));
+        } else {
+            textViewer.getTextWidget().setVisible(true);
+            expandIcon.setImage(resourceProvider.loadImage(TapijiResourceConstants.IMG_COLLAPSE));
+        }
     }
 
     @Override
@@ -185,5 +210,26 @@ final class BundleEntryComposite extends Composite implements KeyListener, Trave
 
     @Override
     public void focusLost(FocusEvent e) {
+    }
+
+    public void setFocusTextView() {
+        if (null != textViewer) {
+            StyledText styledText = textViewer.getTextWidget();
+            styledText.setFocus();
+        }
+    }
+
+    @Override
+    public void mouseDoubleClick(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseDown(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseUp(MouseEvent e) {
+        expandTextView(textViewer.getTextWidget().isVisible());
     }
 }

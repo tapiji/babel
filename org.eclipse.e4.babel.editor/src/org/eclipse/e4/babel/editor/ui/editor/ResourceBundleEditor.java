@@ -6,7 +6,6 @@ import javax.inject.Inject;
 import org.eclipse.e4.babel.editor.ui.editor.composite.BundleTextEditorComposite;
 import org.eclipse.e4.babel.editor.ui.editor.composite.I18nComposite;
 import org.eclipse.e4.babel.editor.ui.editor.composite.TreeViewerComposite;
-import org.eclipse.e4.tools.services.IResourcePool;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.services.EMenuService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
@@ -19,6 +18,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipselabs.e4.tapiji.logger.Log;
+import org.eclipselabs.e4.tapiji.resource.ITapijiResourceProvider;
+import org.eclipselabs.e4.tapiji.resource.TapijiResourceConstants;
 
 
 public class ResourceBundleEditor {
@@ -36,39 +37,33 @@ public class ResourceBundleEditor {
     @Inject
     private MPart part;
 
-    @Inject
-    IResourcePool resourcePool;
     private CTabFolder tabFolder;
 
     @PostConstruct
-    public void createControl(Composite parent, Shell shell, EPartService partService) {
+    public void createControl(Composite parent, Shell shell, EPartService partService, ITapijiResourceProvider resourceProvider) {
         Log.d(TAG, "treeViewerPart");
 
         tabFolder = createTabFolder(parent);
 
+
         SashForm sashForm = new SashForm(tabFolder, SWT.NONE);
 
         TreeViewerComposite.create(sashForm);
-        I18nComposite.create(sashForm);
+        I18nComposite.create(sashForm, resourceProvider);
 
         sashForm.setWeights(new int[] {25, 75});
 
 
-        createItem(0, sashForm);
+        CTabItem firstTabItem = createItem(0, sashForm);
+        firstTabItem.setText("Eigenschaften");
+        firstTabItem.setImage(resourceProvider.loadImage(TapijiResourceConstants.IMG_RESOURCE_BUNDLE));
 
-
-        CTabItem item = createItem(0, sashForm);
-        item.setText("sddada");
-        tabFolder.setSelection(0);
         for (int i = 1; i < 4; i++) {
-            CTabItem items = createItem(i, new BundleTextEditorComposite(tabFolder));
-            items.setText("dsadasda");
+            CTabItem tabItem = createItem(i, new BundleTextEditorComposite(tabFolder));
+            tabItem.setText("Chinesisch");
+            tabItem.setImage(resourceProvider.loadImage(TapijiResourceConstants.IMG_RESOURCE_PROPERTY));
         }
-
-
         tabFolder.setSelection(0);
-
-
     }
 
     private CTabFolder createTabFolder(Composite parent) {

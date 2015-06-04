@@ -39,11 +39,7 @@
     <elements xsi:type="commands:Command" xmi:id="_Y_pGMAFhEeWabIFOKnDnoA" elementId="org.eclipse.e4.babel.editor.command.copyKey" commandName="Copy key"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_kb9P4AIOEeWtdqVY5JMCaQ" featurename="children" parentElementId="org.eclipselabs.e4.tapiji.translator.partsashcontainer.main" positionInList="first">
-    <elements xsi:type="basic:PartStack" xmi:id="_ZUFC4AIWEeWtdqVY5JMCaQ" elementId="org.eclipse.e4.babel.editor.partstack.editorPartStack">
-      <children xsi:type="basic:Part" xmi:id="_jNYgIAJfEeWDo4Scw8eeMw" elementId="org.eclipse.e4.babel.editor.part.dsadad" contributionURI="bundleclass://org.eclipse.e4.babel.editor/org.eclipse.e4.babel.editor.ui.editor.ResourceBundleEditor" label="dsadad" iconURI="platform:/plugin/org.eclipse.babel.editor/icons/unused_translation.png" tooltip="dasdasdasd" closeable="true"/>
-      <children xsi:type="basic:Part" xmi:id="_st6bMAJfEeWDo4Scw8eeMw" elementId="org.eclipse.e4.babel.editor.part.dsasdad" contributionURI="bundleclass://org.eclipse.e4.babel.editor/org.eclipse.e4.babel.editor.ui.editor.ResourceBundleEditor" label="dsasdad" iconURI="platform:/plugin/org.eclipse.babel.editor/icons/warned_translation.png" tooltip="asdasdasd" closeable="true"/>
-      <children xsi:type="basic:Part" xmi:id="_35AeEAamEeW9Cu11A8vwzw" elementId="org.eclipse.e4.babel.editor.part.0" contributionURI="bundleclass://org.eclipse.e4.babel.editor/org.eclipse.e4.babel.editor.ui.editor.composite.TreeViewerPart"/>
-    </elements>
+    <elements xsi:type="basic:PartStack" xmi:id="_ZUFC4AIWEeWtdqVY5JMCaQ" elementId="org.eclipse.e4.babel.editor.partstack.editorPartStack"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_x4on0AV5EeWlfcvoOaUVLQ" featurename="menuContributions" parentElementId="org.eclipselabs.e4.tapiji.translator.application" positionInList="">
     <elements xsi:type="menu:MenuContribution" xmi:id="_vRqwIAV6EeWlfcvoOaUVLQ" elementId="org.eclipse.e4.babel.editor.menucontribution.openResourceBundle" positionInParent="after=org.eclipselabs.e4.tapiji.translator.handledmenuitem.openGlosssary" parentId="org.eclipselabs.e4.tapiji.translator.menu.file">
@@ -51,9 +47,8 @@
     </elements>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_iDlHUAYAEeWu8upNcCFJKA" featurename="descriptors" parentElementId="org.eclipselabs.e4.tapiji.translator.application">
-    <elements xsi:type="basic_1:PartDescriptor" xmi:id="_5MZdAAYAEeWu8upNcCFJKA" elementId="org.eclipse.e4.babel.editor.partdescriptor.resourceBundleEditor" label="Resource Bundle Editor" iconURI="platform:/plugin/org.eclipselabs.e4.tapiji.resource/icons/flags/_unknown.png" tooltip="Resource Bundle Editor" allowMultiple="true" closeable="true" contributionURI="bundleclass://org.eclipse.e4.babel.editor/org.eclipse.e4.babel.editor.ui.editor.ResourceBundleEditor">
+    <elements xsi:type="basic_1:PartDescriptor" xmi:id="_5MZdAAYAEeWu8upNcCFJKA" elementId="org.eclipse.e4.babel.editor.partdescriptor.resourceBundleEditor" label="Resource Bundle Editor" iconURI="platform:/plugin/org.eclipselabs.e4.tapiji.resource/icons/16x16/resource_bundle.png" tooltip="Resource Bundle Editor" allowMultiple="true" closeable="true" contributionURI="bundleclass://org.eclipse.e4.babel.editor/org.eclipse.e4.babel.editor.ui.editor.ResourceBundleEditor">
       <tags>View</tags>
     </elements>
-    <elements xsi:type="basic_1:PartDescriptor" xmi:id="_E2fVQAa0EeW9Cu11A8vwzw" elementId="org.eclipse.e4.babel.editor.partdescriptor.parrt" contributionURI="bundleclass://org.eclipse.e4.babel.editor/org.eclipse.e4.babel.editor.ui.editor.composite.TreeViewerPart"/>
   </fragments>
 </fragment:ModelFragments>
