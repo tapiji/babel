@@ -17,6 +17,7 @@ import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IEditorInput;
 import org.eclipselabs.e4.tapiji.logger.Log;
 import org.eclipselabs.e4.tapiji.resource.ITapijiResourceProvider;
 import org.eclipselabs.e4.tapiji.resource.TapijiResourceConstants;
@@ -45,6 +46,9 @@ public class ResourceBundleEditor {
     @PostConstruct
     public void createControl(final Composite parent, final Shell shell, final EPartService partService) {
         Log.d(TAG, "treeViewerPart");
+
+        IEditorInput file = (IEditorInput) part.getTransientData().get("FILE");
+        Log.d(TAG, "WAHHH" + file.toString());
 
         this.tabFolder = createTabFolder(parent);
 

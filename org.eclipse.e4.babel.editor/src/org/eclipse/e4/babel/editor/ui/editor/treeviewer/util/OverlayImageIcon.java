@@ -1,3 +1,6 @@
+package org.eclipse.e4.babel.editor.ui.editor.treeviewer.util;
+
+
 /*******************************************************************************
  * Copyright (c) 2007 Pascal Essiembre.
  * All rights reserved. This program and the accompanying materials
@@ -7,8 +10,8 @@
  *
  * Contributors:
  *    Pascal Essiembre - initial API and implementation
+ *    Christian Behon
  ******************************************************************************/
-package org.eclipse.babel.editor.util;
 
 
 import org.eclipse.jface.resource.CompositeImageDescriptor;
@@ -19,34 +22,24 @@ import org.eclipse.swt.graphics.Point;
 
 /**
  * @author Pascal Essiembre
+ * @author Christian Behon
  */
 public class OverlayImageIcon extends CompositeImageDescriptor {
 
     /** Constant for overlaying icon in top left corner. */
-    public static final int TOP_LEFT = 0;
-    /** Constant for overlaying icon in top right corner. */
-    public static final int TOP_RIGHT = 1;
-    /** Constant for overlaying icon in bottom left corner. */
-    public static final int BOTTOM_LEFT = 2;
-    /** Constant for overlaying icon in bottom right corner. */
-    public static final int BOTTOM_RIGHT = 3;
+    public enum Position {
+        TOP_LEFT,
+        TOP_RIGHT,
+        BOTTOM_LEFT,
+        BOTTOM_RIGHT
+    }
 
-    private Image baseImage;
-    private Image overlayImage;
-    private int location;
-    private Point imgSize;
+    private final Image baseImage;
+    private final Image overlayImage;
+    private final Position location;
+    private final Point imgSize;
 
-    /**
-     * Constructor.
-     *
-     * @param baseImage
-     *            background image
-     * @param overlayImage
-     *            the image to put on top of background image
-     * @param location
-     *            in which corner to put the icon
-     */
-    public OverlayImageIcon(Image baseImage, Image overlayImage, int location) {
+    private OverlayImageIcon(final Image baseImage, final Image overlayImage, final Position location) {
         super();
         this.baseImage = baseImage;
         this.overlayImage = overlayImage;
@@ -58,31 +51,22 @@ public class OverlayImageIcon extends CompositeImageDescriptor {
      * @see org.eclipse.jface.resource.CompositeImageDescriptor #drawCompositeImage(int, int)
      */
     @Override
-    protected void drawCompositeImage(int width, int height) {
-        // Draw the base image
+    protected void drawCompositeImage(final int width, final int height) {
         drawImage(baseImage.getImageData(), 0, 0);
-        ImageData imageData = overlayImage.getImageData();
-        switch (location) {
-        // Draw on the top left corner
+        final ImageData imageData = overlayImage.getImageData();
+        switch (Position.valueOf(location.toString())) {
             case TOP_LEFT:
                 drawImage(imageData, 0, 0);
-                break;
-
-            // Draw on top right corner
+                return;
             case TOP_RIGHT:
                 drawImage(imageData, imgSize.x - imageData.width, 0);
-                break;
-
-            // Draw on bottom left
+                return;
             case BOTTOM_LEFT:
                 drawImage(imageData, 0, imgSize.y - imageData.height);
-                break;
-
-            // Draw on bottom right corner
+                return;
             case BOTTOM_RIGHT:
                 drawImage(imageData, imgSize.x - imageData.width, imgSize.y - imageData.height);
-                break;
-
+                return;
         }
     }
 
@@ -94,4 +78,14 @@ public class OverlayImageIcon extends CompositeImageDescriptor {
         return imgSize;
     }
 
+    /**
+     * Creates new instance of OverlayImageIcon
+     *
+     * @param baseImage background image
+     * @param overlayImage the image to put on top of background image
+     * @param location in which corner to put the icon
+     */
+    public static OverlayImageIcon create(final Image baseImage, final Image overlayImage, final Position location) {
+        return new OverlayImageIcon(baseImage, overlayImage, location);
+    }
 }
