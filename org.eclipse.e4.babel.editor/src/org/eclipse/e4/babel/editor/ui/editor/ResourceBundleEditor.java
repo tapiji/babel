@@ -3,8 +3,8 @@ package org.eclipse.e4.babel.editor.ui.editor;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-import org.eclipse.e4.babel.editor.ui.editor.composite.BundleEntryComposite;
 import org.eclipse.e4.babel.editor.ui.editor.composite.BundleTextEditorComposite;
+import org.eclipse.e4.babel.editor.ui.editor.composite.I18nComposite;
 import org.eclipse.e4.babel.editor.ui.editor.composite.TreeViewerComposite;
 import org.eclipse.e4.tools.services.IResourcePool;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -49,7 +49,7 @@ public class ResourceBundleEditor {
         SashForm sashForm = new SashForm(tabFolder, SWT.NONE);
 
         TreeViewerComposite.create(sashForm);
-        BundleEntryComposite.create(sashForm);
+        I18nComposite.create(sashForm);
 
         sashForm.setWeights(new int[] {25, 75});
 
