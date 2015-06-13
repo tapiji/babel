@@ -1,6 +1,7 @@
 package org.eclipse.e4.babel.editor.text;
 
 
+import org.eclipse.e4.babel.editor.text.prop.PropertyConfiguration;
 import org.eclipse.jface.text.source.SourceViewer;
 import org.eclipse.jface.text.source.VerticalRuler;
 import org.eclipse.swt.SWT;
@@ -16,6 +17,7 @@ public class PropertiesTextEditor {
     public PropertiesTextEditor(final Composite parent) {
         final VerticalRuler verticalRuler = new VerticalRuler(VERTICAL_RULER_WIDTH);
         final SourceViewer sourceViewer = new SourceViewer(parent, verticalRuler, SOURCE_VIEWER_STYLE);
+        sourceViewer.configure(PropertyConfiguration.create());
     }
 
 }
