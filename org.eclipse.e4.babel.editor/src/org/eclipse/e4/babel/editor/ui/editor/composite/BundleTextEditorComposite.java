@@ -1,8 +1,7 @@
 package org.eclipse.e4.babel.editor.ui.editor.composite;
 
 
-import org.eclipse.jface.text.source.SourceViewer;
-import org.eclipse.jface.text.source.VerticalRuler;
+import org.eclipse.e4.babel.editor.text.PropertiesTextEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.layout.FillLayout;
@@ -23,12 +22,7 @@ public class BundleTextEditorComposite extends Composite {
 
         //      Composite parent = new Composite(this, SWT.NONE);
         setLayout(new FillLayout());
-
-        final int styles = SWT.V_SCROLL | SWT.H_SCROLL | SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION;
-        final VerticalRuler verticalRuler = new VerticalRuler(VERTICAL_RULER_WIDTH);
-
-
-        final SourceViewer viewer = new SourceViewer(this, verticalRuler, styles);
+        new PropertiesTextEditor(this);
 
     }
 }
