@@ -1,7 +1,6 @@
 package org.eclipse.e4.babel.editor.ui.handler.window;
 
 
-import java.util.Random;
 import javax.inject.Named;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
@@ -43,64 +42,46 @@ public class OpenResourceBundleHandler {
             Log.d(TAG, "FileName: " + fileName);
 
             IFile file;
+            IEditorInput input = null;
             try {
                 file = FileUtils.getResourceBundleRef(fileName, FileUtils.EXTERNAL_RB_PROJECT_NAME);
-                final IEditorInput input = new FileEditorInput(file);
+                input = new FileEditorInput(file);
+            } catch (CoreException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            if (null != input) {
+
 
                 MPartStack mainStack = (MPartStack) modelService.find("org.eclipse.e4.babel.editor.partstack.editorPartStack", application);
 
                 MCompositePart compositePart = MBasicFactory.INSTANCE.createCompositePart();
+                compositePart.setLabel("sddsadsdsadas");
+                compositePart.setCloseable(true);
+                compositePart.getTransientData().put("STACK", input.getName());
+                // Always remove the composite part from the model
+                compositePart.getTags().add(EPartService.REMOVE_ON_HIDE_TAG);
+
                 MPartStack newStack = MBasicFactory.INSTANCE.createPartStack();
+                newStack.setElementId(input.getName());
+                // Add tabs to bottom
+                newStack.getPersistedState().put("styleOverride", "1024");
+
+                Log.d(TAG, "Element Id:" + newStack.getElementId());
 
                 compositePart.getChildren().add(newStack);
+
+                MPart part = partService.createPart("org.eclipse.e4.babel.editor.partdescriptor.resourceBundleEditor");
+                part.getTransientData().put("FILE", input);
+                part.getTransientData().put("STACK", newStack.getElementId());
+                newStack.getChildren().add(part);
 
 
                 mainStack.getChildren().add(compositePart);
 
-
-                //     MPartStack newStack = modelService.createModelElement(MPartStack.class);
-                newStack.setElementId("test" + new Random().nextInt(52));
-                newStack.getPersistedState().put("styleOverride", "1024");
-                compositePart.getChildren().add(newStack);
-
-                //     stack.Log.d(TAG, "Stack: " + stack.toString());
-
-                MPart part = partService.createPart("org.eclipse.e4.babel.editor.partdescriptor.resourceBundleEditor");
-                part.getTransientData().put("FILE", input);
-
-                part = partService.createPart("org.eclipse.e4.babel.editor.partdescriptor.test");
-                newStack.getChildren().add(part);
-
-                part = partService.createPart("org.eclipse.e4.babel.editor.partdescriptor.test");
-                newStack.getChildren().add(part);
-
-                part = partService.createPart("org.eclipse.e4.babel.editor.partdescriptor.test");
-                newStack.getChildren().add(part);
-
-                part = partService.createPart("org.eclipse.e4.babel.editor.partdescriptor.test");
-                newStack.getChildren().add(part);
-
-                part = partService.createPart("org.eclipse.e4.babel.editor.partdescriptor.test");
-                newStack.getChildren().add(part);
-
-                part = partService.createPart("org.eclipse.e4.babel.editor.partdescriptor.test");
-                newStack.getChildren().add(part);
-
-                part = partService.createPart("org.eclipse.e4.babel.editor.partdescriptor.test");
-                newStack.getChildren().add(part);
-
-                part = partService.createPart("org.eclipse.e4.babel.editor.partdescriptor.test");
-                newStack.getChildren().add(part);
-
-                part = partService.createPart("org.eclipse.e4.babel.editor.partdescriptor.test");
-                newStack.getChildren().add(part);
-
-
-                Log.d(TAG, "Stack: " + part);
-
+                part.setCloseable(true);
                 partService.showPart(part, PartState.ACTIVATE);
-            } catch (CoreException exception) {
-                Log.e(TAG, exception);
+
             }
 
         }
