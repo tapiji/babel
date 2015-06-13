@@ -3,12 +3,13 @@ package org.eclipse.e4.babel.editor.ui.editor;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-import org.eclipse.e4.babel.editor.ui.editor.composite.BundleTextEditorComposite;
 import org.eclipse.e4.babel.editor.ui.editor.composite.I18nComposite;
 import org.eclipse.e4.babel.editor.ui.editor.composite.TreeViewerComposite;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.e4.ui.model.application.ui.basic.MWindow;
 import org.eclipse.e4.ui.services.EMenuService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
+import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
@@ -43,14 +44,16 @@ public class ResourceBundleEditor {
     @Inject
     private ITapijiResourceProvider resourceProvider;
 
+
     @PostConstruct
-    public void createControl(final Composite parent, final Shell shell, final EPartService partService) {
+    public void createControl(final Composite parent, final Shell shell, final EPartService partService, MWindow window) {
         Log.d(TAG, "treeViewerPart");
 
         IEditorInput file = (IEditorInput) part.getTransientData().get("FILE");
-        Log.d(TAG, "WAHHH" + file.toString());
+        //     Log.d(TAG, "WAHHH" + file.toString());
 
-        this.tabFolder = createTabFolder(parent);
+        // this.tabFolder = createTabFolder(parent);
+
 
         final SashForm sashForm = new SashForm(tabFolder, SWT.SMOOTH);
 
@@ -58,9 +61,9 @@ public class ResourceBundleEditor {
         I18nComposite.create(sashForm, resourceProvider);
 
         sashForm.setWeights(new int[] {25, 75});
-        createFirstTab(sashForm);
+        //createFirstTab(sashForm);
 
-        createTabs();
+        //createTabs(partService);
 
         tabFolder.setSelection(0);
     }
@@ -71,12 +74,22 @@ public class ResourceBundleEditor {
         firstTabItem.setImage(resourceProvider.loadImage(TapijiResourceConstants.IMG_RESOURCE_BUNDLE));
     }
 
-    private void createTabs() {
+    private void createTabs(EPartService partService) {
+
+
         for (int i = 1; i < 4; i++) {
-            final CTabItem tabItem = createItem(i, new BundleTextEditorComposite(tabFolder));
-            tabItem.setText("Chinesisch");
-            tabItem.setImage(resourceProvider.loadImage(TapijiResourceConstants.IMG_RESOURCE_PROPERTY));
+            MPart part = partService.createPart("org.eclipse.e4.babel.editor.text.partdescriptor.property.editor");
+
+            final CTabItem item = new CTabItem(tabFolder, SWT.NONE, i);
+            item.setControl((Control) part.getWidget());
+
+            partService.showPart(part, PartState.ACTIVATE);
+            //   Log.d(TAG, "-------_> PART" + folder);
+            //final CTabItem tabItem = createItem(i, part.getWidget());
+            //tabItem.setText("Chinesisch");
+            //tabItem.setImage(resourceProvider.loadImage(TapijiResourceConstants.IMG_RESOURCE_PROPERTY));
         }
+
     }
 
     private CTabFolder createTabFolder(final Composite parent) {
@@ -85,8 +98,9 @@ public class ResourceBundleEditor {
     }
 
     private CTabItem createItem(final int index, final Control control) {
+
         final CTabItem item = new CTabItem(tabFolder, SWT.NONE, index);
-        item.setControl(control);
+        if (control != null) item.setControl(control);
         return item;
     }
 }

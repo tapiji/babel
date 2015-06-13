@@ -1,7 +1,6 @@
 package org.eclipse.e4.babel.editor.ui.editor.composite;
 
 
-import org.eclipse.e4.babel.editor.text.PropertiesTextEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.layout.FillLayout;
@@ -22,7 +21,7 @@ public class BundleTextEditorComposite extends Composite {
 
         //      Composite parent = new Composite(this, SWT.NONE);
         setLayout(new FillLayout());
-        new PropertiesTextEditor(this);
+        //    new PropertiesTextEditor(this);
 
     }
 }

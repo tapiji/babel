@@ -40,7 +40,7 @@ final class ColorManager {
     }
 
     public void dispose() {
-        for (Color color : COLORS.values()) {
+        for (final Color color : COLORS.values()) {
             color.dispose();
         }
     }

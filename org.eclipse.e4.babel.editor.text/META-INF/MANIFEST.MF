@@ -3,13 +3,15 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Text
 Bundle-SymbolicName: org.eclipse.e4.babel.editor.text;singleton:=true
 Bundle-Version: 1.0.0.qualifier
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Bundle-ActivationPolicy: lazy
+Export-Package: org.eclipse.e4.babel.editor.text
 Require-Bundle: org.eclipse.jface.text,
  org.eclipse.swt,
  org.eclipse.jface,
  org.eclipse.e4.ui.workbench,
  org.eclipse.equinox.common,
- org.eclipse.e4.ui.di
+ org.eclipse.e4.ui.di,
+ org.eclipse.e4.ui.model.workbench;bundle-version="1.1.0.v20140512-1820",
+ org.eclipselabs.e4.tapiji.logger
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Import-Package: javax.inject
-Export-Package: org.eclipse.e4.babel.editor.text
+Bundle-ActivationPolicy: lazy

@@ -1,11 +1,14 @@
 package org.eclipse.e4.babel.editor.ui.handler.window;
 
 
+import java.util.Random;
 import javax.inject.Named;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.ui.model.application.MApplication;
+import org.eclipse.e4.ui.model.application.ui.basic.MBasicFactory;
+import org.eclipse.e4.ui.model.application.ui.basic.MCompositePart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
 import org.eclipse.e4.ui.services.IServiceConstants;
@@ -44,15 +47,57 @@ public class OpenResourceBundleHandler {
                 file = FileUtils.getResourceBundleRef(fileName, FileUtils.EXTERNAL_RB_PROJECT_NAME);
                 final IEditorInput input = new FileEditorInput(file);
 
-                final MPartStack stack = (MPartStack) modelService.find("org.eclipse.e4.babel.editor.partstack.editorPartStack", application);
+                MPartStack mainStack = (MPartStack) modelService.find("org.eclipse.e4.babel.editor.partstack.editorPartStack", application);
 
-                Log.d(TAG, "Stack: " + stack.toString());
+                MCompositePart compositePart = MBasicFactory.INSTANCE.createCompositePart();
+                MPartStack newStack = MBasicFactory.INSTANCE.createPartStack();
 
-                final MPart part = partService.createPart("org.eclipse.e4.babel.editor.partdescriptor.resourceBundleEditor");
+                compositePart.getChildren().add(newStack);
+
+
+                mainStack.getChildren().add(compositePart);
+
+
+                //     MPartStack newStack = modelService.createModelElement(MPartStack.class);
+                newStack.setElementId("test" + new Random().nextInt(52));
+                newStack.getPersistedState().put("styleOverride", "1024");
+                compositePart.getChildren().add(newStack);
+
+                //     stack.Log.d(TAG, "Stack: " + stack.toString());
+
+                MPart part = partService.createPart("org.eclipse.e4.babel.editor.partdescriptor.resourceBundleEditor");
                 part.getTransientData().put("FILE", input);
 
+                part = partService.createPart("org.eclipse.e4.babel.editor.partdescriptor.test");
+                newStack.getChildren().add(part);
+
+                part = partService.createPart("org.eclipse.e4.babel.editor.partdescriptor.test");
+                newStack.getChildren().add(part);
+
+                part = partService.createPart("org.eclipse.e4.babel.editor.partdescriptor.test");
+                newStack.getChildren().add(part);
+
+                part = partService.createPart("org.eclipse.e4.babel.editor.partdescriptor.test");
+                newStack.getChildren().add(part);
+
+                part = partService.createPart("org.eclipse.e4.babel.editor.partdescriptor.test");
+                newStack.getChildren().add(part);
+
+                part = partService.createPart("org.eclipse.e4.babel.editor.partdescriptor.test");
+                newStack.getChildren().add(part);
+
+                part = partService.createPart("org.eclipse.e4.babel.editor.partdescriptor.test");
+                newStack.getChildren().add(part);
+
+                part = partService.createPart("org.eclipse.e4.babel.editor.partdescriptor.test");
+                newStack.getChildren().add(part);
+
+                part = partService.createPart("org.eclipse.e4.babel.editor.partdescriptor.test");
+                newStack.getChildren().add(part);
+
+
                 Log.d(TAG, "Stack: " + part);
-                stack.getChildren().add(part);
+
                 partService.showPart(part, PartState.ACTIVATE);
             } catch (CoreException exception) {
                 Log.e(TAG, exception);

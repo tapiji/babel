@@ -3,6 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Editor
 Bundle-SymbolicName: org.eclipse.e4.babel.editor;singleton:=true
 Bundle-Version: 1.0.0.qualifier
+Export-Package: org.eclipse.e4.babel.editor.ui.editor.interfaces
 Require-Bundle: org.eclipse.e4.core.di,
  org.eclipselabs.e4.tapiji.logger,
  org.eclipselabs.e4.tapiji.utils,
@@ -17,9 +18,10 @@ Require-Bundle: org.eclipse.e4.core.di,
  org.eclipse.jface.text;bundle-version="3.9.2",
  org.eclipse.e4.ui.model.workbench,
  org.eclipse.core.resources,
- org.eclipse.e4.babel.editor.text
+ org.eclipse.e4.babel.editor.text,
+ javax.annotation,
+ javax.inject
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Export-Package: org.eclipse.e4.babel.editor.ui.editor.interfaces
 Import-Package: org.eclipse.e4.babel.editor.text,
  org.eclipse.ui,
  org.eclipse.ui.part
