@@ -1,50 +1,40 @@
 package org.eclipse.e4.babel.editor.text;
 
 
-import javax.annotation.PostConstruct;
-import org.eclipse.e4.babel.editor.text.prop.PropertyConfiguration;
+import org.eclipse.e4.babel.editor.text.property.PropertyConfiguration;
+import org.eclipse.e4.babel.editor.text.property.PropertyPartitionScanner;
 import org.eclipse.jface.text.Document;
+import org.eclipse.jface.text.IDocumentPartitioner;
+import org.eclipse.jface.text.rules.FastPartitioner;
 import org.eclipse.jface.text.source.CompositeRuler;
-import org.eclipse.jface.text.source.IVerticalRuler;
 import org.eclipse.jface.text.source.LineNumberRulerColumn;
 import org.eclipse.jface.text.source.SourceViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipselabs.e4.tapiji.logger.Log;
+import org.eclipse.swt.widgets.Display;
 
 
 public class PropertiesTextEditor {
 
-    private static final int VERTICAL_RULER_WIDTH = 50;
-
     private static final int SOURCE_VIEWER_STYLE = SWT.V_SCROLL | SWT.H_SCROLL | SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION;
+    private static final Font FONT = new Font(Display.getCurrent(), "Tahoma", 10, SWT.NORMAL);
 
+    public PropertiesTextEditor(final Composite parent) {
+        final LineNumberRulerColumn lineNumberRuleColumn = new LineNumberRulerColumn();
+        lineNumberRuleColumn.setFont(FONT);
 
-    public PropertiesTextEditor() {
-        // final VerticalRuler verticalRuler = new VerticalRuler(VERTICAL_RULER_WIDTH);
-
-    }
-
-
-    @PostConstruct
-    public void createControl(final Composite parent) {
-
-        Log.d("asd", "ssdsdsndsadsaidasidasudahuidasidsdausdiasdiasdh");
-
-        LineNumberRulerColumn lineNumberRuleColumn = new LineNumberRulerColumn();
-        //Color color = Display.getCurrent().getSystemColor(SWT.COLOR_DARK_GRAY);
-        //lineNumberRuleColumn.setBackground(color);
-        CompositeRuler compositeRuler = new CompositeRuler();
+        final CompositeRuler compositeRuler = new CompositeRuler();
         compositeRuler.addDecorator(1, lineNumberRuleColumn);
 
+        final SourceViewer sourceViewer = new SourceViewer(parent, compositeRuler, SOURCE_VIEWER_STYLE);
+        sourceViewer.getTextWidget().setFont(FONT);
+        final Document document = new Document();
 
-        IVerticalRuler verticalRuler = compositeRuler;
-
-        // CompositeRuler ruler = new CompositeRuler();
-        //LineNumberRulerColumn lnrc = new LineNumberRulerColumn();
-        //  ruler.addDecorator(0, lnrc);
-        final SourceViewer sourceViewer = new SourceViewer(parent, verticalRuler, SOURCE_VIEWER_STYLE);
-        sourceViewer.setDocument(new Document());
         sourceViewer.configure(PropertyConfiguration.create());
+        final IDocumentPartitioner partitioner = new FastPartitioner(new PropertyPartitionScanner(), PropertyPartitionScanner.PARTITIONS);
+        partitioner.connect(document);
+        document.setDocumentPartitioner(partitioner);
+        sourceViewer.setDocument(document);
     }
 }
