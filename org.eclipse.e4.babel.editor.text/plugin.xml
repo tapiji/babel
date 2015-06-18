@@ -4,9 +4,6 @@
    <extension
          id="org.eclipse.e4.babel.editor.text.fragment"
          point="org.eclipse.e4.workbench.model">
-      <fragment
-            uri="babel.editor.text.e4xmi">
-      </fragment>
    </extension>
 
 </plugin>

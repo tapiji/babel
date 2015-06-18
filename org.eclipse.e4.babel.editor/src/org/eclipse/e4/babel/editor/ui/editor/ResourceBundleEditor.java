@@ -3,7 +3,9 @@ package org.eclipse.e4.babel.editor.ui.editor;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import org.eclipse.babel.i18n.Messages;
 import org.eclipse.e4.babel.editor.ui.editor.composite.BundleTextEditorComposite;
+import org.eclipse.e4.core.services.nls.Translation;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MWindow;
@@ -40,13 +42,16 @@ public class ResourceBundleEditor extends CTabFolder {
     private ITapijiResourceProvider resourceProvider;
 
     @Inject
-    MApplication application;
+    private MApplication application;
 
     @Inject
-    EModelService modelService;
+    private EModelService modelService;
 
     @Inject
-    EPartService partService;
+    private EPartService partService;
+
+    @Translation
+    Messages translation;
 
     @Inject
     public ResourceBundleEditor(Composite parent) {
