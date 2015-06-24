@@ -8,11 +8,11 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 
 
-public class BundleTextEditorComposite extends Composite {
+public class BundleTextEditor extends Composite {
 
     private static final int VERTICAL_RULER_WIDTH = 12;
 
-    public BundleTextEditorComposite(final CTabFolder tabFolder) {
+    public BundleTextEditor(final CTabFolder tabFolder) {
         super(tabFolder, SWT.NONE);
         createControl(tabFolder);
     }

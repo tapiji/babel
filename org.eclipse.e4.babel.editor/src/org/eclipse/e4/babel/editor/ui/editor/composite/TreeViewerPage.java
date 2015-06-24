@@ -16,22 +16,22 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipselabs.e4.tapiji.logger.Log;
 
 
-public class TreeViewerComposite extends Composite {
+public class TreeViewerPage extends Composite {
 
 
     private Text text;
 
 
-    private static final String TAG = TreeViewerComposite.class.getSimpleName();
+    private static final String TAG = TreeViewerPage.class.getSimpleName();
     private static final String BOTTOM_MENU_ID = "org.eclipse.e4.babel.editor.toolbar.toolbar";
     private static final String TREE_VIEWER_MENU_ID = "org.eclipse.e4.babel.editor.popupmenu.treePopupMenu";
 
-    public static TreeViewerComposite create(final Composite sashForm, EMenuService menuService) {
-        return new TreeViewerComposite(sashForm, menuService);
+    public static TreeViewerPage create(final Composite sashForm, EMenuService menuService) {
+        return new TreeViewerPage(sashForm, menuService);
     }
 
 
-    private TreeViewerComposite(final Composite sashForm, EMenuService menuService) {
+    private TreeViewerPage(final Composite sashForm, EMenuService menuService) {
         super(sashForm, SWT.NONE);
         Log.d(TAG, "treeViewerPart");
 

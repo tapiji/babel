@@ -47,7 +47,7 @@
     </elements>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_iDlHUAYAEeWu8upNcCFJKA" featurename="descriptors" parentElementId="org.eclipselabs.e4.tapiji.translator.application">
-    <elements xsi:type="basic_1:PartDescriptor" xmi:id="_5MZdAAYAEeWu8upNcCFJKA" elementId="org.eclipse.e4.babel.editor.partdescriptor.resourceBundleEditor" label="%partdescriptor.label.1" iconURI="platform:/plugin/org.eclipselabs.e4.tapiji.resource/icons/16x16/resource_bundle.png" tooltip="%partdescriptor.tooltip.1" allowMultiple="true" contributionURI="bundleclass://org.eclipse.e4.babel.editor/org.eclipse.e4.babel.editor.ui.editor.ResourceBundleEditor">
+    <elements xsi:type="basic_1:PartDescriptor" xmi:id="_5MZdAAYAEeWu8upNcCFJKA" elementId="org.eclipse.e4.babel.editor.partdescriptor.resourceBundleEditor" label="%partdescriptor.editor.label" iconURI="platform:/plugin/org.eclipselabs.e4.tapiji.resource/icons/16x16/resource_bundle.png" tooltip="%partdescriptor.editor.tooltip" allowMultiple="true" closeable="true" contributionURI="bundleclass://org.eclipse.e4.babel.editor/org.eclipse.e4.babel.editor.ui.editor.ResourceBundleEditor">
       <tags>View</tags>
       <menus xsi:type="menu:PopupMenu" xmi:id="_hfgZoArREeWcNJjDxdFiBQ" elementId="org.eclipse.e4.babel.editor.popupmenu.treePopupMenu">
         <children xsi:type="menu:HandledMenuItem" xmi:id="_oT7TwArREeWcNJjDxdFiBQ" elementId="org.eclipse.e4.babel.editor.handledmenuitem.new" label="%handledmenuitem.new.key" command="_onrngAFgEeWabIFOKnDnoA"/>
@@ -59,8 +59,6 @@
         <children xsi:type="menu:HandledMenuItem" xmi:id="_-IPUoArREeWcNJjDxdFiBQ" elementId="org.eclipse.e4.babel.editor.handledmenuitem.collapseAll" label="%handledmenuitem.collapse.all.key" command="_QZFgEAFhEeWabIFOKnDnoA"/>
       </menus>
     </elements>
-    <elements xsi:type="basic_1:PartDescriptor" xmi:id="_CPqO4BHWEeWfhLfMvL_RUA" elementId="org.eclipse.e4.babel.editor.partdescriptor.testFolder" iconURI="platform:/plugin/org.eclipse.babel.editor/icons/propertiesfile.gif" allowMultiple="true" closeable="true" contributionURI="bundleclass://org.eclipse.e4.babel.editor/org.eclipse.e4.babel.editor.TestFolder"/>
-    <elements xsi:type="basic_1:PartDescriptor" xmi:id="_cIyjEBJlEeWdheaduZjz3w" elementId="org.eclipse.e4.babel.editor.partdescriptor.tabItem" allowMultiple="true" contributionURI="bundleclass://org.eclipse.e4.babel.editor/org.eclipse.e4.babel.editor.TestItem"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_aW6aYBHkEeWfhLfMvL_RUA" featurename="addons" parentElementId="org.eclipselabs.e4.tapiji.translator.application">
     <elements xsi:type="application:Addon" xmi:id="_beUHUBHkEeWfhLfMvL_RUA" elementId="org.eclipse.e4.babel.editor.addon.removeAddon" contributionURI="bundleclass://org.eclipse.e4.babel.editor/org.eclipse.e4.babel.editor.RemoveAddon"/>

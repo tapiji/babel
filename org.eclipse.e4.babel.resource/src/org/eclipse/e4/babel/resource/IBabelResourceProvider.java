@@ -4,7 +4,7 @@ package org.eclipse.e4.babel.resource;
 import org.eclipse.swt.graphics.Image;
 
 
-public interface BabelResourceProvider {
+public interface IBabelResourceProvider {
 
     public Image loadImage(String path);
 

@@ -3,8 +3,14 @@ package org.eclipse.e4.babel.editor.ui.editor;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import javax.inject.Named;
 import org.eclipse.babel.i18n.Messages;
-import org.eclipse.e4.babel.editor.ui.editor.composite.BundleTextEditorComposite;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.e4.babel.editor.ui.editor.composite.BundleTextEditor;
+import org.eclipse.e4.babel.editor.ui.editor.composite.I18nPage;
+import org.eclipse.e4.babel.editor.ui.editor.composite.TreeViewerPage;
+import org.eclipse.e4.babel.resource.IBabelResourceProvider;
+import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.core.services.nls.Translation;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -16,11 +22,13 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
+import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IFileEditorInput;
 import org.eclipselabs.e4.tapiji.logger.Log;
-import org.eclipselabs.e4.tapiji.resource.ITapijiResourceProvider;
 
 
 public class ResourceBundleEditor extends CTabFolder {
@@ -39,7 +47,7 @@ public class ResourceBundleEditor extends CTabFolder {
     private MPart part;
 
     @Inject
-    private ITapijiResourceProvider resourceProvider;
+    private IBabelResourceProvider resourceProvider;
 
     @Inject
     private MApplication application;
@@ -58,6 +66,13 @@ public class ResourceBundleEditor extends CTabFolder {
         super(parent, SWT.BOTTOM);
     }
 
+    @Inject
+    @Optional
+    public void setPartInput(@Named("input") Object input) {
+        IFile file = ((IFileEditorInput) input).getFile();
+        Log.d(TAG, "INPUT: " + file.getProject());
+    }
+
     @PostConstruct
     public void createControl(final Composite parent, final Shell shell, MWindow window) {
         Log.d(TAG, "treeViewerPart");
@@ -65,29 +80,23 @@ public class ResourceBundleEditor extends CTabFolder {
         setMinimumCharacters(40);
         IEditorInput file = (IEditorInput) part.getTransientData().get("FILE");
 
+        final SashForm sashForm = new SashForm(this, SWT.SMOOTH);
+        TreeViewerPage.create(sashForm, menuService);
+        I18nPage.create(sashForm, resourceProvider);
+        sashForm.setWeights(new int[] {25, 75});
+        createTab(sashForm, "Eigenschaften");
 
-        BundleTextEditorComposite bund = new BundleTextEditorComposite(this);
-        CTabItem tab = new CTabItem(this, SWT.NONE);
-        tab.setControl(bund);
-
-        //     stack.Log.d(TAG, "Stack: " + stack.toString());
-
-
-        //     Log.d(TAG, "WAHHH" + file.toString());
-
-        // this.tabFolder = createTabFolder(parent);
-
-
-        //        final SashForm sashForm = new SashForm(tabFolder, SWT.SMOOTH);
-        //
-        //        TreeViewerComposite.create(sashForm, menuService);
-        //        I18nComposite.create(sashForm, resourceProvider);
-        //
-        //        sashForm.setWeights(new int[] {25, 75});
-        //createFirstTab(sashForm);
-
-        //createTabs(partService);
+        for (int i = 0; i < 10; i++) {
+            createTab(new BundleTextEditor(this), "TAB" + i);
+        }
 
         setSelection(0);
+    }
+
+    private void createTab(final Control control, final String title) {
+        CTabItem tab = new CTabItem(this, SWT.NONE);
+        tab.setText("asdasd");
+        //tab.setImage(resourceProvider.loadImage(""));
+        tab.setControl(control);
     }
 }

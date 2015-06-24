@@ -1,6 +1,7 @@
 package org.eclipse.e4.babel.editor.ui.editor.composite;
 
 
+import org.eclipse.e4.babel.resource.IBabelResourceProvider;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.TextViewer;
 import org.eclipse.jface.text.TextViewerUndoManager;
@@ -22,21 +23,20 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
 import org.eclipselabs.e4.tapiji.logger.Log;
-import org.eclipselabs.e4.tapiji.resource.ITapijiResourceProvider;
 import org.eclipselabs.e4.tapiji.resource.TapijiResourceConstants;
 
 
-final class BundleEntryComposite extends Composite implements KeyListener, TraverseListener, SelectionListener, FocusListener, MouseListener {
+final class BundleEntry extends Composite implements KeyListener, TraverseListener, SelectionListener, FocusListener, MouseListener {
 
     private static final int UNDO_LEVEL = 20;
-    private static final String TAG = BundleEntryComposite.class.getSimpleName();
+    private static final String TAG = BundleEntry.class.getSimpleName();
     private final TextViewerUndoManager undoManager = new TextViewerUndoManager(UNDO_LEVEL);
     private final TextViewer textView;
     private IBundleEntryComposite listener;
     private boolean expanded;
     private final GridData textViewStyleData;
     private final GridData data;
-    private final ITapijiResourceProvider resourceProvider;
+    private final IBabelResourceProvider resourceProvider;
     private final Label expandIcon;
 
     public interface IBundleEntryComposite {
@@ -47,11 +47,11 @@ final class BundleEntryComposite extends Composite implements KeyListener, Trave
 
         void setNextFocusUp();
 
-        void onFocusChange(BundleEntryComposite bundleEntryComposite);
+        void onFocusChange(BundleEntry bundleEntryComposite);
 
     }
 
-    private BundleEntryComposite(final Composite parent, final ITapijiResourceProvider resourceProvider, final int style) {
+    private BundleEntry(final Composite parent, final IBabelResourceProvider resourceProvider, final int style) {
         super(parent, style);
         this.resourceProvider = resourceProvider;
 
@@ -174,8 +174,8 @@ final class BundleEntryComposite extends Composite implements KeyListener, Trave
         }
     }
 
-    public static BundleEntryComposite create(final Composite parent, final ITapijiResourceProvider resourceProvider) {
-        return new BundleEntryComposite(parent, resourceProvider, SWT.NONE);
+    public static BundleEntry create(final Composite parent, final IBabelResourceProvider resourceProvider) {
+        return new BundleEntry(parent, resourceProvider, SWT.NONE);
     }
 
     private void expandTextView(final boolean expand) {

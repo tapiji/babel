@@ -6,14 +6,14 @@ import java.util.HashMap;
 import java.util.Map;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.e4.babel.resource.BabelResourceProvider;
+import org.eclipse.e4.babel.resource.IBabelResourceProvider;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
 
 
-public class ResourceLoader implements BabelResourceProvider {
+public class ResourceLoader implements IBabelResourceProvider {
 
     private static final Map<String, Image> IMAGES = new HashMap<String, Image>();
 
