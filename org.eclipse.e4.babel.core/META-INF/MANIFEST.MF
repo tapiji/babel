@@ -4,3 +4,6 @@ Bundle-Name: Core
 Bundle-SymbolicName: org.eclipse.e4.babel.core
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Require-Bundle: org.eclipse.core.resources,
+ org.eclipselabs.e4.tapiji.logger
+Import-Package: org.eclipse.core.runtime

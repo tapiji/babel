@@ -24,7 +24,7 @@ public class BundleTextEditor extends Composite {
         setLayout(new FillLayout());
 
 
-        new PropertiesTextEditor(this);
+        new PropertiesTextEditor(this, null);
 
     }
 }

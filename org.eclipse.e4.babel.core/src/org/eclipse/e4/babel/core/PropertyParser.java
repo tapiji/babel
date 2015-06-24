@@ -1,11 +1,7 @@
 package org.eclipse.e4.babel.core;
 
 
-import java.util.ArrayList;
-import java.util.Collection;
-
-
-public final class PropertyParser {
+public class PropertyParser {
 
     /** System line separator. */
     private static final String SYSTEM_LINE_SEPARATOR = System.getProperty("line.separator"); //$NON-NLS-1$
@@ -31,18 +27,17 @@ public final class PropertyParser {
      *            the string containing the properties to parse
      */
     public void deserialize(String properties) {
-        //Locale locale = messagesBundle.getLocale();
+        //   Locale locale = messagesBundle.getLocale();
 
-        //Collection<String> oldKeys = new ArrayList<String>(Arrays.asList(messagesBundle.getKeys()));
-        Collection<String> newKeys = new ArrayList<String>();
+        //   Collection<String> oldKeys = new ArrayList<String>(Arrays.asList(messagesBundle.getKeys()));
+        //   Collection<String> newKeys = new ArrayList<String>();
 
         String[] lines = properties.split("\r\n|\r|\n"); //$NON-NLS-1$
 
         boolean doneWithFileComment = false;
-        final StringBuffer fileComment = new StringBuffer();
-        final StringBuffer lineComment = new StringBuffer();
-        final StringBuffer lineBuf = new StringBuffer();
-
+        StringBuffer fileComment = new StringBuffer();
+        StringBuffer lineComment = new StringBuffer();
+        StringBuffer lineBuf = new StringBuffer();
         for (int i = 0; i < lines.length; i++) {
             String line = lines[i];
             lineBuf.setLength(0);
@@ -87,22 +82,22 @@ public final class PropertyParser {
                     value = value.substring(1);
                 }
 
-                //  if (this.config != null && config.isUnicodeUnescapeEnabled()) {
-                //     key = convertEncodedToUnicode(key);
-                //     value = convertEncodedToUnicode(value);
-                //  } else {
+                //                if (this.config != null && config.isUnicodeUnescapeEnabled()) {
+                //                    key = convertEncodedToUnicode(key);
+                //                    value = convertEncodedToUnicode(value);
+                //                } else {
                 value = value.replaceAll("\\\\r", "\r"); //$NON-NLS-1$ //$NON-NLS-2$
                 value = value.replaceAll("\\\\n", "\n"); //$NON-NLS-1$//$NON-NLS-2$
-                //  }
-                //   IMessage entry = messagesBundle.getMessage(key);
-                //   if (entry == null) {
-                //       entry = new Message(key, locale);
-                ///       messagesBundle.addMessage(entry);
-                //   }
-                //      entry.setActive(!isCommentedLine);
-                //    entry.setComment(comment);
-                //    entry.setText(value);
-                newKeys.add(key);
+                //}
+                //                IMessage entry = messagesBundle.getMessage(key);
+                //                if (entry == null) {
+                //                    entry = new Message(key, locale);
+                //                    messagesBundle.addMessage(entry);
+                //                }
+                //                entry.setActive(!isCommentedLine);
+                //                entry.setComment(comment);
+                //                entry.setText(value);
+                //                newKeys.add(key);
                 // parse comment line
             } else if (lineBuf.indexOf("#") == 0) { //$NON-NLS-1$
                 if (!doneWithFileComment) {
@@ -118,8 +113,8 @@ public final class PropertyParser {
             }
         }
         // oldKeys.removeAll(newKeys);
-        // messagesBundle.removeMessages(oldKeys.toArray(BabelUtils.EMPTY_STRINGS));
-        // messagesBundle.setComment(fileComment.toString());
+        //        messagesBundle.removeMessages(oldKeys.toArray(BabelUtils.EMPTY_STRINGS));
+        //        messagesBundle.setComment(fileComment.toString());
     }
 
     /**
