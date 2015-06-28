@@ -2,10 +2,16 @@ package org.eclipse.e4.babel.editor.text.document;
 
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetEncoder;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
 import org.eclipselabs.e4.tapiji.logger.Log;
@@ -17,6 +23,7 @@ public final class SourceViewerDocument {
     private static final String DEFAULT_ENCODING = "UTF-8";
     private static final String TAG = SourceViewerDocument.class.getSimpleName();
     private final IFile file;
+    private Document document;
 
     private SourceViewerDocument(final IFile file) {
         this.file = file;
@@ -26,13 +33,40 @@ public final class SourceViewerDocument {
         return new SourceViewerDocument(file);
     }
 
-    public IDocument getDocument() {
-        final InputStream content = getContent();
-        if (content == null) {
-            return null;
+
+    public void saveDocument() {
+        final Charset charset = Charset.forName(getEncoding());
+        final CharsetEncoder encoder = charset.newEncoder();
+
+        try {
+            Log.d(TAG, "CONTENT TO WRITE: " + document.get());
+            final ByteBuffer byteBuffer = encoder.encode(CharBuffer.wrap(document.get()));
+            byte[] bytes;
+            if (byteBuffer.hasArray()) {
+                bytes = byteBuffer.array();
+            } else {
+                bytes = new byte[byteBuffer.limit()];
+                byteBuffer.get(bytes);
+            }
+
+            try (final ByteArrayInputStream stream = new ByteArrayInputStream(bytes, 0, byteBuffer.limit())) {
+                file.setContents(stream, true, true, null);
+            }
+        } catch (final Exception e) {
+            Log.e(TAG, e);
         }
-        final IDocument document = new Document();
-        try (InputStreamReader inputStreamReader = new InputStreamReader(content, getEncoding()); BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
+    }
+
+    @NonNull
+    public IDocument getDocument() {
+        if (null != document) {
+            return document;
+        }
+        document = new Document();
+        try (InputStream content = file.getContents();
+                        InputStreamReader inputStreamReader = new InputStreamReader(content, getEncoding());
+                        BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
+
             final StringBuffer buffer = new StringBuffer(DEFAULT_FILE_CAPACITY);
             final char[] readBuffer = new char[2048];
             int number = bufferedReader.read(readBuffer);
@@ -41,20 +75,11 @@ public final class SourceViewerDocument {
                 number = bufferedReader.read(readBuffer);
             }
             document.set(buffer.toString());
+
         } catch (final Exception exception) {
             Log.e(TAG, exception);
         }
         return document;
-    }
-
-    private InputStream getContent() {
-        InputStream content = null;
-        try {
-            content = file.getContents();
-        } catch (final CoreException e) {
-            Log.e(TAG, e);
-        }
-        return content;
     }
 
     private String getEncoding() {
@@ -64,11 +89,28 @@ public final class SourceViewerDocument {
         } catch (final CoreException e) {
             Log.e(TAG, e);
         }
+        return (null == encoding) ? DEFAULT_ENCODING : encoding;
+    }
 
-        if (null == encoding) {
-            return DEFAULT_ENCODING;
+    public int getNumberOfLines() {
+        if (null == document) {
+            return document.getNumberOfLines();
         } else {
-            return encoding;
+            return 0;
+        }
+    }
+
+    public long getModificationTimeStamp() {
+        if (null == document) {
+            return document.getModificationStamp();
+        } else {
+            return 0L;
+        }
+    }
+
+    public void dispose() {
+        if (null != document) {
+            document.set("");
         }
     }
 }

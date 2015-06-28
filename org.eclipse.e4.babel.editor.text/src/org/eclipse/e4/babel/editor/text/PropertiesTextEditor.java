@@ -5,6 +5,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.e4.babel.editor.text.document.SourceViewerDocument;
 import org.eclipse.e4.babel.editor.text.property.PropertyConfiguration;
 import org.eclipse.e4.babel.editor.text.property.PropertyPartitionScanner;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentPartitioner;
 import org.eclipse.jface.text.rules.FastPartitioner;
@@ -44,6 +45,12 @@ public class PropertiesTextEditor {
         sourceViewer.setDocument(document);
     }
 
+    @NonNull
+    public SourceViewerDocument getSourceViewerDocument() {
+        return sourceViewerDocument;
+    }
+
+    @NonNull
     public SourceViewer getSourceViewer() {
         return sourceViewer;
     }
