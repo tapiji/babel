@@ -25,6 +25,7 @@ final class PropertyColorManager {
     }
 
     private PropertyColorManager() {
+        super();
     }
 
     public Color getColor(final RGB rgb) {
@@ -36,12 +37,6 @@ final class PropertyColorManager {
         return color;
     }
 
-    public void dispose() {
-        for (final Color color : COLORS.values()) {
-            color.dispose();
-        }
-    }
-
     private static class LazyHolder {
 
         private static final PropertyColorManager INSTANCE = new PropertyColorManager();
@@ -49,5 +44,11 @@ final class PropertyColorManager {
 
     public static PropertyColorManager getInstance() {
         return LazyHolder.INSTANCE;
+    }
+
+    public void dispose() {
+        for (final Color color : COLORS.values()) {
+            color.dispose();
+        }
     }
 }

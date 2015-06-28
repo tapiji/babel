@@ -16,6 +16,7 @@ abstract class APropertyScanner extends BufferedRuleBasedScanner {
     private static List<IRule> rules;
 
     public APropertyScanner() {
+        super();
         rules = new ArrayList<IRule>();
         addRules(rules);
         commitRules();

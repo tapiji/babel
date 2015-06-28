@@ -9,6 +9,8 @@ import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.annotation.NonNull;
@@ -33,13 +35,11 @@ public final class SourceViewerDocument {
         return new SourceViewerDocument(file);
     }
 
-
     public void saveDocument() {
         final Charset charset = Charset.forName(getEncoding());
         final CharsetEncoder encoder = charset.newEncoder();
 
         try {
-            Log.d(TAG, "CONTENT TO WRITE: " + document.get());
             final ByteBuffer byteBuffer = encoder.encode(CharBuffer.wrap(document.get()));
             byte[] bytes;
             if (byteBuffer.hasArray()) {
@@ -75,7 +75,6 @@ public final class SourceViewerDocument {
                 number = bufferedReader.read(readBuffer);
             }
             document.set(buffer.toString());
-
         } catch (final Exception exception) {
             Log.e(TAG, exception);
         }
@@ -93,19 +92,23 @@ public final class SourceViewerDocument {
     }
 
     public int getNumberOfLines() {
-        if (null == document) {
+        if (null != document) {
             return document.getNumberOfLines();
         } else {
             return 0;
         }
     }
 
-    public long getModificationTimeStamp() {
-        if (null == document) {
-            return document.getModificationStamp();
-        } else {
-            return 0L;
+    @NonNull
+    public String getModificationTimeStamp(final String format) {
+        String date = "";
+        if (format != null) {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);
+            if (null != document) {
+                date = simpleDateFormat.format(new Date(document.getModificationStamp()));
+            }
         }
+        return date;
     }
 
     public void dispose() {

@@ -62,6 +62,12 @@ public class SourceViewerTest {
         assertEquals(propertyFile.getSourceViewerDocument().getNumberOfLines(), 38);
     }
 
+    @Test
+    public void fileModifiedEmptyDateTest() {
+        final PropertiesTextEditor propertyFile = readPropertyFile(FileUtils.getRelativePath(SourceViewerTest.class).getPath() + "/property/read_bundle.properties");
+        final String modifiedDate = propertyFile.getSourceViewerDocument().getModificationTimeStamp(null);
+        assertEquals(modifiedDate, "");
+    }
 
     private PropertiesTextEditor readPropertyFile(final String fileName) {
         final Shell shell = new Shell(display, SWT.NONE);

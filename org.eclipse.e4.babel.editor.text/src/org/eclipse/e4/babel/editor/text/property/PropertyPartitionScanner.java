@@ -13,8 +13,8 @@ import org.eclipse.jface.text.rules.Token;
 
 public final class PropertyPartitionScanner extends RuleBasedPartitionScanner {
 
-    public final static String PROPERTY_COMMENT = "__prop_comment";
-    public final static String PROPERTY_VALUE = "__prop_value";
+    final static String PROPERTY_COMMENT = "__prop_comment";
+    final static String PROPERTY_VALUE = "__prop_value";
 
     public static String[] PARTITIONS = new String[] {PROPERTY_COMMENT, PROPERTY_VALUE};
 

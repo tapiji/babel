@@ -3,7 +3,6 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Editor
 Bundle-SymbolicName: org.eclipse.e4.babel.editor;singleton:=true
 Bundle-Version: 1.0.0.qualifier
-Export-Package: org.eclipse.e4.babel.editor.ui.editor.interfaces
 Require-Bundle: org.eclipse.e4.core.di,
  org.eclipselabs.e4.tapiji.logger,
  org.eclipselabs.e4.tapiji.utils,

@@ -12,7 +12,7 @@ import org.eclipse.jface.text.source.SourceViewerConfiguration;
 public final class PropertyConfiguration extends SourceViewerConfiguration {
 
     private PropertyConfiguration() {
-
+        super();
     }
 
     @Override
@@ -24,17 +24,17 @@ public final class PropertyConfiguration extends SourceViewerConfiguration {
     public IPresentationReconciler getPresentationReconciler(final ISourceViewer sourceViewer) {
         final PresentationReconciler reconciler = new PresentationReconciler();
 
-        DefaultDamagerRepairer dr = new DefaultDamagerRepairer(PropertyDefaultScanner.getInstance());
-        reconciler.setDamager(dr, IDocument.DEFAULT_CONTENT_TYPE);
-        reconciler.setRepairer(dr, IDocument.DEFAULT_CONTENT_TYPE);
+        DefaultDamagerRepairer defaultDamagerRepairer = new DefaultDamagerRepairer(PropertyDefaultScanner.getInstance());
+        reconciler.setDamager(defaultDamagerRepairer, IDocument.DEFAULT_CONTENT_TYPE);
+        reconciler.setRepairer(defaultDamagerRepairer, IDocument.DEFAULT_CONTENT_TYPE);
 
-        dr = new DefaultDamagerRepairer(PropertyValueScanner.getInstance());
-        reconciler.setDamager(dr, PropertyPartitionScanner.PROPERTY_VALUE);
-        reconciler.setRepairer(dr, PropertyPartitionScanner.PROPERTY_VALUE);
+        defaultDamagerRepairer = new DefaultDamagerRepairer(PropertyValueScanner.getInstance());
+        reconciler.setDamager(defaultDamagerRepairer, PropertyPartitionScanner.PROPERTY_VALUE);
+        reconciler.setRepairer(defaultDamagerRepairer, PropertyPartitionScanner.PROPERTY_VALUE);
 
-        dr = new DefaultDamagerRepairer(PropertyCommentScanner.getInstance());
-        reconciler.setDamager(dr, PropertyPartitionScanner.PROPERTY_COMMENT);
-        reconciler.setRepairer(dr, PropertyPartitionScanner.PROPERTY_COMMENT);
+        defaultDamagerRepairer = new DefaultDamagerRepairer(PropertyCommentScanner.getInstance());
+        reconciler.setDamager(defaultDamagerRepairer, PropertyPartitionScanner.PROPERTY_COMMENT);
+        reconciler.setRepairer(defaultDamagerRepairer, PropertyPartitionScanner.PROPERTY_COMMENT);
 
         return reconciler;
     }

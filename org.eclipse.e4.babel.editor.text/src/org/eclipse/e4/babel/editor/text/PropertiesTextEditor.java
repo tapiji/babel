@@ -18,7 +18,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 
 
-public class PropertiesTextEditor {
+public final class PropertiesTextEditor {
 
     private static final int SOURCE_VIEWER_STYLE = SWT.V_SCROLL | SWT.H_SCROLL | SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION;
     private static final Font FONT = new Font(Display.getCurrent(), "Tahoma", 10, SWT.NORMAL);
