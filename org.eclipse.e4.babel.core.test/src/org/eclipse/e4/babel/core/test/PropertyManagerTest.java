@@ -1,7 +1,8 @@
+package org.eclipse.e4.babel.core.test;
 import org.junit.BeforeClass;
 
 
-public class PropertyParserTest {
+public class PropertyManagerTest {
 
 
     @BeforeClass

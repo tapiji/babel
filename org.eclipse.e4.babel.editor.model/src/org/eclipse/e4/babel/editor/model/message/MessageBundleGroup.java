@@ -1,4 +1,4 @@
-package org.eclipse.e4.babel.editor.model.property;
+package org.eclipse.e4.babel.editor.model.message;
 
 
 import java.util.HashMap;
@@ -8,12 +8,12 @@ import java.util.Set;
 import java.util.TreeSet;
 
 
-public class PropertyGroup {
+public class MessageBundleGroup {
 
-    private final Map<Locale, PropertyFile> properties = new HashMap<>();
+    private final Map<Locale, MessageBundle> properties = new HashMap<>();
     private final Set<String> keys = new TreeSet<String>();
 
-    public PropertyGroup() {
+    public MessageBundleGroup() {
 
 
     }
