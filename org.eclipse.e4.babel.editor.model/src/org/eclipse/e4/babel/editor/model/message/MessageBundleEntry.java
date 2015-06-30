@@ -10,14 +10,14 @@ public final class MessageBundleEntry {
     private final Locale locale;
     private final String comment;
     private final String text;
-    private final boolean commented;
+    private final boolean hasComment;
 
-    private MessageBundleEntry(final String key, final String text, final String comment, final boolean commented) {
+    private MessageBundleEntry(final String key, final String text, final String comment, final boolean hasComment) {
         super();
         this.key = (null == key) ? "" : key;
         this.locale = null;
         this.comment = comment;
-        this.commented = commented;
+        this.hasComment = hasComment;
         this.text = (null == text) ? "" : text;
     }
 
@@ -42,17 +42,17 @@ public final class MessageBundleEntry {
     }
 
 
-    public boolean isCommented() {
-        return commented;
+    public boolean hasComment() {
+        return hasComment;
     }
 
     @Override
     public String toString() {
-        return "PropertyEntry [key=" + key + ", locale=" + locale + ", comment=" + comment + ", text=" + text + ", commented=" + commented + "]";
+        return "MessageBundleEntry [key=" + key + ", locale=" + locale + ", comment=" + comment + ", text=" + text + ", hasComment=" + hasComment + "]";
     }
 
-    public static MessageBundleEntry createInstance(final String key, final String text, final String comment, final boolean commented) {
-        return new MessageBundleEntry(key, text, comment, commented);
+    public static MessageBundleEntry createInstance(final String key, final String text, final String comment, final boolean hasComment) {
+        return new MessageBundleEntry(key, text, comment, hasComment);
     }
 
 }

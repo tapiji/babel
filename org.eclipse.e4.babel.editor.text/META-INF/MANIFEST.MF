@@ -3,7 +3,8 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Text
 Bundle-SymbolicName: org.eclipse.e4.babel.editor.text;singleton:=true
 Bundle-Version: 1.0.0.qualifier
-Export-Package: org.eclipse.e4.babel.editor.text
+Export-Package: org.eclipse.e4.babel.editor.text,
+ org.eclipse.e4.babel.editor.text.document
 Require-Bundle: org.eclipse.jface.text,
  org.eclipse.swt,
  org.eclipse.jface,

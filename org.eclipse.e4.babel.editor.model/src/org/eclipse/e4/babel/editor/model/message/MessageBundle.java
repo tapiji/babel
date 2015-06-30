@@ -7,9 +7,9 @@ import java.util.Map;
 import org.eclipse.jdt.annotation.Nullable;
 
 
-public class MessageBundle {
+public final class MessageBundle {
 
-    private static final Map<String, MessageBundleEntry> ENTRIES = new HashMap<>();
+    private final Map<String, MessageBundleEntry> entries = new HashMap<>();
     private Locale locale;
     private String comment;
 
@@ -20,13 +20,13 @@ public class MessageBundle {
 
 
     public int getNumberOfEntries() {
-        return ENTRIES.size();
+        return entries.size();
     }
 
     @Nullable
     public MessageBundleEntry getEntry(final String key) {
         if (key != null) {
-            return ENTRIES.get(key);
+            return entries.get(key);
         } else {
             return null;
         }
@@ -35,9 +35,9 @@ public class MessageBundle {
     public boolean addEntry(final MessageBundleEntry entry) {
         boolean isAdded = false;
         if (null != entry) {
-            final MessageBundleEntry oldEntry = ENTRIES.get(entry.getKey());
+            final MessageBundleEntry oldEntry = entries.get(entry.getKey());
             if (null == oldEntry) {
-                ENTRIES.put(entry.getKey(), entry);
+                entries.put(entry.getKey(), entry);
                 isAdded = true;
             }
         }
@@ -47,9 +47,9 @@ public class MessageBundle {
     public boolean removeEntry(final MessageBundleEntry entry) {
         boolean isRemoved = false;
         if (null != entry) {
-            final MessageBundleEntry currentEntry = ENTRIES.get(entry.getKey());
+            final MessageBundleEntry currentEntry = entries.get(entry.getKey());
             if (null != currentEntry) {
-                ENTRIES.remove(currentEntry.getKey());
+                entries.remove(currentEntry.getKey());
                 isRemoved = true;
             }
         }
@@ -62,12 +62,17 @@ public class MessageBundle {
 
 
     public void dispose() {
-        ENTRIES.clear();
+        entries.clear();
     }
 
     @Override
     public String toString() {
-        return "PropertyFile [locale=" + locale + ", comment=" + comment + "]";
+        return "MessageBundle [entries=" + entries + ", locale=" + locale + ", comment=" + comment + "]";
+    }
+
+
+    public String[] getKeys() {
+        return null;
     }
 
 }
