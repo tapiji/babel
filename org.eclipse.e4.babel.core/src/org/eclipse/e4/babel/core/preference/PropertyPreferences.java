@@ -24,6 +24,7 @@ public final class PropertyPreferences {
 
     public static final String GROUP_LEVEL_DEPTH = "STORE/GROUP_LEVEL_DEPTH";
     public static final String GROUP_ALIGN_EQUALS_ENABLED = "STORE/GROUP_ALIGN_EQUALS_ENABLED";
+    public static final String GROUP_KEYS_ENABLED = "STORE/GROUP_KEYS_ENABLED";
 
     public static final String CONVERT_TO_UNICODE = "STORE/CONVERT_TO_UNICODE";
 
@@ -93,9 +94,24 @@ public final class PropertyPreferences {
         PREFERENCES.putBoolean(CONVERT_TO_UNICODE, isConvertToUnicodeEnabled);
     }
 
+    public boolean isGroupKeysEnabled() {
+        return PREFERENCES.getBoolean(GROUP_KEYS_ENABLED, true);
+    }
+
+    public void isGroupKeysEnabled(final boolean isGroupKeysEnabled) {
+        PREFERENCES.putBoolean(GROUP_KEYS_ENABLED, isGroupKeysEnabled);
+    }
+
     private static class PropertyPreferencesHolder {
 
         private static final PropertyPreferences INSTANCE = new PropertyPreferences();
+    }
+
+    @Override
+    public String toString() {
+        return "PropertyPreferences [getI18nEditorHeight()=" + getI18nEditorHeight() + ", isWrapLineEnabled()=" + isWrapLineEnabled() + ", getWrapLineCharLimit()="
+                        + getWrapLineCharLimit() + ", isWrapAlignEqualSigns()=" + isWrapAlignEqualSigns() + ", getGroupLevelDepth()=" + getGroupLevelDepth()
+                        + ", isGroupAlignEqualsEnabled()=" + isGroupAlignEqualsEnabled() + ", isConvertToUnicodeEnabled()=" + isConvertToUnicodeEnabled() + "]";
     }
 
     public static PropertyPreferences getInstance() {

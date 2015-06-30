@@ -13,6 +13,7 @@ package org.eclipse.e4.babel.core;
 
 
 import java.util.regex.Pattern;
+import org.eclipse.e4.babel.core.preference.PropertyPreferences;
 import org.eclipse.e4.babel.editor.model.message.MessageBundle;
 import org.eclipse.e4.babel.editor.model.message.MessageBundleEntry;
 import org.eclipse.jdt.annotation.NonNull;
@@ -121,7 +122,7 @@ public final class PropertyManager {
                         value = value.substring(1);
                     }
 
-                    if (isUnicodeUnescapeEnabled()) {
+                    if (PropertyPreferences.getInstance().isConvertToUnicodeEnabled()) {
                         key = convertEncodedToUnicode(key);
                         value = convertEncodedToUnicode(value);
                     } else {
@@ -143,11 +144,6 @@ public final class PropertyManager {
             }
         }
         return messageBundle;
-    }
-
-    // TODO only test purpose
-    private boolean isUnicodeUnescapeEnabled() {
-        return false;
     }
 
     /**
@@ -395,8 +391,8 @@ public final class PropertyManager {
     private int getEqualIndex(final String key, final String group, final MessageBundle messagesBundle) {
         int equalIndex = -1;
         final boolean alignEquals = false;//config.isAlignEqualsEnabled();
-        final boolean groupKeys = false;//config.isGroupKeysEnabled();
-        final boolean groupAlignEquals = false;//config.isGroupAlignEqualsEnabled();
+        final boolean groupKeys = PropertyPreferences.getInstance().isGroupKeysEnabled();
+        final boolean groupAlignEquals = PropertyPreferences.getInstance().isGroupAlignEqualsEnabled();
 
         // Exit now if we are not aligning equals
         if (!alignEquals || (groupKeys && !groupAlignEquals) || (groupKeys && (group == null))) {
