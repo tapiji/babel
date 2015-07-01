@@ -1,6 +1,7 @@
 package org.eclipse.e4.babel.editor.preference;
 
 
+import org.eclipse.e4.babel.editor.preference.validator.DoubleTextKeyListener;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -99,7 +100,7 @@ public final class PreferenceReportingPage extends APreferencePage {
         //reportSimPrecision.setText(prefs.getString(MsgEditorPreferences.REPORT_SIM_VALUES_PRECISION));
         reportSimPrecision.setTextLimit(6);
         setWidthInChars(reportSimPrecision, 6);
-        reportSimPrecision.addKeyListener(new DoubleTextValidatorKeyListener("Der Genauigkeitslevel mu\u00DF zwischen 0 und 1 sein.", 0, 1));
+        reportSimPrecision.addKeyListener(new DoubleTextKeyListener("Der Genauigkeitslevel mu\u00DF zwischen 0 und 1 sein.", 0, 1, this));
 
 
         return composite;

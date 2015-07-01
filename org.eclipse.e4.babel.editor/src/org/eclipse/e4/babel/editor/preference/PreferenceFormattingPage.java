@@ -2,6 +2,7 @@ package org.eclipse.e4.babel.editor.preference;
 
 
 import org.eclipse.e4.babel.core.preference.PropertyPreferences;
+import org.eclipse.e4.babel.editor.preference.validator.NumberTextKeyListener;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -126,7 +127,7 @@ public class PreferenceFormattingPage extends APreferencePage {
         // groupLevelDeep.setText(prefs.getString(MsgEditorPreferences.GROUP_LEVEL_DEEP));
         groupLevelDeep.setTextLimit(2);
         setWidthInChars(groupLevelDeep, 2);
-        groupLevelDeep.addKeyListener(new IntTextValidatorKeyListener("The 'How many level deep' field must be numeric")); //$NON-NLS-1$
+        groupLevelDeep.addKeyListener(new NumberTextKeyListener("The 'How many level deep' field must be numeric", this)); //$NON-NLS-1$
 
         // How many lines between groups?
         field = createFieldComposite(composite, indentPixels);
@@ -135,7 +136,7 @@ public class PreferenceFormattingPage extends APreferencePage {
         //  groupLineBreaks.setText(prefs.getString(MsgEditorPreferences.GROUP_SEP_BLANK_LINE_COUNT));
         groupLineBreaks.setTextLimit(2);
         setWidthInChars(groupLineBreaks, 2);
-        groupLineBreaks.addKeyListener(new IntTextValidatorKeyListener("The 'How many level deep' field must be numeric")); //$NON-NLS-1$
+        groupLineBreaks.addKeyListener(new NumberTextKeyListener("The 'How many level deep' field must be numeric", this)); //$NON-NLS-1$
 
         // Align equal signs within groups?
         field = createFieldComposite(composite, indentPixels);
@@ -163,7 +164,7 @@ public class PreferenceFormattingPage extends APreferencePage {
         //wrapCharLimit.setText(prefs.getString(MsgEditorPreferences.WRAP_LINE_LENGTH));
         wrapCharLimit.setTextLimit(4);
         setWidthInChars(wrapCharLimit, 4);
-        wrapCharLimit.addKeyListener(new IntTextValidatorKeyListener("The 'Wrap lines after...' field must be numeric")); //$NON-NLS-1$
+        wrapCharLimit.addKeyListener(new NumberTextKeyListener("The 'Wrap lines after...' field must be numeric", this)); //$NON-NLS-1$
 
         // Align wrapped lines with equal signs?
         field = createFieldComposite(composite, indentPixels);
@@ -185,7 +186,7 @@ public class PreferenceFormattingPage extends APreferencePage {
         // wrapIndentSpaces.setText(prefs.getString(MsgEditorPreferences.WRAP_INDENT_LENGTH));
         wrapIndentSpaces.setTextLimit(2);
         setWidthInChars(wrapIndentSpaces, 2);
-        wrapIndentSpaces.addKeyListener(new IntTextValidatorKeyListener("The 'How many spaces to use...' field must be numeric")); //$NON-NLS-1$
+        wrapIndentSpaces.addKeyListener(new NumberTextKeyListener("The 'How many spaces to use...' field must be numeric", this)); //$NON-NLS-1$
 
         // Should we wrap after new line characters
         field = createFieldComposite(composite);
