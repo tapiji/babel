@@ -1,59 +1,29 @@
-/*******************************************************************************
- * Copyright (c) 2007 Pascal Essiembre.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *    Pascal Essiembre - initial API and implementation
- ******************************************************************************/
-package org.eclipse.babel.editor.preferences;
+package org.eclipse.e4.babel.editor.preference;
 
 
 import java.util.HashMap;
 import java.util.Map;
-import org.eclipse.babel.editor.plugin.MessagesEditorPlugin;
-import org.eclipse.babel.editor.util.UIUtils;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchPreferencePage;
 
 
-/**
- * Plugin base preference page.
- *
- * @author Pascal Essiembre (pascal@essiembre.com)
- */
-public abstract class AbstractPrefPage extends PreferencePage implements IWorkbenchPreferencePage {
+abstract class APreferencePage extends PreferencePage {
 
-    /** Number of pixels per field indentation */
     protected final int indentPixels = 20;
 
-    /** Controls with errors in them. */
     protected final Map<Text, String> errors = new HashMap<Text, String>();
 
-    /**
-     * Constructor.
-     */
-    public AbstractPrefPage() {
-        super();
-    }
-
-    /**
-     * @see org.eclipse.ui.IWorkbenchPreferencePage #init(org.eclipse.ui.IWorkbench)
-     */
-    @Override
-    public void init(IWorkbench workbench) {
-        setPreferenceStore(MessagesEditorPlugin.getDefault().getPreferenceStore());
+    public APreferencePage(final String title) {
+        super(title);
     }
 
     protected Composite createFieldComposite(Composite parent) {
@@ -70,6 +40,18 @@ public abstract class AbstractPrefPage extends PreferencePage implements IWorkbe
         return composite;
     }
 
+    protected void setWidthInChars(Control field, int widthInChars) {
+        GridData gd = new GridData();
+        gd.widthHint = getWidthInChars(field, widthInChars);
+        field.setLayoutData(gd);
+    }
+
+    public static int getWidthInChars(Control control, int numOfChars) {
+        GC gc = new GC(control);
+        Point extent = gc.textExtent("W");//$NON-NLS-1$
+        gc.dispose();
+        return numOfChars * extent.x;
+    }
 
     protected class IntTextValidatorKeyListener extends KeyAdapter {
 
@@ -115,23 +97,11 @@ public abstract class AbstractPrefPage extends PreferencePage implements IWorkbe
         private double minValue;
         private double maxValue;
 
-        /**
-         * Constructor.
-         *
-         * @param errMsg error message
-         */
         public DoubleTextValidatorKeyListener(String errMsg) {
             super();
             this.errMsg = errMsg;
         }
 
-        /**
-         * Constructor.
-         *
-         * @param errMsg error message
-         * @param minValue minimum value (inclusive)
-         * @param maxValue maximum value (inclusive)
-         */
         public DoubleTextValidatorKeyListener(String errMsg, double minValue, double maxValue) {
             super();
             this.errMsg = errMsg;
@@ -139,9 +109,6 @@ public abstract class AbstractPrefPage extends PreferencePage implements IWorkbe
             this.maxValue = maxValue;
         }
 
-        /**
-         * @see org.eclipse.swt.events.KeyAdapter#keyPressed(org.eclipse.swt.events.KeyEvent)
-         */
         @Override
         public void keyReleased(KeyEvent event) {
             Text text = (Text) event.widget;
@@ -169,11 +136,5 @@ public abstract class AbstractPrefPage extends PreferencePage implements IWorkbe
                 setValid(false);
             }
         }
-    }
-
-    protected void setWidthInChars(Control field, int widthInChars) {
-        GridData gd = new GridData();
-        gd.widthHint = UIUtils.getWidthInChars(field, widthInChars);
-        field.setLayoutData(gd);
     }
 }

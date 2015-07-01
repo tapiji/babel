@@ -28,6 +28,8 @@ public final class PropertyPreferences {
 
     public static final String CONVERT_TO_UNICODE = "STORE/CONVERT_TO_UNICODE";
 
+    public static final String IS_GENERATED_BY_ENABLED = "STORE/SHOW_GENERATED_BY";
+
     private static final Preferences PREFERENCES = InstanceScope.INSTANCE.getNode(NODE_PATH);
 
     private PropertyPreferences() {
@@ -100,6 +102,14 @@ public final class PropertyPreferences {
 
     public void isGroupKeysEnabled(final boolean isGroupKeysEnabled) {
         PREFERENCES.putBoolean(GROUP_KEYS_ENABLED, isGroupKeysEnabled);
+    }
+
+    public boolean isGeneratedByEnabled() {
+        return PREFERENCES.getBoolean(IS_GENERATED_BY_ENABLED, true);
+    }
+
+    public void isGeneratedByEnabled(final boolean isGeneratedByEnabled) {
+        PREFERENCES.putBoolean(IS_GENERATED_BY_ENABLED, isGeneratedByEnabled);
     }
 
     private static class PropertyPreferencesHolder {

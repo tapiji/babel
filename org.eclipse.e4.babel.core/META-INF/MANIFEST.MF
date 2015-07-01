@@ -12,3 +12,4 @@ Require-Bundle: org.eclipse.core.resources,
 Import-Package: org.eclipse.core.runtime,
  org.eclipse.core.runtime.preferences;version="3.3.0",
  org.osgi.service.prefs;version="1.1.1"
+Export-Package: org.eclipse.e4.babel.core.preference

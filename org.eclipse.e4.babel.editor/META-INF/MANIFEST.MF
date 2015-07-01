@@ -23,7 +23,8 @@ Require-Bundle: org.eclipse.e4.core.di,
  org.eclipse.e4.core.contexts,
  org.eclipse.babel.i18n;bundle-version="1.0.0",
  org.eclipse.e4.core.services,
- org.eclipse.e4.babel.resource
+ org.eclipse.e4.babel.resource,
+ org.eclipse.e4.babel.core
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Import-Package: org.eclipse.e4.babel.editor.text,
  org.eclipse.ui,
