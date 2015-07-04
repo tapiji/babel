@@ -9,26 +9,42 @@ public final class PropertyPreferences {
 
     private static final String TAG = PropertyPreferences.class.getSimpleName();
 
-    public static final int NEW_LINE_DEFAULT = 0;
-    public static final int NEW_LINE_UNIX = 1;
-    public static final int NEW_LINE_WIN = 2;
-    public static final int NEW_LINE_MAC = 3;
+    private static final int NEW_LINE_DEFAULT = 0;
+    private static final int NEW_LINE_UNIX = 1;
+    private static final int NEW_LINE_WIN = 2;
+    private static final int NEW_LINE_MAC = 3;
 
-    public static final String NODE_PATH = "org.eclipse.e4.babel.core";
-    public static final String I18N_EDITOR_HEIGHT = "";
+    private static final String NODE_PATH = "org.eclipse.e4.babel.core";
+    private static final String I18N_EDITOR_HEIGHT = "";
 
-    public static final String WRAP_LINE_ENABLED = "STORE/WRAP_LINE_ENABLED";
-    public static final String WRAP_LINE_CHAR_LIMIT = "STORE/WRAP_LINE_LIMIT";
-    public static final String WRAP_ALIGN_EQUAL_SIGNS = "STORE/WRAP_ALIGN_EQUAL_SIGNS";
-    public static final String WRAP_INDENT_LENGTH = "STORE/WRAP_INDENT_LENGTH";
+    private static final String IS_GENERATED_BY_ENABLED = "STORE/SHOW_GENERATED_BY";
 
-    public static final String GROUP_LEVEL_DEPTH = "STORE/GROUP_LEVEL_DEPTH";
-    public static final String GROUP_ALIGN_EQUALS_ENABLED = "STORE/GROUP_ALIGN_EQUALS_ENABLED";
-    public static final String GROUP_KEYS_ENABLED = "STORE/GROUP_KEYS_ENABLED";
+    // Groups
+    public static final String GROUP_KEYS_ENABLED = "CORE_GROUP/KEYSENABLED";
+    public static final String GROUP_LEVEL_DEEP = "CORE_GROUP/LEVELDEEP";
+    public static final String GROUP_SEP_BLANK_LINE_COUNT = "CORE_GROUP/SEPBLANKLINECOUNT";
+    public static final String GROUP_ALIGN_EQUALS_ENABLED = "CORE_GROUP/ALIGNEQUALSENABLED";
 
-    public static final String CONVERT_TO_UNICODE = "STORE/CONVERT_TO_UNICODE";
+    // Unicode
+    public static final String UNICODE_ESCAPE_ENABLED = "CORE_UNICODE/ESCAPE_ENABLED";
+    public static final String UNICODE_ESCAPE_UPPERCASE = "CORE_UNICODE/ESCAPE_UPPERCASE";
+    public static final String UNICODE_UNESCAPE_ENABLED = "CORE_UNICODE/UNESCAPE_ENABLED";
 
-    public static final String IS_GENERATED_BY_ENABLED = "STORE/SHOW_GENERATED_BY";
+    // Wrapping
+    public static final String WRAP_LINES_ENABLED = "CORE_WRAP/LINES_ENABLED";
+    public static final String WRAP_LINE_LENGTH = "CORE_WRAP/LINE_LENGTH";
+    public static final String WRAP_ALIGN_EQUALS_ENABLED = "CORE_WRAP/ALIGNE_QUALS_ENABLED";
+    public static final String WRAP_INDENT_LENGTH = "CORE_WRAP/INDENT_LENGTH";
+
+    // Reporting
+    public static final String REPORT_MISSING_VALUES_LEVEL = "CORE_REPORT/DETECT_MISSING_VALUES_LEVEL";
+    public static final String REPORT_DUPL_VALUES_LEVEL = "CORE_REPORT/DUPLICATE_VALUES_LEVEL";
+    public static final String REPORT_DUPL_VALUES_ONLY_IN_ROOT_LOCALE = "CORE_REPORT/DUPLICATE_VALUES_ONLY_IN_ROOT_LOCALE";
+    public static final String REPORT_SIM_VALUES_LEVEL = "CORE_REPORT/SIMILAR_VALUES_LEVEL";
+    public static final String REPORT_SIM_VALUES_WORD_COMPARE = "CORE_REPORT/SIMILAR_VALUES_WORD_COMPARE";
+    public static final String REPORT_SIM_VALUES_LEVENSTHEIN = "CORE_REPORT/SIMILAR_VALUES_LEVENSTHEIN";
+    public static final String REPORT_SIM_VALUES_PRECISION = "CORE_REPORT/SIMILAR_VALUES_PRECISION";
+
 
     private static final Preferences PREFERENCES = InstanceScope.INSTANCE.getNode(NODE_PATH);
 
@@ -110,6 +126,14 @@ public final class PropertyPreferences {
 
     public void isGeneratedByEnabled(final boolean isGeneratedByEnabled) {
         PREFERENCES.putBoolean(IS_GENERATED_BY_ENABLED, isGeneratedByEnabled);
+    }
+
+    public boolean isUnicodeEscapeUppercase() {
+        return PREFERENCES.getBoolean(UNICODE_ESCAPE_UPPERCASE, true);
+    }
+
+    public void isUnicodeEscapeUppercase(final boolean isGeneratedByEnabled) {
+        PREFERENCES.putBoolean(UNICODE_ESCAPE_UPPERCASE, isGeneratedByEnabled);
     }
 
     private static class PropertyPreferencesHolder {

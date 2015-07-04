@@ -9,6 +9,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
 
 
 abstract class APreferencePage extends PreferencePage {
@@ -39,9 +40,15 @@ abstract class APreferencePage extends PreferencePage {
         field.setLayoutData(gridData);
     }
 
+    protected void createLabel(final Composite parent, final String text) {
+        new Label(parent, SWT.NONE).setText(text);
+    }
+
+
+    // TODO: MOVE TO HELPER CLASS
     public static int getWidthInChars(final Control control, final int numOfChars) {
         final GC gc = new GC(control);
-        final Point extent = gc.textExtent("W");//$NON-NLS-1$
+        final Point extent = gc.textExtent("W");
         gc.dispose();
         return numOfChars * extent.x;
     }
