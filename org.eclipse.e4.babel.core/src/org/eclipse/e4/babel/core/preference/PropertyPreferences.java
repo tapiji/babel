@@ -9,50 +9,24 @@ public final class PropertyPreferences {
 
     private static final String TAG = PropertyPreferences.class.getSimpleName();
 
-    private static final int NEW_LINE_DEFAULT = 0;
-    private static final int NEW_LINE_UNIX = 1;
-    private static final int NEW_LINE_WIN = 2;
-    private static final int NEW_LINE_MAC = 3;
+    public enum NewLineType {
+        NEW_LINE_DEFAULT(0),
+        NEW_LINE_UNIX(1),
+        NEW_LINE_WIN(2),
+        NEW_LINE_MAC(3);
 
-    private static final String NODE_PATH = "org.eclipse.e4.babel.core";
+        private final int id;
 
+        private NewLineType(final int id) {
+            this.id = id;
+        }
 
-    public static final String IS_GENERATED_BY_ENABLED = "isGeneratedByEnabled";
+        public int getId() {
+            return id;
+        }
+    }
 
-    public static final String SHOW_SUPPORT_ENABLED = "showSupportEnabled";
-
-
-    public static final String ALIGN_EQUALS_ENABLED = "alignEqualsEnabled";
-    public static final String SPACES_AROUND_EQUALS_ENABLED = "spacesAroundEqualsEnabled";
-
-    // Group
-    public static final String GROUP_KEYS_ENABLED = "groupKeysEnabled";
-    public static final String GROUP_LEVEL_DEEP = "groupLevelDeep";
-    public static final String GROUP_SEP_BLANK_LINE_COUNT = "groupSepBlankLineCount";
-    public static final String GROUP_ALIGN_EQUALS_ENABLED = "groupAlignEqualsEnabled";
-    public static final String GROUP_LEVEL_SEPARATOR = "groupLevelSeparator";
-
-    // Wrap
-    public static final String WRAP_LINES_ENABLED = "wrapLinesEnabled";
-    public static final String WRAP_LINE_LENGTH = "wrapLineLength";
-    public static final String WRAP_ALIGN_EQUALS_ENABLED = "wrapAlignEqualsEnabled";
-    public static final String WRAP_INDENT_LENGTH = "wrapIndentLength";
-
-    // Unicode
-    public static final String UNICODE_ESCAPE_ENABLED = "unicodeEscapeEnabled";
-    public static final String UNICODE_ESCAPE_UPPERCASE = "unicodeEscapeUppercase";
-    public static final String UNICODE_UNESCAPE_ENABLED = "unicodeUnescapeEnabled";
-
-    // Line
-    public static final String FORCE_NEW_LINE_TYPE = "forceNewLineType";
-    public static final String NEW_LINE_STYLE = "newLineStyle";
-    public static final String NEW_LINE_NICE = "newLineNice";
-
-    // Reporting
-
-    //public static final String REPORT_DUPL_VALUES_ONLY_IN_ROOT_LOCALE = "reportDuplicateValuesOnlyInRootLocale";
-    //
-
+    // Report
     private static final String REPORT_SIMILAR_VALUES_LEVENSTHEIN = "CORE_REPORT/SIMILAR_VALUES_LEVENSTHEIN";
     private static final String REPORT_MISSING_VALUES = "CORE_REPORT/MISSING_VALUES";
     private static final String REPORT_DUPLICATE_VALUES = "CORE_REPORT/DUPLICATE_VALUES";
@@ -72,8 +46,24 @@ public final class PropertyPreferences {
     private static final String LOAD_ONLY_FRAGMENT_RESOURCES = "CORE_GENERAL/LOAD_ONLY_FRAGMENT_RESOURCES";
     private static final String CONVERT_ENCODED_TO_UNICODE = "CORE_GENERAL/CONVERT_ENCODED_TO_UNICODE";
 
+    // Format
+    private static final String IS_GENERATED_BY_ENABLED = "CORE_FORMAT/IS_GENERATED_BY_ENABLED";
+    private static final String CONVERT_UNICODE_TO_ENCODED = "CORE_FORMAT/CONVERT_UNICODE_TO_ENCODED";
+    private static final String CONVERT_UNICODE_TO_ENCODED_UPPER = "CORE_FORMAT/CONVERT_UNICODE_TO_ENCODED_UPPER";
+    private static final String IS_WRAP_LINES = "CORE_FORMAT/IS_WRAP_LINES";
+    private static final String WRAP_INDENT_LENGTH = "CORE_FORMAT/WRAP_INDENT_LENGTH";
+    private static final String WRAP_LINE_LENGTH = "CORE_FORMAT/WRAP_LINE_LENGTH";
+    private static final String WRAP_ALIGN_EQUALS_ENABLED = "CORE_FORMAT/WRAP_ALIGN_EQUALS_ENABLED";
+    private static final String KEEP_EMPTY_FIELDS = "CORE_FORMAT/KEEP_EMPTY_FIELDS";
+    private static final String IS_GROUP_KEYS = "CORE_FORMAT/IS_GROUP_KEYS";
+    private static final String IS_ALIGN_EQUALS_SIGNS = "CORE_FORMAT/IS_ALIGN_EQUALS_SIGNS";
+    private static final String IS_SPACES_AROUND_EQUALS_SIGNS = "CORE_FORMAT/IS_SPACES_AROUND_EQUALS_SIGNS";
+    private static final String GROUP_LEVEL_DEEP = "CORE_FORMAT/GROUP_LEVEL_DEEP";
+    private static final String IS_NEW_LINE_NICE = "CORE_FORMAT/IS_NEW_LINE_NICE";
+    private static final String NEW_LINE_TYPE = "CORE_FORMAT/NEW_LINE_TYPE";
 
-    public static final String KEEP_EMPTY_FIELDS = "keepEmptyFields";
+
+    // NONE
     public static final String SORT_KEYS = "sortKeys";
     public static final String DISPLAY_DEFAULT_COMMENT_FIELD = "displayCommentFieldNL";
     public static final String DISPLAY_LANG_COMMENT_FIELDS = "displayLangCommentFieldsNL";
@@ -81,16 +71,137 @@ public final class PropertyPreferences {
     public static final String ADD_MSG_EDITOR_BUILDER_TO_JAVA_PROJECTS = "addMsgEditorBuilderToJavaProjects";
     public static final String PROPERTIES_DISPLAYED_FILTER = "propertiesFilter";
     public static final String ENABLE_PROPERTIES_INDEXER = "enablePropertiesIndexer";
+    private static final String NODE_PATH = "org.eclipse.e4.babel.core";
+    public static final String SHOW_SUPPORT_ENABLED = "showSupportEnabled";
+    public static final String GROUP_SEP_BLANK_LINE_COUNT = "groupSepBlankLineCount";
+    public static final String GROUP_ALIGN_EQUALS_ENABLED = "groupAlignEqualsEnabled";
+    public static final String GROUP_LEVEL_SEPARATOR = "groupLevelSeparator";
+
+
+    public static final String FORCE_NEW_LINE_TYPE = "forceNewLineType";
 
 
     private static final Preferences PREFERENCES = InstanceScope.INSTANCE.getNode(NODE_PATH);
+
 
     private PropertyPreferences() {
         super();
     }
 
-    // General
+    // Format
+    public boolean isGeneratedByEnabled() {
+        return PREFERENCES.getBoolean(IS_GENERATED_BY_ENABLED, true);
+    }
 
+    public void isGeneratedByEnabled(final boolean isGeneratedByEnabled) {
+        PREFERENCES.putBoolean(IS_GENERATED_BY_ENABLED, isGeneratedByEnabled);
+    }
+
+    public boolean isUnicodeEscapeEnabled() {
+        return PREFERENCES.getBoolean(CONVERT_UNICODE_TO_ENCODED, true);
+    }
+
+    public void isUnicodeEscapeEnabled(final boolean isUnicodeEscapeEnabled) {
+        PREFERENCES.putBoolean(CONVERT_UNICODE_TO_ENCODED, isUnicodeEscapeEnabled);
+    }
+
+    public boolean isConvertUnicodeToEncodedUpper() {
+        return PREFERENCES.getBoolean(CONVERT_UNICODE_TO_ENCODED_UPPER, true);
+    }
+
+    public void isConvertUnicodeToEncodedUpper(final boolean isUnicodeEscapeEnabled) {
+        PREFERENCES.putBoolean(CONVERT_UNICODE_TO_ENCODED_UPPER, isUnicodeEscapeEnabled);
+    }
+
+    public boolean isWrapLines() {
+        return PREFERENCES.getBoolean(IS_WRAP_LINES, true);
+    }
+
+    public void isWrapLines(final boolean isWrapLineEnabled) {
+        PREFERENCES.putBoolean(IS_WRAP_LINES, isWrapLineEnabled);
+    }
+
+    public int getWrapIndentLength() {
+        return PREFERENCES.getInt(WRAP_INDENT_LENGTH, 8);
+    }
+
+    public static void setWrapIndentLength(final int wrapIndentLength) {
+        PREFERENCES.putInt(WRAP_INDENT_LENGTH, wrapIndentLength);
+    }
+
+    public boolean isKeepEmptyFields() {
+        return PREFERENCES.getBoolean(KEEP_EMPTY_FIELDS, true);
+    }
+
+    public void isKeepEmptyFields(final boolean isKeepEmptyFields) {
+        PREFERENCES.putBoolean(KEEP_EMPTY_FIELDS, isKeepEmptyFields);
+    }
+
+    public boolean isGroupKeys() {
+        return PREFERENCES.getBoolean(IS_GROUP_KEYS, true);
+    }
+
+    public void isGroupKeys(final boolean isGroupKeys) {
+        PREFERENCES.putBoolean(IS_GROUP_KEYS, isGroupKeys);
+    }
+
+    public boolean isAlignEqualSigns() {
+        return PREFERENCES.getBoolean(IS_ALIGN_EQUALS_SIGNS, true);
+    }
+
+    public void isAlignEqualSigns(final boolean isAlignEqualSigns) {
+        PREFERENCES.putBoolean(IS_ALIGN_EQUALS_SIGNS, isAlignEqualSigns);
+    }
+
+    public boolean isSpaceAroundEqualsSigns() {
+        return PREFERENCES.getBoolean(IS_SPACES_AROUND_EQUALS_SIGNS, true);
+    }
+
+    public void isSpaceAroundEqualsSigns(final boolean isSpaceAroundEqualsSigns) {
+        PREFERENCES.putBoolean(IS_SPACES_AROUND_EQUALS_SIGNS, isSpaceAroundEqualsSigns);
+    }
+
+    public String getGroupLevelDeep() {
+        return PREFERENCES.get(GROUP_LEVEL_DEEP, "");
+    }
+
+    public void setGroupLevelDeep(final String groupLevelDeepth) {
+        PREFERENCES.put(GROUP_LEVEL_DEEP, groupLevelDeepth);
+    }
+
+    public boolean isWrapAlignEqualSign() {
+        return PREFERENCES.getBoolean(WRAP_ALIGN_EQUALS_ENABLED, true);
+    }
+
+    public void isWrapAlignEqualSign(final boolean isWrapAlignEqualSign) {
+        PREFERENCES.putBoolean(WRAP_ALIGN_EQUALS_ENABLED, isWrapAlignEqualSign);
+    }
+
+    public int getWrapLineLength() {
+        return PREFERENCES.getInt(WRAP_LINE_LENGTH, 0);
+    }
+
+    public void setWrapLineLength(final int setWrapLineLength) {
+        PREFERENCES.putInt(WRAP_LINE_LENGTH, setWrapLineLength);
+    }
+
+    public boolean isNewLineNice() {
+        return PREFERENCES.getBoolean(IS_NEW_LINE_NICE, true);
+    }
+
+    public void isNewLineNice(final boolean isNewLineNice) {
+        PREFERENCES.putBoolean(IS_NEW_LINE_NICE, isNewLineNice);
+    }
+
+    public int getNewLineType() {
+        return PREFERENCES.getInt(NEW_LINE_TYPE, NewLineType.NEW_LINE_DEFAULT.getId());
+    }
+
+    public void setNewLineType(final NewLineType newLineType) {
+        PREFERENCES.putInt(NEW_LINE_TYPE, newLineType.getId());
+    }
+
+    // General
     public boolean isConvertEncodedToUnicode() {
         return PREFERENCES.getBoolean(CONVERT_ENCODED_TO_UNICODE, true);
     }
@@ -218,63 +329,6 @@ public final class PropertyPreferences {
 
     public void isReportSimliarValuesLevensthein(final boolean isSimliarValuesLevensthein) {
         PREFERENCES.putBoolean(REPORT_SIMILAR_VALUES_LEVENSTHEIN, isSimliarValuesLevensthein);
-    }
-
-
-    // NOT DONE
-
-    public boolean isWrapLineEnabled() {
-        return PREFERENCES.getBoolean(WRAP_LINES_ENABLED, true);
-    }
-
-    public void isWrapLineEnabled(final boolean isWrapLineEnabled) {
-        PREFERENCES.putBoolean(WRAP_LINES_ENABLED, isWrapLineEnabled);
-    }
-
-    public boolean isGeneratedByEnabled() {
-        return PREFERENCES.getBoolean(IS_GENERATED_BY_ENABLED, true);
-    }
-
-    public void isGeneratedByEnabled(final boolean isGeneratedByEnabled) {
-        PREFERENCES.putBoolean(IS_GENERATED_BY_ENABLED, isGeneratedByEnabled);
-    }
-
-
-    public boolean isUnicodeEscapeEnabled() {
-        return PREFERENCES.getBoolean(UNICODE_ESCAPE_ENABLED, true);
-    }
-
-    public void isUnicodeEscapeEnabled(final boolean isUnicodeEscapeEnabled) {
-        PREFERENCES.putBoolean(UNICODE_ESCAPE_ENABLED, isUnicodeEscapeEnabled);
-    }
-
-
-    public static int getWrapIndentLength() {
-        return PREFERENCES.getInt(WRAP_INDENT_LENGTH, 8);
-    }
-
-    public boolean isGroupAlignEqualsEnabled() {
-        return PREFERENCES.getBoolean(GROUP_ALIGN_EQUALS_ENABLED, true);
-    }
-
-    public void isGroupAlignEqualsEnabled(final boolean isGroupAlignEqualsEnabled) {
-        PREFERENCES.putBoolean(GROUP_ALIGN_EQUALS_ENABLED, isGroupAlignEqualsEnabled);
-    }
-
-    public boolean isGroupKeysEnabled() {
-        return PREFERENCES.getBoolean(GROUP_KEYS_ENABLED, true);
-    }
-
-    public void isGroupKeysEnabled(final boolean isGroupKeysEnabled) {
-        PREFERENCES.putBoolean(GROUP_KEYS_ENABLED, isGroupKeysEnabled);
-    }
-
-    public boolean isUnicodeEscapeUppercase() {
-        return PREFERENCES.getBoolean(UNICODE_ESCAPE_UPPERCASE, true);
-    }
-
-    public void isUnicodeEscapeUppercase(final boolean isGeneratedByEnabled) {
-        PREFERENCES.putBoolean(UNICODE_ESCAPE_UPPERCASE, isGeneratedByEnabled);
     }
 
     private static class PropertyPreferencesHolder {

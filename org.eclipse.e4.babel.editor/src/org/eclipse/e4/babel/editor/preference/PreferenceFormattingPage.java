@@ -143,28 +143,24 @@ public final class PreferenceFormattingPage extends APreferencePage {
     }
 
     private void keepEmptyFields(final Composite composite) {
-        // Keep empty fields?
         final Composite field = createFieldComposite(composite);
         keepEmptyFields = new Button(field, SWT.CHECK);
-        // keepEmptyFields.setSelection(PropertyPreferences.getInstance().);
+        keepEmptyFields.setSelection(PropertyPreferences.getInstance().isKeepEmptyFields());
         createLabel(field, "Keep keys without values");
-
-
     }
 
     private void wrapNewLine(final Composite composite) {
         final Composite field = createFieldComposite(composite);
         wrapNewLine = new Button(field, SWT.CHECK);
-        //wrapNewLine.setSelection(prefs.getBoolean(MsgEditorPreferences.NEW_LINE_NICE));
-        new Label(field, SWT.NONE).setText("Wrap lines after escaped new line characters"); //$NON-NLS-1$
+        wrapNewLine.setSelection(PropertyPreferences.getInstance().isNewLineNice());
+        createLabel(field, "Wrap lines after escaped new line characters");
     }
 
     private void spacesForIdent(final Composite composite) {
-        // How many spaces/tabs to use for indenting?
         final Composite field = createFieldComposite(composite, indentPixels);
-        new Label(field, SWT.NONE).setText("How many spaces to use for indentation:"); //$NON-NLS-1$
+        new Label(field, SWT.NONE).setText("How many spaces to use for indentation:");
         wrapIndentSpaces = new Text(field, SWT.BORDER);
-        // wrapIndentSpaces.setText(prefs.getString(MsgEditorPreferences.WRAP_INDENT_LENGTH));
+        wrapIndentSpaces.setText(String.valueOf(PropertyPreferences.getInstance().getWrapIndentLength()));
         wrapIndentSpaces.setTextLimit(2);
         setWidthInChars(wrapIndentSpaces, 2);
         wrapIndentSpaces.addKeyListener(new NumberTextKeyListener("The 'How many spaces to use...' field must be numeric", this)); //$NON-NLS-1$
@@ -172,10 +168,9 @@ public final class PreferenceFormattingPage extends APreferencePage {
     }
 
     private void alignWrappedLinesWithEqualSign(final Composite composite) {
-        // Align wrapped lines with equal signs?
         final Composite field = createFieldComposite(composite, indentPixels);
         wrapAlignEqualSigns = new Button(field, SWT.CHECK);
-        //wrapAlignEqualSigns.setSelection(prefs.getBoolean(MsgEditorPreferences.WRAP_ALIGN_EQUALS_ENABLED));
+        wrapAlignEqualSigns.setSelection(PropertyPreferences.getInstance().isWrapAlignEqualSign());
         wrapAlignEqualSigns.addSelectionListener(new SelectionAdapter() {
 
             @Override
@@ -183,14 +178,14 @@ public final class PreferenceFormattingPage extends APreferencePage {
                 performRefresh();
             }
         });
-        new Label(field, SWT.NONE).setText("Align wrapped lines with equal signs"); //$NON-NLS-1$
+        createLabel(field, "Align wrapped lines with equal signs");
     }
 
     private void wrapCharLimit(final Composite composite) {
         final Composite field = createFieldComposite(composite, indentPixels);
         createLabel(field, "Wrap lines after how many characters:");
         wrapCharLimit = new Text(field, SWT.BORDER);
-        // wrapCharLimit.setText(String.valueOf(PropertyPreferences.getInstance().getWrapLineCharLimit()));
+        wrapCharLimit.setText(String.valueOf(PropertyPreferences.getInstance().getWrapLineLength()));
         wrapCharLimit.setTextLimit(4);
         setWidthInChars(wrapCharLimit, 4);
         wrapCharLimit.addKeyListener(new NumberTextKeyListener("The 'Wrap lines after...' field must be numeric", this));
@@ -256,8 +251,8 @@ public final class PreferenceFormattingPage extends APreferencePage {
     private void convertUnicodeUpperCase(final Composite composite) {
         final Composite field = createFieldComposite(composite, indentPixels);
         convertUnicodeUpperCase = new Button(field, SWT.CHECK);
-        convertUnicodeUpperCase.setSelection(PropertyPreferences.getInstance().isUnicodeEscapeUppercase());
-        new Label(field, SWT.NONE).setText("Use uppercase for hexadecimal letters");
+        convertUnicodeUpperCase.setSelection(PropertyPreferences.getInstance().isConvertUnicodeToEncodedUpper());
+        createLabel(field, "Use uppercase for hexadecimal letters");
     }
 
     private void alignEqualSigns(final Composite composite) {
@@ -274,12 +269,19 @@ public final class PreferenceFormattingPage extends APreferencePage {
     }
 
     private void performRefresh() {
-
+        for (int i = 0; i < newLineTypes.length; i++) {
+            newLineTypes[i].setEnabled(newLineTypeForce.getSelection());
+        }
     }
 
     @Override
     public boolean performOk() {
-        return super.performOk();
+        for (int i = 0; i < newLineTypes.length; i++) {
+            if (newLineTypes[i].getSelection()) {
+                PropertyPreferences.getInstance().setNewLineType(PropertyPreferences.NewLineType.values()[i]);
+            }
+        }
+        return true;
     }
 
     @Override
