@@ -15,17 +15,13 @@ public final class PropertyPreferences {
     private static final int NEW_LINE_MAC = 3;
 
     private static final String NODE_PATH = "org.eclipse.e4.babel.core";
-    private static final String I18N_EDITOR_HEIGHT = "";
 
-    public static final String KEY_TREE_HIERARCHICAL = "keyTreeHierarchical";
-    public static final String KEY_TREE_EXPANDED = "keyTreeExpanded";
+
     public static final String IS_GENERATED_BY_ENABLED = "isGeneratedByEnabled";
 
     public static final String SHOW_SUPPORT_ENABLED = "showSupportEnabled";
-    public static final String NL_SUPPORT_ENABLED = "nLSupportEnabled";
-    public static final String SUPPORT_FRAGMENTS = "supportFragments";
-    public static final String LOADING_ONLY_FRAGMENT_RESOURCES = "loadingOnlyFragmentResources";
-    public static final String FIELD_TAB_INSERTS = "fieldTabInserts";
+
+
     public static final String ALIGN_EQUALS_ENABLED = "alignEqualsEnabled";
     public static final String SPACES_AROUND_EQUALS_ENABLED = "spacesAroundEqualsEnabled";
 
@@ -34,7 +30,7 @@ public final class PropertyPreferences {
     public static final String GROUP_LEVEL_DEEP = "groupLevelDeep";
     public static final String GROUP_SEP_BLANK_LINE_COUNT = "groupSepBlankLineCount";
     public static final String GROUP_ALIGN_EQUALS_ENABLED = "groupAlignEqualsEnabled";
-    public static final String GROUP__LEVEL_SEPARATOR = "groupLevelSeparator";
+    public static final String GROUP_LEVEL_SEPARATOR = "groupLevelSeparator";
 
     // Wrap
     public static final String WRAP_LINES_ENABLED = "wrapLinesEnabled";
@@ -57,15 +53,26 @@ public final class PropertyPreferences {
     //public static final String REPORT_DUPL_VALUES_ONLY_IN_ROOT_LOCALE = "reportDuplicateValuesOnlyInRootLocale";
     //
 
-    public static final String REPORT_SIMILAR_VALUES_LEVENSTHEIN = "CORE_REPORT/SIMILAR_VALUES_LEVENSTHEIN";
-    public static final String REPORT_MISSING_VALUES = "CORE_REPORT/MISSING_VALUES";
-    public static final String REPORT_DUPLICATE_VALUES = "CORE_REPORT/DUPLICATE_VALUES";
-    public static final String REPORT_SIMILAR_VALUES = "CORE_REPORT/REPORT_SIMILAR_VALUES_LEVEL";
-    public static final String REPORT_SIMILAR_VALUES_WORD_COMPARE = "CORE_REPORT/SIMILAR_VALUES_WORD_COMPARE";
-    public static final String REPORT_SIMILAR_VALUES_PRECISION = "CORE_REPORT/SIMILAR_VALUES_PRECISION";
+    private static final String REPORT_SIMILAR_VALUES_LEVENSTHEIN = "CORE_REPORT/SIMILAR_VALUES_LEVENSTHEIN";
+    private static final String REPORT_MISSING_VALUES = "CORE_REPORT/MISSING_VALUES";
+    private static final String REPORT_DUPLICATE_VALUES = "CORE_REPORT/DUPLICATE_VALUES";
+    private static final String REPORT_SIMILAR_VALUES = "CORE_REPORT/REPORT_SIMILAR_VALUES_LEVEL";
+    private static final String REPORT_SIMILAR_VALUES_WORD_COMPARE = "CORE_REPORT/SIMILAR_VALUES_WORD_COMPARE";
+    private static final String REPORT_SIMILAR_VALUES_PRECISION = "CORE_REPORT/SIMILAR_VALUES_PRECISION";
+
+    // General
+    private static final String EDITOR_TREE_HIDDEN = "CORE_GENERAL/EDITOR_TREE_HIDDEN";
+    private static final String EDITOR_TREE_HIERARCHICAL = "CORE_GENERAL/EDITOR_TREE_HIERARCHICAL";
+    private static final String EDITOR_TREE_EXPANDED = "CORE_GENERAL/EDITOR_TREE_EXPANDED";
+    private static final String FIELD_TAB_INSERTS = "CORE_GENERAL/FIELD_TAB_INSERTS";
+    private static final String I18N_EDITOR_HEIGHT = "CORE_GENERAL/I18N_EDITOR_HEIGHT";
+    private static final String KEY_GROUP_SEPARATOR = "CORE_GENERAL/KEY_GROUP_SEPARATOR";
+    private static final String SUPPORT_NL = "CORE_GENERAL/SUPPORT_NL";
+    private static final String SUPPORT_FRAGMENTS = "CORE_GENERAL/SUPPORT_FRAGMENTS";
+    private static final String LOAD_ONLY_FRAGMENT_RESOURCES = "CORE_GENERAL/LOAD_ONLY_FRAGMENT_RESOURCES";
+    private static final String CONVERT_ENCODED_TO_UNICODE = "CORE_GENERAL/CONVERT_ENCODED_TO_UNICODE";
 
 
-    public static final String EDITOR_TREE_HIDDEN = "editorTreeHidden";
     public static final String KEEP_EMPTY_FIELDS = "keepEmptyFields";
     public static final String SORT_KEYS = "sortKeys";
     public static final String DISPLAY_DEFAULT_COMMENT_FIELD = "displayCommentFieldNL";
@@ -82,8 +89,89 @@ public final class PropertyPreferences {
         super();
     }
 
-    // Reporting
+    // General
 
+    public boolean isConvertEncodedToUnicode() {
+        return PREFERENCES.getBoolean(CONVERT_ENCODED_TO_UNICODE, true);
+    }
+
+    public void isConvertEncodedToUnicode(final boolean isConvertEncodedToUnicode) {
+        PREFERENCES.putBoolean(CONVERT_ENCODED_TO_UNICODE, isConvertEncodedToUnicode);
+    }
+
+    public boolean isLoadOnlyFragmentResources() {
+        return PREFERENCES.getBoolean(LOAD_ONLY_FRAGMENT_RESOURCES, false);
+    }
+
+    public void isLoadOnlyFragmentResources(final boolean isLoadOnlyFragmentResources) {
+        PREFERENCES.putBoolean(LOAD_ONLY_FRAGMENT_RESOURCES, isLoadOnlyFragmentResources);
+    }
+
+    public boolean isSupportFragments() {
+        return PREFERENCES.getBoolean(SUPPORT_FRAGMENTS, true);
+    }
+
+    public void isSupportFragments(final boolean isSupportFragments) {
+        PREFERENCES.putBoolean(SUPPORT_FRAGMENTS, isSupportFragments);
+    }
+
+    public boolean isSUpportNl() {
+        return PREFERENCES.getBoolean(SUPPORT_NL, false);
+    }
+
+    public void isSUpportNl(final boolean isSUpportNl) {
+        PREFERENCES.putBoolean(SUPPORT_NL, isSUpportNl);
+    }
+
+    public String getKeyGroupSeparator() {
+        return PREFERENCES.get(KEY_GROUP_SEPARATOR, ".");
+    }
+
+    public void setKeyGroupSeparator(final String seperator) {
+        PREFERENCES.put(KEY_GROUP_SEPARATOR, seperator);
+    }
+
+    public int getI18nEditorHeight() {
+        return PREFERENCES.getInt(I18N_EDITOR_HEIGHT, 80);
+    }
+
+    public void setI18nEditorHeight(final int editorHeight) {
+        PREFERENCES.putInt(I18N_EDITOR_HEIGHT, editorHeight);
+    }
+
+    public boolean isFieldTabInsert() {
+        return PREFERENCES.getBoolean(FIELD_TAB_INSERTS, false);
+    }
+
+    public void isFieldTabInsert(final boolean isFieldTabInsert) {
+        PREFERENCES.putBoolean(FIELD_TAB_INSERTS, isFieldTabInsert);
+    }
+
+    public boolean isEditorTreeExpanded() {
+        return PREFERENCES.getBoolean(EDITOR_TREE_EXPANDED, true);
+    }
+
+    public void isEditorTreeExpanded(final boolean isEditorTreeExpanded) {
+        PREFERENCES.putBoolean(EDITOR_TREE_EXPANDED, isEditorTreeExpanded);
+    }
+
+    public boolean isEditorTreeHidden() {
+        return PREFERENCES.getBoolean(EDITOR_TREE_HIDDEN, false);
+    }
+
+    public void isEditorTreeHidden(final boolean isEditorTreeHidden) {
+        PREFERENCES.putBoolean(EDITOR_TREE_HIDDEN, isEditorTreeHidden);
+    }
+
+    public boolean isEditorTreeHierachical() {
+        return PREFERENCES.getBoolean(EDITOR_TREE_HIERARCHICAL, true);
+    }
+
+    public void isEditorTreeHierachical(final boolean isEditorTreeHierachical) {
+        PREFERENCES.putBoolean(EDITOR_TREE_HIERARCHICAL, isEditorTreeHierachical);
+    }
+
+    // Reporting
     public boolean isReportSimilarValues() {
         return PREFERENCES.getBoolean(REPORT_SIMILAR_VALUES, false);
     }
@@ -160,14 +248,6 @@ public final class PropertyPreferences {
         PREFERENCES.putBoolean(UNICODE_ESCAPE_ENABLED, isUnicodeEscapeEnabled);
     }
 
-
-    public int getI18nEditorHeight() {
-        return PREFERENCES.getInt(I18N_EDITOR_HEIGHT, 80);
-    }
-
-    public void setI18nEditorHeight(final int editorHeight) {
-        PREFERENCES.putInt(I18N_EDITOR_HEIGHT, editorHeight);
-    }
 
     public static int getWrapIndentLength() {
         return PREFERENCES.getInt(WRAP_INDENT_LENGTH, 8);
