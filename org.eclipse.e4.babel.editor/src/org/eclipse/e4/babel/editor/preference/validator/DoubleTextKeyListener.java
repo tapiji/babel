@@ -34,6 +34,7 @@ public final class DoubleTextKeyListener extends ATextKeyListener {
             final double doubleValue = Double.parseDouble(value);
             valid = (doubleValue >= minValue) && (doubleValue <= maxValue);
         }
+        event.doit = valid;
         handleError(event.doit, text);
     }
 }

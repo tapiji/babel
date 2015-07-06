@@ -122,7 +122,7 @@ public final class PropertyManager {
                         value = value.substring(1);
                     }
 
-                    if (PropertyPreferences.getInstance().isConvertToUnicodeEnabled()) {
+                    if (PropertyPreferences.getInstance().isUnicodeEscapeEnabled()) {
                         key = convertEncodedToUnicode(key);
                         value = convertEncodedToUnicode(value);
                     } else {

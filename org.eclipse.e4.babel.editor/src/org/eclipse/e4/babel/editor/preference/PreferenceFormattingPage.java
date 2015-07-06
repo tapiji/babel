@@ -89,7 +89,7 @@ public final class PreferenceFormattingPage extends APreferencePage {
     private void convertUnicodeToEncode(final Composite composite) {
         final Composite field = createFieldComposite(composite);
         convertUnicodeToEncoded = new Button(field, SWT.CHECK);
-        convertUnicodeToEncoded.setSelection(PropertyPreferences.getInstance().isConvertToUnicodeEnabled());
+        convertUnicodeToEncoded.setSelection(PropertyPreferences.getInstance().isUnicodeEscapeEnabled());
         convertUnicodeToEncoded.addSelectionListener(new SelectionAdapter() {
 
             @Override
@@ -190,7 +190,7 @@ public final class PreferenceFormattingPage extends APreferencePage {
         final Composite field = createFieldComposite(composite, indentPixels);
         createLabel(field, "Wrap lines after how many characters:");
         wrapCharLimit = new Text(field, SWT.BORDER);
-        wrapCharLimit.setText(String.valueOf(PropertyPreferences.getInstance().getWrapLineCharLimit()));
+        // wrapCharLimit.setText(String.valueOf(PropertyPreferences.getInstance().getWrapLineCharLimit()));
         wrapCharLimit.setTextLimit(4);
         setWidthInChars(wrapCharLimit, 4);
         wrapCharLimit.addKeyListener(new NumberTextKeyListener("The 'Wrap lines after...' field must be numeric", this));
@@ -199,7 +199,7 @@ public final class PreferenceFormattingPage extends APreferencePage {
     private void wrapLines(final Composite composite) {
         final Composite field = createFieldComposite(composite);
         wrapLines = new Button(field, SWT.CHECK);
-        wrapLines.setSelection(PropertyPreferences.getInstance().isWrapLineEnabled());
+        //  wrapLines.setSelection(PropertyPreferences.getInstance().isWrapLineEnabled());
         wrapLines.addSelectionListener(new SelectionAdapter() {
 
             @Override
@@ -233,7 +233,7 @@ public final class PreferenceFormattingPage extends APreferencePage {
         final Composite field = createFieldComposite(composite, indentPixels);
         new Label(field, SWT.NONE).setText("How many level deep:");
         groupLevelDeep = new Text(field, SWT.BORDER);
-        groupLevelDeep.setText(String.valueOf(PropertyPreferences.getInstance().getGroupLevelDepth()));
+        //groupLevelDeep.setText(String.valueOf(PropertyPreferences.getInstance().getGroupLevelDepth()));
         groupLevelDeep.setTextLimit(2);
         setWidthInChars(groupLevelDeep, 2);
         groupLevelDeep.addKeyListener(new NumberTextKeyListener("The 'How many level deep' field must be numeric", this));

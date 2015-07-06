@@ -1,83 +1,76 @@
 package org.eclipse.e4.babel.editor.preference;
 
 
+import org.eclipse.e4.babel.core.preference.PropertyPreferences;
 import org.eclipse.e4.babel.editor.preference.validator.DoubleTextKeyListener;
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 
 public final class PreferenceReportingPage extends APreferencePage {
 
-    private Combo reportMissingVals;
-    private Combo reportDuplVals;
-    private Combo reportSimVals;
+    private Button reportMissingVals;
+    private Button reportDuplVals;
+    private Button reportSimVals;
     private Text reportSimPrecision;
-    private Button[] reportSimValsMode = new Button[2];
+    private final Button[] reportSimValsMode = new Button[2];
 
     public PreferenceReportingPage() {
         super("Performance");
     }
 
     @Override
-    protected Control createContents(Composite parent) {
-        IPreferenceStore prefs = getPreferenceStore();
-        Composite field = null;
-        Composite composite = new Composite(parent, SWT.NONE);
+    protected Control createContents(final Composite parent) {
+        final Composite composite = new Composite(parent, SWT.NONE);
         composite.setLayout(new GridLayout(1, false));
 
-        new Label(composite, SWT.NONE).setText("Die nachfolgenden Funktionen k\u00F6nnen signifikanten Einflu\u00DF auf die Arbeitsgeschwindigkeit haben.");
-        new Label(composite, SWT.NONE).setText("Insbesondere bei gro\u00DFen Dateien. Mit Bedacht verwenden.");
-        new Label(composite, SWT.NONE).setText(" ");
+        createLabel(composite, "Die nachfolgenden Funktionen k\u00F6nnen signifikanten Einflu\u00DF auf die Arbeitsgeschwindigkeit haben.");
+        createLabel(composite, "Insbesondere bei gro\u00DFen Dateien. Mit Bedacht verwenden.");
+        createLabel(composite, " ");
 
-        // Report missing values?
-        field = createFieldComposite(composite);
-        GridData gridData = new GridData();
-        gridData.grabExcessHorizontalSpace = true;
-        field.setLayoutData(gridData);
-        new Label(field, SWT.NONE).setText("Zeige Schl\u00FCssel mit einem oder mehr fehlenden Werten.");
-        reportMissingVals = new Combo(field, SWT.READ_ONLY);
-        // populateCombo(reportMissingVals, prefs.getInt(MsgEditorPreferences.REPORT_MISSING_VALUES_LEVEL));
-        // reportMissingVals.setSelection(
-        // prefs.getBoolean(MsgEditorPreferences.REPORT_MISSING_VALUES));
+        reportMissingValues(composite);
+        reportDuplicateValues(composite);
+        reportSimilarValues(composite);
+        reportPrecisionLevel(composite);
+        performRefresh();
+        return composite;
+    }
 
-        // Report duplicate values?
-        field = createFieldComposite(composite);
-        gridData = new GridData();
-        gridData.grabExcessHorizontalSpace = true;
-        field.setLayoutData(gridData);
-        new Label(field, SWT.NONE).setText("Zeige Schl\u00FCssel, die sich gleiche Inhalte/Werte innerhalb einer Lokale teilen.");
-        reportDuplVals = new Combo(field, SWT.READ_ONLY);
-        // populateCombo(reportDuplVals, prefs.getInt(MsgEditorPreferences.REPORT_DUPL_VALUES_LEVEL));
+    private void reportMissingValues(final Composite composite) {
+        final Composite field = createFieldComposite(composite);
+        reportMissingVals = new Button(field, SWT.CHECK);
+        reportMissingVals.setSelection(PropertyPreferences.getInstance().isReportMissingValues());
+        createLabel(field, "Zeige Schl\u00FCssel mit einem oder mehr fehlenden Werten.");
+    }
 
-        // Report similar values?
-        field = createFieldComposite(composite);
-        gridData = new GridData();
-        gridData.grabExcessHorizontalSpace = true;
-        field.setLayoutData(gridData);
+    private void reportDuplicateValues(final Composite composite) {
+        final Composite field = createFieldComposite(composite);
+        reportDuplVals = new Button(field, SWT.CHECK);
+        reportDuplVals.setSelection(PropertyPreferences.getInstance().isReportDuplicateValues());
+        createLabel(field, "Zeige Schl\u00FCssel, die sich gleiche Inhalte/Werte innerhalb einer Lokale teilen.");
+    }
 
-        new Label(field, SWT.NONE).setText("Zeige Schl\u00FCssel, die sich gleiche Inhalte/Werte innerhalb einer Lokale teilen.");
-        reportSimVals = new Combo(field, SWT.READ_ONLY);
-        //populateCombo(reportSimVals, prefs.getInt(MsgEditorPreferences.REPORT_SIM_VALUES_LEVEL));
+    private void reportSimilarValues(final Composite composite) {
+        final Composite field = createFieldComposite(composite);
+        reportSimVals = new Button(field, SWT.CHECK);
+        reportSimVals.setSelection(PropertyPreferences.getInstance().isReportSimilarValues());
         reportSimVals.addSelectionListener(new SelectionAdapter() {
 
             @Override
-            public void widgetSelected(SelectionEvent event) {
-                //  refreshEnabledStatuses();
+            public void widgetSelected(final SelectionEvent event) {
+                performRefresh();
             }
         });
+        createLabel(field, "Zeige Schl\u00FCssel, die sich gleiche Inhalte/Werte innerhalb einer Lokale teilen.");
 
-        Composite simValModeGroup = new Composite(composite, SWT.NONE);
-        GridLayout gridLayout = new GridLayout(2, false);
+        final Composite simValModeGroup = new Composite(composite, SWT.NONE);
+        final GridLayout gridLayout = new GridLayout(2, false);
         gridLayout.marginWidth = indentPixels;
         gridLayout.marginHeight = 0;
         gridLayout.verticalSpacing = 0;
@@ -85,24 +78,43 @@ public final class PreferenceReportingPage extends APreferencePage {
 
         // Report similar values: word count
         reportSimValsMode[0] = new Button(simValModeGroup, SWT.RADIO);
-        //reportSimValsMode[0].setSelection(prefs.getBoolean(MsgEditorPreferences.REPORT_SIM_VALUES_WORD_COMPARE));
-        new Label(simValModeGroup, SWT.NONE).setText("Nutze Anzahl identischer Worte.");
+        reportSimValsMode[0].setSelection(PropertyPreferences.getInstance().isReportSimilarValuesWordCompare());
+        createLabel(simValModeGroup, "Nutze Anzahl identischer Worte.");
 
         // Report similar values: Levensthein
         reportSimValsMode[1] = new Button(simValModeGroup, SWT.RADIO);
-        //  reportSimValsMode[1].setSelection(prefs.getBoolean(MsgEditorPreferences.REPORT_SIM_VALUES_LEVENSTHEIN));
-        new Label(simValModeGroup, SWT.NONE).setText("Nutze Levensthein Distanz.");
+        reportSimValsMode[1].setSelection(PropertyPreferences.getInstance().isReportSimliarValuesLevensthein());
+        createLabel(simValModeGroup, "Nutze Levensthein Distanz.");
+    }
 
-        // Report similar values: precision level
-        field = createFieldComposite(composite, indentPixels);
-        new Label(field, SWT.NONE).setText("Genauigkeitslevel (zw. 0 und 1):");
+    private void reportPrecisionLevel(final Composite composite) {
+        final Composite field = createFieldComposite(composite, indentPixels);
+        createLabel(field, "Genauigkeitslevel (zw. 0 und 1):");
         reportSimPrecision = new Text(field, SWT.BORDER);
-        //reportSimPrecision.setText(prefs.getString(MsgEditorPreferences.REPORT_SIM_VALUES_PRECISION));
+        reportSimPrecision.setText(String.valueOf(PropertyPreferences.getInstance().getReportSimilarValuesPrecision()));
         reportSimPrecision.setTextLimit(6);
         setWidthInChars(reportSimPrecision, 6);
         reportSimPrecision.addKeyListener(new DoubleTextKeyListener("Der Genauigkeitslevel mu\u00DF zwischen 0 und 1 sein.", 0, 1, this));
-
-
-        return composite;
     }
+
+    @Override
+    public boolean performOk() {
+        PropertyPreferences.getInstance().isReportMissingValues(reportMissingVals.getSelection());
+        PropertyPreferences.getInstance().isReportDuplicateValues(reportDuplVals.getSelection());
+        PropertyPreferences.getInstance().isReportSimilarValues(reportSimVals.getSelection());
+        PropertyPreferences.getInstance().isReportSimilarValuesWordCompare(reportSimValsMode[0].getSelection());
+        PropertyPreferences.getInstance().isReportSimliarValuesLevensthein(reportSimValsMode[1].getSelection());
+        PropertyPreferences.getInstance().setReportSimilarValuesPrecision(Double.parseDouble(reportSimPrecision.getText()));
+        performRefresh();
+        return true;
+    }
+
+    private void performRefresh() {
+        final boolean isReportingSimilar = reportSimVals.getSelection();
+        for (final Button element : reportSimValsMode) {
+            element.setEnabled(isReportingSimilar);
+        }
+        reportSimPrecision.setEnabled(isReportingSimilar);
+    }
+
 }
