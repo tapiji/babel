@@ -1,6 +1,7 @@
 package org.eclipse.e4.babel.editor.preference;
 
 
+import org.eclipse.e4.babel.core.preference.PropertyPreferences;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.GC;
@@ -52,4 +53,17 @@ abstract class APreferencePage extends PreferencePage {
         gc.dispose();
         return numOfChars * extent.x;
     }
+
+    @Override
+    protected void performDefaults() {
+        super.performDefaults();
+        boolean isDeleted = PropertyPreferences.getInstance().clearPreferences();
+        if (isDeleted) {
+            initializeWithDefaultValues();
+        }
+    }
+
+    protected abstract void initializeWithDefaultValues();
+
+
 }

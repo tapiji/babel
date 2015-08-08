@@ -391,24 +391,14 @@ public final class PropertyManager {
     private int getEqualIndex(final String key, final String group, final MessageBundle messagesBundle) {
         int equalIndex = -1;
         final boolean alignEquals = false;//config.isAlignEqualsEnabled();
-        final boolean groupKeys = PropertyPreferences.getInstance().isGroupKeysEnabled();
-        final boolean groupAlignEquals = PropertyPreferences.getInstance().isGroupAlignEqualsEnabled();
-
-        // Exit now if we are not aligning equals
-        if (!alignEquals || (groupKeys && !groupAlignEquals) || (groupKeys && (group == null))) {
-            return key.length();
-        }
-
-        // Get equal index
-        final String[] keys = messagesBundle.getKeys();
-        for (final String iterKey : keys) {
-            if (!groupKeys || (groupAlignEquals && iterKey.startsWith(group))) {
-                final int index = iterKey.length();
-                if (index > equalIndex) {
-                    equalIndex = index;
-                }
-            }
-        }
+        /*
+         * final boolean groupKeys = PropertyPreferences.getInstance().isGroupKeysEnabled(); final boolean
+         * groupAlignEquals = PropertyPreferences.getInstance().isGroupAlignEqualsEnabled(); // Exit now if we are not
+         * aligning equals if (!alignEquals || (groupKeys && !groupAlignEquals) || (groupKeys && (group == null))) {
+         * return key.length(); } // Get equal index final String[] keys = messagesBundle.getKeys(); for (final String
+         * iterKey : keys) { if (!groupKeys || (groupAlignEquals && iterKey.startsWith(group))) { final int index =
+         * iterKey.length(); if (index > equalIndex) { equalIndex = index; } } }_
+         */
         return equalIndex;
     }
 }

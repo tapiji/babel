@@ -4,7 +4,7 @@ package org.eclipse.e4.babel.editor.ui.handler.window;
 import javax.inject.Named;
 import org.eclipse.e4.babel.editor.preference.PreferenceFormattingPage;
 import org.eclipse.e4.babel.editor.preference.PreferenceGeneralPage;
-import org.eclipse.e4.babel.editor.preference.PreferenceReportingPage;
+import org.eclipse.e4.babel.editor.preference.PreferencePerformancePage;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.ui.services.IServiceConstants;
 import org.eclipse.jface.preference.IPreferenceNode;
@@ -27,7 +27,7 @@ public final class ShowPreferenceHandler {
 
         final IPreferenceNode generalPage = new PreferenceNode(PAGE_GENERAL, new PreferenceGeneralPage());
         final IPreferenceNode formattingPage = new PreferenceNode(PAGE_FORMATTING, new PreferenceFormattingPage());
-        final IPreferenceNode reportingPage = new PreferenceNode(PAGE_REPORTING, new PreferenceReportingPage());
+        final IPreferenceNode reportingPage = new PreferenceNode(PAGE_REPORTING, new PreferencePerformancePage());
         mgr.addToRoot(generalPage);
         mgr.addTo(PAGE_GENERAL, formattingPage);
         mgr.addTo(PAGE_GENERAL, reportingPage);

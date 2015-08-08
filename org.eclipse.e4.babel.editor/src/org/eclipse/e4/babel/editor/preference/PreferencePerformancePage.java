@@ -13,7 +13,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 
 
-public final class PreferenceReportingPage extends APreferencePage {
+public final class PreferencePerformancePage extends APreferencePage {
 
     private Button reportMissingVals;
     private Button reportDuplVals;
@@ -21,7 +21,7 @@ public final class PreferenceReportingPage extends APreferencePage {
     private Text reportSimPrecision;
     private final Button[] reportSimValsMode = new Button[2];
 
-    public PreferenceReportingPage() {
+    public PreferencePerformancePage() {
         super("Performance");
     }
 
@@ -117,4 +117,9 @@ public final class PreferenceReportingPage extends APreferencePage {
         reportSimPrecision.setEnabled(isReportingSimilar);
     }
 
+    @Override
+    protected void initializeWithDefaultValues() {
+        // TODO Auto-generated method stub
+
+    }
 }

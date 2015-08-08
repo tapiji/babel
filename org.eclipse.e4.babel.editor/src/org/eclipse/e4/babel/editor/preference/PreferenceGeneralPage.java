@@ -36,11 +36,11 @@ public final class PreferenceGeneralPage extends APreferencePage {
         keyGroupSeparator(composite);
         convertEncodedToUnicode(composite);
         supportNl(composite);
-        keyTreeHierachical(composite);
-        keyTreeExpanded(composite);
-        fieldTabInsert(composite);
-        loadOnlyFragmentResources(composite);
         supportFragments(composite);
+        loadOnlyFragmentResources(composite);
+        keyTreeExpanded(composite);
+        keyTreeHierachical(composite);
+        fieldTabInsert(composite);
         editorTreeHidden(composite);
         i18nEditorHeight(composite);
 
@@ -70,7 +70,7 @@ public final class PreferenceGeneralPage extends APreferencePage {
 
     private void i18nEditorHeight(final Composite composite) {
         final Composite field = createFieldComposite(composite);
-        createLabel(field, "Editor-Höhe");
+        createLabel(field, "Minimale Editor-Höhe");
         i18nEditorHeight = new Text(field, SWT.BORDER);
         i18nEditorHeight.setText(String.valueOf(PropertyPreferences.getInstance().getI18nEditorHeight()));
         i18nEditorHeight.setTextLimit(3);
@@ -134,5 +134,17 @@ public final class PreferenceGeneralPage extends APreferencePage {
         PropertyPreferences.getInstance().isLoadOnlyFragmentResources(loadOnlyFragmentResources.getSelection());
         PropertyPreferences.getInstance().isConvertEncodedToUnicode(convertEncodedToUnicode.getSelection());
         return true;
+    }
+
+    @Override
+    protected void performDefaults() {
+        super.performDefaults();
+        // TODO restore default values
+    }
+
+    @Override
+    protected void initializeWithDefaultValues() {
+        // TODO Auto-generated method stub
+
     }
 }

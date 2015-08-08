@@ -2,12 +2,11 @@ package org.eclipse.e4.babel.core.preference;
 
 
 import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.osgi.service.prefs.BackingStoreException;
 import org.osgi.service.prefs.Preferences;
 
 
 public final class PropertyPreferences {
-
-    private static final String TAG = PropertyPreferences.class.getSimpleName();
 
     public enum NewLineType {
         NEW_LINE_DEFAULT(0),
@@ -61,7 +60,6 @@ public final class PropertyPreferences {
     private static final String GROUP_LEVEL_DEEP = "CORE_FORMAT/GROUP_LEVEL_DEEP";
     private static final String IS_NEW_LINE_NICE = "CORE_FORMAT/IS_NEW_LINE_NICE";
     private static final String NEW_LINE_TYPE = "CORE_FORMAT/NEW_LINE_TYPE";
-
 
     // NONE
     public static final String SORT_KEYS = "sortKeys";
@@ -178,7 +176,7 @@ public final class PropertyPreferences {
     }
 
     public int getWrapLineLength() {
-        return PREFERENCES.getInt(WRAP_LINE_LENGTH, 0);
+        return PREFERENCES.getInt(WRAP_LINE_LENGTH, 80);
     }
 
     public void setWrapLineLength(final int setWrapLineLength) {
@@ -329,6 +327,17 @@ public final class PropertyPreferences {
 
     public void isReportSimliarValuesLevensthein(final boolean isSimliarValuesLevensthein) {
         PREFERENCES.putBoolean(REPORT_SIMILAR_VALUES_LEVENSTHEIN, isSimliarValuesLevensthein);
+    }
+
+    public boolean clearPreferences() {
+        boolean isNodeDeleted = false;
+        try {
+            PREFERENCES.clear();
+            isNodeDeleted = true;
+        } catch (BackingStoreException exception) {
+            isNodeDeleted = false;
+        }
+        return isNodeDeleted;
     }
 
     private static class PropertyPreferencesHolder {
