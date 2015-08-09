@@ -9,10 +9,10 @@ import org.osgi.service.prefs.Preferences;
 public final class PropertyPreferences {
 
     public enum NewLineType {
-        NEW_LINE_DEFAULT(0),
-        NEW_LINE_UNIX(1),
-        NEW_LINE_WIN(2),
-        NEW_LINE_MAC(3);
+        DEFAULT(0),
+        UNIX(1),
+        WIN(2),
+        MAC(3);
 
         private final int id;
 
@@ -58,7 +58,7 @@ public final class PropertyPreferences {
     private static final String IS_ALIGN_EQUALS_SIGNS = "CORE_FORMAT/IS_ALIGN_EQUALS_SIGNS";
     private static final String IS_SPACES_AROUND_EQUALS_SIGNS = "CORE_FORMAT/IS_SPACES_AROUND_EQUALS_SIGNS";
     private static final String GROUP_LEVEL_DEEP = "CORE_FORMAT/GROUP_LEVEL_DEEP";
-    private static final String IS_NEW_LINE_NICE = "CORE_FORMAT/IS_NEW_LINE_NICE";
+    private static final String IS_NEW_LINE_FORCED = "CORE_FORMAT/IS_NEW_LINE_NICE";
     private static final String NEW_LINE_TYPE = "CORE_FORMAT/NEW_LINE_TYPE";
 
     // NONE
@@ -86,7 +86,10 @@ public final class PropertyPreferences {
         super();
     }
 
-    // Format
+    //=========================================================
+    // FROMAT PREFERENCES
+    //=========================================================
+
     public boolean isGeneratedByEnabled() {
         return PREFERENCES.getBoolean(IS_GENERATED_BY_ENABLED, true);
     }
@@ -112,7 +115,7 @@ public final class PropertyPreferences {
     }
 
     public boolean isWrapLines() {
-        return PREFERENCES.getBoolean(IS_WRAP_LINES, true);
+        return PREFERENCES.getBoolean(IS_WRAP_LINES, false);
     }
 
     public void isWrapLines(final boolean isWrapLineEnabled) {
@@ -128,7 +131,7 @@ public final class PropertyPreferences {
     }
 
     public boolean isKeepEmptyFields() {
-        return PREFERENCES.getBoolean(KEEP_EMPTY_FIELDS, true);
+        return PREFERENCES.getBoolean(KEEP_EMPTY_FIELDS, false);
     }
 
     public void isKeepEmptyFields(final boolean isKeepEmptyFields) {
@@ -160,7 +163,7 @@ public final class PropertyPreferences {
     }
 
     public String getGroupLevelDeep() {
-        return PREFERENCES.get(GROUP_LEVEL_DEEP, "");
+        return PREFERENCES.get(GROUP_LEVEL_DEEP, "1");
     }
 
     public void setGroupLevelDeep(final String groupLevelDeepth) {
@@ -183,23 +186,42 @@ public final class PropertyPreferences {
         PREFERENCES.putInt(WRAP_LINE_LENGTH, setWrapLineLength);
     }
 
-    public boolean isNewLineNice() {
-        return PREFERENCES.getBoolean(IS_NEW_LINE_NICE, true);
+    public boolean isNewLineForced() {
+        return PREFERENCES.getBoolean(IS_NEW_LINE_FORCED, true);
     }
 
     public void isNewLineNice(final boolean isNewLineNice) {
-        PREFERENCES.putBoolean(IS_NEW_LINE_NICE, isNewLineNice);
+        PREFERENCES.putBoolean(IS_NEW_LINE_FORCED, isNewLineNice);
     }
 
     public int getNewLineType() {
-        return PREFERENCES.getInt(NEW_LINE_TYPE, NewLineType.NEW_LINE_DEFAULT.getId());
+        return PREFERENCES.getInt(NEW_LINE_TYPE, NewLineType.DEFAULT.getId());
     }
 
     public void setNewLineType(final NewLineType newLineType) {
         PREFERENCES.putInt(NEW_LINE_TYPE, newLineType.getId());
     }
 
-    // General
+    public void resetFormatProperties() {
+        PREFERENCES.putBoolean(IS_GENERATED_BY_ENABLED, true);
+        PREFERENCES.putBoolean(CONVERT_UNICODE_TO_ENCODED, true);
+        PREFERENCES.putBoolean(CONVERT_UNICODE_TO_ENCODED_UPPER, true);
+        PREFERENCES.putBoolean(IS_ALIGN_EQUALS_SIGNS, true);
+        PREFERENCES.put(GROUP_LEVEL_DEEP, "1");
+        PREFERENCES.putInt(NEW_LINE_TYPE, NewLineType.DEFAULT.getId());
+        PREFERENCES.putInt(WRAP_LINE_LENGTH, 80);
+        PREFERENCES.putBoolean(IS_SPACES_AROUND_EQUALS_SIGNS, true);
+        PREFERENCES.putBoolean(KEEP_EMPTY_FIELDS, false);
+        PREFERENCES.putBoolean(IS_WRAP_LINES, false);
+        PREFERENCES.putInt(WRAP_INDENT_LENGTH, 8);
+        PREFERENCES.putBoolean(IS_GROUP_KEYS, true);
+        PREFERENCES.putBoolean(IS_NEW_LINE_FORCED, false);
+    }
+
+    //=========================================================
+    // GENERAL PREFERENCES
+    //=========================================================
+
     public boolean isConvertEncodedToUnicode() {
         return PREFERENCES.getBoolean(CONVERT_ENCODED_TO_UNICODE, true);
     }
@@ -280,7 +302,23 @@ public final class PropertyPreferences {
         PREFERENCES.putBoolean(EDITOR_TREE_HIERARCHICAL, isEditorTreeHierachical);
     }
 
-    // Reporting
+    public void resetGeneralProperties() {
+        PREFERENCES.putBoolean(CONVERT_ENCODED_TO_UNICODE, true);
+        PREFERENCES.putBoolean(LOAD_ONLY_FRAGMENT_RESOURCES, false);
+        PREFERENCES.putBoolean(SUPPORT_FRAGMENTS, true);
+        PREFERENCES.put(KEY_GROUP_SEPARATOR, ".");
+        PREFERENCES.putInt(I18N_EDITOR_HEIGHT, 80);
+        PREFERENCES.putBoolean(FIELD_TAB_INSERTS, false);
+        PREFERENCES.putBoolean(EDITOR_TREE_EXPANDED, true);
+        PREFERENCES.putBoolean(EDITOR_TREE_HIDDEN, false);
+        PREFERENCES.putBoolean(EDITOR_TREE_HIERARCHICAL, true);
+        PREFERENCES.putBoolean(SUPPORT_NL, false);
+    }
+
+    //=========================================================
+    // PERFORMANCE PREFERENCES
+    //=========================================================
+
     public boolean isReportSimilarValues() {
         return PREFERENCES.getBoolean(REPORT_SIMILAR_VALUES, false);
     }
@@ -328,6 +366,16 @@ public final class PropertyPreferences {
     public void isReportSimliarValuesLevensthein(final boolean isSimliarValuesLevensthein) {
         PREFERENCES.putBoolean(REPORT_SIMILAR_VALUES_LEVENSTHEIN, isSimliarValuesLevensthein);
     }
+
+    public void resetPerformanceProperties() {
+        PREFERENCES.putBoolean(REPORT_SIMILAR_VALUES, false);
+        PREFERENCES.putBoolean(REPORT_MISSING_VALUES, true);
+        PREFERENCES.putBoolean(REPORT_DUPLICATE_VALUES, true);
+        PREFERENCES.putBoolean(REPORT_SIMILAR_VALUES_WORD_COMPARE, true);
+        PREFERENCES.putBoolean(REPORT_SIMILAR_VALUES_LEVENSTHEIN, false);
+        PREFERENCES.putDouble(REPORT_SIMILAR_VALUES_PRECISION, 0.75d);
+    }
+
 
     public boolean clearPreferences() {
         boolean isNodeDeleted = false;

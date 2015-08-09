@@ -13,6 +13,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipselabs.e4.tapiji.logger.Log;
 
 
 public final class PreferenceFormattingPage extends APreferencePage {
@@ -77,6 +78,7 @@ public final class PreferenceFormattingPage extends APreferencePage {
         keepEmptyFields(composite);
         sortKeys(composite);
 
+        initValues();
         performRefresh();
         return composite;
     }
@@ -84,14 +86,12 @@ public final class PreferenceFormattingPage extends APreferencePage {
     private void showGeneratedBy(final Composite composite) {
         final Composite field = createFieldComposite(composite);
         showGeneratedBy = new Button(field, SWT.CHECK);
-        showGeneratedBy.setSelection(PropertyPreferences.getInstance().isGeneratedByEnabled());
         createLabel(field, "Zeige \"Erstellt von...\" Kopfzeilenkommentar (Zeige Deine Unterst\u00FCtzung!");
     }
 
     private void convertUnicodeToEncode(final Composite composite) {
         final Composite field = createFieldComposite(composite);
         convertUnicodeToEncoded = new Button(field, SWT.CHECK);
-        convertUnicodeToEncoded.setSelection(PropertyPreferences.getInstance().isUnicodeEscapeEnabled());
         convertUnicodeToEncoded.addSelectionListener(new SelectionAdapter() {
 
             @Override
@@ -103,10 +103,8 @@ public final class PreferenceFormattingPage extends APreferencePage {
     }
 
     private void newLineTypeForce(final Composite composite) {
-        // How should new lines appear in properties file
         final Composite field = createFieldComposite(composite);
         newLineTypeForce = new Button(field, SWT.CHECK);
-        //newLineTypeForce.setSelection(prefs.getBoolean(MsgEditorPreferences.FORCE_NEW_LINE_TYPE));
         newLineTypeForce.addSelectionListener(new SelectionAdapter() {
 
             @Override
@@ -124,21 +122,17 @@ public final class PreferenceFormattingPage extends APreferencePage {
         newLineTypes[1].setText("Windows (\\r\\n)");
         newLineTypes[2] = new Button(newLineRadioGroup, SWT.RADIO);
         newLineTypes[2].setText("Mac (\\r)");
-        //newLineTypes[prefs.getInt(MsgEditorPreferences.NEW_LINE_STYLE) - 1].setSelection(true);
-
     }
 
     private void ensureSpacesAroundEquals(final Composite composite) {
         final Composite field = createFieldComposite(composite);
         ensureSpacesAroundEquals = new Button(field, SWT.CHECK);
-        //ensureSpacesAroundEquals.setSelection(prefs.getBoolean(MsgEditorPreferences.SPACES_AROUND_EQUALS_ENABLED));
         createLabel(field, "Mindestens ein Leerzeichen links und rechts eines Gleichheitszeichens lassen.");
     }
 
     private void sortKeys(final Composite composite) {
         final Composite field = createFieldComposite(composite);
         sortKeys = new Button(field, SWT.CHECK);
-        // sortKeys.setSelection(prefs.getBoolean(MsgEditorPreferences.SORT_KEYS));
         createLabel(field, "Sortiere die SChlüssel");
     }
 
@@ -152,7 +146,7 @@ public final class PreferenceFormattingPage extends APreferencePage {
     private void wrapNewLine(final Composite composite) {
         final Composite field = createFieldComposite(composite);
         wrapNewLine = new Button(field, SWT.CHECK);
-        wrapNewLine.setSelection(PropertyPreferences.getInstance().isNewLineNice());
+        wrapNewLine.setSelection(PropertyPreferences.getInstance().isNewLineForced());
         createLabel(field, "Zeilen nach Escape-Sequenzzeichen umbrechen.");
     }
 
@@ -160,7 +154,6 @@ public final class PreferenceFormattingPage extends APreferencePage {
         final Composite field = createFieldComposite(composite, indentPixels);
         createLabel(field, "Anzahl der Leerzeichen f\u00FCr die Einr\u00FCckung:");
         wrapIndentSpaces = new Text(field, SWT.BORDER);
-        wrapIndentSpaces.setText(String.valueOf(PropertyPreferences.getInstance().getWrapIndentLength()));
         wrapIndentSpaces.setTextLimit(2);
         setWidthInChars(wrapIndentSpaces, 2);
         wrapIndentSpaces.addKeyListener(new NumberTextKeyListener("The 'How many spaces to use...' field must be numeric", this)); //$NON-NLS-1$
@@ -185,7 +178,6 @@ public final class PreferenceFormattingPage extends APreferencePage {
         final Composite field = createFieldComposite(composite, indentPixels);
         createLabel(field, "Anzahl der Zeichen, nach denen die Zeile umgebrochen werden soll:");
         wrapCharLimit = new Text(field, SWT.BORDER);
-        wrapCharLimit.setText(String.valueOf(PropertyPreferences.getInstance().getWrapLineLength()));
         wrapCharLimit.setTextLimit(4);
         setWidthInChars(wrapCharLimit, 4);
         wrapCharLimit.addKeyListener(new NumberTextKeyListener("The 'Wrap lines after...' field must be numeric", this));
@@ -194,7 +186,6 @@ public final class PreferenceFormattingPage extends APreferencePage {
     private void wrapLines(final Composite composite) {
         final Composite field = createFieldComposite(composite);
         wrapLines = new Button(field, SWT.CHECK);
-        //  wrapLines.setSelection(PropertyPreferences.getInstance().isWrapLineEnabled());
         wrapLines.addSelectionListener(new SelectionAdapter() {
 
             @Override
@@ -202,13 +193,13 @@ public final class PreferenceFormattingPage extends APreferencePage {
                 performRefresh();
             }
         });
-        new Label(field, SWT.NONE).setText(" Lange Zeilen umbrechen."); //$NON-NLS-1$
+        new Label(field, SWT.NONE).setText(" Lange Zeilen umbrechen.");
     }
 
     private void alignEqualSignsWithinGroups(final Composite composite) {
         final Composite field = createFieldComposite(composite, indentPixels);
         groupAlignEqualSigns = new Button(field, SWT.CHECK);
-        // groupAlignEqualSigns.setSelection(prefs.getBoolean(MsgEditorPreferences.GROUP_ALIGN_EQUALS_ENABLED));
+
         createLabel(field, "Ausrichten umgebrochener Zeilen mit gleichen Zeichen.");
     }
 
@@ -216,11 +207,9 @@ public final class PreferenceFormattingPage extends APreferencePage {
         final Composite field = createFieldComposite(composite, indentPixels);
         createLabel(field, "Anzahl der Zeilen zwischen den Gruppen:");
         groupLineBreaks = new Text(field, SWT.BORDER);
-        groupLineBreaks.setText("1");
-        //  groupLineBreaks.setText(prefs.getString(MsgEditorPreferences.GROUP_SEP_BLANK_LINE_COUNT));
         groupLineBreaks.setTextLimit(2);
         setWidthInChars(groupLineBreaks, 2);
-        groupLineBreaks.addKeyListener(new NumberTextKeyListener("The 'How many level deep' field must be numeric", this)); //$NON-NLS-1$
+        groupLineBreaks.addKeyListener(new NumberTextKeyListener("The 'How many level deep' field must be numeric", this));
     }
 
     private void groupLevelDeep(final Composite composite) {
@@ -228,7 +217,6 @@ public final class PreferenceFormattingPage extends APreferencePage {
         createLabel(field, "Baumtiefe:");
         groupLevelDeep = new Text(field, SWT.BORDER);
         groupLevelDeep.setText("1");
-        //groupLevelDeep.setText(String.valueOf(PropertyPreferences.getInstance().getGroupLevelDepth()));
         groupLevelDeep.setTextLimit(2);
         setWidthInChars(groupLevelDeep, 2);
         groupLevelDeep.addKeyListener(new NumberTextKeyListener("The 'How many level deep' field must be numeric", this));
@@ -238,7 +226,6 @@ public final class PreferenceFormattingPage extends APreferencePage {
     private void groupKeys(final Composite composite) {
         final Composite field = createFieldComposite(composite);
         groupKeys = new Button(field, SWT.CHECK);
-        // groupKeys.setSelection(prefs.getBoolean(MsgEditorPreferences.GROUP_KEYS_ENABLED));
         groupKeys.addSelectionListener(new SelectionAdapter() {
 
             @Override
@@ -252,14 +239,12 @@ public final class PreferenceFormattingPage extends APreferencePage {
     private void convertUnicodeUpperCase(final Composite composite) {
         final Composite field = createFieldComposite(composite, indentPixels);
         convertUnicodeUpperCase = new Button(field, SWT.CHECK);
-        convertUnicodeUpperCase.setSelection(PropertyPreferences.getInstance().isConvertUnicodeToEncodedUpper());
         createLabel(field, "Nutze Gro\u00DFbuchstaben f\u00FCr hexadezimale Zeichen.");
     }
 
     private void alignEqualSigns(final Composite composite) {
         final Composite field = createFieldComposite(composite);
         alignEqualSigns = new Button(field, SWT.CHECK);
-        //alignEqualSigns.setSelection(prefs.getBoolean(MsgEditorPreferences.ALIGN_EQUALS_ENABLED));
         alignEqualSigns.addSelectionListener(new SelectionAdapter() {
 
             @Override
@@ -290,26 +275,42 @@ public final class PreferenceFormattingPage extends APreferencePage {
         }
     }
 
+    private void initValues() {
+        showGeneratedBy.setSelection(PropertyPreferences.getInstance().isGeneratedByEnabled());
+        alignEqualSigns.setSelection(PropertyPreferences.getInstance().isAlignEqualSigns());
+        convertUnicodeUpperCase.setSelection(PropertyPreferences.getInstance().isConvertUnicodeToEncodedUpper());
+        groupKeys.setSelection(PropertyPreferences.getInstance().isGroupKeys());
+        groupLevelDeep.setText(PropertyPreferences.getInstance().getGroupLevelDeep());
+        //  groupLineBreaks.setText(prefs.getString(MsgEditorPreferences.GROUP_SEP_BLANK_LINE_COUNT));
+        // groupAlignEqualSigns.setSelection(prefs.getBoolean(MsgEditorPreferences.GROUP_ALIGN_EQUALS_ENABLED));
+        wrapLines.setSelection(PropertyPreferences.getInstance().isWrapLines());
+        wrapCharLimit.setText(String.valueOf(PropertyPreferences.getInstance().getWrapLineLength()));
+        wrapIndentSpaces.setText(String.valueOf(PropertyPreferences.getInstance().getWrapIndentLength()));
+        //sortKeys.setSelection(PropertyPreferences.getInstance());
+        convertUnicodeToEncoded.setSelection(PropertyPreferences.getInstance().isUnicodeEscapeEnabled());
+        newLineTypeForce.setSelection(PropertyPreferences.getInstance().isNewLineForced());
+        newLineTypes[PropertyPreferences.getInstance().getNewLineType()].setSelection(true);
+        ensureSpacesAroundEquals.setSelection(PropertyPreferences.getInstance().isSpaceAroundEqualsSigns());
+        groupLineBreaks.setText("1");
+    }
+
+
     @Override
     public boolean performOk() {
-        for (int i = 0; i < newLineTypes.length; i++) {
-            if (newLineTypes[i].getSelection()) {
-                PropertyPreferences.getInstance().setNewLineType(PropertyPreferences.NewLineType.values()[i]);
-            }
-        }
+        Log.d(TAG, "performOk");
+        /*
+         * for (int i = 0; i < newLineTypes.length; i++) { if (newLineTypes[i].getSelection()) {
+         * PropertyPreferences.getInstance().setNewLineType(PropertyPreferences.NewLineType.values()[i]); } }
+         */
         return true;
     }
 
-
     @Override
-    public boolean performCancel() {
-        return super.performCancel();
+    protected void performDefaults() {
+        super.performDefaults();
+        Log.d(TAG, "performDefaults");
+        PropertyPreferences.getInstance().resetFormatProperties();
+        initValues();
+        performRefresh();
     }
-
-    @Override
-    protected void initializeWithDefaultValues() {
-        // TODO Auto-generated method stub
-
-    }
-
 }
