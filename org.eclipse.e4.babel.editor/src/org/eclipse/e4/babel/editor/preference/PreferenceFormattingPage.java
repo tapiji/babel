@@ -2,6 +2,7 @@ package org.eclipse.e4.babel.editor.preference;
 
 
 import org.eclipse.e4.babel.core.preference.PropertyPreferences;
+import org.eclipse.e4.babel.core.preference.PropertyPreferences.NewLineType;
 import org.eclipse.e4.babel.editor.preference.validator.NumberTextKeyListener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -115,13 +116,12 @@ public final class PreferenceFormattingPage extends APreferencePage {
         final Composite newLineRadioGroup = new Composite(field, SWT.NONE);
         createLabel(newLineRadioGroup, "Erzwingen einer neuen Zeile mit Escape-Sequenz:");
         newLineRadioGroup.setLayout(new RowLayout());
-        newLineTypes[0] = new Button(newLineRadioGroup, SWT.RADIO);
-        newLineTypes[0].setText("UNIX (\\n)");
-        newLineTypes[0].setSelection(true);
-        newLineTypes[1] = new Button(newLineRadioGroup, SWT.RADIO);
-        newLineTypes[1].setText("Windows (\\r\\n)");
-        newLineTypes[2] = new Button(newLineRadioGroup, SWT.RADIO);
-        newLineTypes[2].setText("Mac (\\r)");
+        newLineTypes[NewLineType.UNIX.getId()] = new Button(newLineRadioGroup, SWT.RADIO);
+        newLineTypes[NewLineType.UNIX.getId()].setText("UNIX (\\n)");
+        newLineTypes[NewLineType.WIN.getId()] = new Button(newLineRadioGroup, SWT.RADIO);
+        newLineTypes[NewLineType.WIN.getId()].setText("Windows (\\r\\n)");
+        newLineTypes[NewLineType.MAC.getId()] = new Button(newLineRadioGroup, SWT.RADIO);
+        newLineTypes[NewLineType.MAC.getId()].setText("Mac (\\r)");
     }
 
     private void ensureSpacesAroundEquals(final Composite composite) {
@@ -139,14 +139,12 @@ public final class PreferenceFormattingPage extends APreferencePage {
     private void keepEmptyFields(final Composite composite) {
         final Composite field = createFieldComposite(composite);
         keepEmptyFields = new Button(field, SWT.CHECK);
-        keepEmptyFields.setSelection(PropertyPreferences.getInstance().isKeepEmptyFields());
         createLabel(field, "Eintr\u00E4ge mit leeren Werten behalten.");
     }
 
     private void wrapNewLine(final Composite composite) {
         final Composite field = createFieldComposite(composite);
         wrapNewLine = new Button(field, SWT.CHECK);
-        wrapNewLine.setSelection(PropertyPreferences.getInstance().isNewLineForced());
         createLabel(field, "Zeilen nach Escape-Sequenzzeichen umbrechen.");
     }
 
@@ -163,7 +161,6 @@ public final class PreferenceFormattingPage extends APreferencePage {
     private void alignWrappedLinesWithEqualSign(final Composite composite) {
         final Composite field = createFieldComposite(composite, indentPixels);
         wrapAlignEqualSigns = new Button(field, SWT.CHECK);
-        wrapAlignEqualSigns.setSelection(PropertyPreferences.getInstance().isWrapAlignEqualSign());
         wrapAlignEqualSigns.addSelectionListener(new SelectionAdapter() {
 
             @Override
@@ -199,7 +196,6 @@ public final class PreferenceFormattingPage extends APreferencePage {
     private void alignEqualSignsWithinGroups(final Composite composite) {
         final Composite field = createFieldComposite(composite, indentPixels);
         groupAlignEqualSigns = new Button(field, SWT.CHECK);
-
         createLabel(field, "Ausrichten umgebrochener Zeilen mit gleichen Zeichen.");
     }
 
@@ -256,14 +252,17 @@ public final class PreferenceFormattingPage extends APreferencePage {
     }
 
     private void performRefresh() {
+
         final boolean isForceNewLineType = newLineTypeForce.getSelection();
-        for (int i = 0; i < newLineTypes.length; i++) {
-            newLineTypes[i].setEnabled(isForceNewLineType);
+        for (final Button newLineType : newLineTypes) {
+            newLineType.setEnabled(isForceNewLineType);
         }
+
         final boolean isGroupKeys = groupKeys.getSelection();
         groupLevelDeep.setEnabled(isGroupKeys);
         groupLineBreaks.setEnabled(isGroupKeys);
         groupAlignEqualSigns.setEnabled(isGroupKeys);
+
         final boolean isWrapLines = wrapLines.getSelection();
         wrapCharLimit.setEnabled(isWrapLines);
         wrapIndentSpaces.setEnabled(isWrapLines);
@@ -276,32 +275,94 @@ public final class PreferenceFormattingPage extends APreferencePage {
     }
 
     private void initValues() {
-        showGeneratedBy.setSelection(PropertyPreferences.getInstance().isGeneratedByEnabled());
-        alignEqualSigns.setSelection(PropertyPreferences.getInstance().isAlignEqualSigns());
-        convertUnicodeUpperCase.setSelection(PropertyPreferences.getInstance().isConvertUnicodeToEncodedUpper());
-        groupKeys.setSelection(PropertyPreferences.getInstance().isGroupKeys());
-        groupLevelDeep.setText(PropertyPreferences.getInstance().getGroupLevelDeep());
-        //  groupLineBreaks.setText(prefs.getString(MsgEditorPreferences.GROUP_SEP_BLANK_LINE_COUNT));
-        // groupAlignEqualSigns.setSelection(prefs.getBoolean(MsgEditorPreferences.GROUP_ALIGN_EQUALS_ENABLED));
-        wrapLines.setSelection(PropertyPreferences.getInstance().isWrapLines());
-        wrapCharLimit.setText(String.valueOf(PropertyPreferences.getInstance().getWrapLineLength()));
-        wrapIndentSpaces.setText(String.valueOf(PropertyPreferences.getInstance().getWrapIndentLength()));
-        //sortKeys.setSelection(PropertyPreferences.getInstance());
-        convertUnicodeToEncoded.setSelection(PropertyPreferences.getInstance().isUnicodeEscapeEnabled());
-        newLineTypeForce.setSelection(PropertyPreferences.getInstance().isNewLineForced());
-        newLineTypes[PropertyPreferences.getInstance().getNewLineType()].setSelection(true);
-        ensureSpacesAroundEquals.setSelection(PropertyPreferences.getInstance().isSpaceAroundEqualsSigns());
-        groupLineBreaks.setText("1");
-    }
+        final PropertyPreferences preferences = PropertyPreferences.getInstance();
+        showGeneratedBy.setSelection(preferences.isGeneratedByEnabled());
+        alignEqualSigns.setSelection(preferences.isAlignEqualSigns());
 
+        convertUnicodeUpperCase.setSelection(preferences.isConvertUnicodeToEncodedUpper());
+        convertUnicodeToEncoded.setSelection(preferences.isConvertUnicodedToEncoded());
+
+        groupKeys.setSelection(preferences.isGroupKeys());
+        groupLevelDeep.setText(String.valueOf(preferences.getGroupLevelDeep()));
+        groupLineBreaks.setText(String.valueOf(preferences.getGroupLineBreaks()));
+        groupAlignEqualSigns.setSelection(preferences.isAlignEqualSigns());
+
+        wrapLines.setSelection(preferences.isWrapLines());
+        wrapNewLine.setSelection(preferences.isWrapNewLine());
+        wrapCharLimit.setText(String.valueOf(preferences.getWrapCharLimit()));
+        wrapIndentSpaces.setText(String.valueOf(preferences.getWrapIndentSpace()));
+        wrapAlignEqualSigns.setSelection(preferences.isWrapAlignEqualSign());
+        sortKeys.setSelection(preferences.isSortKeys());
+
+        newLineTypeForce.setSelection(preferences.isLineForced());
+        newLineTypes[preferences.getLineType()].setSelection(true);
+        ensureSpacesAroundEquals.setSelection(preferences.isSpaceAroundEqualsSigns());
+        keepEmptyFields.setSelection(preferences.isKeepEmptyFields());
+    }
 
     @Override
     public boolean performOk() {
         Log.d(TAG, "performOk");
-        /*
-         * for (int i = 0; i < newLineTypes.length; i++) { if (newLineTypes[i].getSelection()) {
-         * PropertyPreferences.getInstance().setNewLineType(PropertyPreferences.NewLineType.values()[i]); } }
-         */
+        final PropertyPreferences preferences = PropertyPreferences.getInstance();
+        if (null != showGeneratedBy) {
+            preferences.isGeneratedByEnabled(showGeneratedBy.getSelection());
+        }
+        if (null != alignEqualSigns) {
+            preferences.isAlignEqualSigns(alignEqualSigns.getSelection());
+        }
+        if (null != convertUnicodeUpperCase) {
+            preferences.isConvertUnicodeToEncodedUpper(convertUnicodeUpperCase.getSelection());
+        }
+        if (null != convertUnicodeToEncoded) {
+            preferences.isConvertUnicodedToEncoded(convertUnicodeToEncoded.getSelection());
+        }
+        if (null != groupKeys) {
+            preferences.isGroupKeys(groupKeys.getSelection());
+        }
+        if (null != groupLevelDeep) {
+            preferences.setGroupLevelDeep(Integer.valueOf(groupLevelDeep.getText()));
+        }
+        if (null != groupLineBreaks) {
+            preferences.setGroupLineBreaks(Integer.valueOf(groupLineBreaks.getText()));
+        }
+        if (null != groupAlignEqualSigns) {
+            preferences.isGroupAlignEqualSigns(groupAlignEqualSigns.getSelection());
+        }
+        if (null != wrapLines) {
+            preferences.isWrapLines(wrapLines.getSelection());
+        }
+        if (null != wrapCharLimit) {
+            preferences.setWrapCharLimit(Integer.valueOf(wrapCharLimit.getText()));
+        }
+        if (null != wrapIndentSpaces) {
+            preferences.setWrapIndentSpace(Integer.valueOf(wrapIndentSpaces.getText()));
+        }
+        if (null != newLineTypeForce) {
+            preferences.isLineForced(newLineTypeForce.getSelection());
+        }
+        if (null != sortKeys) {
+            preferences.isSortKeys(sortKeys.getSelection());
+        }
+        if (null != ensureSpacesAroundEquals) {
+            preferences.isSpaceAroundEqualsSigns(ensureSpacesAroundEquals.getSelection());
+        }
+        if (null != keepEmptyFields) {
+            preferences.isKeepEmptyFields(keepEmptyFields.getSelection());
+        }
+        if (null != wrapNewLine) {
+            preferences.isWrapNewLine(wrapNewLine.getSelection());
+        }
+        if (null != wrapAlignEqualSigns) {
+            preferences.isWrapAlignEqualSign(wrapAlignEqualSigns.getSelection());
+        }
+
+        if (null != newLineTypes) {
+            for (final NewLineType type : NewLineType.values()) {
+                if (newLineTypes[type.getId()].getSelection()) {
+                    preferences.setLineType(type);
+                }
+            }
+        }
         return true;
     }
 
