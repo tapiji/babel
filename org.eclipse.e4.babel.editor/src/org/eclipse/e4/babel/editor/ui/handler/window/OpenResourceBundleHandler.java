@@ -55,7 +55,7 @@ public class OpenResourceBundleHandler {
                 partService.showPart(part, PartState.ACTIVATE);
                 part.getContext().set("input", input);
             } else {
-                Log.wtf(TAG, "File input is null!");
+                Log.d(TAG, "File input is null!");
             }
         }
     }
