@@ -1,7 +1,7 @@
 package org.eclipse.e4.babel.editor.ui.editor.composite;
 
-
 import org.eclipse.e4.babel.resource.IBabelResourceProvider;
+import org.eclipse.jface.resource.FontDescriptor;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.TextViewer;
 import org.eclipse.jface.text.TextViewerUndoManager;
@@ -17,225 +17,308 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.TraverseEvent;
 import org.eclipse.swt.events.TraverseListener;
+import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Link;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipselabs.e4.tapiji.logger.Log;
 import org.eclipselabs.e4.tapiji.resource.TapijiResourceConstants;
 
+final class BundleEntry extends Composite
+		implements KeyListener, TraverseListener, SelectionListener, FocusListener, MouseListener {
 
-final class BundleEntry extends Composite implements KeyListener, TraverseListener, SelectionListener, FocusListener, MouseListener {
+	private static final int UNDO_LEVEL = 20;
+	private static final String TAG = BundleEntry.class.getSimpleName();
+	private TextViewerUndoManager undoManager = new TextViewerUndoManager(UNDO_LEVEL);
+	private TextViewer textView;
+	private IBundleEntryComposite listener;
+	private GridData textViewStyleData;
+	private IBabelResourceProvider resourceProvider;
+	private Label expandIcon;
+	private StyledText textViewStyle;
+	private Composite toolbar;
 
-    private static final int UNDO_LEVEL = 20;
-    private static final String TAG = BundleEntry.class.getSimpleName();
-    private final TextViewerUndoManager undoManager = new TextViewerUndoManager(UNDO_LEVEL);
-    private final TextViewer textView;
-    private IBundleEntryComposite listener;
-    private boolean expanded;
-    private final GridData textViewStyleData;
-    private final GridData data;
-    private final IBabelResourceProvider resourceProvider;
-    private final Label expandIcon;
+	public interface IBundleEntryComposite {
 
-    public interface IBundleEntryComposite {
+		void onLocaleClick();
 
-        void onLocaleClick();
+		void setNextFocusDown();
 
-        void setNextFocusDown();
+		void setNextFocusUp();
 
-        void setNextFocusUp();
+		void onFocusChange(BundleEntry bundleEntryComposite);
 
-        void onFocusChange(BundleEntry bundleEntryComposite);
+	}
 
-    }
+	private BundleEntry(final Composite parent, final IBabelResourceProvider resourceProvider, final int style) {
+		super(parent, style);
+		this.resourceProvider = resourceProvider;
 
-    private BundleEntry(final Composite parent, final IBabelResourceProvider resourceProvider, final int style) {
-        super(parent, style);
-        this.resourceProvider = resourceProvider;
+		final GridLayout gridLayout = new GridLayout(1, false);
+		gridLayout.horizontalSpacing = 0;
+		gridLayout.verticalSpacing = 2;
+		gridLayout.marginWidth = 0;
+		gridLayout.marginHeight = 0;
 
-        setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-        final GridLayout gridLayout = new GridLayout(3, false);
-        gridLayout.marginWidth = 0;
-        setLayout(gridLayout);
+		setLayout(gridLayout);
+		setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-        final Composite composite = new Composite(this, SWT.NONE);
-        final GridLayout gl_composite = new GridLayout(3, false);
-        gl_composite.verticalSpacing = 0;
-        gl_composite.marginWidth = 0;
-        gl_composite.marginHeight = 0;
-        composite.setLayout(gl_composite);
+		createView();
+	}
 
-        expandIcon = new Label(composite, SWT.FLAT);
-        expandIcon.setImage(resourceProvider.loadImage(TapijiResourceConstants.IMG_COLLAPSE));
-        expandIcon.addMouseListener(this);
+	private void createView() {
+		toolbar = new Composite(this, SWT.NONE);
+		final GridLayout toolbarLayout = new GridLayout();
+		toolbarLayout.numColumns = 6;
+		toolbarLayout.horizontalSpacing = 5;
+		toolbarLayout.verticalSpacing = 0;
+		toolbarLayout.marginWidth = 0;
+		toolbarLayout.marginHeight = 0;
+		toolbar.setLayout(toolbarLayout);
+		toolbar.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
+		collapseExpandIcon(toolbar);
+		localeNameLabel("Albanien", toolbar);
+		localeImageLabel(toolbar);
+		duplicateButton(toolbar);
+		uncommentButton(toolbar);
+		goToButton(toolbar);
 
-        final Link localeName = new Link(composite, SWT.NONE);
-        localeName.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
-        localeName.setText("<a>Albanien</a>");
-        localeName.addSelectionListener(this);
+		textViewer();
+	}
 
-        final Label localeImage = new Label(composite, SWT.NONE);
-        final GridData localeImageDataLayout = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-        localeImageDataLayout.horizontalIndent = 5;
-        localeImageDataLayout.heightHint = 16;
-        localeImage.setLayoutData(localeImageDataLayout);
-        localeImage.setImage(resourceProvider.loadImage(TapijiResourceConstants.IMG_FOLDER_FLAGS + "AT.png"));
+	private void textViewer() {
+		textView = new TextViewer(this, SWT.MULTI | SWT.WRAP | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
+		textView.setDocument(new Document());
+		textView.setUndoManager(undoManager);
+		textView.activatePlugins();
 
+		textViewStyle = textView.getTextWidget();
+		textViewStyleData = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+		textViewStyleData.minimumHeight = 40;
 
-        new Label(this, SWT.NONE);
+		textViewStyle.setLayoutData(textViewStyleData);
+		textViewStyle.addFocusListener(this);
+		textViewStyle.addTraverseListener(this);
+		textViewStyle.addKeyListener(this);
+	}
 
-        final Composite composite_1 = new Composite(this, SWT.NONE);
-        final GridLayout gl_composite_1 = new GridLayout(2, false);
-        gl_composite_1.marginHeight = 0;
-        gl_composite_1.marginWidth = 0;
-        composite_1.setLayout(gl_composite_1);
-        composite_1.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+	private void duplicateButton(Composite toolBar) {
+		GridData gridData = new GridData();
+		gridData.horizontalAlignment = GridData.END;
+		gridData.grabExcessHorizontalSpace = true;
+		Button button = new Button(toolBar, SWT.TOGGLE);
+		button.setText("=");
+		button.setLayoutData(gridData);
+		button.addListener(SWT.Selection, new Listener() {
 
-        final Label lblNewLabel_3 = new Label(composite_1, SWT.NONE);
-        lblNewLabel_3.setText("New Label");
+			@Override
+			public void handleEvent(Event event) {
+				System.out.println("Duplicate button click " + event);
 
-        final Label lblNewLabel_1 = new Label(composite_1, SWT.NONE);
-        final GridData gd_lblNewLabel_1 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-        gd_lblNewLabel_1.horizontalIndent = 5;
-        lblNewLabel_1.setLayoutData(gd_lblNewLabel_1);
-        lblNewLabel_1.setText("New Label");
+			}
+		});
+	}
 
+	private void uncommentButton(Composite toolBar) {
+		GridData gridData = new GridData();
+		gridData.horizontalAlignment = GridData.END;
+		Button button = new Button(toolBar, SWT.TOGGLE);
+		button.setText("#");
+		button.setLayoutData(gridData);
+		button.addListener(SWT.Selection, new Listener() {
 
-        final Composite composite_2 = new Composite(this, SWT.NONE);
+			@Override
+			public void handleEvent(Event event) {
+				System.out.println("Uncomment button click" + event);
 
-        final GridLayout gl_composite_2 = new GridLayout(1, false);
-        gl_composite_2.marginHeight = 0;
-        gl_composite_2.marginWidth = 0;
-        gl_composite_2.verticalSpacing = 0;
-        composite_2.setLayout(gl_composite_2);
-        data = new GridData(SWT.FILL, SWT.FILL, true, true, 3, 2);
-        composite_2.setLayoutData(data);
+			}
+		});
+	}
 
-        textView = new TextViewer(composite_2, SWT.MULTI | SWT.WRAP | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
-        textView.setDocument(new Document());
-        textView.setUndoManager(undoManager);
-        textView.activatePlugins();
+	private void goToButton(Composite toolBar) {
+		GridData gridData = new GridData();
+		gridData.horizontalAlignment = GridData.END;
+		Button button = new Button(toolBar, SWT.ARROW | SWT.RIGHT);
+		button.setText("");
+		button.setToolTipText("Go to the corresponding property file.");
+		button.setLayoutData(gridData);
+		button.addSelectionListener(new SelectionListener() {
 
-        final StyledText textViewStyle = textView.getTextWidget();
-        textViewStyleData = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
-        textViewStyleData.minimumHeight = 40;
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				System.out.println("Go to button click " + e);
+				// todo redirect to property file
+			}
 
-        textViewStyle.setLayoutData(textViewStyleData);
-        textViewStyle.addFocusListener(this);
-        textViewStyle.addTraverseListener(this);
-        textViewStyle.addKeyListener(this);
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				// no-op
+			}
+		});
+	}
 
-    }
+	private void localeNameLabel(final String string, Composite toolBar) {
+		final Label localeName = new Label(toolBar, SWT.NONE);
+		FontDescriptor boldDescriptor = FontDescriptor.createFrom(localeName.getFont()).setStyle(SWT.BOLD);
+		Font boldFont = boldDescriptor.createFont(localeName.getDisplay());
+		localeName.setFont(boldFont);
+		localeName.setText("Albanien");
+	}
 
-    private static boolean isKeyCombination(final KeyEvent event, final int mask, final int keyCode) {
-        return ((event.keyCode == keyCode) && (event.stateMask == mask));
-    }
+	private void localeImageLabel(Composite toolBar) {
+		final Label localeImage = new Label(toolBar, SWT.NONE);
+		localeImage.setImage(resourceProvider.loadImage(TapijiResourceConstants.IMG_FOLDER_FLAGS + "AT.png"));
+	}
 
-    @Override
-    public void keyPressed(final KeyEvent event) {
-    }
+	private void collapseExpandIcon(Composite toolBar) {
+		GridData gridData = new GridData();
+		gridData.horizontalAlignment = GridData.END;
+		this.expandIcon = new Label(toolBar, SWT.FLAT);
+		this.expandIcon.setLayoutData(gridData);
+		this.expandIcon.setImage(resourceProvider.loadImage(TapijiResourceConstants.IMG_COLLAPSE));
+		this.expandIcon.addMouseListener(this);
+		this.expandIcon.setToolTipText("Expand/Collapse");
+	}
 
-    @Override
-    public void keyReleased(final KeyEvent event) {
-        Log.d(TAG, "keyReleased: " + event);
-        if (isKeyCombination(event, SWT.CTRL, 'z')) {
-            undoManager.undo();
-        } else if (isKeyCombination(event, SWT.CTRL, 'y')) {
-            undoManager.redo();
-        } else if (isKeyCombination(event, SWT.CTRL, 'a')) {
-            textView.setSelectedRange(0, textView.getDocument().getLength());
-        } else {
+	private static boolean isKeyCombination(final KeyEvent event, final int mask, final int keyCode) {
+		return ((event.keyCode == keyCode) && (event.stateMask == mask));
+	}
 
-        }
-    }
+	@Override
+	public void keyPressed(final KeyEvent event) {
+	}
 
-    @Override
-    public void keyTraversed(final TraverseEvent event) {
-        Log.d(TAG, "keyTraversed: " + event.toString());
-        if (listener != null) {
-            if (event.character == SWT.TAB) {
-                event.doit = true;
-                event.detail = SWT.TRAVERSE_NONE;
-                if (event.stateMask == 0) {
-                    listener.setNextFocusDown();
-                } else if (event.stateMask == SWT.SHIFT) {
-                    listener.setNextFocusUp();
-                }
-            } else if ((event.keyCode == SWT.ARROW_DOWN) && (event.stateMask == SWT.CTRL)) {
-                event.doit = true;
-                event.detail = SWT.TRAVERSE_NONE;
-            } else if ((event.keyCode == SWT.ARROW_UP) && (event.stateMask == SWT.CTRL)) {
-                event.doit = true;
-                event.detail = SWT.TRAVERSE_NONE;
-            }
-        }
-    }
+	@Override
+	public void keyReleased(final KeyEvent event) {
+		Log.d(TAG, "keyReleased: " + event);
+		if (isKeyCombination(event, SWT.CTRL, 'z')) {
+			undoManager.undo();
+		} else if (isKeyCombination(event, SWT.CTRL, 'y')) {
+			undoManager.redo();
+		} else if (isKeyCombination(event, SWT.CTRL, 'a')) {
+			textView.setSelectedRange(0, textView.getDocument().getLength());
+		} else {
 
-    public static BundleEntry create(final Composite parent, final IBabelResourceProvider resourceProvider) {
-        return new BundleEntry(parent, resourceProvider, SWT.NONE);
-    }
+		}
+	}
 
-    private void expandTextView(final boolean expand) {
-        if (expand) {
-            textView.getTextWidget().setVisible(false);
-            expandIcon.setImage(resourceProvider.loadImage(TapijiResourceConstants.IMG_EXPAND));
-        } else {
-            textView.getTextWidget().setVisible(true);
-            expandIcon.setImage(resourceProvider.loadImage(TapijiResourceConstants.IMG_COLLAPSE));
-        }
-    }
+	@Override
+	public void keyTraversed(final TraverseEvent event) {
+		Log.d(TAG, "keyTraversed: " + event.toString());
+		if (listener != null) {
+			if (event.character == SWT.TAB) {
+				event.doit = true;
+				event.detail = SWT.TRAVERSE_NONE;
+				if (event.stateMask == 0) {
+					listener.setNextFocusDown();
+				} else if (event.stateMask == SWT.SHIFT) {
+					listener.setNextFocusUp();
+				}
+			} else if ((event.keyCode == SWT.ARROW_DOWN) && (event.stateMask == SWT.CTRL)) {
+				event.doit = true;
+				event.detail = SWT.TRAVERSE_NONE;
+			} else if ((event.keyCode == SWT.ARROW_UP) && (event.stateMask == SWT.CTRL)) {
+				event.doit = true;
+				event.detail = SWT.TRAVERSE_NONE;
+			}
+		}
+	}
 
-    @Override
-    public void widgetSelected(final SelectionEvent event) {
-        Log.d(TAG, "widgetSelected: " + event.toString());
-        if (null != listener) {
-            listener.onLocaleClick();
-        }
-    }
+	public static BundleEntry create(final Composite parent, final IBabelResourceProvider resourceProvider) {
+		return new BundleEntry(parent, resourceProvider, SWT.NONE);
+	}
 
-    @Override
-    public void widgetDefaultSelected(final SelectionEvent e) {
-    }
+	private void expandTextView(final boolean expand) {
+		if (expand) {
+			GridData gridData = ((GridData) textViewStyle.getLayoutData());
+			gridData.verticalAlignment = GridData.BEGINNING;
+			gridData.grabExcessVerticalSpace = false;
+			textViewStyle.setLayoutData(gridData);
 
-    public void addListener(final IBundleEntryComposite entryListener) {
-        if (null != entryListener) {
-            listener = entryListener;
-        }
-    }
+			gridData = (GridData) getLayoutData();
 
-    @Override
-    public void focusGained(final FocusEvent event) {
-        Log.d(TAG, "focusGained: " + event.toString());
-        if (null != listener) {
-            listener.onFocusChange(this);
-        }
-    }
+			gridData.heightHint = toolbar.getSize().y;
+			gridData.verticalAlignment = GridData.BEGINNING;
+			gridData.grabExcessVerticalSpace = false;
+			setLayoutData(gridData);
 
-    @Override
-    public void focusLost(final FocusEvent e) {
-    }
+			getParent().pack();
+			getParent().layout(true, true);
 
-    public void setFocusTextView() {
-        if (null != textView) {
-            final StyledText styledText = textView.getTextWidget();
-            styledText.setFocus();
-        }
-    }
+			textView.getTextWidget().setVisible(false);
+			expandIcon.setImage(resourceProvider.loadImage(TapijiResourceConstants.IMG_EXPAND));
+		} else {
+			GridData gridData = new GridData();
+			gridData.verticalAlignment = GridData.FILL;
+			gridData.grabExcessVerticalSpace = true;
+			gridData.horizontalAlignment = GridData.FILL;
+			gridData.grabExcessHorizontalSpace = true;
+			textViewStyle.setLayoutData(gridData);
 
-    @Override
-    public void mouseDoubleClick(final MouseEvent e) {
+			GridData gd = new GridData(GridData.FILL_BOTH);
+			gridData.heightHint = 40;
+			setLayoutData(gd);
+			getParent().pack();
+			getParent().layout(true, true);
 
-    }
+			textView.getTextWidget().setVisible(true);
+			expandIcon.setImage(resourceProvider.loadImage(TapijiResourceConstants.IMG_COLLAPSE));
+		}
+	}
 
-    @Override
-    public void mouseDown(final MouseEvent e) {
-    }
+	@Override
+	public void widgetSelected(final SelectionEvent event) {
+		Log.d(TAG, "widgetSelected: " + event.toString());
+		if (null != listener) {
+			listener.onLocaleClick();
+		}
+	}
 
-    @Override
-    public void mouseUp(final MouseEvent e) {
-        expandTextView(textView.getTextWidget().isVisible());
-    }
+	@Override
+	public void widgetDefaultSelected(final SelectionEvent e) {
+	}
+
+	public void addListener(final IBundleEntryComposite entryListener) {
+		if (null != entryListener) {
+			listener = entryListener;
+		}
+	}
+
+	@Override
+	public void focusGained(final FocusEvent event) {
+		Log.d(TAG, "focusGained: " + event.toString());
+		if (null != listener) {
+			listener.onFocusChange(this);
+		}
+	}
+
+	@Override
+	public void focusLost(final FocusEvent e) {
+	}
+
+	public void setFocusTextView() {
+		if (null != textView) {
+			final StyledText styledText = textView.getTextWidget();
+			styledText.setFocus();
+		}
+	}
+
+	@Override
+	public void mouseDoubleClick(final MouseEvent e) {
+
+	}
+
+	@Override
+	public void mouseDown(final MouseEvent e) {
+	}
+
+	@Override
+	public void mouseUp(final MouseEvent e) {
+		expandTextView(textView.getTextWidget().isVisible());
+	}
 }
