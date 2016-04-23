@@ -1,6 +1,12 @@
 package org.eclipse.e4.babel.editor.ui.editor.composite;
 
+import javax.inject.Inject;
+
+import org.eclipse.core.commands.Command;
 import org.eclipse.e4.babel.resource.IBabelResourceProvider;
+import org.eclipse.e4.core.commands.ECommandService;
+import org.eclipse.e4.core.commands.EHandlerService;
+import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.jface.resource.FontDescriptor;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.TextViewer;
@@ -41,7 +47,7 @@ final class BundleEntry extends Composite
 	private Label expandIcon;
 	private StyledText textViewStyle;
 	private Composite toolbar;
-
+ 
 	public interface IBundleEntryComposite {
 
 		void onLocaleClick();
@@ -236,36 +242,36 @@ final class BundleEntry extends Composite
 	private void expandTextView(final boolean expand) {
 		if (expand) {
 			GridData gridData = ((GridData) textViewStyle.getLayoutData());
-			gridData.verticalAlignment = GridData.BEGINNING;
+			gridData.verticalAlignment = SWT.BEGINNING;
 			gridData.grabExcessVerticalSpace = false;
 			textViewStyle.setLayoutData(gridData);
 
 			gridData = (GridData) getLayoutData();
 
 			gridData.heightHint = toolbar.getSize().y;
-			gridData.verticalAlignment = GridData.BEGINNING;
+			gridData.verticalAlignment = SWT.BEGINNING;
 			gridData.grabExcessVerticalSpace = false;
 			setLayoutData(gridData);
 
 			getParent().pack();
 			getParent().layout(true, true);
-
+			layout(true, true);
 			textView.getTextWidget().setVisible(false);
 			expandIcon.setImage(resourceProvider.loadImage(TapijiResourceConstants.IMG_EXPAND));
 		} else {
 			GridData gridData = new GridData();
-			gridData.verticalAlignment = GridData.FILL;
+			gridData.verticalAlignment = SWT.FILL;
 			gridData.grabExcessVerticalSpace = true;
-			gridData.horizontalAlignment = GridData.FILL;
+			gridData.horizontalAlignment = SWT.FILL;
 			gridData.grabExcessHorizontalSpace = true;
 			textViewStyle.setLayoutData(gridData);
 
-			GridData gd = new GridData(GridData.FILL_BOTH);
+			GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 			gridData.heightHint = 40;
 			setLayoutData(gd);
 			getParent().pack();
 			getParent().layout(true, true);
-
+			layout(true, true);
 			textView.getTextWidget().setVisible(true);
 			expandIcon.setImage(resourceProvider.loadImage(TapijiResourceConstants.IMG_COLLAPSE));
 		}
