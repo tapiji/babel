@@ -45,6 +45,8 @@ public final class I18nBundleEntry extends Composite
 	private Label expandIcon;
 	private StyledText textViewStyle;
 	private Composite toolbar;
+	private Composite editText;
+	private Composite mparent;
  
 	public interface IBundleEntryComposite {
 
@@ -60,6 +62,7 @@ public final class I18nBundleEntry extends Composite
 
 	private I18nBundleEntry(final Composite parent, final IBabelResourceProvider resourceProvider, final int style) {
 		super(parent, style);
+		mparent = parent;
 		this.resourceProvider = resourceProvider;
 
 		final GridLayout gridLayout = new GridLayout(1, false);
@@ -102,8 +105,8 @@ public final class I18nBundleEntry extends Composite
 		textView.activatePlugins();
 
 		textViewStyle = textView.getTextWidget();
-		textViewStyleData = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
-		textViewStyleData.minimumHeight = 40;
+		textViewStyleData = new GridData(SWT.FILL, SWT.BEGINNING, true, true, 0, 0);
+		textViewStyleData.minimumHeight = 150;
 
 		textViewStyle.setLayoutData(textViewStyleData);
 		textViewStyle.addFocusListener(this);
@@ -240,7 +243,11 @@ public final class I18nBundleEntry extends Composite
 	private void expandTextView(final boolean expand) {
 		if (expand) {
 			GridData gridData = ((GridData) textViewStyle.getLayoutData());
-			gridData.verticalAlignment = SWT.BEGINNING;
+			gridData.exclude = true;
+			textView.getTextWidget().setVisible(false);
+			mparent.layout(true, true);
+			mparent.pack();
+			/*gridData.verticalAlignment = SWT.BEGINNING;
 			gridData.grabExcessVerticalSpace = false;
 			textViewStyle.setLayoutData(gridData);
 
@@ -252,13 +259,15 @@ public final class I18nBundleEntry extends Composite
 			setLayoutData(gridData);
 
 			getParent().pack();
-			getParent().layout(true, true);
-			layout(true, true);
-			textView.getTextWidget().setVisible(false);
+			getParent().layout(true, true);*/
+			
 			expandIcon.setImage(resourceProvider.loadImage(TapijiResourceConstants.IMG_EXPAND));
 		} else {
 			GridData gridData = new GridData();
-			gridData.verticalAlignment = SWT.FILL;
+			gridData.exclude = false;
+			textView.getTextWidget().setVisible(true);
+			getParent().pack();
+			/*gridData.verticalAlignment = SWT.FILL;
 			gridData.grabExcessVerticalSpace = true;
 			gridData.horizontalAlignment = SWT.FILL;
 			gridData.grabExcessHorizontalSpace = true;
@@ -269,8 +278,8 @@ public final class I18nBundleEntry extends Composite
 			setLayoutData(gd);
 			getParent().pack();
 			getParent().layout(true, true);
-			layout(true, true);
-			textView.getTextWidget().setVisible(true);
+			layout(true, true);*/
+			
 			expandIcon.setImage(resourceProvider.loadImage(TapijiResourceConstants.IMG_COLLAPSE));
 		}
 	}
