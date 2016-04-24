@@ -1,8 +1,9 @@
-package org.eclipse.e4.babel.editor.ui.editor.composite;
+package org.eclipse.e4.babel.editor.ui.editor.i18n;
 
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.eclipse.e4.babel.resource.IBabelResourceProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
@@ -10,12 +11,12 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
 
-public final class I18nPage extends ScrolledComposite implements BundleEntry.IBundleEntryComposite {
+public final class I18nPage extends ScrolledComposite implements I18nBundleEntry.IBundleEntryComposite {
 
     private static final String TAG = I18nPage.class.getSimpleName();
-    private final List<BundleEntry> bundleEntries = new ArrayList<>();
+    private final List<I18nBundleEntry> bundleEntries = new ArrayList<>();
 
-    private BundleEntry activeBundleEntry;
+    private I18nBundleEntry activeBundleEntry;
 
     public static I18nPage create(final Composite sashForm, final IBabelResourceProvider resourceProvider) {
         return new I18nPage(sashForm, resourceProvider, SWT.V_SCROLL | SWT.H_SCROLL);
@@ -29,7 +30,7 @@ public final class I18nPage extends ScrolledComposite implements BundleEntry.IBu
         comp.setLayout(new GridLayout(1, false));
 
         for (int i = 0; i < 8; i++) {
-            final BundleEntry entry = BundleEntry.create(comp, resourceProvider);
+            final I18nBundleEntry entry = I18nBundleEntry.create(comp, resourceProvider);
             entry.addListener(this);
             bundleEntries.add(entry);
         }
@@ -69,13 +70,13 @@ public final class I18nPage extends ScrolledComposite implements BundleEntry.IBu
         }
     }
 
-    private void setFocusForNextComposite(final BundleEntry nextFocusComposite) {
+    private void setFocusForNextComposite(final I18nBundleEntry nextFocusComposite) {
         nextFocusComposite.setFocusTextView();
         setOrigin(getOrigin().x, nextFocusComposite.getLocation().y);
     }
 
     @Override
-    public void onFocusChange(final BundleEntry bundleEntry) {
+    public void onFocusChange(final I18nBundleEntry bundleEntry) {
         activeBundleEntry = bundleEntry;
     }
 }

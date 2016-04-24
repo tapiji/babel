@@ -18,7 +18,10 @@ public final class BabelResourceConstants {
 
     public static final String IMG_EXPAND = "icons/16x16/expand.png";
     public static final String IMG_EXPAND_ALL = "icons/16x16/expand_all.png";
-
+    
+    public static final String IMG_TREE_FLAT = "icons/16x16/layout_flat.png";
+    public static final String IMG_TREE_HIERARCHICAL = "icons/16x16/layout_hierarchical.png";
+    
     public static final String IMG_FOLDER_FLAGS = "icons/flags/";
 
 

@@ -30,6 +30,7 @@ public final class NewLocaleHandler {
             protected Control createDialogArea(final Composite parent) {
                 final Composite comp = (Composite) super.createDialogArea(parent);
                 selector = new LocaleSelector(comp);
+               
                 return comp;
             }
 

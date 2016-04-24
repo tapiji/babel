@@ -1,11 +1,9 @@
-package org.eclipse.e4.babel.editor.ui.editor.composite;
+package org.eclipse.e4.babel.editor.ui.editor.i18n;
 
 import javax.inject.Inject;
 
 import org.eclipse.core.commands.Command;
 import org.eclipse.e4.babel.resource.IBabelResourceProvider;
-import org.eclipse.e4.core.commands.ECommandService;
-import org.eclipse.e4.core.commands.EHandlerService;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.jface.resource.FontDescriptor;
 import org.eclipse.jface.text.Document;
@@ -34,11 +32,11 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipselabs.e4.tapiji.logger.Log;
 import org.eclipselabs.e4.tapiji.resource.TapijiResourceConstants;
 
-final class BundleEntry extends Composite
+public final class I18nBundleEntry extends Composite
 		implements KeyListener, TraverseListener, SelectionListener, FocusListener, MouseListener {
 
 	private static final int UNDO_LEVEL = 20;
-	private static final String TAG = BundleEntry.class.getSimpleName();
+	private static final String TAG = I18nBundleEntry.class.getSimpleName();
 	private TextViewerUndoManager undoManager = new TextViewerUndoManager(UNDO_LEVEL);
 	private TextViewer textView;
 	private IBundleEntryComposite listener;
@@ -56,11 +54,11 @@ final class BundleEntry extends Composite
 
 		void setNextFocusUp();
 
-		void onFocusChange(BundleEntry bundleEntryComposite);
+		void onFocusChange(I18nBundleEntry bundleEntryComposite);
 
 	}
 
-	private BundleEntry(final Composite parent, final IBabelResourceProvider resourceProvider, final int style) {
+	private I18nBundleEntry(final Composite parent, final IBabelResourceProvider resourceProvider, final int style) {
 		super(parent, style);
 		this.resourceProvider = resourceProvider;
 
@@ -235,8 +233,8 @@ final class BundleEntry extends Composite
 		}
 	}
 
-	public static BundleEntry create(final Composite parent, final IBabelResourceProvider resourceProvider) {
-		return new BundleEntry(parent, resourceProvider, SWT.NONE);
+	public static I18nBundleEntry create(final Composite parent, final IBabelResourceProvider resourceProvider) {
+		return new I18nBundleEntry(parent, resourceProvider, SWT.NONE);
 	}
 
 	private void expandTextView(final boolean expand) {

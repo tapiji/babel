@@ -1,4 +1,4 @@
-package org.eclipse.e4.babel.editor.ui.editor.provider;
+package org.eclipse.e4.babel.editor.ui.editor.treeviewer;
 
 
 import org.eclipse.jface.viewers.ITreeContentProvider;

@@ -6,9 +6,9 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import org.eclipse.babel.i18n.Messages;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.e4.babel.editor.ui.editor.composite.BundleTextEditor;
-import org.eclipse.e4.babel.editor.ui.editor.composite.I18nPage;
-import org.eclipse.e4.babel.editor.ui.editor.composite.TreeViewerPage;
+import org.eclipse.e4.babel.editor.ui.editor.i18n.I18nPageEditor;
+import org.eclipse.e4.babel.editor.ui.editor.treeviewer.TreeViewerComposite;
+import org.eclipse.e4.babel.editor.ui.editor.i18n.I18nPage;
 import org.eclipse.e4.babel.resource.IBabelResourceProvider;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.core.services.nls.Translation;
@@ -81,13 +81,13 @@ public class ResourceBundleEditor extends CTabFolder {
         IEditorInput file = (IEditorInput) part.getTransientData().get("FILE");
 
         final SashForm sashForm = new SashForm(this, SWT.SMOOTH);
-        TreeViewerPage.create(sashForm, menuService);
+        TreeViewerComposite tree = TreeViewerComposite.create(sashForm, menuService, resourceProvider);
         I18nPage.create(sashForm, resourceProvider);
         sashForm.setWeights(new int[] {25, 75});
         createTab(sashForm, "Eigenschaften");
 
         for (int i = 0; i < 10; i++) {
-            createTab(new BundleTextEditor(this), "TAB" + i);
+            createTab(new I18nPageEditor(this), "TAB" + i);
         }
 
         setSelection(0);

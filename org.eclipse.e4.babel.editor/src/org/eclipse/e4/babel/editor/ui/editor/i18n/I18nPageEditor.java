@@ -1,4 +1,4 @@
-package org.eclipse.e4.babel.editor.ui.editor.composite;
+package org.eclipse.e4.babel.editor.ui.editor.i18n;
 
 
 import org.eclipse.e4.babel.editor.text.PropertiesTextEditor;
@@ -8,11 +8,11 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 
 
-public class BundleTextEditor extends Composite {
+public class I18nPageEditor extends Composite {
 
     private static final int VERTICAL_RULER_WIDTH = 12;
 
-    public BundleTextEditor(final CTabFolder tabFolder) {
+    public I18nPageEditor(final CTabFolder tabFolder) {
         super(tabFolder, SWT.NONE);
         createControl(tabFolder);
     }
