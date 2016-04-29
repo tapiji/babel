@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 
@@ -90,7 +91,7 @@ public final class Bundle {
         }
     }
 
-    public void renameBundleEntryKey(final String oldBundleEntryKey, final String newBundleEntryKey) {
+    public void renameBundleEntryKey(final String newBundleEntryKey, final String oldBundleEntryKey) {
         final BundleEntry oldBundleEntry = bundleEntries.get(oldBundleEntryKey);
         if (oldBundleEntry != null) {
             removeBundleEntry(oldBundleEntry);
@@ -98,6 +99,7 @@ public final class Bundle {
         }
     }
 
+    @NonNull
     public Set<String> getKeys() {
         final Set<String> keys = new TreeSet<String>();
         keys.addAll(bundleEntries.keySet());
@@ -118,7 +120,7 @@ public final class Bundle {
     public void uncommentBundleEntry(final String bundleEntryKey) {
         final BundleEntry bundleEntry = bundleEntries.get(bundleEntryKey);
         if (bundleEntry != null) {
-            addBundleEntry(BundleEntry.create(bundleEntryKey, bundleEntry.getValue(), bundleEntry.getComment(), true));
+            addBundleEntry(BundleEntry.create(bundleEntryKey, bundleEntry.getValue(), bundleEntry.getComment(), false));
         }
     }
 
@@ -143,6 +145,10 @@ public final class Bundle {
 
     public static Bundle create() {
         return new Bundle();
+    }
+
+    public void setGroup(BundleGroup bundleGroup) {
+        this.bundleGroup = bundleGroup;
     }
 
 
