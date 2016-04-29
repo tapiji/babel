@@ -14,8 +14,8 @@ package org.eclipse.e4.babel.core;
 
 import java.util.regex.Pattern;
 import org.eclipse.e4.babel.core.preference.PropertyPreferences;
-import org.eclipse.e4.babel.editor.model.message.MessageBundle;
-import org.eclipse.e4.babel.editor.model.message.MessageBundleEntry;
+import org.eclipse.e4.babel.editor.model.bundle.Bundle;
+import org.eclipse.e4.babel.editor.model.bundle.BundleEntry;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipselabs.e4.tapiji.logger.Log;
 
@@ -52,29 +52,29 @@ public final class PropertyManager {
     }
 
     /**
-     * Generates a formatted string from a given <code>{@link MessageBundle}</code>. The returned string will conform to
+     * Generates a formatted string from a given <code>{@link Bundle}</code>. The returned string will conform to
      * documented properties file structure.
      *
      * @param <tt>MessageBundle</tt> bundle used to generate the content
      * @return <tt>String</tt> The generated content
      */
-    public static String generate(final MessageBundle messageBundle) {
+    public static String generate(final Bundle messageBundle) {
         final StringBuffer text = new StringBuffer();
         return text.toString();
     }
 
 
     /**
-     * Parses the content from a property file and creates a <code>{@link MessageBundle}</code>. This
-     * <code>{@link MessageBundle}</code> represents the structure of a property file. The delivered string is expected
+     * Parses the content from a property file and creates a <code>{@link Bundle}</code>. This
+     * <code>{@link Bundle}</code> represents the structure of a property file. The delivered string is expected
      * to match the documents content.
      *
      * @param <tt>String</tt> content from a specific property file to parse
      * @return <tt>PropertyFile</tt> property file structure
      */
     @NonNull
-    public MessageBundle parse(final String content) {
-        final MessageBundle messageBundle = MessageBundle.createInstance();
+    public Bundle parse(final String content) {
+        final Bundle messageBundle = Bundle.createInstance();
         if (null != content) {
             final String[] entries = PATTERN_LINE_BREAK.split(content);
 
@@ -129,7 +129,7 @@ public final class PropertyManager {
                         value = PATTERN_BACKSLASH_CARRIAGE_RETURN.matcher(value).replaceAll(CARRIAGE_RETURN);
                         value = PATTERN_BACKSLASH_NEW_LINE.matcher(value).replaceAll(NEW_LINE);
                     }
-                    messageBundle.addEntry(MessageBundleEntry.createInstance(key, value, comment, isCommentLine));
+                    messageBundle.addEntry(BundleEntry.createInstance(key, value, comment, isCommentLine));
                 } else if ((lineBuf.length() > 0) && ((lineBuf.charAt(0) == CHARACTER_SIGN) || (lineBuf.charAt(0) == CHARACTER_CALL_SIGN))) {
                     if (!doneWithFileComment) {
                         fileComment.append(lineBuf);
@@ -388,7 +388,7 @@ public final class PropertyManager {
      * @param messagesBundle resource bundle
      * @return position
      */
-    private int getEqualIndex(final String key, final String group, final MessageBundle messagesBundle) {
+    private int getEqualIndex(final String key, final String group, final Bundle messagesBundle) {
         int equalIndex = -1;
         final boolean alignEquals = false;//config.isAlignEqualsEnabled();
         /*
