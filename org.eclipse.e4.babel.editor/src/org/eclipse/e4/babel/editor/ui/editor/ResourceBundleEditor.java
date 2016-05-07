@@ -5,10 +5,11 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import org.eclipse.babel.i18n.Messages;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.e4.babel.editor.ui.editor.i18n.I18nPageEditor;
-import org.eclipse.e4.babel.editor.ui.editor.treeviewer.TreeViewerComposite;
 import org.eclipse.e4.babel.editor.ui.editor.constant.EditorConstant;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.I18nPage;
+import org.eclipse.e4.babel.editor.ui.editor.i18n.I18nPageEditor;
+import org.eclipse.e4.babel.editor.ui.editor.treeviewer.TreeViewerComposite;
+import org.eclipse.e4.babel.editor.ui.handler.window.ShowPreferenceHandler;
 import org.eclipse.e4.babel.resource.IBabelResourceProvider;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.core.services.nls.Translation;
@@ -19,12 +20,10 @@ import org.eclipse.e4.ui.model.application.ui.basic.MWindow;
 import org.eclipse.e4.ui.services.EMenuService;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
-import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.custom.SashForm;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
@@ -60,7 +59,7 @@ public class ResourceBundleEditor extends CTabFolder {
 
 	@Translation
 	Messages translation;
-	private I18nPage page;
+	private I18nPage i18nPage;
 	private SashForm sashForm;
 
 	@Inject
@@ -84,7 +83,7 @@ public class ResourceBundleEditor extends CTabFolder {
 
 		sashForm = new SashForm(this, SWT.SMOOTH);
 		treeViewer = TreeViewerComposite.create(sashForm, menuService, resourceProvider);
-		page = I18nPage.create(sashForm, resourceProvider);
+		i18nPage = I18nPage.create(sashForm, resourceProvider);
 		sashForm.setWeights(new int[] { 25, 75 });
 		createTab(sashForm, "Eigenschaften");
 		for (int i = 0; i < 10; i++) {
@@ -98,11 +97,17 @@ public class ResourceBundleEditor extends CTabFolder {
 	@Optional
 	private void onTreeViewVisibilityChange(@UIEventTopic(EditorConstant.TOPIC_TREE_VIEW_VISIBILITY) final boolean visibility) {
 		if (sashForm.getMaximizedControl() == null) {
-			sashForm.setMaximizedControl(page);
+			sashForm.setMaximizedControl(i18nPage);
 		} else {
 			sashForm.setMaximizedControl(null);
 		}
 	}
+	
+	   @Inject
+	    @Optional
+	    public void setPartInput(@UIEventTopic(ShowPreferenceHandler.TOPIC_REFRESH_LAYOUT) final String visibility) {
+	        Log.d(TAG, "INPUT: UPDATE UI"+visibility);i18nPage.refreshEntzrySize();i18nPage.refreshLayout();
+	    }
 
 	private void createTab(final Control control, final String title) {
 		CTabItem tab = new CTabItem(this, SWT.NONE);

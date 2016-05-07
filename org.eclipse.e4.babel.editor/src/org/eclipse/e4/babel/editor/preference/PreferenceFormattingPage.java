@@ -4,6 +4,7 @@ package org.eclipse.e4.babel.editor.preference;
 import org.eclipse.e4.babel.core.preference.PropertyPreferences;
 import org.eclipse.e4.babel.core.preference.PropertyPreferences.NewLineType;
 import org.eclipse.e4.babel.editor.preference.validator.NumberTextKeyListener;
+import org.eclipse.e4.babel.editor.ui.handler.window.ShowPreferenceHandler;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -46,7 +47,7 @@ public final class PreferenceFormattingPage extends APreferencePage {
     private Button keepEmptyFields;
     private Button sortKeys;
 
-    public PreferenceFormattingPage() {
+    public PreferenceFormattingPage(ShowPreferenceHandler showPreferenceHandler) {
         super("Formatieren");
     }
 
@@ -97,7 +98,7 @@ public final class PreferenceFormattingPage extends APreferencePage {
 
             @Override
             public void widgetSelected(final SelectionEvent event) {
-                performRefresh();
+               
             }
         });
         createLabel(field, "Umwandeln Unicode-Wert nach \\uXXXX.");
@@ -161,13 +162,7 @@ public final class PreferenceFormattingPage extends APreferencePage {
     private void alignWrappedLinesWithEqualSign(final Composite composite) {
         final Composite field = createFieldComposite(composite, indentPixels);
         wrapAlignEqualSigns = new Button(field, SWT.CHECK);
-        wrapAlignEqualSigns.addSelectionListener(new SelectionAdapter() {
-
-            @Override
-            public void widgetSelected(final SelectionEvent event) {
-                performRefresh();
-            }
-        });
+        wrapAlignEqualSigns.addListener(SWT.Selection, (e)->performRefresh());
         createLabel(field, "Ausrichten umgebrochener Zeilen mit gleichen Zeichen.");
     }
 
@@ -183,13 +178,7 @@ public final class PreferenceFormattingPage extends APreferencePage {
     private void wrapLines(final Composite composite) {
         final Composite field = createFieldComposite(composite);
         wrapLines = new Button(field, SWT.CHECK);
-        wrapLines.addSelectionListener(new SelectionAdapter() {
-
-            @Override
-            public void widgetSelected(final SelectionEvent event) {
-                performRefresh();
-            }
-        });
+        wrapLines.addListener(SWT.Selection, (e)->performRefresh());
         new Label(field, SWT.NONE).setText(" Lange Zeilen umbrechen.");
     }
 
@@ -222,13 +211,7 @@ public final class PreferenceFormattingPage extends APreferencePage {
     private void groupKeys(final Composite composite) {
         final Composite field = createFieldComposite(composite);
         groupKeys = new Button(field, SWT.CHECK);
-        groupKeys.addSelectionListener(new SelectionAdapter() {
-
-            @Override
-            public void widgetSelected(final SelectionEvent event) {
-                performRefresh();
-            }
-        });
+        groupKeys.addListener(SWT.Selection, (e)->performRefresh());
         createLabel(field, "Gruppenschl\u00FCssel.");
     }
 
@@ -241,13 +224,7 @@ public final class PreferenceFormattingPage extends APreferencePage {
     private void alignEqualSigns(final Composite composite) {
         final Composite field = createFieldComposite(composite);
         alignEqualSigns = new Button(field, SWT.CHECK);
-        alignEqualSigns.addSelectionListener(new SelectionAdapter() {
-
-            @Override
-            public void widgetSelected(final SelectionEvent event) {
-                performRefresh();
-            }
-        });
+        alignEqualSigns.addListener(SWT.Selection, (e)->performRefresh());
         createLabel(field, "Ausrichten an Gleichheitszeichen.");
     }
 
@@ -358,7 +335,8 @@ public final class PreferenceFormattingPage extends APreferencePage {
 
         if (null != newLineTypes) {
             for (final NewLineType type : NewLineType.values()) {
-                if (newLineTypes[type.getId()].getSelection()) {
+                final Button lineType = newLineTypes[type.getId()];
+                if (lineType != null && lineType.getSelection()) {
                     preferences.setLineType(type);
                 }
             }

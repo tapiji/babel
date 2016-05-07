@@ -3,6 +3,7 @@ package org.eclipse.e4.babel.editor.preference;
 
 import org.eclipse.e4.babel.core.preference.PropertyPreferences;
 import org.eclipse.e4.babel.editor.preference.validator.NumberTextKeyListener;
+import org.eclipse.e4.babel.editor.ui.handler.window.ShowPreferenceHandler;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -25,9 +26,11 @@ public final class PreferenceGeneralPage extends APreferencePage {
     private Button loadOnlyFragmentResources;
     private Button supportFragments;
     private Button editorTreeHidden;
+    private ShowPreferenceHandler showPreferenceHandler;
 
-    public PreferenceGeneralPage() {
+    public PreferenceGeneralPage(ShowPreferenceHandler showPreferenceHandler) {
         super("ResourceBundle Editor");
+        this.showPreferenceHandler = showPreferenceHandler;
     }
 
     @Override
@@ -160,6 +163,7 @@ public final class PreferenceGeneralPage extends APreferencePage {
         if (null != convertEncodedToUnicode) {
             PropertyPreferences.getInstance().isConvertEncodedToUnicode(convertEncodedToUnicode.getSelection());
         }
+        showPreferenceHandler.refreshLayout();
         return true;
     }
 

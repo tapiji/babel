@@ -3,7 +3,6 @@ package org.eclipse.e4.babel.editor.ui.editor.i18n;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.eclipse.e4.babel.resource.IBabelResourceProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
@@ -42,6 +41,10 @@ public final class I18nPage extends ScrolledComposite implements I18nBundleEntry
     public void refreshLayout() {
         this.setMinSize(i18nEntryComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT)); 
         this.layout(true, true);
+    }
+    
+    public void refreshEntzrySize() {
+       bundleEntries.stream().forEach((entry)->entry.updateEditorHeight());
     }
 
     @Override

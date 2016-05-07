@@ -3,9 +3,8 @@ package org.eclipse.e4.babel.editor.preference;
 
 import org.eclipse.e4.babel.core.preference.PropertyPreferences;
 import org.eclipse.e4.babel.editor.preference.validator.DoubleTextKeyListener;
+import org.eclipse.e4.babel.editor.ui.handler.window.ShowPreferenceHandler;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -25,7 +24,7 @@ public final class PreferencePerformancePage extends APreferencePage {
     private Button reportSimVals;
     private Text reportSimPrecision;
 
-    public PreferencePerformancePage() {
+    public PreferencePerformancePage(ShowPreferenceHandler showPreferenceHandler) {
         super("Performance");
     }
 
@@ -63,13 +62,7 @@ public final class PreferencePerformancePage extends APreferencePage {
     private void reportSimilarValues(final Composite composite) {
         final Composite field = createFieldComposite(composite);
         reportSimVals = new Button(field, SWT.CHECK);
-        reportSimVals.addSelectionListener(new SelectionAdapter() {
-
-            @Override
-            public void widgetSelected(final SelectionEvent event) {
-                performRefresh();
-            }
-        });
+        reportSimVals.addListener(SWT.Selection, (e)->performRefresh());
         createLabel(field, "Zeige Schl\u00FCssel, die sich gleiche Inhalte/Werte innerhalb einer Lokale teilen.");
 
         final Composite simValModeGroup = new Composite(composite, SWT.NONE);

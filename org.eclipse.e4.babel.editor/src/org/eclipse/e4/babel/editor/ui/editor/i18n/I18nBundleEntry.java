@@ -1,6 +1,7 @@
 package org.eclipse.e4.babel.editor.ui.editor.i18n;
 
 
+import org.eclipse.e4.babel.core.preference.PropertyPreferences;
 import org.eclipse.e4.babel.resource.IBabelResourceProvider;
 import org.eclipse.jface.resource.FontDescriptor;
 import org.eclipse.jface.text.Document;
@@ -101,8 +102,7 @@ public final class I18nBundleEntry extends Composite implements KeyListener, Tra
 
         textWidget = textView.getTextWidget();
         final GridData textViewStyleData = new GridData(SWT.FILL, SWT.BEGINNING, true, true, 0, 0);
-        textViewStyleData.minimumHeight = 150; // Todo replace with value from settings
-
+        textViewStyleData.minimumHeight = PropertyPreferences.getInstance().getI18nEditorHeight(); 
         textWidget.setLayoutData(textViewStyleData);
         textWidget.addFocusListener(this);
         textWidget.addTraverseListener(this);
@@ -287,5 +287,10 @@ public final class I18nBundleEntry extends Composite implements KeyListener, Tra
     public void mouseUp(final MouseEvent e) {
         expandTextView(textView.getTextWidget()
                                .isVisible());
+    }
+
+    public void updateEditorHeight() {
+        ((GridData)textWidget.getLayoutData()).minimumHeight = PropertyPreferences.getInstance().getI18nEditorHeight();
+        layout(true, true);
     }
 }
