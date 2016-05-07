@@ -161,8 +161,9 @@ public class BundleGroup {
         return bundles.keySet()
                       .stream()
                       .filter(locale -> getBundleEntry(locale, key) != null)
+                      .peek(action -> System.out.println(action))
                       .findFirst()
-                      .orElse(null) != null;
+                      .isPresent();
     }
 
     public int getBundleCount() {
@@ -179,12 +180,20 @@ public class BundleGroup {
 
     }
 
-    public void getNextKey() {
-
+    public void getNextKey(final String key) {
+        //return keys.stream().filter(key)
     }
 
-    public void getPreviousKey() {
-
+    @Nullable
+    public String getPreviousKey(final String currentKey) {
+        return null;
+        /*
+         * return keys.stream()
+         * .filter(key -> key.equals(currentKey))
+         * .peek(action -> System.out.println(action))
+         * .
+         * .orElse(null);
+         */
     }
 
     public static BundleGroup create() {

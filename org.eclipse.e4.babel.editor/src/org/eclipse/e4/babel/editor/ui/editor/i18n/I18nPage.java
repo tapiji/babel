@@ -17,6 +17,7 @@ public final class I18nPage extends ScrolledComposite implements I18nBundleEntry
     private final List<I18nBundleEntry> bundleEntries = new ArrayList<>();
 
     private I18nBundleEntry activeBundleEntry;
+    private Composite i18nEntryComposite;
 
     public static I18nPage create(final Composite sashForm, final IBabelResourceProvider resourceProvider) {
         return new I18nPage(sashForm, resourceProvider, SWT.V_SCROLL | SWT.H_SCROLL);
@@ -24,21 +25,23 @@ public final class I18nPage extends ScrolledComposite implements I18nBundleEntry
 
     private I18nPage(final Composite sashForm, final IBabelResourceProvider resourceProvider, final int style) {
         super(sashForm, style);
-
-
-        final Composite comp = new Composite(this, SWT.BORDER);
-        comp.setLayout(new GridLayout(1, false));
-
+        i18nEntryComposite = new Composite(this, SWT.BORDER);
+        i18nEntryComposite.setLayout(new GridLayout(1, false));
         for (int i = 0; i < 8; i++) {
-            final I18nBundleEntry entry = I18nBundleEntry.create(comp, resourceProvider);
+            final I18nBundleEntry entry = I18nBundleEntry.create(i18nEntryComposite,(ScrolledComposite)this, resourceProvider);
             entry.addListener(this);
             bundleEntries.add(entry);
         }
-        this.setContent(comp);
-        this.setMinSize(comp.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+        this.setContent(i18nEntryComposite);
+        this.setMinSize(i18nEntryComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
         this.setExpandHorizontal(true);
         this.setExpandVertical(true);
         this.setShowFocusedControl(true);
+    }
+    
+    public void refreshLayout() {
+        this.setMinSize(i18nEntryComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT)); 
+        this.layout(true, true);
     }
 
     @Override
