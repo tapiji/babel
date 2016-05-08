@@ -1,6 +1,7 @@
 package org.eclipse.e4.babel.editor.preference;
 
 
+import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.GC;
@@ -12,12 +13,14 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 
 
-abstract class APreferencePage extends PreferencePage {
-
+public abstract class APreferencePage extends PreferencePage {
+    public static final String TOPIC_REFRESH_LAYOUT = "TOPIC_GUI/REFRESH_LAYOUT";
     protected final int indentPixels = 20;
+    private IEventBroker eventBroker;
 
-    public APreferencePage(final String title) {
+    public APreferencePage(final String title, IEventBroker eventBroker) {
         super(title);
+        this.eventBroker = eventBroker;
     }
 
     protected Composite createFieldComposite(final Composite parent) {
@@ -45,6 +48,10 @@ abstract class APreferencePage extends PreferencePage {
     }
 
 
+    public void redrawi18nLayout() {
+        eventBroker.post(TOPIC_REFRESH_LAYOUT, "refresh");
+    }
+    
     // TODO: MOVE TO HELPER CLASS
     public static int getWidthInChars(final Control control, final int numOfChars) {
         final GC gc = new GC(control);

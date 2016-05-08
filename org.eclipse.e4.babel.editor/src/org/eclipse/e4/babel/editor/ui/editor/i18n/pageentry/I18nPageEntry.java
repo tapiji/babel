@@ -1,7 +1,9 @@
-package org.eclipse.e4.babel.editor.ui.editor.i18n;
+package org.eclipse.e4.babel.editor.ui.editor.i18n.pageentry;
 
 
 import org.eclipse.e4.babel.core.preference.PropertyPreferences;
+import org.eclipse.e4.babel.editor.ui.editor.i18n.page.I18nPage;
+import org.eclipse.e4.babel.editor.ui.editor.i18n.page.I18nPageContract;
 import org.eclipse.e4.babel.resource.IBabelResourceProvider;
 import org.eclipse.jface.resource.FontDescriptor;
 import org.eclipse.jface.text.Document;
@@ -30,32 +32,20 @@ import org.eclipselabs.e4.tapiji.logger.Log;
 import org.eclipselabs.e4.tapiji.resource.TapijiResourceConstants;
 
 
-public final class I18nBundleEntry extends Composite implements KeyListener, TraverseListener, SelectionListener, FocusListener, MouseListener {
+public final class I18nPageEntry extends Composite implements KeyListener, TraverseListener, SelectionListener, FocusListener, MouseListener, I18nPageEntryContract.View {
 
     private static final int UNDO_LEVEL = 20;
-    private static final String TAG = I18nBundleEntry.class.getSimpleName();
+    private static final String TAG = I18nPageEntry.class.getSimpleName();
     private TextViewerUndoManager undoManager = new TextViewerUndoManager(UNDO_LEVEL);
     private TextViewer textView;
-    private IBundleEntryComposite listener;
+    private I18nPageContract.View  listener;
     private IBabelResourceProvider resourceProvider;
     private Label expandIcon;
     private StyledText textWidget;
     private Composite toolbar;
     private ScrolledComposite i18nPage;
 
-    public interface IBundleEntryComposite {
-
-        void onLocaleClick();
-
-        void setNextFocusDown();
-
-        void setNextFocusUp();
-
-        void onFocusChange(I18nBundleEntry bundleEntryComposite);
-
-    }
-
-    private I18nBundleEntry(final Composite parent, ScrolledComposite scrolled, final IBabelResourceProvider resourceProvider, final int style) {
+    private I18nPageEntry(final Composite parent, ScrolledComposite scrolled, final IBabelResourceProvider resourceProvider, final int style) {
         super(parent, style);
         this.resourceProvider = resourceProvider;
 
@@ -102,7 +92,8 @@ public final class I18nBundleEntry extends Composite implements KeyListener, Tra
 
         textWidget = textView.getTextWidget();
         final GridData textViewStyleData = new GridData(SWT.FILL, SWT.BEGINNING, true, true, 0, 0);
-        textViewStyleData.minimumHeight = PropertyPreferences.getInstance().getI18nEditorHeight(); 
+        textViewStyleData.minimumHeight = PropertyPreferences.getInstance()
+                                                             .getI18nEditorHeight();
         textWidget.setLayoutData(textViewStyleData);
         textWidget.addFocusListener(this);
         textWidget.addTraverseListener(this);
@@ -219,8 +210,8 @@ public final class I18nBundleEntry extends Composite implements KeyListener, Tra
         }
     }
 
-    public static I18nBundleEntry create(final Composite parent, ScrolledComposite comp, final IBabelResourceProvider resourceProvider) {
-        return new I18nBundleEntry(parent, comp, resourceProvider, SWT.NONE);
+    public static I18nPageEntry create(final Composite parent, ScrolledComposite comp, final IBabelResourceProvider resourceProvider) {
+        return new I18nPageEntry(parent, comp, resourceProvider, SWT.NONE);
     }
 
     private void expandTextView(final boolean expand) {
@@ -249,9 +240,10 @@ public final class I18nBundleEntry extends Composite implements KeyListener, Tra
     public void widgetDefaultSelected(final SelectionEvent e) {
     }
 
-    public void addListener(final IBundleEntryComposite entryListener) {
-        if (null != entryListener) {
-            listener = entryListener;
+    @Override
+    public void addPageListener(final I18nPageContract.View pageListener) {
+        if (null != pageListener) {
+            listener = pageListener;
         }
     }
 
@@ -267,6 +259,7 @@ public final class I18nBundleEntry extends Composite implements KeyListener, Tra
     public void focusLost(final FocusEvent e) {
     }
 
+    @Override
     public void setFocusTextView() {
         if (null != textView) {
             final StyledText styledText = textView.getTextWidget();
@@ -289,8 +282,15 @@ public final class I18nBundleEntry extends Composite implements KeyListener, Tra
                                .isVisible());
     }
 
+    @Override
     public void updateEditorHeight() {
-        ((GridData)textWidget.getLayoutData()).minimumHeight = PropertyPreferences.getInstance().getI18nEditorHeight();
+        ((GridData) textWidget.getLayoutData()).minimumHeight = PropertyPreferences.getInstance()
+                                                                                   .getI18nEditorHeight();
         layout(true, true);
+    }
+
+    @Override
+    public int getCoordinateY() {
+        return getLocation().y;
     }
 }

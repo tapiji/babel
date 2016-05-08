@@ -3,7 +3,7 @@ package org.eclipse.e4.babel.editor.preference;
 
 import org.eclipse.e4.babel.core.preference.PropertyPreferences;
 import org.eclipse.e4.babel.editor.preference.validator.DoubleTextKeyListener;
-import org.eclipse.e4.babel.editor.ui.handler.window.ShowPreferenceHandler;
+import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -24,8 +24,8 @@ public final class PreferencePerformancePage extends APreferencePage {
     private Button reportSimVals;
     private Text reportSimPrecision;
 
-    public PreferencePerformancePage(ShowPreferenceHandler showPreferenceHandler) {
-        super("Performance");
+    public PreferencePerformancePage(IEventBroker eventBroker) {
+        super("Performance",eventBroker);
     }
 
     @Override

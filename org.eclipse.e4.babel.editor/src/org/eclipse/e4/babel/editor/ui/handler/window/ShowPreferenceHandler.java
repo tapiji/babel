@@ -17,7 +17,6 @@ import org.eclipse.swt.widgets.Shell;
 
 public final class ShowPreferenceHandler {
     
-    public static final String TOPIC_REFRESH_LAYOUT = "TOPIC_GUI/REFRESH_LAYOUT";
     private static final String PAGE_GENERAL = "page_general";
     private static final String PAGE_FORMATTING = "page_formatting";
     private static final String PAGE_REPORTING = "page_reporting";
@@ -29,17 +28,13 @@ public final class ShowPreferenceHandler {
         final PreferenceManager mgr = new PreferenceManager();
         final PreferenceDialog dlg = new PreferenceDialog(shell, mgr);
 
-        final IPreferenceNode generalPage = new PreferenceNode(PAGE_GENERAL, new PreferenceGeneralPage(this));
-        final IPreferenceNode formattingPage = new PreferenceNode(PAGE_FORMATTING, new PreferenceFormattingPage(this));
-        final IPreferenceNode reportingPage = new PreferenceNode(PAGE_REPORTING, new PreferencePerformancePage(this));
+        final IPreferenceNode generalPage = new PreferenceNode(PAGE_GENERAL, new PreferenceGeneralPage(eventBroker));
+        final IPreferenceNode formattingPage = new PreferenceNode(PAGE_FORMATTING, new PreferenceFormattingPage(eventBroker));
+        final IPreferenceNode reportingPage = new PreferenceNode(PAGE_REPORTING, new PreferencePerformancePage(eventBroker));
         mgr.addToRoot(generalPage);
         mgr.addTo(PAGE_GENERAL, formattingPage);
         mgr.addTo(PAGE_GENERAL, reportingPage);
         dlg.create();
         dlg.open();
-    }
-    
-    public void refreshLayout() {
-        eventBroker.post(TOPIC_REFRESH_LAYOUT, "refresh");
     }
 }

@@ -1,8 +1,10 @@
-package org.eclipse.e4.babel.editor.ui.editor.i18n;
+package org.eclipse.e4.babel.editor.ui.editor.i18n.page;
 
 
 import java.util.ArrayList;
 import java.util.List;
+import org.eclipse.e4.babel.editor.ui.editor.i18n.pageentry.I18nPageEntry;
+import org.eclipse.e4.babel.editor.ui.editor.i18n.pageentry.I18nPageEntryContract;
 import org.eclipse.e4.babel.resource.IBabelResourceProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
@@ -10,12 +12,12 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
 
-public final class I18nPage extends ScrolledComposite implements I18nBundleEntry.IBundleEntryComposite {
+public final class I18nPage extends ScrolledComposite implements I18nPageContract.View {
 
     private static final String TAG = I18nPage.class.getSimpleName();
-    private final List<I18nBundleEntry> bundleEntries = new ArrayList<>();
+    private final List<I18nPageEntryContract.View> bundleEntries = new ArrayList<>();
 
-    private I18nBundleEntry activeBundleEntry;
+    private I18nPageEntryContract.View activeBundleEntry;
     private Composite i18nEntryComposite;
 
     public static I18nPage create(final Composite sashForm, final IBabelResourceProvider resourceProvider) {
@@ -27,8 +29,8 @@ public final class I18nPage extends ScrolledComposite implements I18nBundleEntry
         i18nEntryComposite = new Composite(this, SWT.BORDER);
         i18nEntryComposite.setLayout(new GridLayout(1, false));
         for (int i = 0; i < 8; i++) {
-            final I18nBundleEntry entry = I18nBundleEntry.create(i18nEntryComposite,(ScrolledComposite)this, resourceProvider);
-            entry.addListener(this);
+            final I18nPageEntryContract.View entry = I18nPageEntry.create(i18nEntryComposite,(ScrolledComposite)this, resourceProvider);
+            entry.addPageListener(this);
             bundleEntries.add(entry);
         }
         this.setContent(i18nEntryComposite);
@@ -43,7 +45,7 @@ public final class I18nPage extends ScrolledComposite implements I18nBundleEntry
         this.layout(true, true);
     }
     
-    public void refreshEntzrySize() {
+    public void redrawEditorSize() {
        bundleEntries.stream().forEach((entry)->entry.updateEditorHeight());
     }
 
@@ -76,13 +78,13 @@ public final class I18nPage extends ScrolledComposite implements I18nBundleEntry
         }
     }
 
-    private void setFocusForNextComposite(final I18nBundleEntry nextFocusComposite) {
+    private void setFocusForNextComposite(final I18nPageEntryContract.View nextFocusComposite) {
         nextFocusComposite.setFocusTextView();
-        setOrigin(getOrigin().x, nextFocusComposite.getLocation().y);
+        setOrigin(getOrigin().x, nextFocusComposite.getCoordinateY());
     }
 
     @Override
-    public void onFocusChange(final I18nBundleEntry bundleEntry) {
+    public void onFocusChange(final I18nPageEntry bundleEntry) {
         activeBundleEntry = bundleEntry;
     }
 }

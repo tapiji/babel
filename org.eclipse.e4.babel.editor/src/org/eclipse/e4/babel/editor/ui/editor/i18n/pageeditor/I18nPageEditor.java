@@ -1,4 +1,4 @@
-package org.eclipse.e4.babel.editor.ui.editor.i18n;
+package org.eclipse.e4.babel.editor.ui.editor.i18n.pageeditor;
 
 
 import org.eclipse.e4.babel.editor.text.PropertiesTextEditor;

@@ -4,7 +4,7 @@ package org.eclipse.e4.babel.editor.preference;
 import org.eclipse.e4.babel.core.preference.PropertyPreferences;
 import org.eclipse.e4.babel.core.preference.PropertyPreferences.NewLineType;
 import org.eclipse.e4.babel.editor.preference.validator.NumberTextKeyListener;
-import org.eclipse.e4.babel.editor.ui.handler.window.ShowPreferenceHandler;
+import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -47,8 +47,8 @@ public final class PreferenceFormattingPage extends APreferencePage {
     private Button keepEmptyFields;
     private Button sortKeys;
 
-    public PreferenceFormattingPage(ShowPreferenceHandler showPreferenceHandler) {
-        super("Formatieren");
+    public PreferenceFormattingPage(IEventBroker eventBroker) {
+        super("Formatieren",eventBroker);
     }
 
     @Override
