@@ -1,4 +1,4 @@
-package org.eclipse.e4.babel.editor.ui.editor.treeviewer;
+package org.eclipse.e4.babel.editor.ui.editor.treeviewer.provider;
 
 
 import org.eclipse.jface.viewers.ColumnLabelProvider;

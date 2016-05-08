@@ -1,11 +1,14 @@
-package org.eclipse.e4.babel.editor.ui.editor.treeviewer;
+package org.eclipse.e4.babel.editor.ui.editor.treeviewer.provider;
 
 
 import org.eclipse.jface.viewers.ITreeContentProvider;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 
 
 public final class KeyTreeContentProvider implements ITreeContentProvider {
+
+    private TreeViewer treeViewer;
 
     @Override
     public void dispose() {
@@ -15,7 +18,7 @@ public final class KeyTreeContentProvider implements ITreeContentProvider {
 
     @Override
     public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-        // TODO Auto-generated method stub
+        this.treeViewer = (TreeViewer) viewer;
 
     }
 

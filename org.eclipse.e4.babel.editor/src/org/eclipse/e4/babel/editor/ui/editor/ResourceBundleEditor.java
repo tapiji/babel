@@ -10,7 +10,7 @@ import org.eclipse.e4.babel.editor.preference.APreferencePage;
 import org.eclipse.e4.babel.editor.ui.editor.constant.EditorConstant;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.page.I18nPage;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.pageeditor.I18nPageEditor;
-import org.eclipse.e4.babel.editor.ui.editor.treeviewer.TreeViewerComposite;
+import org.eclipse.e4.babel.editor.ui.editor.treeviewer.TreeViewerView;
 import org.eclipse.e4.babel.resource.BabelResourceConstants;
 import org.eclipse.e4.babel.resource.IBabelResourceProvider;
 import org.eclipse.e4.core.di.annotations.Optional;
@@ -40,7 +40,7 @@ public class ResourceBundleEditor extends CTabFolder {
     private static final String BOTTOM_MENU_ID = "org.eclipse.e4.babel.editor.toolbar.toolbar";
     private static final String TREE_VIEWER_MENU_ID = "org.eclipse.e4.babel.editor.popupmenu.treePopupMenu";
 
-    private TreeViewerComposite treeViewer;
+    private TreeViewerView treeViewer;
 
     @Inject
     private EMenuService menuService;
@@ -86,7 +86,7 @@ public class ResourceBundleEditor extends CTabFolder {
                                                .get("FILE");
 
         sashForm = new SashForm(this, SWT.SMOOTH);
-        treeViewer = TreeViewerComposite.create(sashForm, menuService, resourceProvider);
+        treeViewer = TreeViewerView.create(sashForm, menuService, resourceProvider);
         i18nPage = I18nPage.create(sashForm, resourceProvider);
         sashForm.setWeights(new int[] {25, 75});
         createTab(sashForm, "Properties", BabelResourceConstants.IMG_RESOURCE_BUNDLE);
