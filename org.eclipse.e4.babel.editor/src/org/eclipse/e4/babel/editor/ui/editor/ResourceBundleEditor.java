@@ -11,6 +11,7 @@ import org.eclipse.e4.babel.editor.ui.editor.constant.EditorConstant;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.page.I18nPage;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.pageeditor.I18nPageEditor;
 import org.eclipse.e4.babel.editor.ui.editor.treeviewer.TreeViewerComposite;
+import org.eclipse.e4.babel.resource.BabelResourceConstants;
 import org.eclipse.e4.babel.resource.IBabelResourceProvider;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.core.services.nls.Translation;
@@ -88,9 +89,10 @@ public class ResourceBundleEditor extends CTabFolder {
         treeViewer = TreeViewerComposite.create(sashForm, menuService, resourceProvider);
         i18nPage = I18nPage.create(sashForm, resourceProvider);
         sashForm.setWeights(new int[] {25, 75});
-        createTab(sashForm, "Eigenschaften");
+        createTab(sashForm, "Properties", BabelResourceConstants.IMG_RESOURCE_BUNDLE);
+        
         for (int i = 0; i < 10; i++) {
-            createTab(new I18nPageEditor(this), "TAB" + i);
+            createTab(new I18nPageEditor(this), "TAB" + i,BabelResourceConstants.IMG_RESOURCE_PROPERTY);
         }
 
         setSelection(0);
@@ -114,10 +116,10 @@ public class ResourceBundleEditor extends CTabFolder {
         i18nPage.refreshLayout();
     }
 
-    private void createTab(final Control control, final String title) {
-        CTabItem tab = new CTabItem(this, SWT.NONE);
-        tab.setText("asdasd");
-        // tab.setImage(resourceProvider.loadImage(""));
+    private void createTab(final Control control, final String title, String image) {
+        final CTabItem tab = new CTabItem(this, SWT.NONE);
+        tab.setText(title);
+        tab.setImage(resourceProvider.loadImage(image));
         tab.setControl(control);
     }
 }
