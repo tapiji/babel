@@ -5,6 +5,7 @@ import org.eclipse.e4.babel.editor.model.tree.KeyTree;
 import org.eclipse.e4.babel.editor.ui.editor.tree.KeyTreeContract.View;
 import org.eclipse.e4.babel.editor.ui.editor.tree.provider.KeyTreeContentProvider;
 import org.eclipse.e4.babel.editor.ui.editor.tree.provider.KeyTreeLabelProvider;
+import org.eclipse.e4.babel.resource.IBabelResourceProvider;
 
 
 final class KeyTreePresenter implements KeyTreeContract.Presenter {
@@ -22,8 +23,8 @@ final class KeyTreePresenter implements KeyTreeContract.Presenter {
 
     }
 
-    public static KeyTreePresenter create(KeyTreeContract.View keyTreeView, KeyTree keyTree) {
-        final KeyTreePresenter presenter = new KeyTreePresenter(keyTreeView, new KeyTreeLabelProvider(), new KeyTreeContentProvider(), keyTree);
+    public static KeyTreePresenter create(KeyTreeContract.View keyTreeView, KeyTree keyTree, IBabelResourceProvider resourceProvider) {
+        final KeyTreePresenter presenter = new KeyTreePresenter(keyTreeView, new KeyTreeLabelProvider(resourceProvider), new KeyTreeContentProvider(), keyTree);
         keyTreeView.setPresenter(presenter);
         return presenter;
     }

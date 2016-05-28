@@ -21,9 +21,18 @@ public final class BabelResourceConstants {
     
     public static final String IMG_TREE_FLAT = "icons/16x16/layout_flat.png";
     public static final String IMG_TREE_HIERARCHICAL = "icons/16x16/layout_hierarchical.png";
+    
+    public static final String IMG_KEY_DEFAULT = "icons/16x16/key.png";
+    public static final String IMG_KEY_MISSING = "icons/16x16/key_missing.png";
+    public static final String IMG_KEY_MISSING_UNUSED = "icons/16x16/key_missing_unused.png";
+    public static final String IMG_KEY_UNUSED = "icons/16x16/key_unused.png";
+    public static final String IMG_KEY_COMMENTED = "icons/16x16/key_commented.png";
 
+    public static final String IMG_OVERLAY_WARNING_GREY = "icons/16x16/warning_grey.png";
+    public static final String IMG_OVERLAY_WARNING = "icons/16x16/warning.png";
     
     public static final String IMG_FOLDER_FLAGS = "icons/flags/";
+
 
 
 }

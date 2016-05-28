@@ -200,8 +200,11 @@ public class BundleGroup {
         return new BundleGroup();
     }
 
-    public boolean isKey(String id) {
-        // TODO Auto-generated method stub
-        return false;
+    public boolean isKey(String key) {
+        return getKeys().contains(key);
+    }
+
+    public int getSize() {
+        return bundles.size();
     }
 }

@@ -45,6 +45,8 @@ public final class KeyTreeContentProvider implements ITreeContentProvider {
         return null;
     }
 
+
+    
     @Override
     public boolean hasChildren(Object element) {
         return getChildren(element).length > 0;

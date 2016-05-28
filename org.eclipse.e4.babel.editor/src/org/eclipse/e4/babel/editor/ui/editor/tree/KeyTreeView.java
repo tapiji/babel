@@ -30,7 +30,7 @@ final class KeyTreeView extends Composite implements KeyTreeContract.View {
 
     public static KeyTreeView create(final Composite sashForm, EMenuService menuService, IBabelResourceProvider resourceProvider, KeyTree keyTree) {
         KeyTreeView treevIew = new KeyTreeView(sashForm, menuService, resourceProvider);
-        KeyTreeContract.Presenter pres = KeyTreePresenter.create(treevIew, keyTree);
+        KeyTreeContract.Presenter pres = KeyTreePresenter.create(treevIew, keyTree,resourceProvider);
         return treevIew;
     }
 

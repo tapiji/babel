@@ -2,10 +2,11 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Model
 Bundle-SymbolicName: org.eclipse.e4.babel.editor.model
-Bundle-Version: 1.0.0.qualifier
+Bundle-Version: 1.0.1
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: org.eclipse.e4.babel.editor.model.bundle,
  org.eclipse.e4.babel.editor.model.tree,
+ org.eclipse.e4.babel.editor.model.tree.visitor,
  org.eclipse.e4.babel.editor.model.updater
 Require-Bundle: org.eclipse.jdt.annotation;bundle-version="2.0.0"
 Import-Package: org.eclipse.jdt.annotation

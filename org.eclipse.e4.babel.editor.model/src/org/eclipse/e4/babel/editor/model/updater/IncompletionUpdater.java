@@ -59,7 +59,7 @@ public class IncompletionUpdater extends KeyTreeUpdater {
         }
         // we only delegate entries in case there are some incomplete ones
         if (count < bundlegroup.getBundleCount()) {
-            //delegation.addKey(keytree, key);
+            delegation.addKey(keytree, key);
         }
     }
 }
