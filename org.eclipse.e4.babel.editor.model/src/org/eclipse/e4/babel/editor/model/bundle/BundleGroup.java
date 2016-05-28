@@ -199,4 +199,9 @@ public class BundleGroup {
     public static BundleGroup create() {
         return new BundleGroup();
     }
+
+    public boolean isKey(String id) {
+        // TODO Auto-generated method stub
+        return false;
+    }
 }

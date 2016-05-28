@@ -265,7 +265,7 @@ public final class I18nPageEntry extends Composite implements KeyListener, Trave
             final StyledText styledText = textView.getTextWidget();
             styledText.setFocus();
         }
-    }
+    } 
 
     @Override
     public void mouseDoubleClick(final MouseEvent e) {

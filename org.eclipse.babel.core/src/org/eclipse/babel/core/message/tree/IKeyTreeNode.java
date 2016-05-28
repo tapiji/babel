@@ -12,6 +12,7 @@ package org.eclipse.babel.core.message.tree;
 
 import org.eclipse.babel.core.message.IMessagesBundleGroup;
 
+
 public interface IKeyTreeNode {
 
     /**

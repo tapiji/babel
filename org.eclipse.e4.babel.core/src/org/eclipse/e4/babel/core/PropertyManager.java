@@ -74,7 +74,7 @@ public final class PropertyManager {
      */
     @NonNull
     public Bundle parse(final String content) {
-        final Bundle messageBundle = Bundle.createInstance();
+     //   final Bundle messageBundle = Bundle.createInstance();
         if (null != content) {
             final String[] entries = PATTERN_LINE_BREAK.split(content);
 
@@ -129,7 +129,7 @@ public final class PropertyManager {
                         value = PATTERN_BACKSLASH_CARRIAGE_RETURN.matcher(value).replaceAll(CARRIAGE_RETURN);
                         value = PATTERN_BACKSLASH_NEW_LINE.matcher(value).replaceAll(NEW_LINE);
                     }
-                    messageBundle.addEntry(BundleEntry.createInstance(key, value, comment, isCommentLine));
+          //          messageBundle.addEntry(BundleEntry.createInstance(key, value, comment, isCommentLine));
                 } else if ((lineBuf.length() > 0) && ((lineBuf.charAt(0) == CHARACTER_SIGN) || (lineBuf.charAt(0) == CHARACTER_CALL_SIGN))) {
                     if (!doneWithFileComment) {
                         fileComment.append(lineBuf);
@@ -143,7 +143,7 @@ public final class PropertyManager {
                 }
             }
         }
-        return messageBundle;
+        return null;
     }
 
     /**

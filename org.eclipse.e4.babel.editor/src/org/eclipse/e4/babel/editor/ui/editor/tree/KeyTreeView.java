@@ -1,9 +1,10 @@
-package org.eclipse.e4.babel.editor.ui.editor.treeviewer;
+package org.eclipse.e4.babel.editor.ui.editor.tree;
 
 
-import org.eclipse.e4.babel.editor.ui.editor.treeviewer.KeyTreeContract.Presenter;
-import org.eclipse.e4.babel.editor.ui.editor.treeviewer.provider.KeyTreeContentProvider;
-import org.eclipse.e4.babel.editor.ui.editor.treeviewer.provider.KeyTreeLabelProvider;
+import org.eclipse.e4.babel.editor.model.tree.KeyTree;
+import org.eclipse.e4.babel.editor.ui.editor.tree.KeyTreeContract.Presenter;
+import org.eclipse.e4.babel.editor.ui.editor.tree.provider.KeyTreeContentProvider;
+import org.eclipse.e4.babel.editor.ui.editor.tree.provider.KeyTreeLabelProvider;
 import org.eclipse.e4.babel.resource.BabelResourceConstants;
 import org.eclipse.e4.babel.resource.IBabelResourceProvider;
 import org.eclipse.e4.ui.services.EMenuService;
@@ -18,25 +19,29 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipselabs.e4.tapiji.logger.Log;
 
 
-public class TreeViewerView extends Composite implements KeyTreeContract.View {
+final class KeyTreeView extends Composite implements KeyTreeContract.View {
 
     private Presenter presenter;
     private IBabelResourceProvider resourceProvider;
     private TreeViewer treeViewer;
-    private static final String TAG = TreeViewerView.class.getSimpleName();
+    private static final String TAG = KeyTreeView.class.getSimpleName();
     private static final String BOTTOM_MENU_ID = "org.eclipse.e4.babel.editor.toolbar.toolbar";
     private static final String TREE_VIEWER_MENU_ID = "org.eclipse.e4.babel.editor.popupmenu.treePopupMenu";
 
-    public static TreeViewerView create(final Composite sashForm, EMenuService menuService, IBabelResourceProvider resourceProvider) {
-        return new TreeViewerView(sashForm, menuService, resourceProvider);
+    public static KeyTreeView create(final Composite sashForm, EMenuService menuService, IBabelResourceProvider resourceProvider, KeyTree keyTree) {
+        KeyTreeView treevIew = new KeyTreeView(sashForm, menuService, resourceProvider);
+        KeyTreeContract.Presenter pres = KeyTreePresenter.create(treevIew, keyTree);
+        return treevIew;
     }
 
-    private TreeViewerView(final Composite parent, EMenuService menuService, IBabelResourceProvider resourceProvider) {
+    private KeyTreeView(final Composite parent, EMenuService menuService, IBabelResourceProvider resourceProvider) {
         super(parent, SWT.BORDER);
+
         this.resourceProvider = resourceProvider;
         Log.d(TAG, "treeViewerPart");
         setLayout(new GridLayout(1, false));
         createView();
+
     }
 
     private void createView() {
@@ -75,8 +80,6 @@ public class TreeViewerView extends Composite implements KeyTreeContract.View {
 
     private void middleView() {
         treeViewer = new TreeViewer(this, SWT.SINGLE | SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
-        treeViewer.setContentProvider(new KeyTreeContentProvider());
-        treeViewer.setLabelProvider(new KeyTreeLabelProvider());
         treeViewer.setUseHashlookup(true);
         treeViewer.getTree().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 0, 0));
     }
@@ -90,10 +93,19 @@ public class TreeViewerView extends Composite implements KeyTreeContract.View {
         Text textBox = new Text(composite, SWT.BORDER);
         textBox.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 
+        
         final Button btnAddKey = new Button(composite, SWT.PUSH);
         btnAddKey.setText("Add");
+        btnAddKey.setEnabled(false);
         btnAddKey.setToolTipText("Add new key");
-        btnAddKey.addListener(SWT.Selection, (e) -> System.out.println("Button click " + e));
+        btnAddKey.addListener(SWT.Selection, (e) -> presenter.addKey(textBox.getText()));
+        
+        textBox.addListener(SWT.KeyUp, (e)-> {
+            if (e.character == SWT.CR && btnAddKey.isEnabled()) {
+                presenter.addKey(textBox.getText());
+            }
+        });
+        textBox.addModifyListener((e)-> btnAddKey.setEnabled(presenter.isNewKey(textBox.getText())));
     }
 
     public TreeViewer getTreeViewer() {
@@ -102,11 +114,25 @@ public class TreeViewerView extends Composite implements KeyTreeContract.View {
 
     public void treeViewVisibility(boolean visible) {
         setVisible(visible);
-
+    }
+    
+    @Override
+    public void updateKeyTree(KeyTree keyTree) {
+        treeViewer.setInput(keyTree);
+    }
+    
+    @Override
+    public void setTreeViewerContentProvider(KeyTreeContentProvider provider) {
+        treeViewer.setContentProvider(provider);
     }
 
     @Override
+    public void setTreeViewerLabelProvider(KeyTreeLabelProvider provider) {
+        treeViewer.setLabelProvider(provider);
+    }
+    @Override
     public void setPresenter(Presenter presenter) {
         this.presenter = presenter;
+        presenter.init();
     }
 }

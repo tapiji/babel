@@ -28,10 +28,20 @@ public class OverlayImageIcon extends CompositeImageDescriptor {
 
     /** Constant for overlaying icon in top left corner. */
     public enum Position {
-        TOP_LEFT,
-        TOP_RIGHT,
-        BOTTOM_LEFT,
-        BOTTOM_RIGHT
+        TOP_LEFT(0),
+        TOP_RIGHT(1),
+        BOTTOM_LEFT(2),
+        BOTTOM_RIGHT(3);
+        
+        private int id;
+
+        Position(int id) {
+            this.id = id;
+        }
+        
+        public int getId() {
+            return this.id;
+        }
     }
 
     private final Image baseImage;

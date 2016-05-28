@@ -8,7 +8,7 @@ import org.osgi.service.prefs.Preferences;
 
 public final class PropertyPreferences {
 
-    private static final String NODE_PATH = "org.eclipse.e4.babel.core";
+    public static final String NODE_PATH = "org.eclipse.e4.babel.core";
     private static final Preferences PREFERENCES = InstanceScope.INSTANCE.getNode(NODE_PATH);
 
     public enum NewLineType {
