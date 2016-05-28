@@ -81,7 +81,7 @@ public class KeyTreeItem implements Comparable<KeyTreeItem>, IKeyTreeVisitable {
 
     @Override
     public String toString() {
-        return "KeyTreeItem [id=" + id + ", keyTree=" + keyTree + ", name=" + name + ", parent=" + parent + ", children=" + children + "]";
+        return "KeyTreeItem [id=" + id + ", keyTree=" + keyTree + ", name=" + name + "]";
     }
 
     @Override

@@ -207,4 +207,12 @@ public class BundleGroup {
     public int getSize() {
         return bundles.size();
     }
+
+    @Override
+    public String toString() {
+
+        return "BundleGroup [keys=" + keys + "]";
+    }
+
+
 }

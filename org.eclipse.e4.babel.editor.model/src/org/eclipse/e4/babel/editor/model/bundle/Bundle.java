@@ -151,5 +151,10 @@ public final class Bundle {
         this.bundleGroup = bundleGroup;
     }
 
+    @Override
+    public String toString() {
+        return "Bundle [bundleEntries=" + bundleEntries + ", locale=" + locale + ", comment=" + comment + ", bundleGroup=" + bundleGroup + "]";
+    }
+
 
 }

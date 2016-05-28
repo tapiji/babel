@@ -80,4 +80,11 @@ public class KeyTree {
     public BundleGroup getBundleGroup() {
         return bundleGroup;
     }
+
+    @Override
+    public String toString() {
+        return "KeyTree [keyItemsCache=, rootKeyItems=, selectedKey=" + selectedKey + ", keyTreeUpdater=" + keyTreeUpdater + ", bundleGroup=" + bundleGroup + "]";
+    }
+
+
 }

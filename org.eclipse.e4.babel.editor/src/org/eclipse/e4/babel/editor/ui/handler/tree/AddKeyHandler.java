@@ -12,9 +12,10 @@ public final class AddKeyHandler {
 
     @Execute
     public void execute() {
+        System.out.println("sadadsd");
         Log.d(TAG, "execute");
     }
-
+    
     @CanExecute
     public boolean canExecute() {
         return true;

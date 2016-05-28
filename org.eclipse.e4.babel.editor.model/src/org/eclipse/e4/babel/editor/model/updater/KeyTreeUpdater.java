@@ -75,4 +75,11 @@ public abstract class KeyTreeUpdater {
             }
         }
     }
+
+    @Override
+    public String toString() {
+        return "KeyTreeUpdater []";
+    }
+
+
 }
