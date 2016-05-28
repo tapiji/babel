@@ -6,7 +6,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 
-public class KeyTreeItem implements Comparable<KeyTreeItem> {
+public class KeyTreeItem implements Comparable<KeyTreeItem>, IKeyTreeVisitable {
 
     private final String id;
 
@@ -82,5 +82,10 @@ public class KeyTreeItem implements Comparable<KeyTreeItem> {
     @Override
     public String toString() {
         return "KeyTreeItem [id=" + id + ", keyTree=" + keyTree + ", name=" + name + ", parent=" + parent + ", children=" + children + "]";
+    }
+
+    @Override
+    public void accept(IKeyTreeVisitor visitor, Object passAlongArgument) {
+        visitor.visitKeyTreeItem(this, passAlongArgument);
     }
 }

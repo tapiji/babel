@@ -21,7 +21,6 @@ import org.eclipse.swt.graphics.Image;
 
 public final class KeyTreeLabelProvider extends LabelProvider implements IFontProvider, IColorProvider {
 
-
     private static final int KEY_DEFAULT = 1 << 1;
     private static final int KEY_COMMENTED = 1 << 2;
     private static final int KEY_NOT = 1 << 3;
@@ -58,7 +57,7 @@ public final class KeyTreeLabelProvider extends LabelProvider implements IFontPr
                     .getBundleGroup()
                     .isKey(treeItem.getId())) {
             IsCommentedVisitor commentedVisitor = new IsCommentedVisitor();
-            //   treeItem.accept(commentedVisitor, null);
+            treeItem.accept(commentedVisitor, null);
             if (commentedVisitor.hasOneCommented()) {
                 iconFlags += KEY_COMMENTED;
             } else {
@@ -72,7 +71,7 @@ public final class KeyTreeLabelProvider extends LabelProvider implements IFontPr
         if (PropertyPreferences.getInstance()
                                .isReportMissingValues()) {
             IsMissingValueVisitor misValVisitor = new IsMissingValueVisitor();
-            // treeItem.accept(misValVisitor, null);
+            treeItem.accept(misValVisitor, null);
             if (misValVisitor.isMissingValue()) {
                 iconFlags += WARNING;
             } else if (misValVisitor.isMissingChildValueOnly()) {
@@ -136,7 +135,7 @@ public final class KeyTreeLabelProvider extends LabelProvider implements IFontPr
         KeyTreeItem treeItem = (KeyTreeItem) element;
 
         IsCommentedVisitor commentedVisitor = new IsCommentedVisitor();
-        // treeItem.accept(commentedVisitor, null);
+        treeItem.accept(commentedVisitor, null);
         if (commentedVisitor.hasOneCommented()) {
             return colorCommented;
         }

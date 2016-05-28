@@ -34,7 +34,8 @@ public class KeyTreePage {
         entry = BundleEntry.create("chris");
         bundle.addBundleEntry(entry);
         
-
+        entry = BundleEntry.create("chris", "wahh", "comment",true);
+        bundle.addBundleEntry(entry);
         
         bundleGroupe.addBundle(new Locale("de", "DE"), bundle);
 

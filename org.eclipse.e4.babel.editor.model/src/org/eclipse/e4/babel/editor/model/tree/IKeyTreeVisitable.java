@@ -15,26 +15,20 @@
  */
 package org.eclipse.e4.babel.editor.model.tree;
 
+
 /**
- * Convenience implementation of <code>IKeyTreeVisitor</code> allowing
- * to override only required methods.
+ * Makes a key tree-related resource visitable by a an
+ * <code>IKeyTreeVisitor</code>.
  * 
  * @author Pascal Essiembre
  */
-public class KeyTreeVisitorAdapter implements IKeyTreeVisitor {
+public interface IKeyTreeVisitable {
 
     /**
-     * Constructor.
+     * Accepts the visitor by passing itself and/or appropriate resources to it.
+     * 
+     * @param visitor the object to visit
+     * @param passAlongArgument optional argument passed to the visitor
      */
-    public KeyTreeVisitorAdapter() {
-        super();
-    }
-
-    @Override
-    public void visitKeyTree(KeyTree keyTree, Object passAlongArgument) {
-    }
-
-    @Override
-    public void visitKeyTreeItem(KeyTreeItem item, Object passAlongArgument) {
-    }
+    void accept(IKeyTreeVisitor visitor, Object passAlongArgument);
 }
