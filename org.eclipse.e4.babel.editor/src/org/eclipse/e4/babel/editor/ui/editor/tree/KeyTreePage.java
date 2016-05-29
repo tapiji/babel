@@ -10,6 +10,7 @@ import org.eclipse.e4.babel.editor.model.updater.GroupedKeyTreeUpdater;
 import org.eclipse.e4.babel.editor.model.updater.KeyTreeUpdater;
 import org.eclipse.e4.babel.resource.IBabelResourceProvider;
 import org.eclipse.e4.ui.services.EMenuService;
+import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.swt.custom.SashForm;
 
 
@@ -18,7 +19,7 @@ public class KeyTreePage {
     private KeyTreeContract.View view;
     private KeyTreeContract.Presenter presenter;
 
-    private KeyTreePage(SashForm sashForm, EMenuService menuService, IBabelResourceProvider resourceProvider) {
+    private KeyTreePage(SashForm sashForm, EMenuService menuService, IBabelResourceProvider resourceProvider, ESelectionService selectionService) {
 
 
         KeyTreeUpdater updater = new GroupedKeyTreeUpdater(".");
@@ -42,7 +43,7 @@ public class KeyTreePage {
 
         KeyTree keyTree = new KeyTree(bundleGroupe,updater);
         
-        view = KeyTreeView.create(sashForm, menuService, resourceProvider, keyTree);
+        view = KeyTreeView.create(sashForm, menuService, resourceProvider, keyTree,selectionService);
         
 
        
@@ -56,7 +57,7 @@ public class KeyTreePage {
         return presenter;
     }
 
-    public static KeyTreePage create(SashForm sashForm, EMenuService menuService, IBabelResourceProvider resourceProvider) {
-        return new KeyTreePage(sashForm, menuService, resourceProvider);
+    public static KeyTreePage create(SashForm sashForm, EMenuService menuService, IBabelResourceProvider resourceProvider, ESelectionService selectionService) {
+        return new KeyTreePage(sashForm, menuService, resourceProvider,selectionService);
     }
 }

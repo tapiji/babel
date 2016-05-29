@@ -22,6 +22,7 @@ import org.eclipse.e4.ui.model.application.ui.basic.MWindow;
 import org.eclipse.e4.ui.services.EMenuService;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
+import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
@@ -57,6 +58,9 @@ public class ResourceBundleEditor extends CTabFolder {
 
     @Inject
     private EPartService partService;
+    
+    @Inject
+    ESelectionService selectionService;
 
     @Translation
     Messages translation;
@@ -85,7 +89,7 @@ public class ResourceBundleEditor extends CTabFolder {
 
         sashForm = new SashForm(this, SWT.SMOOTH);
         
-        KeyTreePage.create(sashForm, menuService, resourceProvider);
+        KeyTreePage.create(sashForm, menuService, resourceProvider,selectionService);
 
 
         i18nPage = I18nPage.create(sashForm, resourceProvider);

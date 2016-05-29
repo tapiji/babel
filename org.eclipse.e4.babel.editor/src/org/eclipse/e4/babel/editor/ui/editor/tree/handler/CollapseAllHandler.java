@@ -1,4 +1,4 @@
-package org.eclipse.e4.babel.editor.ui.handler.tree;
+package org.eclipse.e4.babel.editor.ui.editor.tree.handler;
 
 
 import org.eclipse.e4.core.di.annotations.CanExecute;
@@ -6,9 +6,9 @@ import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipselabs.e4.tapiji.logger.Log;
 
 
-public final class DeleteKeyHandler {
+public final class CollapseAllHandler {
 
-    private static final String TAG = DeleteKeyHandler.class.getSimpleName();
+    private static final String TAG = CollapseAllHandler.class.getSimpleName();
 
     @Execute
     public void execute() {

@@ -8,11 +8,12 @@ import org.eclipse.e4.babel.editor.ui.editor.tree.provider.KeyTreeLabelProvider;
 import org.eclipse.e4.babel.resource.BabelResourceConstants;
 import org.eclipse.e4.babel.resource.IBabelResourceProvider;
 import org.eclipse.e4.ui.services.EMenuService;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -28,20 +29,22 @@ final class KeyTreeView extends Composite implements KeyTreeContract.View {
     private IBabelResourceProvider resourceProvider;
     private TreeViewer treeViewer;
     private EMenuService menuService;
+    private ESelectionService selectionService;
     private static final String TAG = KeyTreeView.class.getSimpleName();
     private static final String BOTTOM_MENU_ID = "org.eclipse.e4.babel.editor.toolbar.toolbar";
     private static final String TREE_VIEWER_MENU_ID = "org.eclipse.e4.babel.editor.popupmenu.treePopupMenu";
 
-    public static KeyTreeView create(final Composite sashForm, EMenuService menuService, IBabelResourceProvider resourceProvider, KeyTree keyTree) {
-        KeyTreeView treevIew = new KeyTreeView(sashForm, menuService, resourceProvider);
+    public static KeyTreeView create(final Composite sashForm, EMenuService menuService, IBabelResourceProvider resourceProvider, KeyTree keyTree,
+                    ESelectionService selectionService) {
+        KeyTreeView treevIew = new KeyTreeView(sashForm, menuService, resourceProvider, selectionService);
         KeyTreeContract.Presenter pres = KeyTreePresenter.create(treevIew, keyTree, resourceProvider);
         return treevIew;
     }
 
-    private KeyTreeView(final Composite parent, EMenuService menuService, IBabelResourceProvider resourceProvider) {
+    private KeyTreeView(final Composite parent, EMenuService menuService, IBabelResourceProvider resourceProvider, ESelectionService selectionService) {
         super(parent, SWT.BORDER);
         this.menuService = menuService;
-
+        this.selectionService = selectionService;
         this.resourceProvider = resourceProvider;
         Log.d(TAG, "treeViewerPart");
         setLayout(new GridLayout(1, false));
@@ -88,16 +91,26 @@ final class KeyTreeView extends Composite implements KeyTreeContract.View {
         treeViewer.setUseHashlookup(true);
         treeViewer.getTree()
                   .setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 0, 0));
-        treeViewer.addSelectionChangedListener(new ISelectionChangedListener() {
-
-            @Override
-            public void selectionChanged(final SelectionChangedEvent event) {
-                final IStructuredSelection selection = (IStructuredSelection) treeViewer.getSelection();
-                //selectionService.setSelection(selection.getFirstElement());
-                Log.d(TAG, "Selection:" + selection);
+        treeViewer.addSelectionChangedListener((event) -> {
+            selectionService.setSelection(((IStructuredSelection) treeViewer.getSelection()).getFirstElement());
+            Log.d(TAG, "Selection:" + ((IStructuredSelection) treeViewer.getSelection()).getFirstElement());
+        });
+        
+        treeViewer.getTree().addMouseListener(new MouseAdapter() {
+            public void mouseDoubleClick(MouseEvent event) {
+                final Object element = selectionService.getSelection();
+                if (treeViewer.isExpandable(element)) {
+                    if (treeViewer.getExpandedState(element)) {
+                        treeViewer.collapseToLevel(element, 1);
+                    } else {
+                        treeViewer.expandToLevel(element, 1);
+                    }
+                }
+                System.out.println("AGAIN: "+selectionService.getSelection());
             }
         });
-        menuService.registerContextMenu(treeViewer.getControl(), TREE_VIEWER_MENU_ID);
+        
+        menuService.registerContextMenu(treeViewer.getTree(), TREE_VIEWER_MENU_ID);
     }
 
     private void bottomView() {
@@ -135,6 +148,7 @@ final class KeyTreeView extends Composite implements KeyTreeContract.View {
     @Override
     public void updateKeyTree(KeyTree keyTree) {
         treeViewer.setInput(keyTree);
+
     }
 
     @Override

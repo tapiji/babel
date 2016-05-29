@@ -1,4 +1,4 @@
-package org.eclipse.e4.babel.editor.ui.handler.tree;
+package org.eclipse.e4.babel.editor.ui.editor.tree.handler;
 
 
 import org.eclipse.e4.core.di.annotations.CanExecute;
