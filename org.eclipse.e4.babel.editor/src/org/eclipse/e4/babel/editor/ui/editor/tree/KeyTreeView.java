@@ -23,7 +23,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipselabs.e4.tapiji.logger.Log;
 
 
-final class KeyTreeView extends Composite implements KeyTreeContract.View {
+public final class KeyTreeView extends Composite implements KeyTreeContract.View {
 
     private Presenter presenter;
     private IBabelResourceProvider resourceProvider;

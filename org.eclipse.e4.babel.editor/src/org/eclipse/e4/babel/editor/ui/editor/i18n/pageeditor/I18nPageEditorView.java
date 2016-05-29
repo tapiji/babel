@@ -8,11 +8,11 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 
 
-public class I18nPageEditor extends Composite {
+public class I18nPageEditorView extends Composite {
 
     private static final int VERTICAL_RULER_WIDTH = 12;
 
-    public I18nPageEditor(final CTabFolder tabFolder) {
+    public I18nPageEditorView(final CTabFolder tabFolder) {
         super(tabFolder, SWT.NONE);
         createControl(tabFolder);
     }

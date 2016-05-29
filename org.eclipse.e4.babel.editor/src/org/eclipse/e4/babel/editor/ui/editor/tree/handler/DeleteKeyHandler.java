@@ -4,7 +4,6 @@ package org.eclipse.e4.babel.editor.ui.editor.tree.handler;
 import javax.inject.Named;
 import org.eclipse.e4.babel.editor.model.IResourceBundleEditorService;
 import org.eclipse.e4.babel.editor.model.tree.KeyTreeItem;
-import org.eclipse.e4.core.di.annotations.CanExecute;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.ui.services.IServiceConstants;
 import org.eclipse.swt.SWT;
@@ -13,8 +12,6 @@ import org.eclipse.swt.widgets.Shell;
 
 
 public final class DeleteKeyHandler {
-
-    private static final String TAG = DeleteKeyHandler.class.getSimpleName();
 
     @Execute
     public void execute(@Named(IServiceConstants.ACTIVE_SELECTION) KeyTreeItem item, @Named(IServiceConstants.ACTIVE_SHELL) final Shell shell,

@@ -3,6 +3,7 @@ package org.eclipse.e4.babel.editor.ui.editor.i18n.page;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.eclipse.e4.babel.editor.ui.editor.i18n.page.I18nPageContract.Presenter;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.pageentry.I18nPageEntry;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.pageentry.I18nPageEntryContract;
 import org.eclipse.e4.babel.resource.IBabelResourceProvider;
@@ -12,19 +13,19 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
 
-public final class I18nPage extends ScrolledComposite implements I18nPageContract.View {
+public final class I18nPageView extends ScrolledComposite implements I18nPageContract.View {
 
-    private static final String TAG = I18nPage.class.getSimpleName();
+    private static final String TAG = I18nPageView.class.getSimpleName();
     private final List<I18nPageEntryContract.View> bundleEntries = new ArrayList<>();
 
     private I18nPageEntryContract.View activeBundleEntry;
     private Composite i18nEntryComposite;
 
-    public static I18nPage create(final Composite sashForm, final IBabelResourceProvider resourceProvider) {
-        return new I18nPage(sashForm, resourceProvider, SWT.V_SCROLL | SWT.H_SCROLL);
+    public static I18nPageView create(final Composite sashForm, final IBabelResourceProvider resourceProvider) {
+        return new I18nPageView(sashForm, resourceProvider, SWT.V_SCROLL | SWT.H_SCROLL);
     }
 
-    private I18nPage(final Composite sashForm, final IBabelResourceProvider resourceProvider, final int style) {
+    private I18nPageView(final Composite sashForm, final IBabelResourceProvider resourceProvider, final int style) {
         super(sashForm, style);
         i18nEntryComposite = new Composite(this, SWT.BORDER);
         i18nEntryComposite.setLayout(new GridLayout(1, false));
@@ -86,5 +87,11 @@ public final class I18nPage extends ScrolledComposite implements I18nPageContrac
     @Override
     public void onFocusChange(final I18nPageEntry bundleEntry) {
         activeBundleEntry = bundleEntry;
+    }
+
+    @Override
+    public void setPresenter(Presenter presenter) {
+        // TODO Auto-generated method stub
+        
     }
 }

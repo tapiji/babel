@@ -11,4 +11,11 @@ public class I18nPageEntryPresenter implements I18nPageEntryContract.Presenter {
     public static I18nPageEntryPresenter create() {
         return new I18nPageEntryPresenter();
     }
+
+
+    @Override
+    public void init() {
+        // TODO Auto-generated method stub
+        
+    }
 }

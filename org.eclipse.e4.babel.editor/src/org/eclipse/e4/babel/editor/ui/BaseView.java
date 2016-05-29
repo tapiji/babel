@@ -1,4 +1,4 @@
-package org.eclipse.e4.babel.editor.ui.editor;
+package org.eclipse.e4.babel.editor.ui;
 
 public interface BaseView<T> {
 

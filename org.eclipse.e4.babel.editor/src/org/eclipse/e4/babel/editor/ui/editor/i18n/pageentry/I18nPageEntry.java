@@ -2,8 +2,9 @@ package org.eclipse.e4.babel.editor.ui.editor.i18n.pageentry;
 
 
 import org.eclipse.e4.babel.core.preference.PropertyPreferences;
-import org.eclipse.e4.babel.editor.ui.editor.i18n.page.I18nPage;
+import org.eclipse.e4.babel.editor.ui.editor.i18n.page.I18nPageView;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.page.I18nPageContract;
+import org.eclipse.e4.babel.editor.ui.editor.i18n.pageentry.I18nPageEntryContract.Presenter;
 import org.eclipse.e4.babel.resource.IBabelResourceProvider;
 import org.eclipse.jface.resource.FontDescriptor;
 import org.eclipse.jface.text.Document;
@@ -225,7 +226,7 @@ public final class I18nPageEntry extends Composite implements KeyListener, Trave
             textWidget.setVisible(!expand);
             expandIcon.setImage(resourceProvider.loadImage(TapijiResourceConstants.IMG_COLLAPSE));
         }
-        ((I18nPage) i18nPage).refreshLayout();
+        ((I18nPageView) i18nPage).refreshLayout();
     }
 
     @Override
@@ -292,5 +293,11 @@ public final class I18nPageEntry extends Composite implements KeyListener, Trave
     @Override
     public int getCoordinateY() {
         return getLocation().y;
+    }
+
+    @Override
+    public void setPresenter(Presenter presenter) {
+        // TODO Auto-generated method stub
+        
     }
 }

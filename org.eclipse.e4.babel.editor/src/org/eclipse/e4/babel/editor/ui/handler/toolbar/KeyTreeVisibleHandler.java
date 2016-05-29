@@ -1,11 +1,10 @@
 package org.eclipse.e4.babel.editor.ui.handler.toolbar;
 
 
-import org.eclipse.e4.babel.editor.ui.editor.constant.EditorConstant;
+import org.eclipse.e4.babel.editor.ui.editor.ResourceBundleEditor;
 import org.eclipse.e4.core.di.annotations.CanExecute;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.core.services.events.IEventBroker;
-import org.eclipse.e4.ui.model.application.ui.menu.MMenuItem;
 import org.eclipselabs.e4.tapiji.logger.Log;
 
 
@@ -16,7 +15,7 @@ public final class KeyTreeVisibleHandler {
     @Execute
     public void execute(final IEventBroker eventBroker) {
         Log.d(TAG, "execute");
-        eventBroker.post(EditorConstant.TOPIC_TREE_VIEW_VISIBILITY,false);
+        eventBroker.post(ResourceBundleEditor.TOPIC_TREE_VIEW_VISIBILITY,false);
     }
     
     @CanExecute

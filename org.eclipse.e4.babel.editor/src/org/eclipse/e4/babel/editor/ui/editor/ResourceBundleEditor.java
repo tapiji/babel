@@ -8,10 +8,9 @@ import org.eclipse.babel.i18n.Messages;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.e4.babel.editor.model.IResourceBundleEditorService;
 import org.eclipse.e4.babel.editor.preference.APreferencePage;
-import org.eclipse.e4.babel.editor.ui.editor.constant.EditorConstant;
-import org.eclipse.e4.babel.editor.ui.editor.i18n.page.I18nPage;
-import org.eclipse.e4.babel.editor.ui.editor.i18n.pageeditor.I18nPageEditor;
-import org.eclipse.e4.babel.editor.ui.editor.tree.KeyTreePage;
+import org.eclipse.e4.babel.editor.ui.editor.i18n.page.I18nPageView;
+import org.eclipse.e4.babel.editor.ui.editor.i18n.pageeditor.I18nPageEditorView;
+import org.eclipse.e4.babel.editor.ui.editor.tree.KeyTreeView;
 import org.eclipse.e4.babel.resource.BabelResourceConstants;
 import org.eclipse.e4.babel.resource.IBabelResourceProvider;
 import org.eclipse.e4.core.di.annotations.Optional;
@@ -37,7 +36,7 @@ import org.eclipselabs.e4.tapiji.logger.Log;
 
 
 public class ResourceBundleEditor extends CTabFolder {
-
+    public static final String TOPIC_TREE_VIEW_VISIBILITY = "TOPIC_GUI/TREE_VIEW_VISIBILITY";
     private static final String TAG = ResourceBundleEditor.class.getSimpleName();
     private static final String BOTTOM_MENU_ID = "org.eclipse.e4.babel.editor.toolbar.toolbar";
     private static final String TREE_VIEWER_MENU_ID = "org.eclipse.e4.babel.editor.popupmenu.treePopupMenu";
@@ -65,7 +64,7 @@ public class ResourceBundleEditor extends CTabFolder {
 
     @Translation
     Messages translation;
-    private I18nPage i18nPage;
+    private I18nPageView i18nPage;
     private SashForm sashForm;
 
     @Inject
@@ -92,15 +91,15 @@ public class ResourceBundleEditor extends CTabFolder {
 
         sashForm = new SashForm(this, SWT.SMOOTH);
         
-        KeyTreePage.create(sashForm, menuService, resourceProvider,selectionService, editor);
+        KeyTreeView view = KeyTreeView.create(sashForm, menuService, resourceProvider, editor.getKeyTree(),selectionService);
+        
 
-
-        i18nPage = I18nPage.create(sashForm, resourceProvider);
+        i18nPage = I18nPageView.create(sashForm, resourceProvider);
         sashForm.setWeights(new int[] {25, 75});
         createTab(sashForm, "Properties", BabelResourceConstants.IMG_RESOURCE_BUNDLE);
 
         for (int i = 0; i < 10; i++) {
-            createTab(new I18nPageEditor(this), "TAB" + i, BabelResourceConstants.IMG_RESOURCE_PROPERTY);
+            createTab(new I18nPageEditorView(this), "TAB" + i, BabelResourceConstants.IMG_RESOURCE_PROPERTY);
         }
 
         setSelection(0);
@@ -108,7 +107,7 @@ public class ResourceBundleEditor extends CTabFolder {
 
     @Inject
     @Optional
-    private void onTreeViewVisibilityChange(@UIEventTopic(EditorConstant.TOPIC_TREE_VIEW_VISIBILITY) final boolean visibility) {
+    private void onTreeViewVisibilityChange(@UIEventTopic(TOPIC_TREE_VIEW_VISIBILITY) final boolean visibility) {
         if (sashForm.getMaximizedControl() == null) {
             sashForm.setMaximizedControl(i18nPage);
         } else {

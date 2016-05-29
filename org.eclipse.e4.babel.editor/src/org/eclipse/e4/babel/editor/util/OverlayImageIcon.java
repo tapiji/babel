@@ -1,4 +1,4 @@
-package org.eclipse.e4.babel.editor.ui.editor.treeviewer.util;
+package org.eclipse.e4.babel.editor.util;
 
 
 /*******************************************************************************
