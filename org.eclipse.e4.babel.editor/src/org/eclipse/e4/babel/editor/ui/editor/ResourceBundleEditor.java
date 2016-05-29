@@ -6,6 +6,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import org.eclipse.babel.i18n.Messages;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.e4.babel.editor.model.IResourceBundleEditorService;
 import org.eclipse.e4.babel.editor.preference.APreferencePage;
 import org.eclipse.e4.babel.editor.ui.editor.constant.EditorConstant;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.page.I18nPage;
@@ -72,6 +73,8 @@ public class ResourceBundleEditor extends CTabFolder {
         super(parent, SWT.BOTTOM);
     }
 
+ 
+    
     @Inject
     @Optional
     public void setPartInput(@Named("input") Object input) {
@@ -80,7 +83,7 @@ public class ResourceBundleEditor extends CTabFolder {
     }
 
     @PostConstruct
-    public void createControl(final Composite parent, final Shell shell, MWindow window) {
+    public void createControl(final Composite parent, final Shell shell, MWindow window,IResourceBundleEditorService editor) {
         Log.d(TAG, "treeViewerPart");
 
         setMinimumCharacters(40);
@@ -89,7 +92,7 @@ public class ResourceBundleEditor extends CTabFolder {
 
         sashForm = new SashForm(this, SWT.SMOOTH);
         
-        KeyTreePage.create(sashForm, menuService, resourceProvider,selectionService);
+        KeyTreePage.create(sashForm, menuService, resourceProvider,selectionService, editor);
 
 
         i18nPage = I18nPage.create(sashForm, resourceProvider);
