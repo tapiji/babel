@@ -22,6 +22,8 @@ public interface KeyTreeContract {
         void setTreeViewerLabelProvider(KeyTreeLabelProvider provider);
 
         void setSelectedKeyTreeItem(KeyTreeItem item);
+        
+        
     }
 
     interface Presenter extends BasePresenter {
@@ -37,6 +39,11 @@ public interface KeyTreeContract {
         String getSelectedKeyFromSelection(IStructuredSelection selection);
 
         KeyTree getKeyTree();
+
+        void changeToHierarchicalTree();
+
+        void changeToFlatTree();
+        
     }
 }
 

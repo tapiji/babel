@@ -6,5 +6,8 @@ public interface BasePresenter {
 
     void init();
 
+    void dispose();
+
+
 
 }

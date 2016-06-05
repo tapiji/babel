@@ -18,4 +18,11 @@ public class I18nPageEntryPresenter implements I18nPageEntryContract.Presenter {
         // TODO Auto-generated method stub
         
     }
+
+
+    @Override
+    public void dispose() {
+        // TODO Auto-generated method stub
+        
+    }
 }

@@ -66,8 +66,8 @@ public class KeyTree {
 
     public void setUpdater(KeyTreeUpdater keyTreeUpdater) {
         this.keyTreeUpdater = keyTreeUpdater;
-        keyItemsCache.clear();
-        rootKeyItems.clear();
+        this.keyItemsCache.clear();
+        this.rootKeyItems.clear();
         loadKeys();
     }
 

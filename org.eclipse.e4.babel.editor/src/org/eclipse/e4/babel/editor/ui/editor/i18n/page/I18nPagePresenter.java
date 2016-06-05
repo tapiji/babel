@@ -8,4 +8,10 @@ public class I18nPagePresenter implements I18nPageContract.Presenter{
         
     }
 
+    @Override
+    public void dispose() {
+        // TODO Auto-generated method stub
+        
+    }
+
 }

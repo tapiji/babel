@@ -7,4 +7,10 @@ public class I18nPageEditorPresenter implements I18nPageEditorContract.Presenter
     public void init() {
     }
 
+    @Override
+    public void dispose() {
+        // TODO Auto-generated method stub
+        
+    }
+
 }
