@@ -2,10 +2,13 @@ package org.eclipse.e4.babel.editor.ui.editor.tree;
 
 
 import org.eclipse.e4.babel.editor.model.tree.KeyTree;
+import org.eclipse.e4.babel.editor.model.tree.KeyTreeItem;
 import org.eclipse.e4.babel.editor.ui.editor.tree.KeyTreeContract.View;
 import org.eclipse.e4.babel.editor.ui.editor.tree.provider.KeyTreeContentProvider;
 import org.eclipse.e4.babel.editor.ui.editor.tree.provider.KeyTreeLabelProvider;
 import org.eclipse.e4.babel.resource.IBabelResourceProvider;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 
 
 final class KeyTreePresenter implements KeyTreeContract.Presenter {
@@ -45,6 +48,31 @@ final class KeyTreePresenter implements KeyTreeContract.Presenter {
     public boolean isNewKey(String text) {
         // TODO Auto-generated method stub
         return true;
+    }
+
+    @Override
+    public String getSelectedKey(final KeyTreeItem item) {
+        String key = null;
+        if (item != null) {
+            key = item.getId();
+        }
+        return key;
+    }
+
+    @Override
+    public String getSelectedKeyFromSelection(IStructuredSelection selection) {
+        return getSelectedKey(getSelection(selection));
+    }
+
+
+    @Override
+    public KeyTreeItem getSelection(IStructuredSelection selection) {
+        return (KeyTreeItem) selection.getFirstElement();
+    }
+    
+    @Override
+    public KeyTree getKeyTree() {
+        return keyTree;
     }
 
 
