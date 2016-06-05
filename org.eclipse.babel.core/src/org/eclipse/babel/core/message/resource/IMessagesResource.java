@@ -42,6 +42,18 @@ public interface IMessagesResource {
      * Serializes a {@link MessagesBundle} instance to its native format.
      * 
      * @param messagesBundle
+     * 
+     * 
+     * 
+     * 
+     * 
+     * 
+     * 
+     * 
+     * 
+     * 
+     *  
+     *  
      *            the MessagesBundle to serialize
      */
     void serialize(IMessagesBundle messagesBundle);
