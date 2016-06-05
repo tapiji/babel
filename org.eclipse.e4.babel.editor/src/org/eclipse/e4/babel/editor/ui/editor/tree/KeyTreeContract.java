@@ -20,6 +20,8 @@ public interface KeyTreeContract {
         void setTreeViewerContentProvider(KeyTreeContentProvider provider);
 
         void setTreeViewerLabelProvider(KeyTreeLabelProvider provider);
+
+        void setSelectedKeyTreeItem(KeyTreeItem item);
     }
 
     interface Presenter extends BasePresenter {

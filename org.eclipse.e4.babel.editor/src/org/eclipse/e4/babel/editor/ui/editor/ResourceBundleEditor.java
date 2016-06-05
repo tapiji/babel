@@ -13,6 +13,8 @@ import org.eclipse.e4.babel.editor.ui.editor.i18n.pageeditor.I18nPageEditorView;
 import org.eclipse.e4.babel.editor.ui.editor.tree.KeyTreeView;
 import org.eclipse.e4.babel.resource.BabelResourceConstants;
 import org.eclipse.e4.babel.resource.IBabelResourceProvider;
+import org.eclipse.e4.core.commands.ECommandService;
+import org.eclipse.e4.core.commands.EHandlerService;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.core.services.nls.Translation;
 import org.eclipse.e4.ui.di.UIEventTopic;
@@ -35,7 +37,8 @@ import org.eclipse.ui.IFileEditorInput;
 import org.eclipselabs.e4.tapiji.logger.Log;
 
 
-public class ResourceBundleEditor extends CTabFolder {
+public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEditorContract.View {
+    
     public static final String TOPIC_TREE_VIEW_VISIBILITY = "TOPIC_GUI/TREE_VIEW_VISIBILITY";
     private static final String TAG = ResourceBundleEditor.class.getSimpleName();
     private static final String BOTTOM_MENU_ID = "org.eclipse.e4.babel.editor.toolbar.toolbar";
@@ -51,16 +54,16 @@ public class ResourceBundleEditor extends CTabFolder {
     private IBabelResourceProvider resourceProvider;
 
     @Inject
-    private MApplication application;
+    private ECommandService commandService;
 
     @Inject
-    private EModelService modelService;
-
-    @Inject
-    private EPartService partService;
+    private EHandlerService handlerService;
     
     @Inject
-    ESelectionService selectionService;
+    private IResourceBundleEditorService editor;
+    
+    @Inject
+    private ESelectionService selectionService;
 
     @Translation
     Messages translation;
@@ -71,8 +74,6 @@ public class ResourceBundleEditor extends CTabFolder {
     public ResourceBundleEditor(Composite parent) {
         super(parent, SWT.BOTTOM);
     }
-
- 
     
     @Inject
     @Optional
@@ -82,7 +83,7 @@ public class ResourceBundleEditor extends CTabFolder {
     }
 
     @PostConstruct
-    public void createControl(final Composite parent, final Shell shell, MWindow window,IResourceBundleEditorService editor) {
+    public void createControl(final Composite parent, final Shell shell, MWindow window) {
         Log.d(TAG, "treeViewerPart");
 
         setMinimumCharacters(40);
@@ -91,7 +92,7 @@ public class ResourceBundleEditor extends CTabFolder {
 
         sashForm = new SashForm(this, SWT.SMOOTH);
         
-        KeyTreeView view = KeyTreeView.create(sashForm, menuService, resourceProvider, editor.getKeyTree(),selectionService);
+        KeyTreeView view = KeyTreeView.create(sashForm, (ResourceBundleEditorContract.View) this);
         
 
         i18nPage = I18nPageView.create(sashForm, resourceProvider);
@@ -128,5 +129,35 @@ public class ResourceBundleEditor extends CTabFolder {
         tab.setText(title);
         tab.setImage(resourceProvider.loadImage(image));
         tab.setControl(control);
+    }
+
+    @Override
+    public ECommandService getCommandService() {
+        return commandService;
+    }
+
+    @Override
+    public EHandlerService getHandlerService() {
+        return handlerService;
+    }
+
+    @Override
+    public EMenuService getMenuService() {
+        return menuService;
+    }
+
+    @Override
+    public IBabelResourceProvider getResourceProvider() {
+        return resourceProvider;
+    }
+    
+    @Override
+    public IResourceBundleEditorService getEditorService() {
+        return editor;
+    }
+
+    @Override
+    public ESelectionService getSelectionService() {
+        return selectionService;
     }
 }

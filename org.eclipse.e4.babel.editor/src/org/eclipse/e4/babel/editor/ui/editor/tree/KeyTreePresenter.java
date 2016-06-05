@@ -1,8 +1,10 @@
 package org.eclipse.e4.babel.editor.ui.editor.tree;
 
 
+import org.eclipse.e4.babel.editor.model.IResourceBundleEditorService;
 import org.eclipse.e4.babel.editor.model.tree.KeyTree;
 import org.eclipse.e4.babel.editor.model.tree.KeyTreeItem;
+import org.eclipse.e4.babel.editor.ui.editor.ResourceBundleEditorContract;
 import org.eclipse.e4.babel.editor.ui.editor.tree.KeyTreeContract.View;
 import org.eclipse.e4.babel.editor.ui.editor.tree.provider.KeyTreeContentProvider;
 import org.eclipse.e4.babel.editor.ui.editor.tree.provider.KeyTreeLabelProvider;
@@ -15,19 +17,19 @@ final class KeyTreePresenter implements KeyTreeContract.Presenter {
 
     private KeyTreeLabelProvider keyTreeLabelProvider;
     private KeyTreeContentProvider keyTreeContentProvider;
-    private KeyTree keyTree;
+    private IResourceBundleEditorService editorService;
     private View keyTreeView;
 
-    private KeyTreePresenter(View keyTreeView, KeyTreeLabelProvider keyTreeLabelProvider, KeyTreeContentProvider keyTreeContentProvider, KeyTree keyTree) {
+    private KeyTreePresenter(View keyTreeView, KeyTreeLabelProvider keyTreeLabelProvider, KeyTreeContentProvider keyTreeContentProvider, IResourceBundleEditorService editorService) {
         this.keyTreeView = keyTreeView;
         this.keyTreeLabelProvider = keyTreeLabelProvider;
         this.keyTreeContentProvider = keyTreeContentProvider;
-        this.keyTree = keyTree;
+        this.editorService = editorService;
 
     }
 
-    public static KeyTreePresenter create(KeyTreeContract.View keyTreeView, KeyTree keyTree, IBabelResourceProvider resourceProvider) {
-        final KeyTreePresenter presenter = new KeyTreePresenter(keyTreeView, new KeyTreeLabelProvider(resourceProvider), new KeyTreeContentProvider(), keyTree);
+    public static KeyTreePresenter create(KeyTreeContract.View keyTreeView, ResourceBundleEditorContract.View resourceBundleEditor) {
+        final KeyTreePresenter presenter = new KeyTreePresenter(keyTreeView, new KeyTreeLabelProvider(resourceBundleEditor.getResourceProvider()), new KeyTreeContentProvider(), resourceBundleEditor.getEditorService());
         keyTreeView.setPresenter(presenter);
         return presenter;
     }
@@ -36,12 +38,13 @@ final class KeyTreePresenter implements KeyTreeContract.Presenter {
     public void init() {
         keyTreeView.setTreeViewerContentProvider(keyTreeContentProvider);
         keyTreeView.setTreeViewerLabelProvider(keyTreeLabelProvider);
-        keyTreeView.updateKeyTree(keyTree);
+        keyTreeView.updateKeyTree(getKeyTree());
     }
-
+    
     @Override
-    public void addKey(String text) {
-        // Todo add new key entry
+    public void addKey(String key) {
+        editorService.addNewKey(key);
+        keyTreeView.setSelectedKeyTreeItem(getKeyTree().getKeyTreeItem(key));
     }
 
     @Override
@@ -72,7 +75,7 @@ final class KeyTreePresenter implements KeyTreeContract.Presenter {
     
     @Override
     public KeyTree getKeyTree() {
-        return keyTree;
+        return editorService.getKeyTree();
     }
 
 
