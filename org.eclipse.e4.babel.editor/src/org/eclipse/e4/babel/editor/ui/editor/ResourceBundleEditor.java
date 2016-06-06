@@ -6,6 +6,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import org.eclipse.babel.i18n.Messages;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.e4.babel.core.preference.PropertyPreferences;
 import org.eclipse.e4.babel.editor.model.IResourceBundleEditorService;
 import org.eclipse.e4.babel.editor.preference.APreferencePage;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.page.I18nPageView;
@@ -16,6 +18,7 @@ import org.eclipse.e4.babel.resource.IBabelResourceProvider;
 import org.eclipse.e4.core.commands.ECommandService;
 import org.eclipse.e4.core.commands.EHandlerService;
 import org.eclipse.e4.core.di.annotations.Optional;
+import org.eclipse.e4.core.di.extensions.Preference;
 import org.eclipse.e4.core.services.nls.Translation;
 import org.eclipse.e4.ui.di.UIEventTopic;
 import org.eclipse.e4.ui.model.application.MApplication;
@@ -122,6 +125,7 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
         Log.d(TAG, "INPUT: UPDATE UI" + visibility);
         i18nPage.redrawEditorSize();
         i18nPage.refreshLayout();
+        System.out.println("New user: " + PropertyPreferences.getInstance().isEditorTreeExpanded());
     }
 
     private void createTab(final Control control, final String title, String image) {

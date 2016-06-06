@@ -49,6 +49,7 @@ public abstract class APreferencePage extends PreferencePage {
 
 
     public void redrawi18nLayout() {
+        
         eventBroker.post(TOPIC_REFRESH_LAYOUT, "refresh");
     }
     

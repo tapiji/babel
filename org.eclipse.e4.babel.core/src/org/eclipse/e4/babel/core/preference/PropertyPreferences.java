@@ -38,7 +38,7 @@ public final class PropertyPreferences {
     // General
     private static final String EDITOR_TREE_HIDDEN = "CORE_GENERAL/EDITOR_TREE_HIDDEN";
     private static final String EDITOR_TREE_HIERARCHICAL = "CORE_GENERAL/EDITOR_TREE_HIERARCHICAL";
-    private static final String EDITOR_TREE_EXPANDED = "CORE_GENERAL/EDITOR_TREE_EXPANDED";
+    public static final String EDITOR_TREE_EXPANDED = "CORE_GENERAL/EDITOR_TREE_EXPANDED";
     private static final String FIELD_TAB_INSERTS = "CORE_GENERAL/FIELD_TAB_INSERTS";
     private static final String I18N_EDITOR_HEIGHT = "CORE_GENERAL/I18N_EDITOR_HEIGHT";
     private static final String KEY_GROUP_SEPARATOR = "CORE_GENERAL/KEY_GROUP_SEPARATOR";
@@ -425,6 +425,14 @@ public final class PropertyPreferences {
             isNodeDeleted = false;
         }
         return isNodeDeleted;
+    }
+    
+    public void flush() {
+        try {
+            PREFERENCES.flush();
+        } catch (BackingStoreException e) {
+            e.printStackTrace();
+        }
     }
 
     private static class PropertyPreferencesHolder {
