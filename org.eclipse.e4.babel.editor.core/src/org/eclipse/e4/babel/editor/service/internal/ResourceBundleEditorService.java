@@ -32,6 +32,8 @@ public final class ResourceBundleEditorService implements IResourceBundleEditorS
         Bundle bundle = Bundle.create();
         BundleEntry entry = BundleEntry.create("blavla.dsd");
         bundle.addBundleEntry(entry);
+        entry = BundleEntry.create("blavla");
+        bundle.addBundleEntry(entry);
         entry = BundleEntry.create("chris");
         bundle.addBundleEntry(entry);
         entry = BundleEntry.create("chris", "wahh", "comment", true);

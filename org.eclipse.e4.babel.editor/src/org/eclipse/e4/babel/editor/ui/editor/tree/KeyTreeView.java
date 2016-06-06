@@ -74,6 +74,7 @@ public final class KeyTreeView extends Composite implements KeyTreeContract.View
         final Button btnFlat = new Button(composite, SWT.TOGGLE);
         btnFlat.setImage(rbeView.getResourceProvider()
                                 .loadImage(BabelResourceConstants.IMG_TREE_FLAT));
+        btnFlat.setToolTipText("Tree");
         btnFlat.addListener(SWT.Selection, (e) -> {
             if (btnFlat.getSelection()) {
                 btnHierarchical.setSelection(false);
@@ -87,13 +88,14 @@ public final class KeyTreeView extends Composite implements KeyTreeContract.View
                 setVisible(true);
                 setCursor(defaultCursor);
                 treeViewer.refresh(true);
-                
+
             }
         });
 
 
         btnHierarchical.setImage(rbeView.getResourceProvider()
                                         .loadImage(BabelResourceConstants.IMG_TREE_HIERARCHICAL));
+        btnHierarchical.setToolTipText("Tree");
         btnHierarchical.addListener(SWT.Selection, (e) -> {
             if (btnHierarchical.getSelection()) {
                 btnFlat.setSelection(false);
@@ -124,15 +126,34 @@ public final class KeyTreeView extends Composite implements KeyTreeContract.View
         layoutData.heightHint = btnHierarchical.computeSize(SWT.DEFAULT, SWT.DEFAULT).y;
         separator.setLayoutData(layoutData);
 
-        final Button btnExpandAll = new Button(composite, SWT.PUSH);
+        final Button btnExpandAll = new Button(composite, SWT.PUSH | SWT.FLAT);
         btnExpandAll.setImage(rbeView.getResourceProvider()
                                      .loadImage(BabelResourceConstants.IMG_EXPAND_ALL));
-        btnExpandAll.addListener(SWT.Selection, (e) -> System.out.println("Button click " + e));
+        btnExpandAll.addListener(SWT.Selection, (e) -> {
+            treeViewer.expandAll();
+            treeViewer.getTree()
+                      .forceFocus();
+        });
+        btnExpandAll.setToolTipText("Expand all");
 
-        final Button btnCollapseAll = new Button(composite, SWT.PUSH);
+        final Button btnCollapseAll = new Button(composite, SWT.PUSH | SWT.FLAT);
+        btnCollapseAll.setToolTipText("Collapse all");
         btnCollapseAll.setImage(rbeView.getResourceProvider()
                                        .loadImage(BabelResourceConstants.IMG_COLLAPSE_ALL));
-        btnCollapseAll.addListener(SWT.Selection, (e) -> System.out.println("Button click " + e));
+        btnCollapseAll.addListener(SWT.Selection, (e) -> {
+            treeViewer.collapseAll();
+            treeViewer.getTree()
+                      .forceFocus();
+        });
+
+        if (PropertyPreferences.getInstance()
+                               .isEditorTreeHierachical()) {
+            btnHierarchical.setSelection(true);
+            btnHierarchical.setEnabled(false);
+        } else {
+            btnFlat.setSelection(true);
+            btnFlat.setEnabled(false);
+        }
     }
 
     private void middleView() {
@@ -140,6 +161,10 @@ public final class KeyTreeView extends Composite implements KeyTreeContract.View
         treeViewer.setUseHashlookup(true);
         treeViewer.getTree()
                   .setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 0, 0));
+        if (PropertyPreferences.getInstance()
+                               .isEditorTreeExpanded()) {
+            treeViewer.expandAll();
+        }
         treeViewer.addSelectionChangedListener((event) -> {
             IStructuredSelection selection = (IStructuredSelection) treeViewer.getSelection();
             rbeView.getSelectionService()
