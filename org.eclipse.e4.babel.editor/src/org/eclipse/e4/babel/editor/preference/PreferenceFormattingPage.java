@@ -260,7 +260,7 @@ public final class PreferenceFormattingPage extends APreferencePage {
         convertUnicodeToEncoded.setSelection(preferences.isConvertUnicodedToEncoded());
 
         groupKeys.setSelection(preferences.isGroupKeys());
-        groupLevelDeep.setText(String.valueOf(preferences.getGroupLevelDeep()));
+        groupLevelDeep.setText(String.valueOf(preferences.getGroupLevelDepth()));
         groupLineBreaks.setText(String.valueOf(preferences.getGroupLineBreaks()));
         groupAlignEqualSigns.setSelection(preferences.isAlignEqualSigns());
 

@@ -16,7 +16,10 @@
 package org.eclipse.e4.babel.editor.service.internal.generator;
 
 import java.util.Iterator;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.e4.babel.core.preference.PropertyPreferences;
+import org.eclipse.e4.babel.editor.model.bundle.Bundle;
+import org.eclipse.e4.babel.editor.model.bundle.BundleEntry;
 
 
 
@@ -45,15 +48,18 @@ public final class PropertiesGenerator {
     
     /** System line separator. */
 	private static final String SYSTEM_LINE_SEP = Platform
-			.getPreferencesService().getString("org.eclipse.core.runtime",
+			.getPreferencesService().getString(Platform.PI_RUNTIME,
 					"line.separator", System.getProperty("line.separator"),
 					null);
+	
+	private static final String SYSTEM_LINE_SEPARATOR = System.lineSeparator();
+	
     /** Forced line separators. */
     private static final String[] FORCED_LINE_SEP = new String[3];
     static {
-        FORCED_LINE_SEP[PropertyPreferences.NewLineType.UNIX] = "\\\\n";
-        FORCED_LINE_SEP[PropertyPreferences.NEW_LINE_WIN] = "\\\\r\\\\n";
-        FORCED_LINE_SEP[PropertyPreferences.NEW_LINE_MAC] = "\\\\r";
+        FORCED_LINE_SEP[PropertyPreferences.NewLineType.UNIX.getId()] = "\\\\n";
+        FORCED_LINE_SEP[PropertyPreferences.NewLineType.WIN.getId()] = "\\\\r\\\\n";
+        FORCED_LINE_SEP[PropertyPreferences.NewLineType.MAC.getId()] = "\\\\r";
     }
 
     /**
@@ -70,14 +76,15 @@ public final class PropertiesGenerator {
      * @return the generated string
      */
     public static String generate(Bundle bundle) {
+        
         String lineBreak = SYSTEM_LINE_SEP;
-        int numOfLineBreaks = RBEPreferences.getGroupLineBreaks();
+        int numOfLineBreaks = PropertyPreferences.getInstance().getGroupLineBreaks();
         StringBuffer text = new StringBuffer();
 
         // Header comment
         String headComment = bundle.getComment();
         if (headComment != null && headComment.length() > 0) {
-            if (RBEPreferences.getShowGenerator() 
+            if (PropertyPreferences.getInstance().isGeneratedByEnabled() 
                     && !headComment.startsWith(GENERATED_BY)) {
                 text.append(GENERATED_BY);
                 text.append(SYSTEM_LINE_SEP);
@@ -90,22 +97,21 @@ public final class PropertiesGenerator {
         int equalIndex = -1;
         for (Iterator<String> iter = bundle.getKeys().iterator(); 
                 iter.hasNext();) {
-            BundleEntry bundleEntry = bundle.getEntry(iter.next());
+            BundleEntry bundleEntry = bundle.getBundleEntry(iter.next());
             String key = bundleEntry.getKey();
             String value = bundleEntry.getValue(); 
             String comment = bundleEntry.getComment();    
             
             if (value != null){
                 // escape backslashes
-                if (RBEPreferences.getConvertUnicodeToEncoded()) {
+                if (PropertyPreferences.getInstance().isConvertUnicodedToEncoded()) {
                     value = value.replaceAll("\\\\", "\\\\\\\\");
                 }
                 
                 // handle new lines in value
-                if (RBEPreferences.getForceNewLineType()) {
+                if (PropertyPreferences.getInstance().isLineForced()) {
                     value = value.replaceAll(
-                            "\r\n|\r|\n", FORCED_LINE_SEP[
-                                    RBEPreferences.getNewLineType()]);
+                            "\r\n|\r|\n", FORCED_LINE_SEP[PropertyPreferences.getInstance().getLineType()]);
                 } else {
                     value = value.replaceAll("\r", "\\\\r");
                     value = value.replaceAll("\n", "\\\\n");
@@ -114,9 +120,9 @@ public final class PropertiesGenerator {
                 value = "";
             }
             
-            if (RBEPreferences.getKeepEmptyFields() || value.length() > 0) {
+            if (PropertyPreferences.getInstance().isKeepEmptyFields() || value.length() > 0) {
                 // handle group equal align and line break options
-                if (RBEPreferences.getGroupKeys()) {
+                if (PropertyPreferences.getInstance().isGroupKeys()) {
                     String newGroup = getKeyGroup(key);
                     if (newGroup == null || !newGroup.equals(group)) {
                         group = newGroup;
@@ -130,7 +136,7 @@ public final class PropertiesGenerator {
                 }
                 
                 // Build line
-                if (RBEPreferences.getConvertUnicodeToEncoded()) {
+                if (PropertyPreferences.getInstance().isConvertUnicodedToEncoded()) {
                     key = PropertiesGenerator.convertUnicodeToEncoded(key);
                     value = PropertiesGenerator.convertUnicodeToEncoded(value);
                 }
@@ -178,7 +184,7 @@ public final class PropertiesGenerator {
      */
     private static char toHex(int nibble) {
         char hexChar = HEX_DIGITS[(nibble & 0xF)];
-        if (!RBEPreferences.getConvertUnicodeToEncodedUpper()) {
+        if (!PropertyPreferences.getInstance().isConvertUnicodeToEncodedUpper()) {
             return Character.toLowerCase(hexChar);
         }
         return hexChar;
@@ -199,22 +205,22 @@ public final class PropertiesGenerator {
             if (value.startsWith(" ")) {
                 value = "\\" + value;
             }
-            int lineLength = RBEPreferences.getWrapCharLimit() - 1;
+            int lineLength = PropertyPreferences.getInstance().getWrapCharLimit() - 1;
             int valueStartPos = equalIndex;
-            if (RBEPreferences.getSpacesAroundEqualSigns()) {
+            if (PropertyPreferences.getInstance().isSpaceAroundEqualsSigns()) {
                 valueStartPos += 3;
             } else {
                 valueStartPos += 1;
             }
             
             // Break line after escaped new line
-            if (RBEPreferences.getNewLineNice()) {
+            if (PropertyPreferences.getInstance().isWrapNewLine()) {
                 value = value.replaceAll(
                         "(\\\\r\\\\n|\\\\r|\\\\n)",
                         "$1\\\\" + SYSTEM_LINE_SEP);
             }
             // Wrap lines
-            if (RBEPreferences.getWrapLines() && valueStartPos < lineLength) {
+            if (PropertyPreferences.getInstance().isWrapLines() && valueStartPos < lineLength) {
                 StringBuffer valueBuf = new StringBuffer(value);
                 while (valueBuf.length() + valueStartPos > lineLength
                         || valueBuf.indexOf("\n") != -1) {
@@ -238,8 +244,8 @@ public final class PropertiesGenerator {
                     }
                     valueBuf.delete(0, endPos);
                     // Figure out starting position for next line
-                    if (!RBEPreferences.getWrapAlignEqualSigns()) {
-                        valueStartPos = RBEPreferences.getWrapIndentSpaces();
+                    if (!PropertyPreferences.getInstance().isWrapAlignEqualSign()) {
+                        valueStartPos = PropertyPreferences.getInstance().getWrapIndentSpace();
                     }
 
                     if (commented && valueStartPos > 0) {
@@ -278,7 +284,7 @@ public final class PropertiesGenerator {
         for (int i = 0; i < equalIndex - key.length(); i++) {
             text.append(' ');
         }
-        if (RBEPreferences.getSpacesAroundEqualSigns()) {
+        if (PropertyPreferences.getInstance().isSpaceAroundEqualsSigns()) {
             text.append(" = ");
         } else {
             text.append("=");
@@ -317,8 +323,8 @@ public final class PropertiesGenerator {
      * @return key group
      */
     private static String getKeyGroup(String key) {
-        String sep = RBEPreferences.getKeyGroupSeparator();
-        int deepness = RBEPreferences.getGroupLevelDepth();
+        String sep = PropertyPreferences.getInstance().getKeyGroupSeparator();
+        int deepness = PropertyPreferences.getInstance().getGroupLevelDepth();
         int endIndex = 0;
         int levelFound = 0;
         
@@ -348,9 +354,9 @@ public final class PropertiesGenerator {
      */
     private static int getEqualIndex(String key, String group, Bundle bundle) {
         int equalIndex = -1;
-        boolean alignEquals = RBEPreferences.getAlignEqualSigns();
-        boolean groupKeys = RBEPreferences.getGroupKeys();
-        boolean groupAlignEquals = RBEPreferences.getGroupAlignEqualSigns();
+        boolean alignEquals = PropertyPreferences.getInstance().isAlignEqualSigns();
+        boolean groupKeys = PropertyPreferences.getInstance().isGroupKeys();
+        boolean groupAlignEquals = PropertyPreferences.getInstance().isGroupAlignEqualSigns();
 
         // Exit now if we are not aligning equals
         if (!alignEquals || groupKeys && !groupAlignEquals 

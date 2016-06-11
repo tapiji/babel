@@ -160,7 +160,7 @@ public final class PropertyPreferences {
         PREFERENCES.putBoolean(IS_SPACES_AROUND_EQUALS_SIGNS, isSpaceAroundEqualsSigns);
     }
 
-    public int getGroupLevelDeep() {
+    public int getGroupLevelDepth() {
         return PREFERENCES.getInt(GROUP_LEVEL_DEEP, 1);
     }
 
@@ -184,6 +184,7 @@ public final class PropertyPreferences {
         PREFERENCES.putBoolean(IS_WRAP_NEW_LINE, isWrapNewLine);
     }
 
+    // ForceNewLineType() ??
     public boolean isLineForced() {
         return PREFERENCES.getBoolean(IS_LINE_FORCED, false);
     }
