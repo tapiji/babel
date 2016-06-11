@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.eclipse.e4.babel.editor.model.utils;
+package org.eclipse.e4.babel.editor.model.checks.proximity;
 
 
 import java.util.ArrayList;
@@ -53,7 +53,7 @@ public class WordCountAnalyzer implements ProximityAnalyzer {
     }
 
     /**
-     * @see com.essiembre.eclipse.rbe.model.utils.ProximityAnalyzer
+     * @see org.eclipse.e4.babel.editor.model.checks.proximity.essiembre.eclipse.rbe.model.utils.ProximityAnalyzer
      *      #analyse(java.lang.Object, java.lang.Object)
      */
     @Override

@@ -13,15 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.eclipse.e4.babel.editor.model.visitor;
+package org.eclipse.e4.babel.editor.model.checks.visitor;
 
 
 import java.util.ArrayList;
 import java.util.Collection;
 import org.eclipse.e4.babel.editor.model.bundle.BundleEntry;
 import org.eclipse.e4.babel.editor.model.bundle.BundleVisitorAdapter;
-import org.eclipse.e4.babel.editor.model.utils.ProximityAnalyzer;
-import org.eclipse.e4.babel.editor.model.utils.WordCountAnalyzer;
+import org.eclipse.e4.babel.editor.model.checks.proximity.ProximityAnalyzer;
+import org.eclipse.e4.babel.editor.model.checks.proximity.WordCountAnalyzer;
 
 
 /**
