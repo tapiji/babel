@@ -8,10 +8,11 @@ import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
+import org.eclipse.e4.babel.editor.model.bundle.observer.BundleObject;
 import org.eclipse.jdt.annotation.Nullable;
 
 
-public class BundleGroup {
+public class BundleGroup extends BundleObject {
 
     private final Map<Locale, Bundle> bundles = new HashMap<>();
     private final SortedSet<String> keys = new TreeSet<String>();
@@ -34,15 +35,19 @@ public class BundleGroup {
     }
 
     public void addBundle(final Locale locale, final Bundle bundle) {
+        final Bundle localBundle = bundles.get(bundle);
         bundle.setLocale(locale);
         bundle.setGroup(this);
 
-        final Bundle localBundle = bundles.get(bundle);
+       
         if (localBundle == null) {
             bundles.put(locale, bundle);
             refreshKeys();
+            fireAdd(bundle);
         } else {
-            //todo
+            localBundle.copyFrom(bundle);
+            refreshKeys();
+            fireModify(bundle);
         }
     }
 
@@ -50,11 +55,12 @@ public class BundleGroup {
         final Bundle bundle = bundles.get(locale);
         if (bundle != null) {
             final BundleEntry existingBundleEntry = getBundleEntry(locale, bundleEntry.getKey());
-            if (existingBundleEntry != null && !existingBundleEntry.equals(bundleEntry)) {
+            if (!bundleEntry.equals(existingBundleEntry)) {
                 bundleEntry.setBundle(bundle);
                 bundleEntry.setLocale(locale);
                 bundle.addBundleEntry(bundleEntry);
                 refreshKeys();
+                fireModify(bundle);
             }
         }
     }
@@ -75,6 +81,7 @@ public class BundleGroup {
                        if (bundle != null) {
                            bundle.renameBundleEntryKey(newKey, oldKey);
                            refreshKeys();
+                           fireModify(bundle);
                        }
                    }
                });
@@ -89,7 +96,7 @@ public class BundleGroup {
     }
 
     private void markBundleEntryAsComment(final String key, boolean comment) {
-        bundles.keySet()
+   /*     bundles.keySet()
                .stream()
                .forEach(locale -> {
                    final BundleEntry entry = getBundleEntry(locale, key);
@@ -103,7 +110,7 @@ public class BundleGroup {
                            }
                        }
                    }
-               });
+               });*/
     }
 
     public void copyBundleEntryKey(final String origKey, final String newKey) {
@@ -134,6 +141,7 @@ public class BundleGroup {
                        if (bundle != null) {
                            bundle.removeBundleEntry(entry);
                            refreshKeys();
+                           fireModify(bundle);
                        }
                    }
                });

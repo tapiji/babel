@@ -9,6 +9,8 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.e4.babel.core.preference.PropertyPreferences;
 import org.eclipse.e4.babel.editor.model.IResourceBundleEditorService;
+import org.eclipse.e4.babel.editor.model.bundle.observer.BundleEvent;
+import org.eclipse.e4.babel.editor.model.bundle.observer.BundleListener;
 import org.eclipse.e4.babel.editor.preference.APreferencePage;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.page.I18nPageView;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.pageeditor.I18nPageEditorView;
@@ -28,10 +30,14 @@ import org.eclipse.e4.ui.services.EMenuService;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
@@ -73,6 +79,8 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
     private I18nPageView i18nPage;
     private SashForm sashForm;
 
+    LocalBehaviour local = new LocalBehaviour();
+    
     @Inject
     public ResourceBundleEditor(Composite parent) {
         super(parent, SWT.BOTTOM);
@@ -96,8 +104,9 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
         sashForm = new SashForm(this, SWT.SMOOTH);
         
         KeyTreeView view = KeyTreeView.create(sashForm, (ResourceBundleEditorContract.View) this);
+        view.getTreeViewer().addSelectionChangedListener(local);
+            view.getKeyTree().addChangeLIstener(local);
         
-
         i18nPage = I18nPageView.create(sashForm, resourceProvider);
         sashForm.setWeights(new int[] {25, 75});
         createTab(sashForm, "Properties", BabelResourceConstants.IMG_RESOURCE_BUNDLE);
@@ -163,5 +172,52 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
     @Override
     public ESelectionService getSelectionService() {
         return selectionService;
+    }
+    
+    private class LocalBehaviour implements FocusListener, BundleListener,
+    ISelectionChangedListener {
+
+        @Override
+        public void selectionChanged(SelectionChangedEvent event) {
+            // TODO Auto-generated method stub
+            
+        }
+
+        @Override
+        public <T> void add(BundleEvent<T> event) {
+            // TODO Auto-generated method stub
+            
+        }
+
+        @Override
+        public <T> void remove(BundleEvent<T> event) {
+            // TODO Auto-generated method stub
+            
+        }
+
+        @Override
+        public <T> void modify(BundleEvent<T> event) {
+            // TODO Auto-generated method stub
+            
+        }
+
+        @Override
+        public <T> void select(BundleEvent<T> event) {
+            // TODO Auto-generated method stub
+            
+        }
+
+        @Override
+        public void focusGained(FocusEvent e) {
+            // TODO Auto-generated method stub
+            
+        }
+
+        @Override
+        public void focusLost(FocusEvent e) {
+            // TODO Auto-generated method stub
+            
+        }
+        
     }
 }

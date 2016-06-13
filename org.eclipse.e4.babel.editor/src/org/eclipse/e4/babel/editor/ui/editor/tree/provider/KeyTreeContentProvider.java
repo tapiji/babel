@@ -1,15 +1,20 @@
 package org.eclipse.e4.babel.editor.ui.editor.tree.provider;
 
 
+import org.eclipse.e4.babel.editor.model.bundle.observer.BundleEvent;
+import org.eclipse.e4.babel.editor.model.bundle.observer.BundleListener;
 import org.eclipse.e4.babel.editor.model.tree.KeyTree;
 import org.eclipse.e4.babel.editor.model.tree.KeyTreeItem;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipselabs.e4.tapiji.logger.Log;
 
 
-public final class KeyTreeContentProvider implements ITreeContentProvider {
 
+public final class KeyTreeContentProvider implements ITreeContentProvider,BundleListener {
+
+    private static final String TAG = KeyTreeContentProvider.class.getSimpleName();
     private static Object[] EMPTY_ARRAY = new Object[0];
     private TreeViewer treeViewer;
 
@@ -20,6 +25,12 @@ public final class KeyTreeContentProvider implements ITreeContentProvider {
     @Override
     public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
         this.treeViewer = (TreeViewer) viewer;
+        if(oldInput != null) {
+            ((KeyTree) oldInput).removeChangeListener(this);
+        }
+        if(newInput != null) {
+            ((KeyTree) newInput).addChangeLIstener(this);
+        }
     }
 
     @Override
@@ -50,6 +61,34 @@ public final class KeyTreeContentProvider implements ITreeContentProvider {
     @Override
     public boolean hasChildren(Object element) {
         return getChildren(element).length > 0;
+    }
+
+
+    @Override
+    public <T> void add(BundleEvent<T> event) {
+        treeViewer.refresh(true);
+        Log.d(TAG, "add: " + event);
+        
+    }
+
+    @Override
+    public <T> void remove(BundleEvent<T> event) {
+        treeViewer.refresh(true);
+        Log.d(TAG, "remove: " + event);
+    }
+
+    @Override
+    public <T> void modify(BundleEvent<T> event) {
+        KeyTreeItem treeItem = (KeyTreeItem) event.data();
+        Object parentTreeItem = treeItem.getParent();
+        treeViewer.refresh(parentTreeItem, true);
+        Log.d(TAG, "modify: " + event);
+    }
+
+    @Override
+    public <T> void select(BundleEvent<T> event) {
+        // TODO Auto-generated method stub
+        
     }
 
 

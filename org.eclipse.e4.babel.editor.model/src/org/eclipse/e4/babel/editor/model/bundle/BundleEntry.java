@@ -87,5 +87,46 @@ public final class BundleEntry {
         return new BundleEntry(key);
     }
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((bundle == null) ? 0 : bundle.hashCode());
+        result = prime * result + ((comment == null) ? 0 : comment.hashCode());
+        result = prime * result + (commented ? 1231 : 1237);
+        result = prime * result + ((key == null) ? 0 : key.hashCode());
+        result = prime * result + ((locale == null) ? 0 : locale.hashCode());
+        result = prime * result + ((value == null) ? 0 : value.hashCode());
+        return result;
+    }
+
+    
+    
+    
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (!(obj instanceof BundleEntry)) return false;
+        BundleEntry other = (BundleEntry) obj;
+        if (bundle == null) {
+            if (other.bundle != null) return false;
+        } else if (!bundle.equals(other.bundle)) return false;
+        if (comment == null) {
+            if (other.comment != null) return false;
+        } else if (!comment.equals(other.comment)) return false;
+        if (commented != other.commented) return false;
+        if (key == null) {
+            if (other.key != null) return false;
+        } else if (!key.equals(other.key)) return false;
+        if (locale == null) {
+            if (other.locale != null) return false;
+        } else if (!locale.equals(other.locale)) return false;
+        if (value == null) {
+            if (other.value != null) return false;
+        } else if (!value.equals(other.value)) return false;
+        return true;
+    }
+
 
 }

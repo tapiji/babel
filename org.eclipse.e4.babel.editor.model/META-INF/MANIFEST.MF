@@ -6,6 +6,7 @@ Bundle-Version: 1.0.1
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: org.eclipse.e4.babel.editor.model,
  org.eclipse.e4.babel.editor.model.bundle,
+ org.eclipse.e4.babel.editor.model.bundle.observer,
  org.eclipse.e4.babel.editor.model.tree,
  org.eclipse.e4.babel.editor.model.tree.visitor,
  org.eclipse.e4.babel.editor.model.updater
@@ -15,4 +16,5 @@ Import-Package: org.eclipse.core.resources,
  org.eclipse.jface.viewers,
  org.eclipse.ui,
  org.eclipse.ui.editors.text,
- org.eclipse.ui.texteditor
+ org.eclipse.ui.texteditor,
+ org.eclipselabs.e4.tapiji.logger

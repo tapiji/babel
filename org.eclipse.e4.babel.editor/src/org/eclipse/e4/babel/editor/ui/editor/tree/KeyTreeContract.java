@@ -22,6 +22,8 @@ public interface KeyTreeContract {
         void setTreeViewerLabelProvider(KeyTreeLabelProvider provider);
 
         void setSelectedKeyTreeItem(KeyTreeItem item);
+
+        KeyTree getKeyTree();
         
         
     }

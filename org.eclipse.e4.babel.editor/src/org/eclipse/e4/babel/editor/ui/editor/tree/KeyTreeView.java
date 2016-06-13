@@ -257,6 +257,11 @@ public final class KeyTreeView extends Composite implements KeyTreeContract.View
     public void setTreeViewerLabelProvider(KeyTreeLabelProvider provider) {
         treeViewer.setLabelProvider(provider);
     }
+    
+    @Override
+    public KeyTree getKeyTree() {
+      return  presenter.getKeyTree();
+    }
 
     @Override
     public void setPresenter(Presenter presenter) {

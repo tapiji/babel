@@ -9,11 +9,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
+import org.eclipse.e4.babel.editor.model.bundle.observer.BundleObject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 
-public final class Bundle {
+public final class Bundle extends BundleObject {
 
     private final Map<String, BundleEntry> bundleEntries = new HashMap<>();
     private Locale locale;
@@ -62,11 +63,13 @@ public final class Bundle {
         if (oldBundleEntry != null && !oldBundleEntry.equals(bundleEntry)) {
             bundleEntries.put(bundleEntry.getKey(), bundleEntry);
             bundleEntry.setLocale(locale);
+            fireModify(oldBundleEntry);
         } else if (bundleEntry.getKey()
                               .trim()
                               .length() > 0) {
             bundleEntries.put(bundleEntry.getKey(), bundleEntry);
             bundleEntry.setLocale(locale);
+            fireAdd(bundleEntry);
         } else {
             // todo log not added message
         }
@@ -77,6 +80,7 @@ public final class Bundle {
             BundleEntry bundleEntryToRemove = bundleEntries.get(bundleEntry.getKey());
             if (bundleEntryToRemove != null) {
                 bundleEntries.remove(bundleEntryToRemove.getKey());
+                fireRemove(bundleEntryToRemove);
             }
         }
     }
@@ -110,7 +114,7 @@ public final class Bundle {
         return bundleEntries.values();
     }
 
-    public void commentBundleEntry(final String bundleEntryKey) {
+   /* public void commentBundleEntry(final String bundleEntryKey) {
         final BundleEntry bundleEntry = bundleEntries.get(bundleEntryKey);
         if (bundleEntry != null) {
             addBundleEntry(BundleEntry.create(bundleEntryKey, bundleEntry.getValue(), bundleEntry.getComment(), true));
@@ -122,7 +126,7 @@ public final class Bundle {
         if (bundleEntry != null) {
             addBundleEntry(BundleEntry.create(bundleEntryKey, bundleEntry.getValue(), bundleEntry.getComment(), false));
         }
-    }
+    }*/
 
     public void copyBundleEntry(final String originalBundleEntryKey, final String newBundleEntryKey) {
         final BundleEntry bundleEntry = bundleEntries.get(originalBundleEntryKey);

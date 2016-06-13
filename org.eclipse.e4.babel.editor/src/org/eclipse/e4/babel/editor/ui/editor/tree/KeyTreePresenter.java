@@ -45,6 +45,7 @@ final class KeyTreePresenter implements KeyTreeContract.Presenter {
     public void addKey(String key) {
         editorService.addNewKey(key);
         keyTreeView.setSelectedKeyTreeItem(getKeyTree().getKeyTreeItem(key));
+     
     }
 
     @Override
