@@ -2,7 +2,7 @@ package org.eclipse.e4.babel.editor.ui.editor.tree.provider;
 
 
 import org.eclipse.e4.babel.editor.model.bundle.observer.BundleEvent;
-import org.eclipse.e4.babel.editor.model.bundle.observer.BundleListener;
+import org.eclipse.e4.babel.editor.model.bundle.observer.BundleChangeListener;
 import org.eclipse.e4.babel.editor.model.tree.KeyTree;
 import org.eclipse.e4.babel.editor.model.tree.KeyTreeItem;
 import org.eclipse.jface.viewers.ITreeContentProvider;
@@ -12,7 +12,7 @@ import org.eclipselabs.e4.tapiji.logger.Log;
 
 
 
-public final class KeyTreeContentProvider implements ITreeContentProvider,BundleListener {
+public final class KeyTreeContentProvider implements ITreeContentProvider,BundleChangeListener {
 
     private static final String TAG = KeyTreeContentProvider.class.getSimpleName();
     private static Object[] EMPTY_ARRAY = new Object[0];

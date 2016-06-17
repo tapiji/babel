@@ -46,9 +46,9 @@ public final class ResourceBundleEditorService implements IResourceBundleEditorS
     public void addNewKey(String newKey) {
         Log.d(TAG, "addNewKey " + newKey);
         BundleGroup bundleGroup = keyTree.getBundleGroup();
-        if (!bundleGroup.containsKey(newKey)) {
+        //if (!bundleGroup.containsKey(newKey)) {
             bundleGroup.addBundleEntryKey(newKey);
-        }
+       // }
     }
 
     @Override

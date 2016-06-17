@@ -1,6 +1,7 @@
 package org.eclipse.e4.babel.editor.model.tree;
 
 
+import java.awt.RenderingHints.Key;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
@@ -10,13 +11,16 @@ import org.eclipse.e4.babel.editor.model.bundle.Bundle;
 import org.eclipse.e4.babel.editor.model.bundle.BundleEntry;
 import org.eclipse.e4.babel.editor.model.bundle.BundleGroup;
 import org.eclipse.e4.babel.editor.model.bundle.observer.BundleEvent;
-import org.eclipse.e4.babel.editor.model.bundle.observer.BundleListener;
+import org.eclipse.e4.babel.editor.model.bundle.observer.BundleChangeAdapter;
+import org.eclipse.e4.babel.editor.model.bundle.observer.BundleChangeListener;
 import org.eclipse.e4.babel.editor.model.bundle.observer.BundleObject;
 import org.eclipse.e4.babel.editor.model.updater.KeyTreeUpdater;
+import org.eclipselabs.e4.tapiji.logger.Log;
 
 
 public class KeyTree extends BundleObject {
 
+    private static String TAG = KeyTree.class.getSimpleName();
     private final Map<String, KeyTreeItem> keyItemsCache = new TreeMap<String, KeyTreeItem>();
     private final Set<KeyTreeItem> rootKeyItems = new TreeSet<KeyTreeItem>();
 
@@ -28,64 +32,41 @@ public class KeyTree extends BundleObject {
         super();
         this.keyTreeUpdater = keyTreeUpdater;
         this.bundleGroup = bundleGroup;
-        
-        
-        bundleGroup.addChangeLIstener(new BundleListener() {
+        this.bundleGroup.addChangeLIstener(new BundleChangeAdapter() {
 
             @Override
             public <T> void add(BundleEvent<T> event) {
                 initBundle((Bundle) event.data());
-                
             }
-
-            @Override
-            public <T> void remove(BundleEvent<T> event) {
-                // TODO Auto-generated method stub
-                
-            }
-
-            @Override
-            public <T> void modify(BundleEvent<T> event) {
-                // TODO Auto-generated method stub
-                
-            }
-
-            @Override
-            public <T> void select(BundleEvent<T> event) {
-                // TODO Auto-generated method stub
-                
-            }
-            
         });
-        
+        for (Bundle bundle : bundleGroup.getBundles().values()) {
+            initBundle(bundle);
+        }
         loadKeys();
     }
-    
+
     protected void initBundle(final Bundle bundle) {
-        bundle.addChangeLIstener(new BundleListener() {
+        bundle.addChangeLIstener(new BundleChangeAdapter() {
+
             @Override
             public <T> void add(BundleEvent<T> event) {
                 String key = ((BundleEntry) event.data()).getKey();
                 addKey(key);
             }
+
             @Override
             public <T> void remove(BundleEvent<T> event) {
                 String key = ((BundleEntry) event.data()).getKey();
-                Collection<BundleEntry> entries = 
-                        bundleGroup.getBundleEntries(key);
+                Collection<BundleEntry> entries = bundleGroup.getBundleEntries(key);
                 if (entries.size() == 0) {
                     removeKey(((BundleEntry) event.data()).getKey());
                 }
             }
+
             @Override
             public <T> void modify(BundleEvent<T> event) {
                 String key = ((BundleEntry) event.data()).getKey();
                 modifyKey(key);
-            }
-            @Override
-            public <T> void select(BundleEvent<T> event) {
-                // TODO Auto-generated method stub
-                
             }
         });
     }
@@ -109,20 +90,20 @@ public class KeyTree extends BundleObject {
     public void addKey(String key) {
         keyTreeUpdater.addKey(this, key);
         fireAdd(keyItemsCache.get(key));
-        System.out.println("Add key: " + key);
+        Log.d(TAG, "Add key: " + key);
     }
 
     public void removeKey(String key) {
         Object item = keyItemsCache.get(key);
         keyTreeUpdater.removeKey(this, key);
         fireRemove(item);
-        System.out.println("Remove key: " + key);
+        Log.d(TAG, "Remove key: " + key);
     }
 
     public void modifyKey(String key) {
         Object item = keyItemsCache.get(key);
         fireModify(item);
-        System.out.println("Modify key: " + key);
+        Log.d(TAG, "Modify key: " + key);
     }
 
     public void selectKey(String key) {

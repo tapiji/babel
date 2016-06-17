@@ -1,7 +1,7 @@
 package org.eclipse.e4.babel.editor.model.bundle.observer;
 
 
-public interface BundleListener {
+public interface BundleChangeListener {
 
     public <T> void add(final BundleEvent<T> event);
     

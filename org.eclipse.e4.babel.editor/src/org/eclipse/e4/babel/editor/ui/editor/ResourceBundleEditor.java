@@ -10,7 +10,7 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.e4.babel.core.preference.PropertyPreferences;
 import org.eclipse.e4.babel.editor.model.IResourceBundleEditorService;
 import org.eclipse.e4.babel.editor.model.bundle.observer.BundleEvent;
-import org.eclipse.e4.babel.editor.model.bundle.observer.BundleListener;
+import org.eclipse.e4.babel.editor.model.bundle.observer.BundleChangeListener;
 import org.eclipse.e4.babel.editor.preference.APreferencePage;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.page.I18nPageView;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.pageeditor.I18nPageEditorView;
@@ -174,7 +174,7 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
         return selectionService;
     }
     
-    private class LocalBehaviour implements FocusListener, BundleListener,
+    private class LocalBehaviour implements FocusListener, BundleChangeListener,
     ISelectionChangedListener {
 
         @Override
