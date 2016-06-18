@@ -95,7 +95,7 @@ public final class Bundle extends BundleObject {
         }
     }
 
-    public void renameBundleEntryKey(final String newBundleEntryKey, final String oldBundleEntryKey) {
+    public void renameBundleEntryKey(final String oldBundleEntryKey, final String newBundleEntryKey) {
         final BundleEntry oldBundleEntry = bundleEntries.get(oldBundleEntryKey);
         if (oldBundleEntry != null) {
             removeBundleEntry(oldBundleEntry);

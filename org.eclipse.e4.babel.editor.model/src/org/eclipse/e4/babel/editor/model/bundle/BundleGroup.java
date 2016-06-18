@@ -39,7 +39,7 @@ public class BundleGroup extends BundleObject {
         bundle.setLocale(locale);
         bundle.setGroup(this);
 
-       
+
         if (localBundle == null) {
             bundles.put(locale, bundle);
             refreshKeys();
@@ -71,7 +71,7 @@ public class BundleGroup extends BundleObject {
                .forEach(locale -> addBundleEntry(locale, BundleEntry.create(key)));
     }
 
-    public void renameBundleEntryKey(final String newKey, final String oldKey) {
+    public void renameBundleEntryKey(final String oldKey, final String newKey) {
         bundles.keySet()
                .stream()
                .forEach(locale -> {
@@ -79,7 +79,7 @@ public class BundleGroup extends BundleObject {
                    if (entry != null) {
                        final Bundle bundle = getBundle(locale);
                        if (bundle != null) {
-                           bundle.renameBundleEntryKey(newKey, oldKey);
+                           bundle.renameBundleEntryKey(oldKey, newKey);
                            refreshKeys();
                            fireModify(bundle);
                        }
@@ -96,21 +96,23 @@ public class BundleGroup extends BundleObject {
     }
 
     private void markBundleEntryAsComment(final String key, boolean comment) {
-   /*     bundles.keySet()
-               .stream()
-               .forEach(locale -> {
-                   final BundleEntry entry = getBundleEntry(locale, key);
-                   if (entry != null) {
-                       final Bundle bundle = getBundle(locale);
-                       if (bundle != null) {
-                           if (comment) {
-                               bundle.commentBundleEntry(key);
-                           } else {
-                               bundle.uncommentBundleEntry(key);
-                           }
-                       }
-                   }
-               });*/
+        /*
+         * bundles.keySet()
+         * .stream()
+         * .forEach(locale -> {
+         * final BundleEntry entry = getBundleEntry(locale, key);
+         * if (entry != null) {
+         * final Bundle bundle = getBundle(locale);
+         * if (bundle != null) {
+         * if (comment) {
+         * bundle.commentBundleEntry(key);
+         * } else {
+         * bundle.uncommentBundleEntry(key);
+         * }
+         * }
+         * }
+         * });
+         */
     }
 
     public void copyBundleEntryKey(final String origKey, final String newKey) {
@@ -221,7 +223,6 @@ public class BundleGroup extends BundleObject {
 
         return "BundleGroup [keys=" + keys + "]";
     }
-
 
 
 }

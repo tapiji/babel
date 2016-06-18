@@ -1,7 +1,6 @@
 package org.eclipse.e4.babel.editor.model.tree;
 
 
-import java.awt.RenderingHints.Key;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
@@ -10,9 +9,8 @@ import java.util.TreeSet;
 import org.eclipse.e4.babel.editor.model.bundle.Bundle;
 import org.eclipse.e4.babel.editor.model.bundle.BundleEntry;
 import org.eclipse.e4.babel.editor.model.bundle.BundleGroup;
-import org.eclipse.e4.babel.editor.model.bundle.observer.BundleEvent;
 import org.eclipse.e4.babel.editor.model.bundle.observer.BundleChangeAdapter;
-import org.eclipse.e4.babel.editor.model.bundle.observer.BundleChangeListener;
+import org.eclipse.e4.babel.editor.model.bundle.observer.BundleEvent;
 import org.eclipse.e4.babel.editor.model.bundle.observer.BundleObject;
 import org.eclipse.e4.babel.editor.model.updater.KeyTreeUpdater;
 import org.eclipselabs.e4.tapiji.logger.Log;
@@ -32,17 +30,19 @@ public class KeyTree extends BundleObject {
         super();
         this.keyTreeUpdater = keyTreeUpdater;
         this.bundleGroup = bundleGroup;
-        this.bundleGroup.addChangeLIstener(new BundleChangeAdapter() {
+        initBundleGroup(bundleGroup);
+        loadKeys();
+    }
+    
+    private void initBundleGroup(final BundleGroup bundleGroup) {
+        bundleGroup.addChangeLIstener(new BundleChangeAdapter() {
 
             @Override
             public <T> void add(BundleEvent<T> event) {
                 initBundle((Bundle) event.data());
             }
         });
-        for (Bundle bundle : bundleGroup.getBundles().values()) {
-            initBundle(bundle);
-        }
-        loadKeys();
+        bundleGroup.getBundles().values().stream().forEach(bundle->initBundle(bundle));
     }
 
     protected void initBundle(final Bundle bundle) {
@@ -131,6 +131,10 @@ public class KeyTree extends BundleObject {
 
     public BundleGroup getBundleGroup() {
         return bundleGroup;
+    }
+    
+    public void dispose() {
+        
     }
 
     @Override

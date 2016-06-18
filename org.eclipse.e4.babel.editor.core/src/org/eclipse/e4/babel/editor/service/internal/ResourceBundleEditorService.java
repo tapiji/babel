@@ -70,7 +70,7 @@ public final class ResourceBundleEditorService implements IResourceBundleEditorS
         items.addAll(keyTreeItem.getNestedChildren());
         items.stream()
              .forEach((item) -> {
-                 String oldItemKey = item.getId();
+                 final String oldItemKey = item.getId();
                  if (oldItemKey.startsWith(keyTreeItem.getId())) {
                      String newItemKey = newKey + oldItemKey.substring(keyTreeItem.getId().length());
                      keyTree.getBundleGroup().renameBundleEntryKey(oldItemKey, newItemKey);
