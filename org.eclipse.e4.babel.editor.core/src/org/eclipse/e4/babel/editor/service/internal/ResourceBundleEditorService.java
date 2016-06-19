@@ -4,6 +4,7 @@ package org.eclipse.e4.babel.editor.service.internal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import org.eclipse.e4.babel.core.preference.PropertyPreferences;
 import org.eclipse.e4.babel.editor.model.IResourceBundleEditorService;
 import org.eclipse.e4.babel.editor.model.bundle.Bundle;
 import org.eclipse.e4.babel.editor.model.bundle.BundleEntry;
@@ -44,10 +45,8 @@ public final class ResourceBundleEditorService implements IResourceBundleEditorS
   @Override
   public void addNewKey(String newKey) {
     Log.d(TAG, "addNewKey " + newKey);
-    BundleGroup bundleGroup = keyTree.getBundleGroup();
-    //if (!bundleGroup.containsKey(newKey)) {
-    bundleGroup.addBundleEntryKey(newKey);
-    // }
+    keyTree.getBundleGroup()
+           .addBundleEntryKey(checkGroupSeparator(newKey));
   }
 
   @Override
@@ -73,12 +72,25 @@ public final class ResourceBundleEditorService implements IResourceBundleEditorS
          .forEach((item) -> {
            final String oldItemKey = item.getId();
            if (oldItemKey.startsWith(keyTreeItem.getId())) {
-             String newItemKey = newKey + oldItemKey.substring(keyTreeItem.getId()
-                                                                          .length());
+             String newItemKey = checkGroupSeparator(newKey) + oldItemKey.substring(keyTreeItem.getId()
+                                                                                               .length());
              keyTree.getBundleGroup()
                     .renameBundleEntryKey(oldItemKey, newItemKey);
            }
          });
+  }
+
+  private String checkGroupSeparator(final String key) {
+    final String separator = PropertyPreferences.getInstance()
+                                                .getKeyGroupSeparator();
+    String changedKey = key;
+    if (key.startsWith(separator)) {
+      changedKey = key.substring(1);
+    }
+    if (key.endsWith(separator)) {
+      changedKey = key.substring(1, key.length() - 1);
+    }
+    return changedKey;
   }
 
   @Override
