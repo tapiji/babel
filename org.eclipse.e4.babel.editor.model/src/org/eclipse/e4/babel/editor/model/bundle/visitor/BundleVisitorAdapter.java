@@ -13,8 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.eclipse.e4.babel.editor.model.bundle;
+package org.eclipse.e4.babel.editor.model.bundle.visitor;
 
+import org.eclipse.e4.babel.editor.model.bundle.Bundle;
+import org.eclipse.e4.babel.editor.model.bundle.BundleEntry;
+import org.eclipse.e4.babel.editor.model.bundle.BundleGroup;
 
 /**
  * Convenience implementation of <code>IBundleVisitor</code> allowing to
@@ -24,22 +27,22 @@ package org.eclipse.e4.babel.editor.model.bundle;
  */
 public class BundleVisitorAdapter implements IBundleVisitor {
 
-    /**
-     * Constructor.
-     */
-    public BundleVisitorAdapter() {
-        super();
-    }
+  /**
+   * Constructor.
+   */
+  public BundleVisitorAdapter() {
+    super();
+  }
 
-    @Override
-    public void visitBundleGroup(BundleGroup group, Object passAlongArgument) {
-    }
+  @Override
+  public void visitBundleGroup(BundleGroup group, Object passAlongArgument) {
+  }
 
-    @Override
-    public void visitBundle(Bundle bundle, Object passAlongArgument) {
-    }
+  @Override
+  public void visitBundle(Bundle bundle, Object passAlongArgument) {
+  }
 
-    @Override
-    public void visitBundleEntry(BundleEntry entry, Object passAlongArgument) {
-    }
+  @Override
+  public void visitBundleEntry(BundleEntry entry, Object passAlongArgument) {
+  }
 }

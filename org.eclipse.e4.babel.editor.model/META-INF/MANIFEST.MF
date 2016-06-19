@@ -6,7 +6,7 @@ Bundle-Version: 1.0.1
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: org.eclipse.e4.babel.editor.model,
  org.eclipse.e4.babel.editor.model.bundle,
- org.eclipse.e4.babel.editor.model.bundle.observer,
+ org.eclipse.e4.babel.editor.model.bundle.listener,
  org.eclipse.e4.babel.editor.model.tree,
  org.eclipse.e4.babel.editor.model.tree.visitor,
  org.eclipse.e4.babel.editor.model.updater

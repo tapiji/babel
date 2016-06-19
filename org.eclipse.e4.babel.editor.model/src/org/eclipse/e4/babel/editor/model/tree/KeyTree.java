@@ -9,9 +9,9 @@ import java.util.TreeSet;
 import org.eclipse.e4.babel.editor.model.bundle.Bundle;
 import org.eclipse.e4.babel.editor.model.bundle.BundleEntry;
 import org.eclipse.e4.babel.editor.model.bundle.BundleGroup;
-import org.eclipse.e4.babel.editor.model.bundle.observer.BundleChangeAdapter;
-import org.eclipse.e4.babel.editor.model.bundle.observer.BundleEvent;
-import org.eclipse.e4.babel.editor.model.bundle.observer.BundleObject;
+import org.eclipse.e4.babel.editor.model.bundle.BundleObject;
+import org.eclipse.e4.babel.editor.model.bundle.listener.BundleChangeAdapter;
+import org.eclipse.e4.babel.editor.model.bundle.listener.BundleEvent;
 import org.eclipse.e4.babel.editor.model.updater.KeyTreeUpdater;
 import org.eclipselabs.e4.tapiji.logger.Log;
 

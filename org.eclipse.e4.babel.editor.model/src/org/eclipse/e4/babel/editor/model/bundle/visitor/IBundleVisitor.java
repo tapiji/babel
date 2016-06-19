@@ -1,3 +1,4 @@
+package org.eclipse.e4.babel.editor.model.bundle.visitor;
 /*
  * Copyright (C) 2003-2014  Pascal Essiembre
  *
@@ -13,8 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.eclipse.e4.babel.editor.model.bundle;
 
+import org.eclipse.e4.babel.editor.model.bundle.Bundle;
+import org.eclipse.e4.babel.editor.model.bundle.BundleEntry;
+import org.eclipse.e4.babel.editor.model.bundle.BundleGroup;
 
 /**
  * Objects implementing this interface can act as a visitor to any
@@ -25,27 +28,27 @@ package org.eclipse.e4.babel.editor.model.bundle;
  */
 public interface IBundleVisitor {
 
-    /**
-     * Visits a bundle group.
-     * 
-     * @param group bundle group
-     * @param passAlongArgument an optional argument
-     */
-    public void visitBundleGroup(BundleGroup group, Object passAlongArgument);
+  /**
+   * Visits a bundle group.
+   * 
+   * @param group bundle group
+   * @param passAlongArgument an optional argument
+   */
+  public void visitBundleGroup(BundleGroup group, Object passAlongArgument);
 
-    /**
-     * Visits a bundle.
-     * 
-     * @param bundle bundle
-     * @param passAlongArgument an optional argument
-     */
-    public void visitBundle(Bundle bundle, Object passAlongArgument);
+  /**
+   * Visits a bundle.
+   * 
+   * @param bundle bundle
+   * @param passAlongArgument an optional argument
+   */
+  public void visitBundle(Bundle bundle, Object passAlongArgument);
 
-    /**
-     * Visits a bundle entry.
-     * 
-     * @param entry bundle entry
-     * @param passAlongArgument an optional argument
-     */
-    public void visitBundleEntry(BundleEntry entry, Object passAlongArgument);
+  /**
+   * Visits a bundle entry.
+   * 
+   * @param entry bundle entry
+   * @param passAlongArgument an optional argument
+   */
+  public void visitBundleEntry(BundleEntry entry, Object passAlongArgument);
 }

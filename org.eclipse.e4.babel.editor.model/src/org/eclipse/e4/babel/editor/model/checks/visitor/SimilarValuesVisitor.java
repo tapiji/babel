@@ -19,7 +19,7 @@ package org.eclipse.e4.babel.editor.model.checks.visitor;
 import java.util.ArrayList;
 import java.util.Collection;
 import org.eclipse.e4.babel.editor.model.bundle.BundleEntry;
-import org.eclipse.e4.babel.editor.model.bundle.BundleVisitorAdapter;
+import org.eclipse.e4.babel.editor.model.bundle.visitor.BundleVisitorAdapter;
 import org.eclipse.e4.babel.editor.model.checks.proximity.ProximityAnalyzer;
 import org.eclipse.e4.babel.editor.model.checks.proximity.WordCountAnalyzer;
 
@@ -47,7 +47,7 @@ public class SimilarValuesVisitor extends BundleVisitorAdapter {
     }
 
     /**
-     * @see com.essiembre.eclipse.rbe.model.bundle.IBundleVisitor
+     * @see org.eclipse.e4.babel.editor.model.bundle.visitor.essiembre.eclipse.rbe.model.bundle.IBundleVisitor
      *      #visitBundleEntry(
      *      com.essiembre.eclipse.rbe.model.bundle.BundleEntry,
      *      java.lang.Object)

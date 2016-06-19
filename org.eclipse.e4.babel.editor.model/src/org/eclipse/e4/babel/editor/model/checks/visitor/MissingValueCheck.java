@@ -11,7 +11,7 @@
 package org.eclipse.e4.babel.editor.model.checks.visitor;
 
 import org.eclipse.e4.babel.editor.model.bundle.BundleEntry;
-import org.eclipse.e4.babel.editor.model.bundle.BundleVisitorAdapter;
+import org.eclipse.e4.babel.editor.model.bundle.visitor.BundleVisitorAdapter;
 
 /**
  * Visitor for finding if a key has at least one corresponding bundle entry with
