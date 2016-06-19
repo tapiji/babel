@@ -7,45 +7,45 @@ import org.eclipse.e4.babel.editor.ui.BasePresenter;
 import org.eclipse.e4.babel.editor.ui.BaseView;
 import org.eclipse.e4.babel.editor.ui.editor.tree.provider.KeyTreeContentProvider;
 import org.eclipse.e4.babel.editor.ui.editor.tree.provider.KeyTreeLabelProvider;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 
 
 public interface KeyTreeContract {
 
-    interface View extends BaseView<Presenter> {
+  interface View extends BaseView<Presenter> {
 
-        void updateKeyTree(KeyTree keyTree);
+    void updateKeyTree(KeyTree keyTree);
 
-        void setTreeViewerContentProvider(KeyTreeContentProvider provider);
+    void setTreeViewerContentProvider(KeyTreeContentProvider provider);
 
-        void setTreeViewerLabelProvider(KeyTreeLabelProvider provider);
+    void setTreeViewerLabelProvider(KeyTreeLabelProvider provider);
 
-        void setSelectedKeyTreeItem(KeyTreeItem item);
+    void setSelectedKeyTreeItem(KeyTreeItem item);
 
-        KeyTree getKeyTree();
-        
-        
-    }
+    KeyTree getKeyTree();
 
-    interface Presenter extends BasePresenter {
+    void collapseAll();
 
-        void addKey(String text);
+    void expandAll();
+  }
 
-        boolean isNewKey(String text);
+  interface Presenter extends BasePresenter {
 
-        String getSelectedKey(KeyTreeItem item);
+    void addKey(String text);
 
-        KeyTreeItem getSelection(IStructuredSelection selection);
+    boolean isNewKey(String text);
 
-        String getSelectedKeyFromSelection(IStructuredSelection selection);
+    String getSelectedKey(KeyTreeItem item);
 
-        KeyTree getKeyTree();
+    KeyTreeItem getSelection(IStructuredSelection selection);
 
-        void changeToHierarchicalTree();
+    String getSelectedKeyFromSelection(IStructuredSelection selection);
 
-        void changeToFlatTree();
-        
-    }
+    KeyTree getKeyTree();
+
+    void changeToHierarchicalTree();
+
+    void changeToFlatTree();
+  }
 }
 

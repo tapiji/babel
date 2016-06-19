@@ -7,11 +7,13 @@ import org.eclipse.e4.babel.editor.model.tree.KeyTreeItem;
 
 public interface IResourceBundleEditorService {
 
-    void addNewKey(final String key);
+  void addNewKey(final String key);
 
-    void removeKey(final KeyTreeItem keyTreeItem, final String key);
+  void removeKey(final KeyTreeItem keyTreeItem, final String key);
 
-    void renameKey(final KeyTreeItem keyTreeItem, final String key);
+  void renameKey(final KeyTreeItem keyTreeItem, final String key);
 
-    KeyTree getKeyTree();
+  KeyTree getKeyTree();
+
+  boolean containsKey(final String key);
 }
