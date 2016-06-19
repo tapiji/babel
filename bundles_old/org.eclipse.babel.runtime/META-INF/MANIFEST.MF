@@ -9,7 +9,8 @@ Bundle-Vendor: Nigel Westbury
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.search,
- org.eclipse.ui.forms
+ org.eclipse.ui.forms,
+ org.eclipse.osgi
 Eclipse-LazyStart: true
 Export-Package: org.eclipse.babel.runtime.external
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
