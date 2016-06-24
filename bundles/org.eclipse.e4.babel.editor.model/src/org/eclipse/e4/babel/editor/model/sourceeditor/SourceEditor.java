@@ -42,7 +42,7 @@ public class SourceEditor {
    * @param locale a locale
    * @param file properties file
    */
-  public SourceEditor(ISourceViewer editor, Locale locale, IFile file) {
+  private SourceEditor(ISourceViewer editor, Locale locale, IFile file) {
     super();
     this.editor = editor;
     this.locale = locale;
@@ -50,6 +50,14 @@ public class SourceEditor {
     this.contentCache = getContent();
   }
 
+  public static SourceEditor create(ISourceViewer editor, Locale locale, IFile file) {
+	  return new SourceEditor(editor, locale, file);
+  }
+  
+  public static SourceEditor create( Locale locale, IFile file) {
+	  return new SourceEditor(null, locale, file);
+  }
+  
   /**
    * Gets the locale associated with this source editor.
    * 
@@ -100,8 +108,7 @@ public class SourceEditor {
    * @return content
    */
   public String getContent() {
-    return editor.getDocument()
-                 .get();
+    return "dasasasd";//editor.getDocument() .get();
   }
 
   /**

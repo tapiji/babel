@@ -15,7 +15,7 @@ public class BabelExtensionManager {
 
 	private static String RESOURCE_MANAGER_EXTENSION_POINT_ID = "org.eclipse.e4.babel.core.api.resourceManager";
 
-	private static String RESOURCE_FACTORY_EXTENSION_POINT_ID = "org.eclipse.e4.babel.core.api.resourceFactory";
+	public static String RESOURCE_FACTORY_EXTENSION_POINT_ID = "org.eclipse.e4.babel.core.api.resourceFactory";
 
 	private IExtensionRegistry registry;
 

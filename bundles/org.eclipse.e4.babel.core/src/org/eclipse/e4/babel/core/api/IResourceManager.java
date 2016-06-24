@@ -1,7 +1,10 @@
 package org.eclipse.e4.babel.core.api;
 
+import java.util.Locale;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.e4.babel.editor.model.sourceeditor.SourceEditor;
 import org.eclipse.e4.babel.editor.model.tree.KeyTree;
 import org.eclipse.e4.babel.editor.model.tree.KeyTreeItem;
 
@@ -18,4 +21,8 @@ public interface IResourceManager {
 	boolean containsKey(final String key);
 
 	void init(IFile file) throws CoreException;
+
+	SourceEditor getSourceEditor(Locale locale);
+
+	SourceEditor[] getSourceEditors();
 }

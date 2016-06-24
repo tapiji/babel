@@ -29,6 +29,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.e4.babel.core.api.IResourceFactory;
 import org.eclipse.e4.babel.core.internal.createfile.PropertiesFileCreator;
+import org.eclipse.e4.babel.core.utils.UIUtils;
 import org.eclipse.e4.babel.editor.model.sourceeditor.SourceEditor;
 import org.eclipse.ui.PartInitException;
 
@@ -65,15 +66,15 @@ abstract class ResourceFactory implements IResourceFactory {
 	/**
 	 * A sorted map of {@link SourceEditor}s. Sorted by key (Locale).
 	 */
-	private Map<Locale, SourceEditor> sourceEditors = new TreeMap<>(new Comparator<Locale>() {
-
-		@Override
-		public int compare(Locale locale1, Locale locale2) {
-			// String displayName1 = UIUtils.getDisplayName(locale1);
-			// String displayName2 = UIUtils.getDisplayName(locale2);
-			return 0;// displayName1.compareToIgnoreCase(displayName2);
-		}
-	});
+    private Map<Locale, SourceEditor> sourceEditors = 
+            new TreeMap<>(new Comparator<Locale>() {
+        @Override
+        public int compare(Locale locale1, Locale locale2) {
+           String displayName1 = UIUtils.getDisplayName(locale1);
+           String displayName2 = UIUtils.getDisplayName(locale2);
+           return displayName1.compareToIgnoreCase(displayName2);
+        }
+    });
 
 	/**
 	 * The {@link PropertiesFileCreator} used to create new files.
@@ -127,6 +128,7 @@ abstract class ResourceFactory implements IResourceFactory {
 	}
 
 	protected void addSourceEditor(Locale locale, SourceEditor sourceEditor) {
+		if(locale == null) return;
 		sourceEditors.put(locale, sourceEditor);
 	}
 
@@ -249,38 +251,9 @@ abstract class ResourceFactory implements IResourceFactory {
 		return locale;
 	}
 
-	protected SourceEditor createEditor(IResource resource, Locale locale) throws PartInitException {
-		/*
-		 * ITextEditor textEditor = null; if (resource != null && resource
-		 * instanceof IFile) { IEditorInput newEditorInput = new
-		 * FileEditorInput((IFile) resource); try { // Use PropertiesFileEditor
-		 * if available textEditor = (TextEditor)
-		 * Class.forName(PROPERTIES_EDITOR_CLASS_NAME) .newInstance(); } catch
-		 * (Exception e) { // Use default editor otherwise textEditor = new
-		 * TextEditor(); } textEditor.init(site, newEditorInput);
-		 * 
-		 * try {
-		 * 
-		 * ugly fix for a memory leak: ITextEditor.init(.) Javadoc states:
-		 * "Clients must not call this method." but we do in
-		 * ResourceFactory.createEditor(.), and the way we set-up everything, we
-		 * have to. Since duplicate calls to init(.) create a memory leak, due
-		 * to a zombie ActivationListener registered in AbstractTextEditor, we
-		 * dispose the first ActivationListener we just unintentionally created
-		 *
-		 * Field field =
-		 * AbstractTextEditor.class.getDeclaredField("fActivationListener"); //
-		 * enable access to the method - ...hackity hack
-		 * field.setAccessible(true); Object activationListener =
-		 * field.get(textEditor); Method disposeMethod =
-		 * activationListener.getClass() .getMethod("dispose");
-		 * disposeMethod.setAccessible(true);
-		 * disposeMethod.invoke(activationListener); } catch (Exception e) {
-		 * System.err.println("Failed to apply memory leak work around"); } } if
-		 * (textEditor != null) { return new SourceEditor(textEditor, locale,
-		 * (IFile) resource); }
-		 */
-		return null;
+	protected SourceEditor createEditor(IResource resource, Locale locale)  {
+
+		return SourceEditor.create(locale,(IFile) resource);
 	}
 
 	// private static boolean isNLResource(IFile file)

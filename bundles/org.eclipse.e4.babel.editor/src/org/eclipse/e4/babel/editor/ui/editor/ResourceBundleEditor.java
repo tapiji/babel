@@ -13,12 +13,15 @@ import org.eclipse.e4.babel.core.BabelExtensionManager;
 import org.eclipse.e4.babel.core.api.IResourceFactory;
 import org.eclipse.e4.babel.core.api.IResourceManager;
 import org.eclipse.e4.babel.core.preference.PropertyPreferences;
+import org.eclipse.e4.babel.core.utils.UIUtils;
 import org.eclipse.e4.babel.editor.model.bundle.listener.BundleChangeListener;
 import org.eclipse.e4.babel.editor.model.bundle.listener.BundleEvent;
+import org.eclipse.e4.babel.editor.model.sourceeditor.SourceEditor;
 import org.eclipse.e4.babel.editor.preference.APreferencePage;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.page.I18nPageView;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.pageeditor.I18nPageEditorView;
 import org.eclipse.e4.babel.editor.ui.editor.tree.KeyTreeView;
+import org.eclipse.e4.babel.editor.ui.handler.window.OpenResourceBundleHandler;
 import org.eclipse.e4.babel.resource.BabelResourceConstants;
 import org.eclipse.e4.babel.resource.IBabelResourceProvider;
 import org.eclipse.e4.core.commands.ECommandService;
@@ -96,14 +99,18 @@ private IResourceManager resourceManager;
 
   @PostConstruct
   public void createControl(final Composite parent, final Shell shell, MWindow window, BabelExtensionManager manager) {
-    Log.d(TAG, "treeViewerPart");
-
+    Log.d(TAG, "Create ResourceBundleEditor");
+    this.resourceManager = manager.getResourceManager().get();   
     setMinimumCharacters(40);
-    IEditorInput file = (IEditorInput) part.getTransientData()
-                                           .get("FILE");
-    resourceManager = manager.getResourceManager().get();
+    
+    IFile file = (IFile) part.getTransientData().get(OpenResourceBundleHandler.KEY_FILE);
+    try {
+		resourceManager.init(file);
+	} catch (CoreException e) {
+		e.printStackTrace();
+	}
 
-
+   Log.d(TAG, "KEYTREE: "+resourceManager.getKeyTree().toString());
     
     sashForm = new SashForm(this, SWT.SMOOTH);
 
@@ -116,9 +123,14 @@ private IResourceManager resourceManager;
     i18nPage = I18nPageView.create(sashForm, resourceProvider);
     sashForm.setWeights(new int[] {25, 75});
     createTab(sashForm, "Properties", BabelResourceConstants.IMG_RESOURCE_BUNDLE);
-
+    
     for (int i = 0; i < 10; i++) {
-      createTab(new I18nPageEditorView(this), "TAB" + i, BabelResourceConstants.IMG_RESOURCE_PROPERTY);
+      
+    }
+    SourceEditor[] sourceEditors = resourceManager.getSourceEditors();
+    for (int i = 0; i < sourceEditors.length; i++) {
+    	 SourceEditor sourceEditor = sourceEditors[i];
+    	createTab(new I18nPageEditorView(this),  UIUtils.getDisplayName(sourceEditor.getLocale()), BabelResourceConstants.IMG_RESOURCE_PROPERTY);
     }
 
     setSelection(0);

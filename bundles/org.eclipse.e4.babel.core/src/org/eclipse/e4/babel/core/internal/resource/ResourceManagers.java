@@ -137,6 +137,7 @@ public final class ResourceManagers implements IResourceManager {
 	 * 
 	 * @return source editors.
 	 */
+	@Override
 	public SourceEditor[] getSourceEditors() {
 		return resourcesFactory.getSourceEditors();
 	}
@@ -197,6 +198,7 @@ public final class ResourceManagers implements IResourceManager {
 	 * @param locale locale matching requested source editor
 	 * @return source editor or <code>null</code> if no match
 	 */
+	@Override
 	public SourceEditor getSourceEditor(Locale locale) {
 		return (SourceEditor) sourceEditors.get(locale);
 	}

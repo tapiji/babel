@@ -23,6 +23,7 @@ import java.util.TreeMap;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.e4.babel.core.BabelExtensionManager;
 import org.eclipse.e4.babel.core.api.IResourceFactory;
 
 
@@ -33,8 +34,7 @@ import org.eclipse.e4.babel.core.api.IResourceFactory;
  */
 class ResourceFactoryDescriptor {
 
-  private static final String EXTENSION_POINT_ID = "com.essiembre.eclipse.rbe.resourceFactory";
-  private static final String TAG_FACTORY = "factory";
+  private static final String TAG_FACTORY = "resource_factory";
   private IConfigurationElement fElement;
 
   private ResourceFactoryDescriptor(IConfigurationElement element) {
@@ -71,7 +71,7 @@ class ResourceFactoryDescriptor {
 
   private static ResourceFactoryDescriptor[] getContributedResourceFactoryDescriptors() {
     IConfigurationElement[] elements = Platform.getExtensionRegistry()
-                                               .getConfigurationElementsFor(EXTENSION_POINT_ID);
+                                               .getConfigurationElementsFor(BabelExtensionManager.RESOURCE_FACTORY_EXTENSION_POINT_ID);
     return createDescriptors(elements);
   }
 

@@ -4,19 +4,25 @@ Bundle-Name: Core
 Bundle-SymbolicName: org.eclipse.e4.babel.core;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Require-Bundle: org.eclipse.core.resources,
- org.eclipselabs.e4.tapiji.logger,
- org.eclipse.jdt.annotation,
- org.eclipse.e4.babel.editor.model,
- org.eclipse.swt
-Import-Package: org.eclipse.core.runtime,
- org.eclipse.core.runtime.preferences;version="3.3.0",
+Import-Package: org.eclipse.core.resources,
+ org.eclipse.core.runtime,
+ org.eclipse.core.runtime.preferences,
+ org.eclipse.e4.babel.editor.model.bundle,
+ org.eclipse.e4.babel.editor.model.bundle.listener,
+ org.eclipse.e4.babel.editor.model.sourceeditor,
+ org.eclipse.e4.babel.editor.model.tree,
+ org.eclipse.e4.babel.editor.model.updater,
  org.eclipse.e4.core.di.annotations,
+ org.eclipse.swt,
+ org.eclipse.swt.graphics,
+ org.eclipse.swt.widgets,
  org.eclipse.ui,
  org.eclipse.ui.internal.ide.model,
- org.osgi.framework;version="1.8.0",
- org.osgi.service.prefs;version="1.1.1"
+ org.eclipselabs.e4.tapiji.logger,
+ org.osgi.framework,
+ org.osgi.service.prefs
 Export-Package: org.eclipse.e4.babel.core,
  org.eclipse.e4.babel.core.api,
  org.eclipse.e4.babel.core.preference,
  org.eclipse.e4.babel.core.utils
+Require-Bundle: org.eclipse.core.runtime;bundle-version="3.12.0"

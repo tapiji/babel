@@ -1,6 +1,8 @@
 package org.eclipse.e4.babel.core.utils;
 
 
+import java.util.Locale;
+
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
@@ -59,6 +61,18 @@ public final class UIUtils {
             fontData[i].setStyle(style);
         }
         return new Font(control.getDisplay(), fontData);
+    }
+    
+    /**
+     * Gets a locale, null-safe, display name.
+     * @param locale locale to get display name
+     * @return display name
+     */
+    public static String getDisplayName(Locale locale) {
+        if (locale == null) {
+            return "DEFAULT";
+        }
+        return locale.getDisplayName();
     }
 
     /**
