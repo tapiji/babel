@@ -1,4 +1,4 @@
-package org.eclipse.e4.babel.editor.model.sourceeditor;
+package org.eclipse.e4.babel.editor.text;
 /*
  * Copyright (C) 2003-2014  Pascal Essiembre
  *
@@ -18,6 +18,7 @@ package org.eclipse.e4.babel.editor.model.sourceeditor;
 
 import java.util.Locale;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.e4.babel.editor.text.document.SourceViewerDocument;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.text.source.ISourceViewer;
 
@@ -32,7 +33,7 @@ public class SourceEditor {
 
   private final Locale locale;
   private final IFile file;
-  private final ISourceViewer editor;
+  private final SourceViewerDocument document;
   private String contentCache;
 
   /**
@@ -42,22 +43,18 @@ public class SourceEditor {
    * @param locale a locale
    * @param file properties file
    */
-  private SourceEditor(ISourceViewer editor, Locale locale, IFile file) {
+  private SourceEditor(SourceViewerDocument document, Locale locale, IFile file) {
     super();
-    this.editor = editor;
+    this.document = document;
     this.locale = locale;
     this.file = file;
     this.contentCache = getContent();
   }
 
-  public static SourceEditor create(ISourceViewer editor, Locale locale, IFile file) {
-	  return new SourceEditor(editor, locale, file);
+  public static SourceEditor create(SourceViewerDocument document, Locale locale, IFile file) {
+	  return new SourceEditor(document, locale, file);
   }
-  
-  public static SourceEditor create( Locale locale, IFile file) {
-	  return new SourceEditor(null, locale, file);
-  }
-  
+
   /**
    * Gets the locale associated with this source editor.
    * 
@@ -81,8 +78,9 @@ public class SourceEditor {
    * 
    * @return text editor
    */
-  public ISourceViewer getEditor() {
-    return editor;
+  // TODO RENAME
+  public SourceViewerDocument getEditor() {
+    return document;
   }
 
   /**
@@ -108,7 +106,7 @@ public class SourceEditor {
    * @return content
    */
   public String getContent() {
-    return "ddas.sadsad=sddqsdqw";//editor.getDocument() .get();
+    return document.getDocument() .get();
   }
 
   /**
@@ -117,8 +115,7 @@ public class SourceEditor {
    * @param content new content
    */
   public void setContent(String content) {
-    editor.getDocument()
-          .set(content);
+	document.getDocument().set(content);
     contentCache = content;
   }
 
@@ -133,7 +130,7 @@ public class SourceEditor {
 
   public void selectKey(String key) {
     if (key != null) {
-      ISourceViewer textEditor = getEditor();
+     // ISourceViewer textEditor = getEditor();
       /*
        * String editorContent = getContent();
        * Pattern pattern = Pattern.compile("^" + Pattern.quote(key) + ".*$", Pattern.MULTILINE);
@@ -147,7 +144,7 @@ public class SourceEditor {
   }
 
   public String getCurrentKey() {
-    ISourceViewer textEditor = getEditor();
+    /*ISourceViewer textEditor = getEditor();
     if (textEditor.getSelectionProvider()
                   .getSelection() instanceof TextSelection) {
       TextSelection selection = (TextSelection) textEditor.getSelectionProvider()
@@ -164,7 +161,7 @@ public class SourceEditor {
       String line = content.substring(start, end + 1)
                            .trim();
       return line;
-    }
+    }*/
     return null;
   }
 

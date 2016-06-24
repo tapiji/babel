@@ -31,7 +31,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.e4.babel.core.internal.createfile.NLPropertiesFileCreator;
 import org.eclipse.e4.babel.core.internal.createfile.PropertiesFileCreator;
 import org.eclipse.e4.babel.core.preference.PropertyPreferences;
-import org.eclipse.e4.babel.editor.model.sourceeditor.SourceEditor;
+import org.eclipse.e4.babel.editor.text.SourceEditor;
 
 
 /**

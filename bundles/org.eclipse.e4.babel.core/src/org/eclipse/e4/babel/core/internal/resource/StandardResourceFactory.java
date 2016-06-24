@@ -16,14 +16,16 @@
 package org.eclipse.e4.babel.core.internal.resource;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Locale;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.e4.babel.core.internal.createfile.PropertiesFileCreator;
 import org.eclipse.e4.babel.core.internal.createfile.StandardPropertiesFileCreator;
-import org.eclipse.e4.babel.editor.model.sourceeditor.SourceEditor;
+import org.eclipse.e4.babel.editor.text.SourceEditor;
 import org.eclipse.ui.PartInitException;
 
 /**
@@ -54,8 +56,6 @@ public class StandardResourceFactory extends ResourceFactory {
 
 		for (int i = 0; i < resources.length; i++) {
 			IResource resource = resources[i];
-			//            String resourceName = resource.getName();
-			// Build local title
 			Locale locale = parseBundleName(resource);
 			SourceEditor sourceEditor = createEditor(resource, locale);
 			if (sourceEditor != null) {
@@ -76,22 +76,21 @@ public class StandardResourceFactory extends ResourceFactory {
 	}
 
 	protected static IFile[] getResources(IFile file) throws PartInitException {
-
 		String regex = ResourceFactory.getPropertiesFileRegEx(file);
-		IResource[] resources = null;
+		List<IResource> resources = new ArrayList<>();
 		try {
-			resources = file.getParent().members();
+			resources = Arrays.asList(file.getParent().members());
 		} catch (CoreException e) {
 			throw new PartInitException("Can't initialize resource bundle editor.", e);
 		}
-		Collection<IResource> validResources = new ArrayList<>();
-		for (int i = 0; i < resources.length; i++) {
-			IResource resource = resources[i];
+		
+		List<IResource> validResources = new ArrayList<>();
+		resources.stream().forEach(resource->{
 			String resourceName = resource.getName();
 			if (resource instanceof IFile && resourceName.matches(regex)) {
 				validResources.add(resource);
 			}
-		}
+		});
 		return (IFile[]) validResources.toArray(new IFile[] {});
 	}
 }

@@ -5,9 +5,9 @@ import java.util.Locale;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.e4.babel.editor.model.sourceeditor.SourceEditor;
 import org.eclipse.e4.babel.editor.model.tree.KeyTree;
 import org.eclipse.e4.babel.editor.model.tree.KeyTreeItem;
+import org.eclipse.e4.babel.editor.text.SourceEditor;
 
 public interface IResourceManager {
 

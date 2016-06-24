@@ -1,21 +1,20 @@
 package org.eclipse.e4.babel.editor.ui.editor;
 
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
-import org.eclipse.babel.i18n.Messages;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.e4.babel.core.BabelExtensionManager;
-import org.eclipse.e4.babel.core.api.IResourceFactory;
 import org.eclipse.e4.babel.core.api.IResourceManager;
 import org.eclipse.e4.babel.core.preference.PropertyPreferences;
 import org.eclipse.e4.babel.core.utils.UIUtils;
 import org.eclipse.e4.babel.editor.model.bundle.listener.BundleChangeListener;
 import org.eclipse.e4.babel.editor.model.bundle.listener.BundleEvent;
-import org.eclipse.e4.babel.editor.model.sourceeditor.SourceEditor;
 import org.eclipse.e4.babel.editor.preference.APreferencePage;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.page.I18nPageView;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.pageeditor.I18nPageEditorView;
@@ -26,7 +25,6 @@ import org.eclipse.e4.babel.resource.IBabelResourceProvider;
 import org.eclipse.e4.core.commands.ECommandService;
 import org.eclipse.e4.core.commands.EHandlerService;
 import org.eclipse.e4.core.di.annotations.Optional;
-import org.eclipse.e4.core.services.nls.Translation;
 import org.eclipse.e4.ui.di.UIEventTopic;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MWindow;
@@ -38,12 +36,9 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.custom.SashForm;
-import org.eclipse.swt.events.FocusEvent;
-import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipselabs.e4.tapiji.logger.Log;
 
@@ -72,8 +67,7 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
 	@Inject
 	private ESelectionService selectionService;
 
-	@Translation
-	Messages translation;
+
 	private I18nPageView i18nPage;
 	private SashForm sashForm;
 
@@ -120,11 +114,9 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
 		sashForm.setWeights(new int[] { 25, 75 });
 		createTab(sashForm, "Properties", BabelResourceConstants.IMG_RESOURCE_BUNDLE);
 
-		for (int i = 0; i < 10; i++) {
 
-		}
 		resourceManager.getSourceEditors().stream().forEach(editor -> {
-			createTab(new I18nPageEditorView(this), UIUtils.getDisplayName(editor.getLocale()),
+			createTab(new I18nPageEditorView(this, editor), UIUtils.getDisplayName(editor.getLocale()),
 					BabelResourceConstants.IMG_RESOURCE_PROPERTY);
 		});
 
@@ -198,44 +190,47 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
 		@Override
 		public void selectionChanged(SelectionChangedEvent event) {
 			// TODO Auto-generated method stub
-
+			
 		}
 
 		@Override
 		public <T> void add(BundleEvent<T> event) {
 			// TODO Auto-generated method stub
-
+			
 		}
 
 		@Override
 		public <T> void remove(BundleEvent<T> event) {
 			// TODO Auto-generated method stub
-
+			
 		}
 
 		@Override
 		public <T> void modify(BundleEvent<T> event) {
 			// TODO Auto-generated method stub
-
+			
 		}
 
 		@Override
 		public <T> void select(BundleEvent<T> event) {
 			// TODO Auto-generated method stub
-
+			
 		}
 
 		@Override
 		public void focusGained(FocusEvent e) {
 			// TODO Auto-generated method stub
-
+			
 		}
 
 		@Override
 		public void focusLost(FocusEvent e) {
 			// TODO Auto-generated method stub
-
+			
 		}
+
+
+
 
 	}
 }

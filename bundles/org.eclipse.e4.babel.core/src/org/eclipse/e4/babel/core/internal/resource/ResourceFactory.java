@@ -33,8 +33,12 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.e4.babel.core.api.IResourceFactory;
 import org.eclipse.e4.babel.core.internal.createfile.PropertiesFileCreator;
 import org.eclipse.e4.babel.core.utils.UIUtils;
-import org.eclipse.e4.babel.editor.model.sourceeditor.SourceEditor;
+import org.eclipse.e4.babel.editor.text.SourceEditor;
+import org.eclipse.e4.babel.editor.text.document.SourceViewerDocument;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jface.text.IDocument;
 import org.eclipse.ui.PartInitException;
+import org.eclipselabs.e4.tapiji.logger.Log;
 
 /**
  * Responsible for creating resources related to a given file structure.
@@ -50,6 +54,9 @@ import org.eclipse.ui.PartInitException;
  */
 abstract class ResourceFactory implements IResourceFactory {
 
+
+	private final static String TAG = ResourceFactory.class.getSimpleName();
+	
 	/** Class name of Properties file editor (Eclipse 3.1). */
 	protected static final String PROPERTIES_EDITOR_CLASS_NAME = "org.eclipse.jdt.internal.ui.propertiesfileeditor."
 			+ "PropertiesFileEditor";
@@ -70,13 +77,12 @@ abstract class ResourceFactory implements IResourceFactory {
 	/**
 	 * A sorted map of {@link SourceEditor}s. Sorted by key (Locale).
 	 */
-    private Map<Locale, SourceEditor> sourceEditors = 
-            new TreeMap<>(new Comparator<Locale>() {
-        @Override
-        public int compare(final Locale locale1,final Locale locale2) {
-           return UIUtils.getDisplayName(locale1).compareToIgnoreCase( UIUtils.getDisplayName(locale2));
-        }
-    });
+	private Map<Locale, SourceEditor> sourceEditors = new TreeMap<>(new Comparator<Locale>() {
+		@Override
+		public int compare(final Locale locale1, final Locale locale2) {
+			return UIUtils.getDisplayName(locale1).compareToIgnoreCase(UIUtils.getDisplayName(locale2));
+		}
+	});
 
 	/**
 	 * The {@link PropertiesFileCreator} used to create new files.
@@ -89,6 +95,7 @@ abstract class ResourceFactory implements IResourceFactory {
 	 * The displayname
 	 */
 	private String displayName;
+
 
 	@Override
 	public String getEditorDisplayName() {
@@ -109,32 +116,21 @@ abstract class ResourceFactory implements IResourceFactory {
 	@Override
 	public List<SourceEditor> getSourceEditors() {
 		List<SourceEditor> editors = new ArrayList<>(sourceEditors.values().size());
-		
-		sourceEditors.values().stream().forEach(editor->editors.add(editor));
-		
-		/*SourceEditor[] editors = new SourceEditor[sourceEditors.values().size()];
-		int i = 0;
-		for (Iterator<SourceEditor> it = sourceEditors.values().iterator(); it.hasNext();) {
-			Object obj = it.next();
-			if (obj instanceof SourceEditor) {
-				editors[i] = (SourceEditor) obj;
-			}
-			i++;
-		}*/
+		sourceEditors.values().stream().forEach(editor -> editors.add(editor));
 		return editors;
 	}
 
 	@Override
 	public SourceEditor addResource(IResource resource, Locale locale) throws PartInitException {
-		if (sourceEditors.containsKey(locale))
+		if (sourceEditors.containsKey(locale)) {
 			throw new IllegalArgumentException("ResourceFactory already contains a resource for locale " + locale);
+		}
 		SourceEditor editor = createEditor(resource, locale);
 		addSourceEditor(editor.getLocale(), editor);
 		return editor;
 	}
 
 	protected void addSourceEditor(Locale locale, SourceEditor sourceEditor) {
-		if(locale == null) return;
 		sourceEditors.put(locale, sourceEditor);
 	}
 
@@ -152,22 +148,6 @@ abstract class ResourceFactory implements IResourceFactory {
 
 	@Override
 	public abstract void init(IFile file) throws CoreException;
-
-	// /**
-	// * Creates a resource factory based on given arguments.
-	// * @param site eclipse editor site
-	// * @param file file used to create factory
-	// * @return resource factory
-	// * @throws CoreException problem creating factory
-	// */
-	// public static ResourceFactory createFactory(IEditorSite site, IFile file)
-	// throws CoreException {
-	// if (isNLResource(file)) {
-	// return new NLResourceFactory(site, file);
-	// }
-	// return new StandardResourceFactory(site, file);
-	// }
-	//
 
 	/**
 	 * Creates a resource factory based on given arguments.
@@ -212,7 +192,7 @@ abstract class ResourceFactory implements IResourceFactory {
 	 * @throws CoreException
 	 *             problem creating factory
 	 */
-	public static IResourceFactory createParentFactory(IFile file, Class<?> childFactoryClass) throws CoreException {
+	public static IResourceFactory createParentFactory(IFile file, Class<?> childFactoryClass) throws CoreException {		
 		IResourceFactory[] factories = ResourceFactoryDescriptor.getContributedResourceFactories();
 		for (int i = 0; i < factories.length; i++) {
 			IResourceFactory factory = factories[i];
@@ -257,54 +237,17 @@ abstract class ResourceFactory implements IResourceFactory {
 		return locale;
 	}
 
-	protected SourceEditor createEditor(IResource resource, Locale locale)  {
+	protected SourceEditor createEditor(IResource resource, Locale locale) {
+		
+		
+		
+		SourceViewerDocument document = SourceViewerDocument.create((IFile) resource);
+		
+		IDocument doc = document.getDocument();
+		Log.d(TAG, "CONTENT: "+doc.get());
 
-		return SourceEditor.create(locale,(IFile) resource);
+		return SourceEditor.create(document,locale, (IFile) resource);
 	}
-
-	// private static boolean isNLResource(IFile file)
-	// throws PartInitException {
-	// /*
-	// * Check if NL is supported.
-	// */
-	// if (!RBEPreferences.getSupportNL()) {
-	// return false;
-	// }
-	//
-	// /*
-	// * Check if there is an NL directory
-	// */
-	// IContainer container = file.getParent();
-	// IResource nlDir = null;
-	// while (container != null
-	// && (nlDir == null || !(nlDir instanceof Folder))) {
-	// nlDir = container.findMember("nl");
-	// container = container.getParent();
-	// }
-	// if (nlDir == null || !(nlDir instanceof Folder)) {
-	// return false;
-	// }
-	//
-	// /*
-	// * Ensures NL directory is part of file path, or that file dir
-	// * is parent of NL directory.
-	// */
-	// IPath filePath = file.getFullPath();
-	// IPath nlDirPath = nlDir.getFullPath();
-	// if (!nlDirPath.isPrefixOf(filePath)
-	// && !filePath.removeLastSegments(1).isPrefixOf(nlDirPath)) {
-	// return false;
-	// }
-	//
-	// /*
-	// * Ensure that there are no other files which could make a standard
-	// * resource bundle.
-	// */
-	// if (StandardResourceFactory.getResources(file).length > 1) {
-	// return false;
-	// }
-	// return true;
-	// }
 
 	protected static String getBundleName(IResource file) {
 		String name = file.getName();
@@ -336,17 +279,14 @@ abstract class ResourceFactory implements IResourceFactory {
 	 * @throws CoreException
 	 */
 	protected static IFile[] getResources(IFile file) throws CoreException {
-
 		String regex = ResourceFactory.getPropertiesFileRegEx(file);
-		IResource[] resources = file.getParent().members();
-		Collection<IResource> validResources = new ArrayList<>();
-		for (int i = 0; i < resources.length; i++) {
-			IResource resource = resources[i];
+		final Collection<IResource> validResources = new ArrayList<>();
+		Stream.of(file.getParent().members()).forEach(resource -> {
 			String resourceName = resource.getName();
 			if (resource instanceof IFile && resourceName.matches(regex)) {
 				validResources.add(resource);
 			}
-		}
+		});
 		return (IFile[]) validResources.toArray(new IFile[] {});
 	}
 

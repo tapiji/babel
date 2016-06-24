@@ -1,7 +1,6 @@
 package org.eclipse.e4.babel.editor.text;
 
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.e4.babel.editor.text.document.SourceViewerDocument;
 import org.eclipse.e4.babel.editor.text.property.PropertyConfiguration;
 import org.eclipse.e4.babel.editor.text.property.PropertyPartitionScanner;
@@ -26,7 +25,8 @@ public final class PropertiesTextEditor {
   private SourceViewer sourceViewer;
   private SourceViewerDocument sourceViewerDocument;
 
-  public PropertiesTextEditor(final Composite parent, final IFile file) {
+  public PropertiesTextEditor(final Composite parent, SourceViewerDocument sourceViewerDocument) {
+	  this.sourceViewerDocument = sourceViewerDocument;
     final LineNumberRulerColumn lineNumberRuleColumn = new LineNumberRulerColumn();
     lineNumberRuleColumn.setFont(FONT);
 
@@ -35,11 +35,9 @@ public final class PropertiesTextEditor {
     compositeRuler.addDecorator(2, new AnnotationRulerColumn(20));
 
     sourceViewer = new SourceViewer(parent, compositeRuler, SOURCE_VIEWER_STYLE);
-    sourceViewer.getTextWidget()
-                .setFont(FONT);
+    sourceViewer.getTextWidget().setFont(FONT);
     sourceViewer.configure(PropertyConfiguration.create());
 
-    sourceViewerDocument = SourceViewerDocument.create(file);
     final IDocument document = sourceViewerDocument.getDocument();
 
     final IDocumentPartitioner partitioner = new FastPartitioner(new PropertyPartitionScanner(), PropertyPartitionScanner.PARTITIONS);
