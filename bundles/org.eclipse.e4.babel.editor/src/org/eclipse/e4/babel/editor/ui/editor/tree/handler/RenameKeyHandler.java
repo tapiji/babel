@@ -17,7 +17,7 @@ public final class RenameKeyHandler {
   @Execute
   public void execute(@Named(IServiceConstants.ACTIVE_SELECTION) KeyTreeItem item, @Named(IServiceConstants.ACTIVE_SHELL) final Shell shell, MPart part) {
   	if (part.getObject() instanceof ResourceBundleEditorContract.View) {
-			ResourceBundleEditorContract.View resourceBundleEditorContract = (ResourceBundleEditorContract.View) part;
+			ResourceBundleEditorContract.View resourceBundleEditorContract = (ResourceBundleEditorContract.View) part.getObject();
     String key = item.getId();
     String msgHead = null;
     String msgBody = null;

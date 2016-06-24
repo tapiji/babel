@@ -28,7 +28,7 @@ public class I18nPageEditorView extends Composite {
     setLayout(new FillLayout());
 
 
-    new PropertiesTextEditor(this, editor.getEditor());
+    new PropertiesTextEditor(this, editor.getDocument());
 
   }
 }

@@ -238,15 +238,7 @@ abstract class ResourceFactory implements IResourceFactory {
 	}
 
 	protected SourceEditor createEditor(IResource resource, Locale locale) {
-		
-		
-		
-		SourceViewerDocument document = SourceViewerDocument.create((IFile) resource);
-		
-		IDocument doc = document.getDocument();
-		Log.d(TAG, "CONTENT: "+doc.get());
-
-		return SourceEditor.create(document,locale, (IFile) resource);
+		return SourceEditor.create(SourceViewerDocument.create((IFile) resource),locale, (IFile) resource);
 	}
 
 	protected static String getBundleName(IResource file) {

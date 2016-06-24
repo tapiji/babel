@@ -16,8 +16,7 @@ public final class NewKeyHandler {
 	@Execute
 	public void execute(@Named(IServiceConstants.ACTIVE_SELECTION) KeyTreeItem item,@Named(IServiceConstants.ACTIVE_SHELL) final Shell shell, MPart part) {
 		if (part.getObject() instanceof ResourceBundleEditorContract.View) {
-			ResourceBundleEditorContract.View resourceBundleEditorContract = (ResourceBundleEditorContract.View) part
-					.getObject();
+			ResourceBundleEditorContract.View resourceBundleEditorContract = (ResourceBundleEditorContract.View) part.getObject();
 			if (item != null) {
 				System.out.println("sadadsd " + item.toString());
 				InputDialog dialog = new InputDialog(shell, "Add new key",
