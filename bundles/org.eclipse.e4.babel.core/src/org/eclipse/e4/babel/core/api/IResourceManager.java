@@ -1,5 +1,6 @@
 package org.eclipse.e4.babel.core.api;
 
+import java.util.List;
 import java.util.Locale;
 
 import org.eclipse.core.resources.IFile;
@@ -24,5 +25,5 @@ public interface IResourceManager {
 
 	SourceEditor getSourceEditor(Locale locale);
 
-	SourceEditor[] getSourceEditors();
+	List<SourceEditor> getSourceEditors();
 }

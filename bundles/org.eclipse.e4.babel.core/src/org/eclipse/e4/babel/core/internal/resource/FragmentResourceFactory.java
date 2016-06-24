@@ -49,6 +49,7 @@ import org.eclipse.ui.PartInitException;
  * projects contributing translations.
  * 
  * @author Uwe Voigt
+ * @author Christian Behon
  */
 public class FragmentResourceFactory extends NLResourceFactory {
 
@@ -144,13 +145,12 @@ public class FragmentResourceFactory extends NLResourceFactory {
 				IResourceFactory parentFactory = ResourceFactory
 						.createParentFactory(hostProject.getFile(file.getProjectRelativePath()), this.getClass());
 				if (parentFactory != null) {
-					SourceEditor[] parentEditors = parentFactory.getSourceEditors();
 					Set<Locale> fragmentLocales = getFragmentLocales(fragmentEditors);
-					for (int i = 0; i < parentEditors.length; i++) {
-						if (!fragmentLocales.contains(parentEditors[i].getLocale())) {
-							editors.add(parentEditors[i]);
+					parentFactory.getSourceEditors().stream().forEach(editor->{
+						if (!fragmentLocales.contains(editor.getLocale())) {
+							editors.add(editor);
 						}
-					}
+					});
 				}
 			}
 		}

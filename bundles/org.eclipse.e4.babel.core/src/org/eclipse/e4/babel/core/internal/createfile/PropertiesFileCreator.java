@@ -31,6 +31,7 @@ import org.eclipse.e4.babel.core.preference.PropertyPreferences;
  * Creates a properties file.
  * 
  * @author Pascal Essiembre
+ * @author Christian Behon
  */
 public abstract class PropertiesFileCreator {
 

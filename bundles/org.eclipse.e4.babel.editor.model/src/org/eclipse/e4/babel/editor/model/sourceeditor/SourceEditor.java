@@ -108,7 +108,7 @@ public class SourceEditor {
    * @return content
    */
   public String getContent() {
-    return "dasasasd";//editor.getDocument() .get();
+    return "ddas.sadsad=sddqsdqw";//editor.getDocument() .get();
   }
 
   /**

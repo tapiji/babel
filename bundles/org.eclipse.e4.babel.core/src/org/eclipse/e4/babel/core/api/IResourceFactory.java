@@ -1,5 +1,6 @@
 package org.eclipse.e4.babel.core.api;
 
+import java.util.List;
 import java.util.Locale;
 
 import org.eclipse.core.resources.IFile;
@@ -29,7 +30,7 @@ public interface IResourceFactory {
      * </p>
      * @return All {@link SourceEditor}s of this factory.
      */
-    public abstract SourceEditor[] getSourceEditors();
+    public abstract List<SourceEditor> getSourceEditors();
 
     /**
      * Adds the given resource to the factory.

@@ -16,6 +16,7 @@
 package org.eclipse.e4.babel.core.internal.resource;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -24,6 +25,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
+import java.util.stream.Stream;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -43,6 +46,7 @@ import org.eclipse.ui.PartInitException;
  * 
  * @author Pascal Essiembre
  * @author cuhiodtick
+ * @author Christian Behon
  */
 abstract class ResourceFactory implements IResourceFactory {
 
@@ -69,10 +73,8 @@ abstract class ResourceFactory implements IResourceFactory {
     private Map<Locale, SourceEditor> sourceEditors = 
             new TreeMap<>(new Comparator<Locale>() {
         @Override
-        public int compare(Locale locale1, Locale locale2) {
-           String displayName1 = UIUtils.getDisplayName(locale1);
-           String displayName2 = UIUtils.getDisplayName(locale2);
-           return displayName1.compareToIgnoreCase(displayName2);
+        public int compare(final Locale locale1,final Locale locale2) {
+           return UIUtils.getDisplayName(locale1).compareToIgnoreCase( UIUtils.getDisplayName(locale2));
         }
     });
 
@@ -105,8 +107,12 @@ abstract class ResourceFactory implements IResourceFactory {
 	}
 
 	@Override
-	public SourceEditor[] getSourceEditors() {
-		SourceEditor[] editors = new SourceEditor[sourceEditors.values().size()];
+	public List<SourceEditor> getSourceEditors() {
+		List<SourceEditor> editors = new ArrayList<>(sourceEditors.values().size());
+		
+		sourceEditors.values().stream().forEach(editor->editors.add(editor));
+		
+		/*SourceEditor[] editors = new SourceEditor[sourceEditors.values().size()];
 		int i = 0;
 		for (Iterator<SourceEditor> it = sourceEditors.values().iterator(); it.hasNext();) {
 			Object obj = it.next();
@@ -114,7 +120,7 @@ abstract class ResourceFactory implements IResourceFactory {
 				editors[i] = (SourceEditor) obj;
 			}
 			i++;
-		}
+		}*/
 		return editors;
 	}
 

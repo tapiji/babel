@@ -23,19 +23,20 @@ import org.eclipse.core.runtime.Path;
  * Creates a standard properties file.
  * @author Pascal Essiembre
  */
-public class StandardPropertiesFileCreator extends PropertiesFileCreator {
+public final class StandardPropertiesFileCreator extends PropertiesFileCreator {
 
-	private String dir;
-	private String baseFileName;
-	private String extension;
+	private final String dir;
+	private final String baseFileName;
+	private final String extension;
 
 	/**
-	 * Constructor.
-	 * @param dir directory in wich to create the file
+	 * Constructor
+	 * 
+	 * @param dir directory in which to create the file
 	 * @param baseFileName base name of file to create
 	 * @param extension file extension
 	 */
-	public StandardPropertiesFileCreator(String dir, String baseFileName, String extension) {
+	public StandardPropertiesFileCreator(final String dir, final String baseFileName, final String extension) {
 		super();
 		this.dir = dir;
 		this.baseFileName = baseFileName;
@@ -43,8 +44,7 @@ public class StandardPropertiesFileCreator extends PropertiesFileCreator {
 	}
 
 	@Override
-	protected IPath buildFilePath(Locale locale) {
-
+	protected IPath buildFilePath(final Locale locale) {
 		IPath path = new Path(dir);
 		path = path.append(baseFileName);
 		if (locale != null) {

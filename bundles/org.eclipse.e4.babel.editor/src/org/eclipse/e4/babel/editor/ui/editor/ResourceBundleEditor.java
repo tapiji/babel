@@ -1,6 +1,5 @@
 package org.eclipse.e4.babel.editor.ui.editor;
 
-
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -48,201 +47,195 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipselabs.e4.tapiji.logger.Log;
 
-
 public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEditorContract.View {
 
-  public static final String TOPIC_TREE_VIEW_VISIBILITY = "TOPIC_GUI/TREE_VIEW_VISIBILITY";
-  private static final String TAG = ResourceBundleEditor.class.getSimpleName();
-  private static final String BOTTOM_MENU_ID = "org.eclipse.e4.babel.editor.toolbar.toolbar";
-  private static final String TREE_VIEWER_MENU_ID = "org.eclipse.e4.babel.editor.popupmenu.treePopupMenu";
+	public static final String TOPIC_TREE_VIEW_VISIBILITY = "TOPIC_GUI/TREE_VIEW_VISIBILITY";
+	private static final String TAG = ResourceBundleEditor.class.getSimpleName();
+	private static final String BOTTOM_MENU_ID = "org.eclipse.e4.babel.editor.toolbar.toolbar";
+	private static final String TREE_VIEWER_MENU_ID = "org.eclipse.e4.babel.editor.popupmenu.treePopupMenu";
 
-  @Inject
-  private EMenuService menuService;
+	@Inject
+	private EMenuService menuService;
 
-  @Inject
-  private MPart part;
+	@Inject
+	private MPart part;
 
-  @Inject
-  private IBabelResourceProvider resourceProvider;
+	@Inject
+	private IBabelResourceProvider resourceProvider;
 
-  @Inject
-  private ECommandService commandService;
+	@Inject
+	private ECommandService commandService;
 
-  @Inject
-  private EHandlerService handlerService;
+	@Inject
+	private EHandlerService handlerService;
 
-  @Inject
-  private ESelectionService selectionService;
+	@Inject
+	private ESelectionService selectionService;
 
-  @Translation
-  Messages translation;
-  private I18nPageView i18nPage;
-  private SashForm sashForm;
+	@Translation
+	Messages translation;
+	private I18nPageView i18nPage;
+	private SashForm sashForm;
 
-  LocalBehaviour local = new LocalBehaviour();
+	LocalBehaviour local = new LocalBehaviour();
 
+	private KeyTreeView keyTreeView;
+	private IResourceManager resourceManager;
 
-  private KeyTreeView keyTreeView;
-private IResourceManager resourceManager;
-
-  @Inject
-  public ResourceBundleEditor(Composite parent) {
-    super(parent, SWT.BOTTOM);
-  }
-
-  @Inject
-  @Optional
-  public void setPartInput(@Named("input") Object input) {
-    IFile file = ((IFileEditorInput) input).getFile();
-    Log.d(TAG, "INPUT: " + file.getProject());
-  }
-
-  @PostConstruct
-  public void createControl(final Composite parent, final Shell shell, MWindow window, BabelExtensionManager manager) {
-    Log.d(TAG, "Create ResourceBundleEditor");
-    this.resourceManager = manager.getResourceManager().get();   
-    setMinimumCharacters(40);
-    
-    IFile file = (IFile) part.getTransientData().get(OpenResourceBundleHandler.KEY_FILE);
-    try {
-		resourceManager.init(file);
-	} catch (CoreException e) {
-		e.printStackTrace();
+	@Inject
+	public ResourceBundleEditor(Composite parent) {
+		super(parent, SWT.BOTTOM);
 	}
 
-   Log.d(TAG, "KEYTREE: "+resourceManager.getKeyTree().toString());
-    
-    sashForm = new SashForm(this, SWT.SMOOTH);
+	@Inject
+	@Optional
+	public void setPartInput(@Named("input") Object input) {
+		IFile file = ((IFileEditorInput) input).getFile();
+		Log.d(TAG, "INPUT: " + file.getProject());
+	}
 
-    keyTreeView = KeyTreeView.create(sashForm, (ResourceBundleEditorContract.View) this);
-   // keyTreeView.getTreeViewer()
-   //            .addSelectionChangedListener(local);
-    //keyTreeView.getKeyTree()
-   //            .addChangeLIstener(local);
+	@PostConstruct
+	public void createControl(final Composite parent, final Shell shell, MWindow window,
+			BabelExtensionManager manager) {
+		Log.d(TAG, "Create ResourceBundleEditor");
+		this.resourceManager = manager.getResourceManager().get();
+		setMinimumCharacters(40);
 
-    i18nPage = I18nPageView.create(sashForm, resourceProvider);
-    sashForm.setWeights(new int[] {25, 75});
-    createTab(sashForm, "Properties", BabelResourceConstants.IMG_RESOURCE_BUNDLE);
-    
-    for (int i = 0; i < 10; i++) {
-      
-    }
-    SourceEditor[] sourceEditors = resourceManager.getSourceEditors();
-    for (int i = 0; i < sourceEditors.length; i++) {
-    	 SourceEditor sourceEditor = sourceEditors[i];
-    	createTab(new I18nPageEditorView(this),  UIUtils.getDisplayName(sourceEditor.getLocale()), BabelResourceConstants.IMG_RESOURCE_PROPERTY);
-    }
+		IFile file = (IFile) part.getTransientData().get(OpenResourceBundleHandler.KEY_FILE);
+		try {
+			resourceManager.init(file);
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
 
-    setSelection(0);
+		Log.d(TAG, "KEYTREE: " + resourceManager.getKeyTree().toString());
 
-  }
+		sashForm = new SashForm(this, SWT.SMOOTH);
 
-  @Inject
-  @Optional
-  private void onTreeViewVisibilityChange(@UIEventTopic(TOPIC_TREE_VIEW_VISIBILITY) final boolean visibility) {
-    if (sashForm.getMaximizedControl() == null) {
-      sashForm.setMaximizedControl(i18nPage);
-    } else {
-      sashForm.setMaximizedControl(null);
-    }
-  }
+		keyTreeView = KeyTreeView.create(sashForm, (ResourceBundleEditorContract.View) this);
+		keyTreeView.getTreeViewer().addSelectionChangedListener(local);
+		keyTreeView.getKeyTree().addChangeLIstener(local);
 
-  @Inject
-  @Optional
-  public void redrawLayout(@UIEventTopic(APreferencePage.TOPIC_REFRESH_LAYOUT) final String visibility) {
-    Log.d(TAG, "INPUT: UPDATE UI" + visibility);
-    i18nPage.redrawEditorSize();
-    i18nPage.refreshLayout();
-    System.out.println("New user: " + PropertyPreferences.getInstance()
-                                                         .isEditorTreeExpanded());
-  }
+		i18nPage = I18nPageView.create(sashForm, resourceProvider);
+		sashForm.setWeights(new int[] { 25, 75 });
+		createTab(sashForm, "Properties", BabelResourceConstants.IMG_RESOURCE_BUNDLE);
 
-  private void createTab(final Control control, final String title, String image) {
-    final CTabItem tab = new CTabItem(this, SWT.NONE);
-    tab.setText(title);
-    tab.setImage(resourceProvider.loadImage(image));
-    tab.setControl(control);
-  }
+		for (int i = 0; i < 10; i++) {
 
-  @Override
-  public IResourceManager getResourceManager() {
-	  return resourceManager;
-  }
-  
-  @Override
-  public ECommandService getCommandService() {
-    return commandService;
-  }
+		}
+		resourceManager.getSourceEditors().stream().forEach(editor -> {
+			createTab(new I18nPageEditorView(this), UIUtils.getDisplayName(editor.getLocale()),
+					BabelResourceConstants.IMG_RESOURCE_PROPERTY);
+		});
 
-  @Override
-  public EHandlerService getHandlerService() {
-    return handlerService;
-  }
+		setSelection(0);
 
-  @Override
-  public EMenuService getMenuService() {
-    return menuService;
-  }
+	}
 
-  @Override
-  public IBabelResourceProvider getResourceProvider() {
-    return resourceProvider;
-  }
+	@Inject
+	@Optional
+	private void onTreeViewVisibilityChange(@UIEventTopic(TOPIC_TREE_VIEW_VISIBILITY) final boolean visibility) {
+		if (sashForm.getMaximizedControl() == null) {
+			sashForm.setMaximizedControl(i18nPage);
+		} else {
+			sashForm.setMaximizedControl(null);
+		}
+	}
 
+	@Inject
+	@Optional
+	public void redrawLayout(@UIEventTopic(APreferencePage.TOPIC_REFRESH_LAYOUT) final String visibility) {
+		Log.d(TAG, "INPUT: UPDATE UI" + visibility);
+		i18nPage.redrawEditorSize();
+		i18nPage.refreshLayout();
+		System.out.println("New user: " + PropertyPreferences.getInstance().isEditorTreeExpanded());
+	}
 
-  @Override
-  public ESelectionService getSelectionService() {
-    return selectionService;
-  }
+	private void createTab(final Control control, final String title, String image) {
+		final CTabItem tab = new CTabItem(this, SWT.NONE);
+		tab.setText(title);
+		tab.setImage(resourceProvider.loadImage(image));
+		tab.setControl(control);
+	}
 
-  @Override
-  public KeyTreeView getKeyTreeView() {
-    return keyTreeView;
-  }
+	@Override
+	public IResourceManager getResourceManager() {
+		return resourceManager;
+	}
 
-  private class LocalBehaviour implements FocusListener, BundleChangeListener, ISelectionChangedListener {
+	@Override
+	public ECommandService getCommandService() {
+		return commandService;
+	}
 
-    @Override
-    public void selectionChanged(SelectionChangedEvent event) {
-      // TODO Auto-generated method stub
+	@Override
+	public EHandlerService getHandlerService() {
+		return handlerService;
+	}
 
-    }
+	@Override
+	public EMenuService getMenuService() {
+		return menuService;
+	}
 
-    @Override
-    public <T> void add(BundleEvent<T> event) {
-      // TODO Auto-generated method stub
+	@Override
+	public IBabelResourceProvider getResourceProvider() {
+		return resourceProvider;
+	}
 
-    }
+	@Override
+	public ESelectionService getSelectionService() {
+		return selectionService;
+	}
 
-    @Override
-    public <T> void remove(BundleEvent<T> event) {
-      // TODO Auto-generated method stub
+	@Override
+	public KeyTreeView getKeyTreeView() {
+		return keyTreeView;
+	}
 
-    }
+	private class LocalBehaviour implements FocusListener, BundleChangeListener, ISelectionChangedListener {
 
-    @Override
-    public <T> void modify(BundleEvent<T> event) {
-      // TODO Auto-generated method stub
+		@Override
+		public void selectionChanged(SelectionChangedEvent event) {
+			// TODO Auto-generated method stub
 
-    }
+		}
 
-    @Override
-    public <T> void select(BundleEvent<T> event) {
-      // TODO Auto-generated method stub
+		@Override
+		public <T> void add(BundleEvent<T> event) {
+			// TODO Auto-generated method stub
 
-    }
+		}
 
-    @Override
-    public void focusGained(FocusEvent e) {
-      // TODO Auto-generated method stub
+		@Override
+		public <T> void remove(BundleEvent<T> event) {
+			// TODO Auto-generated method stub
 
-    }
+		}
 
-    @Override
-    public void focusLost(FocusEvent e) {
-      // TODO Auto-generated method stub
+		@Override
+		public <T> void modify(BundleEvent<T> event) {
+			// TODO Auto-generated method stub
 
-    }
+		}
 
-  }
+		@Override
+		public <T> void select(BundleEvent<T> event) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void focusGained(FocusEvent e) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void focusLost(FocusEvent e) {
+			// TODO Auto-generated method stub
+
+		}
+
+	}
 }

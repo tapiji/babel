@@ -21,6 +21,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.function.Predicate;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -49,18 +51,17 @@ import org.eclipselabs.e4.tapiji.logger.Log;
  * 
  * @author Pascal Essiembre
  * @author Alexander Bieber
+ * @author Christian Behon
  */
 
 public final class ResourceManagers implements IResourceManager {
 
 	private static final String TAG = ResourceManagers.class.getSimpleName();
 
-	private String values;
 	private IResourceFactory resourcesFactory;
 	private BundleGroup bundleGroup;
 	private KeyTree keyTree;
-	/** key=Locale;value=SourceEditor */
-	/* default */ final Map<Locale, SourceEditor> sourceEditors = new HashMap<>();
+	private final Map<Locale, SourceEditor> sourceEditors = new HashMap<>();
 	private final List<Locale> locales = new ArrayList<>();
 
 	/**
@@ -74,14 +75,13 @@ public final class ResourceManagers implements IResourceManager {
 	public void init(final IFile file) throws CoreException {
 		resourcesFactory = ResourceFactory.createFactory(file);
 		bundleGroup = BundleGroup.create();
-		SourceEditor[] editors = resourcesFactory.getSourceEditors();
-		for (int i = 0; i < editors.length; i++) {
-			SourceEditor sourceEditor = editors[i];
-			Locale locale = sourceEditor.getLocale();
-			sourceEditors.put(locale, sourceEditor);
+		resourcesFactory.getSourceEditors().stream().forEach(editor -> {
+			Locale locale = editor.getLocale();
+			sourceEditors.put(locale, editor);
 			locales.add(locale);
-			bundleGroup.addBundle(locale, PropertiesParser.parse(sourceEditor.getContent()));
-		}
+			bundleGroup.addBundle(locale, PropertiesParser.parse(editor.getContent()));
+		});
+
 		bundleGroup.addChangeLIstener(new BundleChangeAdapter() {
 
 			@Override
@@ -138,7 +138,7 @@ public final class ResourceManagers implements IResourceManager {
 	 * @return source editors.
 	 */
 	@Override
-	public SourceEditor[] getSourceEditors() {
+	public List<SourceEditor> getSourceEditors() {
 		return resourcesFactory.getSourceEditors();
 	}
 
@@ -148,10 +148,9 @@ public final class ResourceManagers implements IResourceManager {
 	 * @param monitor progress monitor
 	 */
 	public void save(IProgressMonitor monitor) {
-		SourceEditor[] editors = resourcesFactory.getSourceEditors();
-		for (int i = 0; i < editors.length; i++) {
-			//  editors[i].getEditor()               .doSave(monitor);
-		}
+		resourcesFactory.getSourceEditors().stream().forEach(editor -> {
+			//((Object) editor.getEditor()).doSave(monitor)
+		});
 	}
 
 	/**
@@ -171,13 +170,8 @@ public final class ResourceManagers implements IResourceManager {
 	 * @return <code>true</code> if a known resource
 	 */
 	public boolean isResource(IFile file) {
-		SourceEditor[] editors = resourcesFactory.getSourceEditors();
-		for (int i = 0; i < editors.length; i++) {
-			if (editors[i].getFile().equals(file)) {
-				return true;
-			}
-		}
-		return false;
+		Predicate<SourceEditor> knownFile = editor -> editor.getFile().equals(file);
+		return resourcesFactory.getSourceEditors().stream().anyMatch(knownFile);
 	}
 
 	/**
@@ -215,22 +209,30 @@ public final class ResourceManagers implements IResourceManager {
 	 * Reloads the properties files (parse them).
 	 */
 	public void reloadProperties() {
-		SourceEditor[] editors = resourcesFactory.getSourceEditors();
-		for (int i = 0; i < editors.length; i++) {
-			SourceEditor editor = editors[i];
+		resourcesFactory.getSourceEditors().stream().forEach(editor -> {
 			if (editor.isCacheDirty()) {
 				bundleGroup.addBundle(editor.getLocale(), PropertiesParser.parse(editor.getContent()));
 				editor.resetCache();
 			}
-		}
+		});
 	}
 
+	/**
+	 * Add new key
+	 * @param key
+	 */
 	@Override
 	public void addNewKey(String newKey) {
 		Log.d(TAG, "addNewKey " + newKey);
 		keyTree.getBundleGroup().addBundleEntryKey(checkGroupSeparator(newKey));
 	}
 
+	/**
+	 * Remove key
+	 * 
+	 * @param keyTreeItem
+	 * @param key
+	 */
 	@Override
 	public void removeKey(final KeyTreeItem keyTreeItem, String key) {
 		Log.d(TAG, "removeKey " + key);
@@ -242,6 +244,11 @@ public final class ResourceManagers implements IResourceManager {
 		});
 	}
 
+	/**
+	 * Rename key
+	 * @param keyTreeItem
+	 * @param newKey
+	 */
 	@Override
 	public void renameKey(final KeyTreeItem keyTreeItem, final String newKey) {
 		Log.d(TAG, "renameKey " + newKey);
@@ -257,6 +264,12 @@ public final class ResourceManagers implements IResourceManager {
 		});
 	}
 
+	/**
+	 * Check group separator
+	 * 
+	 * @param key
+	 * @return string
+	 */
 	private String checkGroupSeparator(final String key) {
 		final String separator = PropertyPreferences.getInstance().getKeyGroupSeparator();
 		String changedKey = key;
