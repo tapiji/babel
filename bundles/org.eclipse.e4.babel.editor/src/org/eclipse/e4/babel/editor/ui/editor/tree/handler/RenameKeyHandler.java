@@ -2,9 +2,10 @@ package org.eclipse.e4.babel.editor.ui.editor.tree.handler;
 
 
 import javax.inject.Named;
-import org.eclipse.e4.babel.editor.model.IResourceBundleEditorService;
 import org.eclipse.e4.babel.editor.model.tree.KeyTreeItem;
+import org.eclipse.e4.babel.editor.ui.editor.ResourceBundleEditorContract;
 import org.eclipse.e4.core.di.annotations.Execute;
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.services.IServiceConstants;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.window.Window;
@@ -14,7 +15,9 @@ import org.eclipse.swt.widgets.Shell;
 public final class RenameKeyHandler {
 
   @Execute
-  public void execute(@Named(IServiceConstants.ACTIVE_SELECTION) KeyTreeItem item, @Named(IServiceConstants.ACTIVE_SHELL) final Shell shell, IResourceBundleEditorService editorService) {
+  public void execute(@Named(IServiceConstants.ACTIVE_SELECTION) KeyTreeItem item, @Named(IServiceConstants.ACTIVE_SHELL) final Shell shell, MPart part) {
+  	if (part.getObject() instanceof ResourceBundleEditorContract.View) {
+			ResourceBundleEditorContract.View resourceBundleEditorContract = (ResourceBundleEditorContract.View) part;
     String key = item.getId();
     String msgHead = null;
     String msgBody = null;
@@ -34,7 +37,8 @@ public final class RenameKeyHandler {
 
     if (dialog.getReturnCode() == Window.OK) {
       dialog.getValue();
-      editorService.renameKey(item, dialog.getValue());
+      resourceBundleEditorContract.getResourceManager().renameKey(item, dialog.getValue());
     }
+  }
   }
 }

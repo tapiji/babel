@@ -1,7 +1,7 @@
 package org.eclipse.e4.babel.editor.ui.editor;
 
 
-import org.eclipse.e4.babel.editor.model.IResourceBundleEditorService;
+import org.eclipse.e4.babel.core.api.IResourceManager;
 import org.eclipse.e4.babel.editor.ui.editor.tree.KeyTreeView;
 import org.eclipse.e4.babel.resource.IBabelResourceProvider;
 import org.eclipse.e4.core.commands.ECommandService;
@@ -22,10 +22,10 @@ public interface ResourceBundleEditorContract {
 
     IBabelResourceProvider getResourceProvider();
 
-    IResourceBundleEditorService getEditorService();
-
     ESelectionService getSelectionService();
 
     KeyTreeView getKeyTreeView();
+
+	IResourceManager getResourceManager();
   }
 }

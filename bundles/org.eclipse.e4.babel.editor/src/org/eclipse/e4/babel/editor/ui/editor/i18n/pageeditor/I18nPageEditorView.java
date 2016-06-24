@@ -10,21 +10,21 @@ import org.eclipse.swt.widgets.Composite;
 
 public class I18nPageEditorView extends Composite {
 
-    private static final int VERTICAL_RULER_WIDTH = 12;
+  private static final int VERTICAL_RULER_WIDTH = 12;
 
-    public I18nPageEditorView(final CTabFolder tabFolder) {
-        super(tabFolder, SWT.NONE);
-        createControl(tabFolder);
-    }
-
-
-    public void createControl(final Composite sashForm) {
-
-        //      Composite parent = new Composite(this, SWT.NONE);
-        setLayout(new FillLayout());
+  public I18nPageEditorView(final CTabFolder tabFolder) {
+    super(tabFolder, SWT.NONE);
+    createControl(tabFolder);
+  }
 
 
-        new PropertiesTextEditor(this, null);
+  public void createControl(final Composite sashForm) {
 
-    }
+    //      Composite parent = new Composite(this, SWT.NONE);
+    setLayout(new FillLayout());
+
+
+    new PropertiesTextEditor(this, null);
+
+  }
 }

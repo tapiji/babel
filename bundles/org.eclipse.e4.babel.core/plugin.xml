@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension-point id="org.eclipse.e4.babel.core.api.resourceFactory" name="Resource Factory" schema="schema/org.eclipse.e4.babel.core.api.resourceFactory.exsd"/>
+   <extension-point id="org.eclipse.e4.babel.core.api.resourceManager" name="Resource Manager" schema="schema/org.eclipse.e4.babel.core.api.resourceManager.exsd"/>
+   <extension
+         point="org.eclipse.e4.babel.core.api.resourceFactory">
+      <resource_factory
+            class="org.eclipse.e4.babel.core.internal.resource.StandardResourceFactory"
+            order="9999">
+      </resource_factory>
+      <resource_factory
+            class="org.eclipse.e4.babel.core.internal.resource.NLResourceFactory"
+            order="2">
+      </resource_factory>
+      <resource_factory
+            class="org.eclipse.e4.babel.core.internal.resource.FragmentResourceFactory"
+            order="1">
+      </resource_factory>
+   </extension>
+   <extension
+         point="org.eclipse.e4.babel.core.api.resourceManager">
+      <resource_manager
+            class="org.eclipse.e4.babel.core.internal.resource.ResourceManagers"
+            order="1">
+      </resource_manager>
+   </extension>
+
+</plugin>

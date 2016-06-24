@@ -10,7 +10,7 @@ import org.eclipse.swt.widgets.Display;
 public final class UIUtils {
     
     private UIUtils() {
-        
+        // Only static access allowed
     }
     
     /**

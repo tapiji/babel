@@ -6,8 +6,13 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import org.eclipse.babel.i18n.Messages;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtensionRegistry;
+import org.eclipse.e4.babel.core.BabelExtensionManager;
+import org.eclipse.e4.babel.core.api.IResourceFactory;
+import org.eclipse.e4.babel.core.api.IResourceManager;
 import org.eclipse.e4.babel.core.preference.PropertyPreferences;
-import org.eclipse.e4.babel.editor.model.IResourceBundleEditorService;
 import org.eclipse.e4.babel.editor.model.bundle.listener.BundleChangeListener;
 import org.eclipse.e4.babel.editor.model.bundle.listener.BundleEvent;
 import org.eclipse.e4.babel.editor.preference.APreferencePage;
@@ -64,9 +69,6 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
   private EHandlerService handlerService;
 
   @Inject
-  private IResourceBundleEditorService editor;
-
-  @Inject
   private ESelectionService selectionService;
 
   @Translation
@@ -76,7 +78,9 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
 
   LocalBehaviour local = new LocalBehaviour();
 
+
   private KeyTreeView keyTreeView;
+private IResourceManager resourceManager;
 
   @Inject
   public ResourceBundleEditor(Composite parent) {
@@ -91,20 +95,23 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
   }
 
   @PostConstruct
-  public void createControl(final Composite parent, final Shell shell, MWindow window) {
+  public void createControl(final Composite parent, final Shell shell, MWindow window, BabelExtensionManager manager) {
     Log.d(TAG, "treeViewerPart");
 
     setMinimumCharacters(40);
     IEditorInput file = (IEditorInput) part.getTransientData()
                                            .get("FILE");
+    resourceManager = manager.getResourceManager().get();
 
+
+    
     sashForm = new SashForm(this, SWT.SMOOTH);
 
     keyTreeView = KeyTreeView.create(sashForm, (ResourceBundleEditorContract.View) this);
-    keyTreeView.getTreeViewer()
-               .addSelectionChangedListener(local);
-    keyTreeView.getKeyTree()
-               .addChangeLIstener(local);
+   // keyTreeView.getTreeViewer()
+   //            .addSelectionChangedListener(local);
+    //keyTreeView.getKeyTree()
+   //            .addChangeLIstener(local);
 
     i18nPage = I18nPageView.create(sashForm, resourceProvider);
     sashForm.setWeights(new int[] {25, 75});
@@ -115,6 +122,7 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
     }
 
     setSelection(0);
+
   }
 
   @Inject
@@ -145,6 +153,11 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
   }
 
   @Override
+  public IResourceManager getResourceManager() {
+	  return resourceManager;
+  }
+  
+  @Override
   public ECommandService getCommandService() {
     return commandService;
   }
@@ -164,10 +177,6 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
     return resourceProvider;
   }
 
-  @Override
-  public IResourceBundleEditorService getEditorService() {
-    return editor;
-  }
 
   @Override
   public ESelectionService getSelectionService() {

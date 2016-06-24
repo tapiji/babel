@@ -33,4 +33,5 @@ Import-Package: org.eclipse.e4.babel.editor.text,
  org.eclipse.e4.core.commands,
  org.eclipse.ui,
  org.eclipse.ui.part,
+ org.eclipse.ui.views.contentoutline,
  org.osgi.service.event;version="1.3.0"

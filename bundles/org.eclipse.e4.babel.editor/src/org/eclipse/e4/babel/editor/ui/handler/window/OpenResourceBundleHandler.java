@@ -51,9 +51,13 @@ public class OpenResourceBundleHandler {
             if (null != input) {
                 MPartStack mainStack = (MPartStack) modelService.find("org.eclipse.e4.babel.editor.partstack.editorPartStack", application);
                 MPart part = partService.createPart("org.eclipse.e4.babel.editor.partdescriptor.resourceBundleEditor");
+                
+                part.getTransientData().put("input", input);
+                
                 mainStack.getChildren().add(part);
+               
                 partService.showPart(part, PartState.ACTIVATE);
-                part.getContext().set("input", input);
+               
             } else {
                 Log.d(TAG, "File input is null!");
             }
