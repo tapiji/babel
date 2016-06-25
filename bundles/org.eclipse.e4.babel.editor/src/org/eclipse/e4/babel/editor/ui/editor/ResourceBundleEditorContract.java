@@ -1,6 +1,8 @@
 package org.eclipse.e4.babel.editor.ui.editor;
 
 
+import java.util.Locale;
+
 import org.eclipse.e4.babel.core.api.IResourceManager;
 import org.eclipse.e4.babel.editor.ui.editor.tree.KeyTreeView;
 import org.eclipse.e4.babel.resource.IBabelResourceProvider;
@@ -27,5 +29,7 @@ public interface ResourceBundleEditorContract {
     KeyTreeView getKeyTreeView();
 
 	IResourceManager getResourceManager();
+
+	void setActiveTab(Locale locale);
   }
 }

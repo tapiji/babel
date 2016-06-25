@@ -2,6 +2,11 @@ package org.eclipse.e4.babel.editor.ui.editor;
 
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.TreeMap;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -13,11 +18,12 @@ import org.eclipse.e4.babel.core.BabelExtensionManager;
 import org.eclipse.e4.babel.core.api.IResourceManager;
 import org.eclipse.e4.babel.core.preference.PropertyPreferences;
 import org.eclipse.e4.babel.core.utils.UIUtils;
-import org.eclipse.e4.babel.editor.model.bundle.listener.BundleChangeListener;
+import org.eclipse.e4.babel.editor.model.bundle.listener.IBundleChangeListener;
 import org.eclipse.e4.babel.editor.model.bundle.listener.BundleEvent;
 import org.eclipse.e4.babel.editor.preference.APreferencePage;
+import org.eclipse.e4.babel.editor.text.PropertiesTextEditor;
+import org.eclipse.e4.babel.editor.text.model.SourceEditor;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.page.I18nPageView;
-import org.eclipse.e4.babel.editor.ui.editor.i18n.pageeditor.I18nPageEditorView;
 import org.eclipse.e4.babel.editor.ui.editor.tree.KeyTreeView;
 import org.eclipse.e4.babel.editor.ui.handler.window.OpenResourceBundleHandler;
 import org.eclipse.e4.babel.resource.BabelResourceConstants;
@@ -67,7 +73,6 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
 	@Inject
 	private ESelectionService selectionService;
 
-
 	private I18nPageView i18nPage;
 	private SashForm sashForm;
 
@@ -110,20 +115,44 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
 		keyTreeView.getTreeViewer().addSelectionChangedListener(local);
 		keyTreeView.getKeyTree().addChangeLIstener(local);
 
-		i18nPage = I18nPageView.create(sashForm, resourceProvider);
+		i18nPage = I18nPageView.create(sashForm,  (ResourceBundleEditorContract.View) this ,resourceProvider, resourceManager);
+		
 		sashForm.setWeights(new int[] { 25, 75 });
+		
 		createTab(sashForm, "Properties", BabelResourceConstants.IMG_RESOURCE_BUNDLE);
 
-
 		resourceManager.getSourceEditors().stream().forEach(editor -> {
-			createTab(new I18nPageEditorView(this, editor), UIUtils.getDisplayName(editor.getLocale()),
+			final PropertiesTextEditor textEditor = new PropertiesTextEditor(this, editor.getDocument());
+			createTab(textEditor, UIUtils.getDisplayName(editor.getLocale()),
 					BabelResourceConstants.IMG_RESOURCE_PROPERTY);
+
 		});
-
 		setSelection(0);
-
 	}
 
+	/**
+	 * Change current tab based on locale. If there is no editors associated
+     * with current locale, do nothing.
+	 * 
+	 * @param locale Locale used to identify the tab to change to
+	 */
+	@Override
+	public void setActiveTab(Locale locale) {
+		final List<SourceEditor> editors = resourceManager.getSourceEditors();
+		for (int i = 0; i < editors.size(); i++) {
+			Locale editorLocale = editors.get(i).getLocale();
+			if (editorLocale != null && editorLocale.equals(locale) || editorLocale == null && locale == null) {
+				setSelection(i+1);
+				break;
+			}
+		}
+	}
+
+	/**
+	 * Change the visibility of tree view.
+	 * 
+	 * @param visibility True hide tree view otherwise show tree view
+	 */
 	@Inject
 	@Optional
 	private void onTreeViewVisibilityChange(@UIEventTopic(TOPIC_TREE_VIEW_VISIBILITY) final boolean visibility) {
@@ -134,6 +163,10 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
 		}
 	}
 
+	/**
+	 * Refresh layout
+	 * @param visibility
+	 */
 	@Inject
 	@Optional
 	public void redrawLayout(@UIEventTopic(APreferencePage.TOPIC_REFRESH_LAYOUT) final String visibility) {
@@ -185,52 +218,49 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
 		return keyTreeView;
 	}
 
-	private class LocalBehaviour implements FocusListener, BundleChangeListener, ISelectionChangedListener {
+	private class LocalBehaviour implements FocusListener, IBundleChangeListener, ISelectionChangedListener {
 
 		@Override
 		public void selectionChanged(SelectionChangedEvent event) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public <T> void add(BundleEvent<T> event) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public <T> void remove(BundleEvent<T> event) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public <T> void modify(BundleEvent<T> event) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public <T> void select(BundleEvent<T> event) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void focusGained(FocusEvent e) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void focusLost(FocusEvent e) {
 			// TODO Auto-generated method stub
-			
+
 		}
-
-
-
 
 	}
 }

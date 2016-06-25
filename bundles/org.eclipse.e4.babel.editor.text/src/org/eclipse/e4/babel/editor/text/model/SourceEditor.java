@@ -1,4 +1,4 @@
-package org.eclipse.e4.babel.editor.text;
+package org.eclipse.e4.babel.editor.text.model;
 /*
  * Copyright (C) 2003-2014  Pascal Essiembre
  *
@@ -144,8 +144,8 @@ public class SourceEditor {
 	}
 
 	public String getCurrentKey() {
-
-      /*  if (textEditor.getSelectionProvider().getSelection() 
+/*
+        if (textEditor.getSelectionProvider().getSelection() 
                 instanceof TextSelection) {
             TextSelection selection = (TextSelection) 
                     textEditor.getSelectionProvider().getSelection();

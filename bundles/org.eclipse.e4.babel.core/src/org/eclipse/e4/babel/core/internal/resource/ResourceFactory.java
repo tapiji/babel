@@ -22,6 +22,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Locale.Builder;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
@@ -33,8 +34,8 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.e4.babel.core.api.IResourceFactory;
 import org.eclipse.e4.babel.core.internal.createfile.PropertiesFileCreator;
 import org.eclipse.e4.babel.core.utils.UIUtils;
-import org.eclipse.e4.babel.editor.text.SourceEditor;
 import org.eclipse.e4.babel.editor.text.document.SourceViewerDocument;
+import org.eclipse.e4.babel.editor.text.model.SourceEditor;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.ui.PartInitException;
@@ -207,8 +208,7 @@ abstract class ResourceFactory implements IResourceFactory {
 	/**
 	 * Parses the specified bundle name and returns the locale.
 	 * 
-	 * @param resource
-	 *            the resource
+	 * @param resource the resource
 	 * @return the locale or null if none
 	 */
 	protected static Locale parseBundleName(IResource resource) {
@@ -223,7 +223,7 @@ abstract class ResourceFactory implements IResourceFactory {
 		Locale locale = null;
 		switch (localeSections.size()) {
 		case 1:
-			locale = new Locale(localeSections.get(0));
+			locale = new Locale(localeSections.get(0), localeSections.get(0).toUpperCase());
 			break;
 		case 2:
 			locale = new Locale(localeSections.get(0), localeSections.get(1));
@@ -236,7 +236,7 @@ abstract class ResourceFactory implements IResourceFactory {
 		}
 		return locale;
 	}
-
+	
 	protected SourceEditor createEditor(IResource resource, Locale locale) {
 		return SourceEditor.create(SourceViewerDocument.create((IFile) resource),locale, (IFile) resource);
 	}

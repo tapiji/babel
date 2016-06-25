@@ -1,7 +1,7 @@
 package org.eclipse.e4.babel.editor.model.bundle.listener;
 
 
-public abstract class BundleChangeAdapter implements BundleChangeListener {
+public abstract class BundleChangeAdapter implements IBundleChangeListener {
 
   @Override
   public <T> void add(BundleEvent<T> event) {

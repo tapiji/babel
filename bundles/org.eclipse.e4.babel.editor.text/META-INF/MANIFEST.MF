@@ -4,7 +4,8 @@ Bundle-Name: Text
 Bundle-SymbolicName: org.eclipse.e4.babel.editor.text;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Export-Package: org.eclipse.e4.babel.editor.text,
- org.eclipse.e4.babel.editor.text.document
+ org.eclipse.e4.babel.editor.text.document,
+ org.eclipse.e4.babel.editor.text.model
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Import-Package: javax.inject,
  org.eclipse.core.resources,
@@ -16,6 +17,7 @@ Import-Package: javax.inject,
  org.eclipse.swt,
  org.eclipse.swt.custom,
  org.eclipse.swt.graphics,
+ org.eclipse.swt.layout,
  org.eclipse.swt.widgets,
  org.eclipse.ui.texteditor,
  org.eclipselabs.e4.tapiji.logger

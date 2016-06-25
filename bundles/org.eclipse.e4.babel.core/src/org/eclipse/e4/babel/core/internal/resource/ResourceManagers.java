@@ -40,7 +40,7 @@ import org.eclipse.e4.babel.editor.model.tree.KeyTreeItem;
 import org.eclipse.e4.babel.editor.model.updater.FlatKeyTreeUpdater;
 import org.eclipse.e4.babel.editor.model.updater.GroupedKeyTreeUpdater;
 import org.eclipse.e4.babel.editor.model.updater.KeyTreeUpdater;
-import org.eclipse.e4.babel.editor.text.SourceEditor;
+import org.eclipse.e4.babel.editor.text.model.SourceEditor;
 import org.eclipse.e4.core.di.annotations.Creatable;
 import org.eclipse.ui.PartInitException;
 import org.eclipselabs.e4.tapiji.logger.Log;
@@ -109,6 +109,7 @@ public final class ResourceManagers implements IResourceManager {
 	 * 
 	 * @return bundle group
 	 */
+	@Override
 	public BundleGroup getBundleGroup() {
 		return bundleGroup;
 	}
@@ -118,6 +119,7 @@ public final class ResourceManagers implements IResourceManager {
 	 * 
 	 * @return locales
 	 */
+	@Override
 	public List<Locale> getLocales() {
 		return locales;
 	}

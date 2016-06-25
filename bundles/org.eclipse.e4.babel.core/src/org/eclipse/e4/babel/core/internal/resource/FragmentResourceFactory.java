@@ -40,7 +40,7 @@ import org.eclipse.e4.babel.core.internal.createfile.FragmentNLPropertiesFileCre
 import org.eclipse.e4.babel.core.internal.createfile.FragmentPropertiesFileCreator;
 import org.eclipse.e4.babel.core.preference.PropertyPreferences;
 import org.eclipse.e4.babel.core.utils.PDEUtils;
-import org.eclipse.e4.babel.editor.text.SourceEditor;
+import org.eclipse.e4.babel.editor.text.model.SourceEditor;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 

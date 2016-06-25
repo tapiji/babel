@@ -7,7 +7,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.e4.babel.core.internal.createfile.PropertiesFileCreator;
-import org.eclipse.e4.babel.editor.text.SourceEditor;
+import org.eclipse.e4.babel.editor.text.model.SourceEditor;
 import org.eclipse.ui.PartInitException;
 
 

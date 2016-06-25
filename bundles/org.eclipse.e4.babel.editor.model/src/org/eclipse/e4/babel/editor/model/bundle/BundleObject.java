@@ -3,7 +3,7 @@ package org.eclipse.e4.babel.editor.model.bundle;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.eclipse.e4.babel.editor.model.bundle.listener.BundleChangeListener;
+import org.eclipse.e4.babel.editor.model.bundle.listener.IBundleChangeListener;
 import org.eclipse.e4.babel.editor.model.bundle.listener.BundleEvent;
 import org.eclipselabs.e4.tapiji.logger.Log;
 
@@ -11,7 +11,7 @@ import org.eclipselabs.e4.tapiji.logger.Log;
 public abstract class BundleObject {
 
   private static final String TAG = BundleObject.class.getSimpleName();
-  private final List<BundleChangeListener> listeners = new ArrayList<>();
+  private final List<IBundleChangeListener> listeners = new ArrayList<>();
 
   protected <T> void fireAdd(final T object) {
     listeners.stream()
@@ -34,13 +34,13 @@ public abstract class BundleObject {
              .forEach(listener -> listener.modify(BundleEvent.create(object)));
   }
 
-  public void addChangeLIstener(final BundleChangeListener listener) {
+  public void addChangeLIstener(final IBundleChangeListener listener) {
     Log.d(TAG, "addChangeLIstener: " + listener.getClass()
                                                .getSimpleName() + " listener cnt: " + listeners.size());
     listeners.add(0, listener);
   }
 
-  public void removeChangeListener(final BundleChangeListener listener) {
+  public void removeChangeListener(final IBundleChangeListener listener) {
     Log.d(TAG, "removeChangeListener: " + listener.getClass()
                                                   .getSimpleName() + " listener cnt: " + listeners.size());
     listeners.remove(listener);
