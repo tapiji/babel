@@ -1,13 +1,18 @@
 package org.eclipse.e4.babel.editor.ui.editor.i18n.pageentry;
 
 
+import java.util.Collection;
 import java.util.Locale;
 
 import org.eclipse.e4.babel.core.api.IResourceManager;
+import org.eclipse.e4.babel.editor.model.bundle.BundleEntry;
 import org.eclipse.e4.babel.editor.ui.BasePresenter;
 import org.eclipse.e4.babel.editor.ui.BaseView;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.page.I18nPageContract;
+import org.eclipse.e4.babel.editor.ui.editor.i18n.page.I18nPageContract.View;
 import org.eclipse.e4.babel.resource.IBabelResourceProvider;
+import org.eclipse.jface.text.Document;
+import org.eclipse.jface.text.IDocument;
 import org.eclipse.swt.graphics.Image;
 
 
@@ -19,11 +24,17 @@ public interface I18nPageEntryContract {
 
         void setFocusTextView();
 
-        void addPageListener(I18nPageContract.View pageListener);
-
         int getCoordinateY();
 
-		void refresh(String key);
+		Presenter getPresenter();
+
+		void updateTextView(IDocument document, boolean enabled);
+
+		void setDuplicateButtonVisibility(boolean visible);
+
+		void setSimilarButtonVisibility(boolean visible);
+
+		String getText();
     }
 
     interface Presenter extends BasePresenter {
@@ -38,5 +49,24 @@ public interface I18nPageEntryContract {
 
 		void goToTab();
 
+		void findDuplicates(BundleEntry bundleEntry);
+
+		void findSimilar(BundleEntry bundleEntry);
+
+		void updateDocument(String key);
+
+		boolean isKeyAvailable(String key);
+
+		void updateBundleOnChanges();
+
+		String getActiveKey();
+
+		Collection<BundleEntry> getSimilars();
+
+		Collection<BundleEntry> getDuplicates();
+
+		I18nPageContract.View getI18nPageView();
+
     }
 }
+

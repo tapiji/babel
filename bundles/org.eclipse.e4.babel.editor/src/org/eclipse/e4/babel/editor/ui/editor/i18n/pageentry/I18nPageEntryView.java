@@ -1,21 +1,25 @@
 package org.eclipse.e4.babel.editor.ui.editor.i18n.pageentry;
 
+import java.text.MessageFormat;
+import java.util.Collection;
+import java.util.LinkedList;
 import java.util.Locale;
 
 import org.eclipse.e4.babel.core.api.IResourceManager;
 import org.eclipse.e4.babel.core.preference.PropertyPreferences;
 import org.eclipse.e4.babel.core.utils.UIUtils;
-import org.eclipse.e4.babel.editor.ui.editor.i18n.page.I18nPageView;
-import org.eclipse.e4.babel.editor.model.bundle.BundleEntry;
-import org.eclipse.e4.babel.editor.model.bundle.BundleGroup;
-import org.eclipse.e4.babel.editor.text.model.SourceEditor;
-import org.eclipse.e4.babel.editor.ui.editor.ResourceBundleEditorContract.View;
+import org.eclipse.e4.babel.editor.text.document.SourceViewerDocument;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.page.I18nPageContract;
+import org.eclipse.e4.babel.editor.ui.editor.i18n.page.I18nPageView;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.pageentry.I18nPageEntryContract.Presenter;
+import org.eclipse.e4.babel.resource.BabelResourceConstants;
 import org.eclipse.e4.babel.resource.IBabelResourceProvider;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.FontDescriptor;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.ITextListener;
+import org.eclipse.jface.text.TextEvent;
 import org.eclipse.jface.text.TextViewer;
 import org.eclipse.jface.text.TextViewerUndoManager;
 import org.eclipse.swt.SWT;
@@ -29,7 +33,6 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.TraverseEvent;
 import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.graphics.Color;
@@ -43,22 +46,27 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipselabs.e4.tapiji.logger.Log;
 import org.eclipselabs.e4.tapiji.resource.TapijiResourceConstants;
 
-public final class I18nPageEntry extends Composite implements KeyListener, TraverseListener, SelectionListener,
-		FocusListener, MouseListener, I18nPageEntryContract.View {
+public final class I18nPageEntryView extends Composite implements KeyListener, TraverseListener,
+		FocusListener, MouseListener, I18nPageEntryContract.View, ITextListener {
 
 	private static final int UNDO_LEVEL = 20;
-	private static final String TAG = I18nPageEntry.class.getSimpleName();
+	private static final String TAG = I18nPageEntryView.class.getSimpleName();
 
 	private TextViewerUndoManager undoManager = new TextViewerUndoManager(UNDO_LEVEL);
+	private Collection<FocusListener> focusListeners = new LinkedList<FocusListener>();
 	private TextViewer textView;
-	private I18nPageContract.View listener;
+
 	private Label expandIcon;
 	private StyledText textWidget;
 	private Composite toolbar;
 	private ScrolledComposite i18nPage;
 	private Presenter presenter;
+	private Button goToButton;
+	private Button duplicateButton;
+	private Button similarButton;
+	private String textBeforeUpdate;
 
-	private I18nPageEntry(final Composite parent, ScrolledComposite scrolled, final int style) {
+	private I18nPageEntryView(final Composite parent, ScrolledComposite scrolled, final int style) {
 		super(parent, style);
 
 		this.i18nPage = scrolled;
@@ -85,10 +93,10 @@ public final class I18nPageEntry extends Composite implements KeyListener, Trave
 		toolbar.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 		collapseExpandIcon(toolbar);
-		localeNameLabel("Albanien", toolbar);
+		localeNameLabel(toolbar);
 		countryFlag(toolbar);
 		duplicateButton(toolbar);
-		uncommentButton(toolbar);
+		similarButton(toolbar);
 		goToButton(toolbar);
 
 		textViewer();
@@ -99,43 +107,85 @@ public final class I18nPageEntry extends Composite implements KeyListener, Trave
 		textView.setDocument(new Document());
 		textView.setUndoManager(undoManager);
 		textView.activatePlugins();
+		textView.addTextListener(this);
 
 		textWidget = textView.getTextWidget();
 		final GridData textViewStyleData = new GridData(SWT.FILL, SWT.BEGINNING, true, true, 0, 0);
 		textViewStyleData.minimumHeight = PropertyPreferences.getInstance().getI18nEditorHeight();
 		textWidget.setLayoutData(textViewStyleData);
-		textWidget.addFocusListener(this);
+		textWidget.addFocusListener(new FocusListener() {
+			public void focusGained(FocusEvent event) {
+				textBeforeUpdate = textWidget.getText();
+			}
+
+			public void focusLost(FocusEvent event) {
+				presenter.updateBundleOnChanges();
+			}
+		});
 		textWidget.addTraverseListener(this);
 		textWidget.addKeyListener(this);
+		textWidget.addFocusListener(this);
+
 	}
 
 	private void duplicateButton(Composite toolBar) {
 		GridData gridData = new GridData();
 		gridData.horizontalAlignment = GridData.END;
 		gridData.grabExcessHorizontalSpace = true;
-		Button button = new Button(toolBar, SWT.TOGGLE);
-		button.setText("=");
-		button.setLayoutData(gridData);
-		button.addListener(SWT.Selection, (e) -> System.out.println("Duplicate button click " + e));
+		duplicateButton = new Button(toolBar, SWT.TOGGLE);
+		duplicateButton.setImage(presenter.loadImage(BabelResourceConstants.IMG_SIMILAR));
+		duplicateButton.setLayoutData(gridData);
+		duplicateButton.setVisible(false);
+		duplicateButton.addListener(SWT.Selection, (e) -> {
+			StringBuilder foundKeys = new StringBuilder();
+			foundKeys.append("\n\n");
+			presenter.getDuplicates().forEach(duplicate -> {
+				foundKeys.append("        ");
+				foundKeys.append(duplicate.getKey());
+				foundKeys.append("\n");
+			});
+			showVisitorDialog("Gleiche(r) Wert(e) gefunden.",
+					"Die Werte folgender Schl\u00FCssel sind innerhalb der Lokalen \"{1}\" beim Schl\u00FCssel \"{0}\" identisch:",
+					foundKeys);
+		});
 	}
 
-	private void uncommentButton(Composite toolBar) {
+	private void similarButton(Composite toolBar) {
 		GridData gridData = new GridData();
 		gridData.horizontalAlignment = GridData.END;
-		Button button = new Button(toolBar, SWT.TOGGLE);
-		button.setText("#");
-		button.setLayoutData(gridData);
-		button.addListener(SWT.Selection, (e) -> System.out.println("Uncomment button click" + e));
+		similarButton = new Button(toolBar, SWT.TOGGLE);
+		similarButton.setImage(presenter.loadImage(BabelResourceConstants.IMG_SIMILAR));
+		similarButton.setLayoutData(gridData);
+		similarButton.setVisible(false);
+		similarButton.addListener(SWT.Selection, (e) -> {
+			StringBuilder foundKeys = new StringBuilder();
+			foundKeys.append("\n\n");
+			presenter.getSimilars().forEach(similar -> {
+				foundKeys.append("        ");
+				foundKeys.append(similar.getKey());
+				foundKeys.append("\n");
+			});
+			showVisitorDialog("Ähnliche Werte gefunden. Klicken für Details.",
+					"Die Werte folgender Schl\u00FCssel sind innerhalb der Lokalen \"{1}\" beim Schl\u00FCssel \"{0}\" ähnlich:",
+					foundKeys);
+		});
+	}
+
+	private void showVisitorDialog(String head, String message, StringBuilder foundKeys) {
+		final String body = MessageFormat.format(message, presenter.getActiveKey(),
+				UIUtils.getDisplayName(presenter.getLocale())) + foundKeys.toString();
+		MessageDialog.openInformation(getShell(), head, body);
 	}
 
 	private void goToButton(Composite toolBar) {
 		GridData gridData = new GridData();
 		gridData.horizontalAlignment = GridData.END;
-		Button button = new Button(toolBar, SWT.ARROW | SWT.RIGHT);
-		button.setText("");
-		button.setToolTipText("Go to the corresponding property file.");
-		button.setLayoutData(gridData);
-		button.addSelectionListener(new SelectionAdapter() {
+
+		this.goToButton = new Button(toolBar, SWT.ARROW | SWT.RIGHT);
+		this.goToButton.setText("");
+		this.goToButton.setToolTipText("Go to the corresponding property file.");
+		this.goToButton.setLayoutData(gridData);
+		this.goToButton.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -144,7 +194,7 @@ public final class I18nPageEntry extends Composite implements KeyListener, Trave
 		});
 	}
 
-	private void localeNameLabel(final String string, Composite toolBar) {
+	private void localeNameLabel(Composite toolBar) {
 		final Label localeName = new Label(toolBar, SWT.NONE);
 		FontDescriptor boldDescriptor = FontDescriptor.createFrom(localeName.getFont()).setStyle(SWT.BOLD);
 		Font boldFont = boldDescriptor.createFont(localeName.getDisplay());
@@ -196,29 +246,44 @@ public final class I18nPageEntry extends Composite implements KeyListener, Trave
 		} else if (isKeyCombination(event, SWT.CTRL, 'a')) {
 			textView.setSelectedRange(0, textView.getDocument().getLength());
 		} else {
-
+			StyledText eventBox = (StyledText) event.widget;
+			SourceViewerDocument editor = presenter.getResourceManager().getSourceEditor(presenter.getLocale())
+					.getDocument();
+			// Text field has changed: make editor dirty if not already
+			if (textBeforeUpdate != null && !textBeforeUpdate.equals(eventBox.getText())) {
+				// Make the editor dirty if not already. If it is,
+				// we wait until field focus lost (or save) to
+				// update it completely.
+				/*
+				 * if (!editor.isDirty()) { int caretPosition =
+				 * eventBox.getCaretOffset(); presenter.updateBundleOnChanges();
+				 * eventBox.setSelection(caretPosition); }
+				 */
+			}
 		}
 	}
 
 	@Override
 	public void keyTraversed(final TraverseEvent event) {
 		Log.d(TAG, "keyTraversed: " + event.toString());
-		if (listener != null) {
-			if (event.character == SWT.TAB) {
-				event.doit = true;
-				event.detail = SWT.TRAVERSE_NONE;
-				if (event.stateMask == 0) {
-					listener.setNextFocusDown();
-				} else if (event.stateMask == SWT.SHIFT) {
-					listener.setNextFocusUp();
-				}
-			} else if ((event.keyCode == SWT.ARROW_DOWN) && (event.stateMask == SWT.CTRL)) {
-				event.doit = true;
-				event.detail = SWT.TRAVERSE_NONE;
-			} else if ((event.keyCode == SWT.ARROW_UP) && (event.stateMask == SWT.CTRL)) {
-				event.doit = true;
-				event.detail = SWT.TRAVERSE_NONE;
+		if (event.character == SWT.TAB && !PropertyPreferences.getInstance().isFieldTabInsert()) {
+			event.doit = true;
+			event.detail = SWT.TRAVERSE_NONE;
+			if (event.stateMask == 0) {
+				textView.setSelectedRange(0, 0);
+				presenter.getI18nPageView().setNextFocusDown();
+			} else if (event.stateMask == SWT.SHIFT) {
+				textView.setSelectedRange(0, 0);
+				presenter.getI18nPageView().setNextFocusUp();
 			}
+		} else if ((event.keyCode == SWT.ARROW_DOWN) && (event.stateMask == SWT.CTRL)) {
+			event.doit = true;
+			event.detail = SWT.TRAVERSE_NONE;
+			presenter.getI18nPageView().selectNextTreeEntry();
+		} else if ((event.keyCode == SWT.ARROW_UP) && (event.stateMask == SWT.CTRL)) {
+			event.doit = true;
+			event.detail = SWT.TRAVERSE_NONE;
+			presenter.getI18nPageView().selectPreviousTreeEntry();
 		}
 	}
 
@@ -237,34 +302,21 @@ public final class I18nPageEntry extends Composite implements KeyListener, Trave
 	}
 
 	@Override
-	public void widgetSelected(final SelectionEvent event) {
-		Log.d(TAG, "widgetSelected: " + event.toString());
-		if (null != listener) {
-			listener.onLocaleClick();
-		}
-	}
-
-	@Override
-	public void widgetDefaultSelected(final SelectionEvent e) {
-	}
-
-	@Override
-	public void addPageListener(final I18nPageContract.View pageListener) {
-		if (null != pageListener) {
-			listener = pageListener;
-		}
-	}
-
-	@Override
-	public void focusGained(final FocusEvent event) {
-		Log.d(TAG, "focusGained: " + event.toString());
-		if (null != listener) {
-			listener.onFocusChange(this);
-		}
+	public void focusGained(final FocusEvent e) {
+		e.widget = I18nPageEntryView.this;
+		focusListeners.forEach(listener->listener.focusGained(e));
 	}
 
 	@Override
 	public void focusLost(final FocusEvent e) {
+		e.widget = I18nPageEntryView.this;
+		focusListeners.forEach(listener->listener.focusLost(e));
+	}
+
+	@Override
+	public void addFocusListener(FocusListener listener) {
+		if (!focusListeners.contains(listener))
+			focusListeners.add(listener);
 	}
 
 	@Override
@@ -291,7 +343,8 @@ public final class I18nPageEntry extends Composite implements KeyListener, Trave
 
 	@Override
 	public void updateEditorHeight() {
-		((GridData) textWidget.getLayoutData()).minimumHeight = PropertyPreferences.getInstance().getI18nEditorHeight();
+		((GridData) this.textWidget.getLayoutData()).minimumHeight = PropertyPreferences.getInstance()
+				.getI18nEditorHeight();
 		layout(true, true);
 	}
 
@@ -306,55 +359,58 @@ public final class I18nPageEntry extends Composite implements KeyListener, Trave
 		presenter.init();
 	}
 
-	public static I18nPageEntry create(final Composite parent, ScrolledComposite comp,
+	public static I18nPageEntryView create(final Composite parent, ScrolledComposite comp,
 			final IBabelResourceProvider resourceProvider, IResourceManager resourceManager, Locale locale,
-			View editorView) {
-		final I18nPageEntry pageView = new I18nPageEntry(parent, comp, SWT.NONE);
-		I18nPageEntryPresenter.create(pageView, resourceManager, resourceProvider, locale, editorView);
+			I18nPageContract.View i18nPageView) {
+		final I18nPageEntryView pageView = new I18nPageEntryView(parent, comp, SWT.NONE);
+		I18nPageEntryPresenter.create(pageView, resourceManager, resourceProvider, locale, i18nPageView);
 		pageView.onCreate();
 		return pageView;
 	}
 
 	@Override
-	public void refresh(String key) {
-		BundleGroup bundleGroup = presenter.getResourceManager().getBundleGroup();
-
-		IDocument document = new Document();
-		if (key != null && bundleGroup.isKey(key)) {
-			BundleEntry bundleEntry = bundleGroup.getBundleEntry(presenter.getLocale(), key);
-			SourceEditor sourceEditor = presenter.getResourceManager().getSourceEditor(presenter.getLocale());
-			if (bundleEntry == null) {
-				document.set("");
-			} else {
-				String value = bundleEntry.getValue();
-				document.set(value);
-			}
-			
-	            textWidget.setEnabled(!sourceEditor.isReadOnly());
-	            textWidget.setEditable(true);
-	            textWidget.setBackground(getDisplay().getSystemColor(SWT.COLOR_WHITE));
-	           /* gotoButton.setEnabled(true);
-	            if (RBEPreferences.getReportDuplicateValues()) {
-	                findDuplicates(bundleEntry);
-	            } else {
-	                duplVisitor = null;
-	            }
-	            if (RBEPreferences.getReportSimilarValues()) {
-	                findSimilar(bundleEntry);
-	            } else {
-	                similarVisitor = null;
-	            }*/
-		}else {
-          /*  commentedCheckbox.setSelection(false);
-            commentedCheckbox.setEnabled(false);
-            document.set("");
-            textBox.setEnabled(false);
-            gotoButton.setEnabled(false);
-            duplButton.setVisible(false);
-            simButton.setVisible(false);
-            textBox.setEditable(false);*/
-			textWidget.setBackground(new Color(getDisplay(), 245, 245, 245));
-        }
-		textView.setDocument(document);   
+	public String getText() {
+		return this.textView.getDocument().get();
 	}
+
+	@Override
+	public void updateTextView(IDocument document, boolean enabled) {
+		if (enabled) {
+			this.textWidget
+					.setEnabled(!presenter.getResourceManager().getSourceEditor(presenter.getLocale()).isReadOnly());
+			this.textWidget.setEditable(true);
+			this.textWidget.setBackground(getDisplay().getSystemColor(SWT.COLOR_WHITE));
+			this.goToButton.setEnabled(true);
+		} else {
+			this.goToButton.setEnabled(false);
+			this.duplicateButton.setVisible(false);
+			this.similarButton.setVisible(false);
+			this.textWidget.setEnabled(false);
+			this.textView.setEditable(false);
+			this.textWidget.setBackground(new Color(getDisplay(), 245, 245, 245));
+		}
+		this.textView.setDocument(document);
+	}
+
+	@Override
+	public Presenter getPresenter() {
+		return this.presenter;
+	}
+
+	@Override
+	public void setDuplicateButtonVisibility(boolean visible) {
+		this.duplicateButton.setVisible(visible);
+	}
+
+	@Override
+	public void setSimilarButtonVisibility(boolean visible) {
+		this.similarButton.setVisible(visible);
+	}
+
+	String _oldText = null;
+
+	@Override
+	public void textChanged(TextEvent event) {
+	}
+
 }

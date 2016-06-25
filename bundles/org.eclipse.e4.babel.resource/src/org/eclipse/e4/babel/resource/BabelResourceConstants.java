@@ -32,6 +32,10 @@ public final class BabelResourceConstants {
     public static final String IMG_OVERLAY_WARNING = "icons/16x16/warning.png";
     
     public static final String IMG_FOLDER_FLAGS = "icons/flags/";
+    
+    public static final String IMG_SIMILAR = "icons/similar.gif";
+    public static final String IMG_DUPLICATE = "icons/duplicate.gif";
+
 
 
 

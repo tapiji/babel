@@ -400,7 +400,7 @@ public final class PropertyPreferences {
         PREFERENCES.putDouble(REPORT_SIMILAR_VALUES_PRECISION, reportSimValuesPrecision);
     }
 
-    public boolean isReportSimliarValuesLevensthein() {
+    public boolean isReportSimilarValuesLevensthein() {
         return PREFERENCES.getBoolean(REPORT_SIMILAR_VALUES_LEVENSTHEIN, false);
     }
 

@@ -100,7 +100,7 @@ public final class PreferencePerformancePage extends APreferencePage {
 
     private void initValues() {
         reportSimPrecision.setText(String.valueOf(PropertyPreferences.getInstance().getReportSimilarValuesPrecision()));
-        reportSimValsMode[1].setSelection(PropertyPreferences.getInstance().isReportSimliarValuesLevensthein());
+        reportSimValsMode[1].setSelection(PropertyPreferences.getInstance().isReportSimilarValuesLevensthein());
         reportSimValsMode[0].setSelection(PropertyPreferences.getInstance().isReportSimilarValuesWordCompare());
         reportSimVals.setSelection(PropertyPreferences.getInstance().isReportSimilarValues());
         reportDuplVals.setSelection(PropertyPreferences.getInstance().isReportDuplicateValues());

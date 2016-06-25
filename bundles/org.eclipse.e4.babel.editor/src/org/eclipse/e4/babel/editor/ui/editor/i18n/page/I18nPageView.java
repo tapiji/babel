@@ -14,7 +14,7 @@ import org.eclipse.e4.babel.editor.model.tree.KeyTreeItem;
 import org.eclipse.e4.babel.editor.ui.editor.ResourceBundleEditorContract;
 import org.eclipse.e4.babel.editor.ui.editor.ResourceBundleEditorContract.View;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.page.I18nPageContract.Presenter;
-import org.eclipse.e4.babel.editor.ui.editor.i18n.pageentry.I18nPageEntry;
+import org.eclipse.e4.babel.editor.ui.editor.i18n.pageentry.I18nPageEntryView;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.pageentry.I18nPageEntryContract;
 import org.eclipse.e4.babel.resource.IBabelResourceProvider;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -49,8 +49,7 @@ public final class I18nPageView extends ScrolledComposite implements I18nPageCon
         
         editorView.getKeyTreeView().getTreeViewer().addSelectionChangedListener(localBehaviour);
         resourceManager.getLocales().stream().forEach(locale -> {
-            final I18nPageEntryContract.View entry = I18nPageEntry.create(i18nEntryComposite,(ScrolledComposite)this, resourceProvider, resourceManager, locale, editorView);
-            entry.addPageListener(this);
+            final I18nPageEntryContract.View entry = I18nPageEntryView.create(i18nEntryComposite,(ScrolledComposite)this, resourceProvider, resourceManager, locale, this);
             pageEntries.add(entry);	
         });
 
@@ -81,7 +80,7 @@ public final class I18nPageView extends ScrolledComposite implements I18nPageCon
     public void refreshTextBoxes() {
         String key = getSelectedKey();
         pageEntries.forEach(entry -> {
-        	entry.refresh(key);
+        	entry.getPresenter().updateDocument(key);
         });
     }
     
@@ -119,7 +118,7 @@ public final class I18nPageView extends ScrolledComposite implements I18nPageCon
     }
 
     @Override
-    public void onFocusChange(final I18nPageEntry bundleEntry) {
+    public void onFocusChange(final I18nPageEntryView bundleEntry) {
         activeBundleEntry = bundleEntry;
     }
 
@@ -167,6 +166,30 @@ public final class I18nPageView extends ScrolledComposite implements I18nPageCon
 		}
     	
     }
+
+	@Override
+	public ResourceBundleEditorContract.View getResourceBundleEditor() {
+		return editorView;
+	}
+
+	@Override
+	public void selectNextTreeEntry() {
+      /*  activeEntry.updateBundleOnChanges();
+        String nextKey = resourceMediator.getBundleGroup().getNextKey(
+                getSelectedKey());
+        if (nextKey == null)
+            return;
+
+        Locale currentLocale = activeEntry.getLocale();
+        resourceMediator.getKeyTree().selectKey(nextKey);
+        focusBundleEntryComposite(currentLocale);*/
+	}
+
+	@Override
+	public void selectPreviousTreeEntry() {
+		// TODO Auto-generated method stub
+		
+	}
     
     
 }

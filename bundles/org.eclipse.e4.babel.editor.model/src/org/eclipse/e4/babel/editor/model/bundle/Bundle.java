@@ -9,6 +9,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
+
+import org.eclipse.e4.babel.editor.model.checks.visitor.DuplicateValuesVisitor;
+import org.eclipse.e4.babel.editor.model.checks.visitor.SimilarValuesVisitor;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -144,4 +147,14 @@ public final class Bundle extends BundleObject {
   public String toString() {
     return "Bundle [locale=" + locale + ", comment=" + comment + "]";
   }
+
+	public void accept(SimilarValuesVisitor similarVisitor, BundleEntry bundleEntry) {
+	// TODO Auto-generated method stub
+	
+	}
+
+	public void accept(DuplicateValuesVisitor duplVisitor, BundleEntry bundleEntry) {
+		// TODO Auto-generated method stub
+		
+	}
 }
