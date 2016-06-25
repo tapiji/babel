@@ -2,6 +2,7 @@ package org.eclipse.e4.babel.editor.ui.editor;
 
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
@@ -13,12 +14,18 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResourceChangeEvent;
+import org.eclipse.core.resources.IResourceChangeListener;
+import org.eclipse.core.resources.IResourceDelta;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.e4.babel.core.BabelExtensionManager;
 import org.eclipse.e4.babel.core.api.IResourceManager;
 import org.eclipse.e4.babel.core.preference.PropertyPreferences;
 import org.eclipse.e4.babel.core.utils.UIUtils;
 import org.eclipse.e4.babel.editor.model.bundle.listener.IBundleChangeListener;
+import org.eclipse.e4.babel.editor.model.tree.KeyTree;
 import org.eclipse.e4.babel.editor.model.bundle.listener.BundleEvent;
 import org.eclipse.e4.babel.editor.preference.APreferencePage;
 import org.eclipse.e4.babel.editor.text.PropertiesTextEditor;
@@ -54,7 +61,8 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
 	private static final String TAG = ResourceBundleEditor.class.getSimpleName();
 	private static final String BOTTOM_MENU_ID = "org.eclipse.e4.babel.editor.toolbar.toolbar";
 	private static final String TREE_VIEWER_MENU_ID = "org.eclipse.e4.babel.editor.popupmenu.treePopupMenu";
-
+	private List<IPath> paths = new ArrayList<IPath>();
+	private ResourceChangeListener resourceChangeListener = new ResourceChangeListener();
 	@Inject
 	private EMenuService menuService;
 
@@ -107,6 +115,9 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
 			e.printStackTrace();
 		}
 
+		ResourcesPlugin.getWorkspace().addResourceChangeListener(resourceChangeListener,
+				IResourceChangeEvent.POST_CHANGE);
+
 		Log.d(TAG, "KEYTREE: " + resourceManager.getKeyTree().toString());
 
 		sashForm = new SashForm(this, SWT.SMOOTH);
@@ -115,10 +126,11 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
 		keyTreeView.getTreeViewer().addSelectionChangedListener(local);
 		keyTreeView.getKeyTree().addChangeLIstener(local);
 
-		i18nPage = I18nPageView.create(sashForm,  (ResourceBundleEditorContract.View) this ,resourceProvider, resourceManager);
-		
+		i18nPage = I18nPageView.create(sashForm, (ResourceBundleEditorContract.View) this, resourceProvider,
+				resourceManager);
+
 		sashForm.setWeights(new int[] { 25, 75 });
-		
+
 		createTab(sashForm, "Properties", BabelResourceConstants.IMG_RESOURCE_BUNDLE);
 
 		resourceManager.getSourceEditors().stream().forEach(editor -> {
@@ -132,9 +144,10 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
 
 	/**
 	 * Change current tab based on locale. If there is no editors associated
-     * with current locale, do nothing.
+	 * with current locale, do nothing.
 	 * 
-	 * @param locale Locale used to identify the tab to change to
+	 * @param locale
+	 *            Locale used to identify the tab to change to
 	 */
 	@Override
 	public void setActiveTab(Locale locale) {
@@ -142,7 +155,7 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
 		for (int i = 0; i < editors.size(); i++) {
 			Locale editorLocale = editors.get(i).getLocale();
 			if (editorLocale != null && editorLocale.equals(locale) || editorLocale == null && locale == null) {
-				setSelection(i+1);
+				setSelection(i + 1);
 				break;
 			}
 		}
@@ -151,7 +164,8 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
 	/**
 	 * Change the visibility of tree view.
 	 * 
-	 * @param visibility True hide tree view otherwise show tree view
+	 * @param visibility
+	 *            True hide tree view otherwise show tree view
 	 */
 	@Inject
 	@Optional
@@ -165,6 +179,7 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
 
 	/**
 	 * Refresh layout
+	 * 
 	 * @param visibility
 	 */
 	@Inject
@@ -263,4 +278,59 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
 		}
 
 	}
+
+	@Override
+	public void addResource(IFile resource, Locale locale) {
+		SourceEditor editor = resourceManager.addSourceEditor(resource, locale);
+		final PropertiesTextEditor textEditor = new PropertiesTextEditor(this, editor.getDocument());
+		createTab(textEditor, UIUtils.getDisplayName(editor.getLocale()), BabelResourceConstants.IMG_RESOURCE_PROPERTY);
+
+		i18nPage.refreshPage();
+		setSelection(0);
+		// re-set the content to trigger dirty state
+		editor.setContent(editor.getContent());
+	}
+
+	public void doSave() {
+		KeyTree keyTree = resourceManager.getKeyTree();
+		String key = keyTree.getSelectedKey();
+
+		i18nPage.refreshEditorOnChanges();
+		resourceManager.save();
+
+		keyTree.setUpdater(keyTree.getUpdater());
+		if (key != null)
+			keyTree.selectKey(key);
+	}
+
+	private class ResourceChangeListener implements IResourceChangeListener {
+		@Override
+		public void resourceChanged(IResourceChangeEvent event) {
+			boolean deltaFound = false;
+			for (IPath path : paths) {
+				IResourceDelta delta = event.getDelta().findMember(path);
+				deltaFound |= delta != null;
+			}
+			if (deltaFound) {
+				resourceManager.reloadProperties();
+				i18nPage.refreshTextBoxes();
+			}
+		}
+	}
+
+	@Override
+	public void dispose() {
+
+		if (i18nPage != null) {
+			i18nPage.dispose();
+		}
+
+		List<SourceEditor> sourceEditors = resourceManager.getSourceEditors();
+		sourceEditors.forEach(editor -> {
+			editor.getDocument().dispose();
+		});
+		ResourcesPlugin.getWorkspace().removeResourceChangeListener(resourceChangeListener);
+		super.dispose();
+	}
+
 }

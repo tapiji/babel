@@ -142,5 +142,9 @@ public class KeyTree extends BundleObject {
         return "KeyTree [keyItemsCache=, rootKeyItems=, selectedKey=" + selectedKey + ", keyTreeUpdater=" + keyTreeUpdater + ", bundleGroup=" + bundleGroup + "]";
     }
 
+	public KeyTreeUpdater getUpdater() {
+		return keyTreeUpdater;
+	}
+
 
 }

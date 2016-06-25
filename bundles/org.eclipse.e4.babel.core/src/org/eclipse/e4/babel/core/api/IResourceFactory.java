@@ -38,8 +38,7 @@ public interface IResourceFactory {
      * @param resource The resource to add.
      * @param locale The locale of the resource.
      */
-    public abstract SourceEditor addResource(IResource resource, Locale locale)
-            throws PartInitException;
+    public abstract SourceEditor addResource(IResource resource, Locale locale);
 
     /**
      * Gets a properties file creator.

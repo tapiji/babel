@@ -10,6 +10,7 @@ import org.eclipse.e4.babel.editor.ui.BasePresenter;
 import org.eclipse.e4.babel.editor.ui.BaseView;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.page.I18nPageContract;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.page.I18nPageContract.View;
+import org.eclipse.e4.babel.editor.ui.editor.i18n.page.I18nPageView.LocalBehaviour;
 import org.eclipse.e4.babel.resource.IBabelResourceProvider;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
@@ -35,6 +36,13 @@ public interface I18nPageEntryContract {
 		void setSimilarButtonVisibility(boolean visible);
 
 		String getText();
+
+		void focusTextBox();
+
+		void dispose();
+
+		void addLocalListener(LocalBehaviour localBehaviour);
+
     }
 
     interface Presenter extends BasePresenter {

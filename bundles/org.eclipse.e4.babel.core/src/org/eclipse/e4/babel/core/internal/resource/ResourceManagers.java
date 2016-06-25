@@ -149,7 +149,7 @@ public final class ResourceManagers implements IResourceManager {
 	 * 
 	 * @param monitor progress monitor
 	 */
-	public void save(IProgressMonitor monitor) {
+	public void save() {
 		resourcesFactory.getSourceEditors().stream().forEach(editor -> {
 			//((Object) editor.getEditor()).doSave(monitor)
 		});
@@ -184,6 +184,7 @@ public final class ResourceManagers implements IResourceManager {
 	 * @throws CoreException problem creating file
 	 * @throws IOException problem creating file
 	 */
+	@Override
 	public IFile createPropertiesFile(Locale locale) throws CoreException, IOException {
 		return resourcesFactory.getPropertiesFileCreator().createPropertiesFile(locale);
 	}
@@ -199,7 +200,8 @@ public final class ResourceManagers implements IResourceManager {
 		return (SourceEditor) sourceEditors.get(locale);
 	}
 
-	public SourceEditor addSourceEditor(IFile resource, Locale locale) throws PartInitException {
+	@Override
+	public SourceEditor addSourceEditor(IFile resource, Locale locale) {
 		SourceEditor sourceEditor = resourcesFactory.addResource(resource, locale);
 		sourceEditors.put(sourceEditor.getLocale(), sourceEditor);
 		locales.add(locale);
@@ -210,6 +212,7 @@ public final class ResourceManagers implements IResourceManager {
 	/**
 	 * Reloads the properties files (parse them).
 	 */
+	@Override
 	public void reloadProperties() {
 		resourcesFactory.getSourceEditors().stream().forEach(editor -> {
 			if (editor.isCacheDirty()) {

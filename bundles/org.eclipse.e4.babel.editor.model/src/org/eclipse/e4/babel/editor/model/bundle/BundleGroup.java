@@ -1,8 +1,10 @@
 package org.eclipse.e4.babel.editor.model.bundle;
 
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.SortedSet;
@@ -140,6 +142,15 @@ public final class BundleGroup extends BundleObject {
                   .findFirst()
                   .isPresent();
   }
+  
+  public boolean containsLocale(Locale value) {
+	    return bundles.values()
+                .stream()
+                .filter(locale -> locale.equals(value))
+                .peek(action -> System.out.println(action))
+                .findFirst()
+                .isPresent();
+  }
 
   public int getBundleCount() {
     return bundles.size();
@@ -156,20 +167,29 @@ public final class BundleGroup extends BundleObject {
   }
 
 
-  public void getNextKey(final String key) {
-    //return keys.stream().filter(key)
+  public String getNextKey(final String currentKey) {
+      boolean returnNextKey = false;
+      for (String key : keys) {
+          if (returnNextKey) {
+              return key;
+          }
+          if (key.equals(currentKey)) {
+              returnNextKey = true;
+          }
+      }
+      return null;
   }
 
   @Nullable
   public String getPreviousKey(final String currentKey) {
-    return null;
-    /*
-     * return keys.stream()
-     * .filter(key -> key.equals(currentKey))
-     * .peek(action -> System.out.println(action))
-     * .
-     * .orElse(null);
-     */
+      String previousKey = null;
+      for (String key : keys) {
+          if (key.equals(currentKey)) {
+              return previousKey;
+          }
+          previousKey = key;
+      }
+      return null;
   }
 
   public static BundleGroup create() {

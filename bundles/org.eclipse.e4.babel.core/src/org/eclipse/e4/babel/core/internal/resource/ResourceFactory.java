@@ -122,7 +122,7 @@ abstract class ResourceFactory implements IResourceFactory {
 	}
 
 	@Override
-	public SourceEditor addResource(IResource resource, Locale locale) throws PartInitException {
+	public SourceEditor addResource(IResource resource, Locale locale) {
 		if (sourceEditors.containsKey(locale)) {
 			throw new IllegalArgumentException("ResourceFactory already contains a resource for locale " + locale);
 		}

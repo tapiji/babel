@@ -1,10 +1,9 @@
 package org.eclipse.e4.babel.editor.ui.editor.i18n.page;
 
 
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import org.eclipse.e4.babel.core.api.IResourceManager;
 import org.eclipse.e4.babel.editor.model.bundle.listener.BundleChangeAdapter;
@@ -21,9 +20,13 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 
 
 public final class I18nPageView extends ScrolledComposite implements I18nPageContract.View {
@@ -35,6 +38,9 @@ public final class I18nPageView extends ScrolledComposite implements I18nPageCon
     private Composite i18nEntryComposite;
 	private IResourceManager resourceManager;
 	private View editorView;
+	private I18nPageEntryContract.View activeEntry;
+	private I18nPageEntryContract.View lastActiveEntry;
+	private IBabelResourceProvider resourceProvider;
 
     public static I18nPageView create(final Composite sashForm, ResourceBundleEditorContract.View editorView, final IBabelResourceProvider resourceProvider, IResourceManager resourceManager) {
         return new I18nPageView(sashForm, resourceProvider,resourceManager,editorView, SWT.V_SCROLL | SWT.H_SCROLL);
@@ -44,14 +50,12 @@ public final class I18nPageView extends ScrolledComposite implements I18nPageCon
         super(sashForm, style);
         this.resourceManager = resourceManager;
         this.editorView = editorView;
+        this.resourceProvider = resourceProvider;
         i18nEntryComposite = new Composite(this, SWT.BORDER);
         i18nEntryComposite.setLayout(new GridLayout(1, false));
         
         editorView.getKeyTreeView().getTreeViewer().addSelectionChangedListener(localBehaviour);
-        resourceManager.getLocales().stream().forEach(locale -> {
-            final I18nPageEntryContract.View entry = I18nPageEntryView.create(i18nEntryComposite,(ScrolledComposite)this, resourceProvider, resourceManager, locale, this);
-            pageEntries.add(entry);	
-        });
+        createEditingPart();
 
         this.setContent(i18nEntryComposite);
         this.setMinSize(i18nEntryComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
@@ -60,6 +64,58 @@ public final class I18nPageView extends ScrolledComposite implements I18nPageCon
         this.setShowFocusedControl(true);
     }
     
+    
+    
+    private void createEditingPart() {
+        Control[] children = i18nEntryComposite.getChildren();
+        for (int i = 0; i < children.length; i++) {
+            children[i].dispose();
+        }
+     
+        
+        resourceManager.getLocales().stream().forEach(locale -> {
+            final I18nPageEntryContract.View entry = I18nPageEntryView.create(this,locale);
+            entry.addLocalListener(localBehaviour);
+            pageEntries.add(entry);	
+        });
+        // TODO
+        
+      /*  Composite _rightComposite = new Composite(parent, SWT.BORDER);
+        parent.setContent(_rightComposite);
+//        if (!RBEPreferences.getAutoAdjust()) {
+            parent.setMinSize(_rightComposite.computeSize(
+                    SWT.DEFAULT,
+                    resourceMediator.getLocales().size()
+                            * RBEPreferences.getMinHeight()));
+//        }
+        _rightComposite.setLayout(new GridLayout(1, false));
+        entryComposites.clear();
+        for (Iterator<Locale> iter = resourceMediator.getLocales().iterator(); 
+                iter.hasNext();) {
+            Locale locale = (Locale) iter.next();
+            BundleEntryComposite entryComposite = new BundleEntryComposite(
+                    _rightComposite, resourceMediator, locale, this);
+            entryComposite.addFocusListener(localBehaviour);
+            entryComposites.add(entryComposite);
+        }*/
+        
+    }
+    @Override
+    public Composite getI18NPage() {
+    	return i18nEntryComposite;
+    }
+    @Override
+    public IResourceManager getResourceManager() {
+    	return resourceManager;
+    }
+    
+    @Override
+    public IBabelResourceProvider getResourceProvider() {
+    	return resourceProvider;
+    }
+    
+    
+    @Override
     public void refreshLayout() {
         this.setMinSize(i18nEntryComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT)); 
         this.layout(true, true);
@@ -128,8 +184,20 @@ public final class I18nPageView extends ScrolledComposite implements I18nPageCon
         
     }
     
-    private class LocalBehaviour extends BundleChangeAdapter implements FocusListener,
+    /**
+     * Refreshes the editor associated with the active text box (if any) if it
+     * has changed.
+     */
+    public void refreshEditorOnChanges() {
+        if (activeEntry != null) {
+            activeEntry.getPresenter().updateBundleOnChanges();
+        }
+    }
+    
+    public class LocalBehaviour extends BundleChangeAdapter implements FocusListener,
     ISelectionChangedListener {
+
+
 
 		@Override
 		public void selectionChanged(SelectionChangedEvent event) {
@@ -154,15 +222,14 @@ public final class I18nPageView extends ScrolledComposite implements I18nPageCon
 		}
 
 		@Override
-		public void focusGained(FocusEvent arg0) {
-			// TODO Auto-generated method stub
-			
+		public void focusGained(FocusEvent event) {
+            activeEntry = (I18nPageEntryView) event.widget;
+            lastActiveEntry = activeEntry;
 		}
 
 		@Override
 		public void focusLost(FocusEvent arg0) {
-			// TODO Auto-generated method stub
-			
+			activeEntry = null;
 		}
     	
     }
@@ -174,22 +241,116 @@ public final class I18nPageView extends ScrolledComposite implements I18nPageCon
 
 	@Override
 	public void selectNextTreeEntry() {
-      /*  activeEntry.updateBundleOnChanges();
-        String nextKey = resourceMediator.getBundleGroup().getNextKey(
-                getSelectedKey());
+        activeEntry.getPresenter().updateBundleOnChanges();
+        String nextKey = resourceManager.getBundleGroup().getNextKey(getSelectedKey());
         if (nextKey == null)
             return;
 
-        Locale currentLocale = activeEntry.getLocale();
-        resourceMediator.getKeyTree().selectKey(nextKey);
-        focusBundleEntryComposite(currentLocale);*/
+        Locale currentLocale = activeEntry.getPresenter().getLocale();
+        resourceManager.getKeyTree().selectKey(nextKey);
+        focusBundleEntryComposite(currentLocale);
 	}
 
 	@Override
 	public void selectPreviousTreeEntry() {
-		// TODO Auto-generated method stub
-		
+	    activeEntry.getPresenter().updateBundleOnChanges();
+        String prevKey = resourceManager.getBundleGroup().getPreviousKey(
+                getSelectedKey());
+        if (prevKey == null)
+            return;
+
+        Locale currentLocale = activeEntry.getPresenter().getLocale();
+        resourceManager.getKeyTree().selectKey(prevKey);
+        focusBundleEntryComposite(currentLocale);		
 	}
+	
+	
+    /**
+     * Refreshes the tree and recreates the editing part.
+     */
+    public void refreshPage() {
+        if (editorView != null) {
+        	editorView.getKeyTreeView().getTreeViewer().refresh(true);
+        }
+       createEditingPart();
+       i18nEntryComposite.layout(true, true);
+       layout(true, true);
+    }
+	
+	  /**
+     * This method focusses the {@link BundleEntryComposite} corresponding to
+     * the given {@link Locale}. If no such composite exists or the locale is
+     * null, nothing happens.
+     * 
+     * @param locale
+     *            The locale whose {@link BundleEntryComposite} is to be
+     *            focussed.
+     */
+    public void focusBundleEntryComposite(Locale locale) {
+        for (I18nPageEntryContract.View entry : pageEntries) {
+        	 Locale currentLocale = entry.getPresenter().getLocale();
+            if ((currentLocale == null) && (locale == null) || (locale != null && locale.equals(currentLocale))) {
+            	entry.focusTextBox();
+            }
+        }
+    }
     
+    
+    /**
+     * Focusses the previous {@link BundleEntryComposite}.
+     */
+    public void focusPreviousBundleEntryComposite() {
+        int index = pageEntries.indexOf(activeEntry);
+        I18nPageEntryContract.View nextComposite;
+        if (index > 0)
+            nextComposite = pageEntries.get(--index);
+        else
+            nextComposite = pageEntries.get(pageEntries.size() - 1);
+
+        if (nextComposite != null)
+            focusComposite(nextComposite);
+    }
+    
+    /**
+     * Focusses the next {@link BundleEntryComposite}.
+     */
+    public void focusNextBundleEntryComposite() {
+        int index = pageEntries.indexOf(activeEntry);
+        I18nPageEntryContract.View nextComposite;
+        if (index < pageEntries.size() - 1)
+            nextComposite = pageEntries.get(++index);
+        else
+            nextComposite = pageEntries.get(0);
+
+        if (nextComposite != null)
+        	focusComposite(nextComposite);
+    }
+    
+    
+    /**
+     * Focusses the given {@link BundleEntryComposite} and scrolls the
+     * surrounding {@link ScrolledComposite} in order to make it visible.
+     * 
+     * @param comp
+     *            The {@link BundleEntryComposite} to be focussed.
+     */
+    private void focusComposite(I18nPageEntryContract.View comp) {
+        Point compPos =((I18nPageEntryView) comp).getLocation();
+        Point compSize = ((I18nPageEntryView) comp).getSize();
+        Point size = (I18nPageView.this).getSize();
+        Point origin = (I18nPageView.this).getOrigin();
+        if (compPos.y + compSize.y > size.y + origin.y)
+        	(I18nPageView.this).setOrigin(origin.x, origin.y
+                    + (compPos.y + compSize.y) - (origin.y + size.y) + 5);
+        else if (compPos.y < origin.y)
+        	(I18nPageView.this).setOrigin(origin.x, compPos.y);
+       comp.focusTextBox();
+    }
+    public void dispose() {
+     ////      keysComposite.dispose();
+      //  }
+        pageEntries.forEach(entry->entry.dispose());
+        super.dispose();
+    }
     
 }

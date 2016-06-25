@@ -1,5 +1,6 @@
 package org.eclipse.e4.babel.core.api;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
@@ -31,4 +32,12 @@ public interface IResourceManager {
 	List<Locale> getLocales();
 
 	BundleGroup getBundleGroup();
+
+	void reloadProperties();
+
+	void save();
+
+	SourceEditor addSourceEditor(IFile resource, Locale locale);
+
+	IFile createPropertiesFile(Locale locale) throws CoreException, IOException;
 }

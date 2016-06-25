@@ -32,22 +32,17 @@ public class I18nPageEntryPresenter implements I18nPageEntryContract.Presenter {
 	private String activeKey;
 	private ResourceBundleEditorContract.View resourceBundleEditor;
 
-	private I18nPageEntryPresenter(final View view, final IResourceManager resourceManager,
-			final IBabelResourceProvider resourceProvider, Locale locale,
-			I18nPageContract.View i18nPageView) {
+	private I18nPageEntryPresenter(final View view, Locale locale,I18nPageContract.View i18nPageView) {
 		this.view = view;
-		this.resourceManager = resourceManager;
-		this.resourceProvider = resourceProvider;
+		this.resourceManager = i18nPageView.getResourceManager();
+		this.resourceProvider = i18nPageView.getResourceProvider();
 		this.locale = locale;
 		this.i18nPageView = i18nPageView;
 		this.resourceBundleEditor = i18nPageView.getResourceBundleEditor();
 	}
 
-	public static I18nPageEntryPresenter create(final I18nPageEntryContract.View pageView,
-			final IResourceManager resourceManager, IBabelResourceProvider resourceProvider, Locale locale,
-			I18nPageContract.View i18nPageView) {
-		I18nPageEntryPresenter presenter = new I18nPageEntryPresenter(pageView, resourceManager, resourceProvider,
-				locale, i18nPageView);
+	public static I18nPageEntryPresenter create(final I18nPageEntryContract.View pageView, Locale locale, I18nPageContract.View i18nPageView) {
+		I18nPageEntryPresenter presenter = new I18nPageEntryPresenter(pageView, locale, i18nPageView);
 		pageView.setPresenter(presenter);
 		return presenter;
 	}

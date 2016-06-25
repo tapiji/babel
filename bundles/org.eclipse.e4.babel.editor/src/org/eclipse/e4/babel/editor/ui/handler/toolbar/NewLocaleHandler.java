@@ -1,13 +1,22 @@
 package org.eclipse.e4.babel.editor.ui.handler.toolbar;
 
 
+import java.io.IOException;
+import java.util.Locale;
+
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.e4.babel.editor.ui.editor.ResourceBundleEditorContract;
 import org.eclipse.e4.babel.editor.widget.LocaleSelector;
 import org.eclipse.e4.core.di.annotations.CanExecute;
 import org.eclipse.e4.core.di.annotations.Execute;
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipselabs.e4.tapiji.logger.Log;
 
 
 public final class NewLocaleHandler {
@@ -15,7 +24,7 @@ public final class NewLocaleHandler {
     private static final String TAG = NewLocaleHandler.class.getSimpleName();
 
     @Execute
-    public void execute(final Shell shell) {
+    public void execute(final Shell shell, final MPart part) {
         final Dialog localeDialog = new Dialog(shell) {
 
             LocaleSelector selector;
@@ -36,27 +45,26 @@ public final class NewLocaleHandler {
 
             @Override
             protected void okPressed() {
-                // add local to bundleGroup
-                /*
-                 * MessagesBundleGroup bundleGroup = editor.getBundleGroup();
-                 * Locale newLocal = selector.getSelectedLocale();
-                 * // exists local already?
-                 * boolean existsLocal = false;
-                 * Locale[] locales = bundleGroup.getLocales();
-                 * for (Locale locale : locales) {
-                 * if (locale == null) {
-                 * if (newLocal == null) {
-                 * existsLocal = true;
-                 * break;
-                 * }
-                 * } else if (locale.equals(newLocal)) {
-                 * existsLocal = true;
-                 * break;
-                 * }
-                 * }
-                 * if (!existsLocal) bundleGroup.addMessagesBundle(newLocal);
-                 */
-
+            	
+            	Locale newLocal = selector.getSelectedLocale();
+            	
+              	if (part.getObject() instanceof ResourceBundleEditorContract.View) {
+        			ResourceBundleEditorContract.View resourceBundleEditor = (ResourceBundleEditorContract.View) part.getObject();
+        			
+        			if(!resourceBundleEditor.getResourceManager().getBundleGroup().containsLocale(newLocal)) {
+        				try {
+							IFile newFile = resourceBundleEditor.getResourceManager().createPropertiesFile(newLocal);
+							Log.d(TAG, "CREATED FILE: "+newFile);
+							Display.getDefault().asyncExec(new Runnable() {
+	                            public void run() {
+	                            	resourceBundleEditor.addResource(newFile, newLocal);
+	                            }
+	                        });
+						} catch (CoreException | IOException e) {
+							e.printStackTrace();
+						}
+        			};
+              	}
                 super.okPressed();
             }
         };

@@ -11,6 +11,7 @@ import org.eclipse.e4.babel.core.utils.UIUtils;
 import org.eclipse.e4.babel.editor.text.document.SourceViewerDocument;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.page.I18nPageContract;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.page.I18nPageView;
+import org.eclipse.e4.babel.editor.ui.editor.i18n.page.I18nPageView.LocalBehaviour;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.pageentry.I18nPageEntryContract.Presenter;
 import org.eclipse.e4.babel.resource.BabelResourceConstants;
 import org.eclipse.e4.babel.resource.IBabelResourceProvider;
@@ -46,8 +47,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipselabs.e4.tapiji.logger.Log;
 import org.eclipselabs.e4.tapiji.resource.TapijiResourceConstants;
 
-public final class I18nPageEntryView extends Composite implements KeyListener, TraverseListener,
-		FocusListener, MouseListener, I18nPageEntryContract.View, ITextListener {
+public final class I18nPageEntryView extends Composite implements KeyListener, TraverseListener, FocusListener,
+		MouseListener, I18nPageEntryContract.View, ITextListener {
 
 	private static final int UNDO_LEVEL = 20;
 	private static final String TAG = I18nPageEntryView.class.getSimpleName();
@@ -59,17 +60,14 @@ public final class I18nPageEntryView extends Composite implements KeyListener, T
 	private Label expandIcon;
 	private StyledText textWidget;
 	private Composite toolbar;
-	private ScrolledComposite i18nPage;
 	private Presenter presenter;
 	private Button goToButton;
 	private Button duplicateButton;
 	private Button similarButton;
 	private String textBeforeUpdate;
 
-	private I18nPageEntryView(final Composite parent, ScrolledComposite scrolled, final int style) {
+	private I18nPageEntryView(final Composite parent, final int style) {
 		super(parent, style);
-
-		this.i18nPage = scrolled;
 
 		final GridLayout gridLayout = new GridLayout(1, false);
 		gridLayout.horizontalSpacing = 0;
@@ -298,19 +296,19 @@ public final class I18nPageEntryView extends Composite implements KeyListener, T
 			textWidget.setVisible(!expand);
 			expandIcon.setImage(presenter.loadImage(TapijiResourceConstants.IMG_COLLAPSE));
 		}
-		((I18nPageView) i18nPage).refreshLayout();
+		presenter.getI18nPageView().refreshLayout();
 	}
 
 	@Override
 	public void focusGained(final FocusEvent e) {
 		e.widget = I18nPageEntryView.this;
-		focusListeners.forEach(listener->listener.focusGained(e));
+		focusListeners.forEach(listener -> listener.focusGained(e));
 	}
 
 	@Override
 	public void focusLost(final FocusEvent e) {
 		e.widget = I18nPageEntryView.this;
-		focusListeners.forEach(listener->listener.focusLost(e));
+		focusListeners.forEach(listener -> listener.focusLost(e));
 	}
 
 	@Override
@@ -359,11 +357,9 @@ public final class I18nPageEntryView extends Composite implements KeyListener, T
 		presenter.init();
 	}
 
-	public static I18nPageEntryView create(final Composite parent, ScrolledComposite comp,
-			final IBabelResourceProvider resourceProvider, IResourceManager resourceManager, Locale locale,
-			I18nPageContract.View i18nPageView) {
-		final I18nPageEntryView pageView = new I18nPageEntryView(parent, comp, SWT.NONE);
-		I18nPageEntryPresenter.create(pageView, resourceManager, resourceProvider, locale, i18nPageView);
+	public static I18nPageEntryView create(final Composite parent, Locale locale) {
+		final I18nPageEntryView pageView = new I18nPageEntryView(((I18nPageContract.View)parent).getI18NPage(), SWT.NONE);
+		I18nPageEntryPresenter.create(pageView, locale, (I18nPageContract.View) parent);
 		pageView.onCreate();
 		return pageView;
 	}
@@ -411,6 +407,25 @@ public final class I18nPageEntryView extends Composite implements KeyListener, T
 
 	@Override
 	public void textChanged(TextEvent event) {
+	}
+
+	@Override
+	public void focusTextBox() {
+		textWidget.setFocus();
+		textView.setSelectedRange(0, textView.getDocument().getLength());
+	}
+	
+	@Override
+	public void dispose() {
+		focusListeners.clear();
+		focusListeners = null;
+		undoManager = null;
+		super.dispose();
+	}
+
+	@Override
+	public void addLocalListener(LocalBehaviour localBehaviour) {
+		addFocusListener(localBehaviour);
 	}
 
 }
