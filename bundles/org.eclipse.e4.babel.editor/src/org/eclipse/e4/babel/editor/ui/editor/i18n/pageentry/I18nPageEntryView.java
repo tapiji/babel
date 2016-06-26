@@ -10,8 +10,8 @@ import org.eclipse.e4.babel.core.preference.PropertyPreferences;
 import org.eclipse.e4.babel.core.utils.UIUtils;
 import org.eclipse.e4.babel.editor.text.document.SourceViewerDocument;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.page.I18nPageContract;
+import org.eclipse.e4.babel.editor.ui.editor.i18n.page.I18nPagePresenter.LocalBehaviour;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.page.I18nPageView;
-import org.eclipse.e4.babel.editor.ui.editor.i18n.page.I18nPageView.LocalBehaviour;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.pageentry.I18nPageEntryContract.Presenter;
 import org.eclipse.e4.babel.resource.BabelResourceConstants;
 import org.eclipse.e4.babel.resource.IBabelResourceProvider;
@@ -277,11 +277,11 @@ public final class I18nPageEntryView extends Composite implements KeyListener, T
 		} else if ((event.keyCode == SWT.ARROW_DOWN) && (event.stateMask == SWT.CTRL)) {
 			event.doit = true;
 			event.detail = SWT.TRAVERSE_NONE;
-			presenter.getI18nPageView().selectNextTreeEntry();
+			presenter.getI18nPageView().getPresenter().selectNextTreeEntry();
 		} else if ((event.keyCode == SWT.ARROW_UP) && (event.stateMask == SWT.CTRL)) {
 			event.doit = true;
 			event.detail = SWT.TRAVERSE_NONE;
-			presenter.getI18nPageView().selectPreviousTreeEntry();
+			presenter.getI18nPageView().getPresenter().selectPreviousTreeEntry();
 		}
 	}
 

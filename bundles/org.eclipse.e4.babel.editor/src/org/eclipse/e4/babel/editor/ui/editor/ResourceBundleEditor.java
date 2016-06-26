@@ -186,7 +186,7 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
 	@Optional
 	public void redrawLayout(@UIEventTopic(APreferencePage.TOPIC_REFRESH_LAYOUT) final String visibility) {
 		Log.d(TAG, "INPUT: UPDATE UI" + visibility);
-		i18nPage.redrawEditorSize();
+		i18nPage.getPresenter().redrawEditorSize();
 		i18nPage.refreshLayout();
 		System.out.println("New user: " + PropertyPreferences.getInstance().isEditorTreeExpanded());
 	}
@@ -295,7 +295,7 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
 		KeyTree keyTree = resourceManager.getKeyTree();
 		String key = keyTree.getSelectedKey();
 
-		i18nPage.refreshEditorOnChanges();
+		i18nPage.getPresenter().refreshEditorOnChanges();
 		resourceManager.save();
 
 		keyTree.setUpdater(keyTree.getUpdater());
@@ -313,7 +313,7 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
 			}
 			if (deltaFound) {
 				resourceManager.reloadProperties();
-				i18nPage.refreshTextBoxes();
+				i18nPage.getPresenter().refreshTextBoxes();
 			}
 		}
 	}

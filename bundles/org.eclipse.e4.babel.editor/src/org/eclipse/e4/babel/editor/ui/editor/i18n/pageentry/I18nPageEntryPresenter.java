@@ -34,11 +34,11 @@ public class I18nPageEntryPresenter implements I18nPageEntryContract.Presenter {
 
 	private I18nPageEntryPresenter(final View view, Locale locale,I18nPageContract.View i18nPageView) {
 		this.view = view;
-		this.resourceManager = i18nPageView.getResourceManager();
-		this.resourceProvider = i18nPageView.getResourceProvider();
+		this.resourceManager = i18nPageView.getPresenter().getResourceManager();
+		this.resourceProvider = i18nPageView.getPresenter().getResourceProvider();
 		this.locale = locale;
 		this.i18nPageView = i18nPageView;
-		this.resourceBundleEditor = i18nPageView.getResourceBundleEditor();
+		this.resourceBundleEditor = i18nPageView.getPresenter().getResourceBundleEditor();
 	}
 
 	public static I18nPageEntryPresenter create(final I18nPageEntryContract.View pageView, Locale locale, I18nPageContract.View i18nPageView) {

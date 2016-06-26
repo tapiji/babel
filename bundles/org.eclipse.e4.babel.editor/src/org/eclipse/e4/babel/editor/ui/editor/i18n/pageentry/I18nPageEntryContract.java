@@ -9,10 +9,8 @@ import org.eclipse.e4.babel.editor.model.bundle.BundleEntry;
 import org.eclipse.e4.babel.editor.ui.BasePresenter;
 import org.eclipse.e4.babel.editor.ui.BaseView;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.page.I18nPageContract;
-import org.eclipse.e4.babel.editor.ui.editor.i18n.page.I18nPageContract.View;
-import org.eclipse.e4.babel.editor.ui.editor.i18n.page.I18nPageView.LocalBehaviour;
+import org.eclipse.e4.babel.editor.ui.editor.i18n.page.I18nPagePresenter.LocalBehaviour;
 import org.eclipse.e4.babel.resource.IBabelResourceProvider;
-import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.swt.graphics.Image;
 
