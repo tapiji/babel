@@ -43,6 +43,7 @@ public class I18nPagePresenter implements I18nPageContract.Presenter{
 
 	@Override
     public void init() {
+		i18nPageView.createEditingPart();
 		editorView.getKeyTreeView().getTreeViewer().addSelectionChangedListener(localBehaviour);
     }
 

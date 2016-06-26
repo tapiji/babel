@@ -38,17 +38,15 @@ public final class I18nPageView extends ScrolledComposite implements I18nPageCon
 		i18nEntryComposite = new Composite(this, SWT.BORDER);
 		i18nEntryComposite.setLayout(new GridLayout(1, false));
 
-
-		createEditingPart();
-
 		this.setContent(i18nEntryComposite);
 		this.setMinSize(i18nEntryComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		this.setExpandHorizontal(true);
 		this.setExpandVertical(true);
 		this.setShowFocusedControl(true);
 	}
-
-	private void createEditingPart() {
+	
+	@Override
+	public void createEditingPart() {
 		Control[] children = i18nEntryComposite.getChildren();
 		for (int i = 0; i < children.length; i++) {
 			children[i].dispose();

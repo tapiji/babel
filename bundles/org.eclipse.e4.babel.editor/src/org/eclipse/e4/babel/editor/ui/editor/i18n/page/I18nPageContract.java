@@ -33,6 +33,8 @@ public interface I18nPageContract {
 		void refreshLayout();
 
 		Presenter getPresenter();
+
+		void createEditingPart();
     }
 
     interface Presenter extends BasePresenter {
