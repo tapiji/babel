@@ -12,11 +12,18 @@ import org.eclipse.e4.babel.editor.model.bundle.BundleGroup;
 import org.eclipse.e4.babel.editor.model.bundle.BundleObject;
 import org.eclipse.e4.babel.editor.model.bundle.listener.BundleChangeAdapter;
 import org.eclipse.e4.babel.editor.model.bundle.listener.BundleEvent;
+import org.eclipse.e4.babel.editor.model.tree.filter.ITreeFilter;
 import org.eclipse.e4.babel.editor.model.updater.KeyTreeUpdater;
-import org.eclipselabs.e4.tapiji.logger.Log;
 
 
-public class KeyTree extends BundleObject {
+/**
+ * Tree representation of a bundle group.
+ * 
+ * @author Pascal Essiembre
+ * @author cuhiodtick
+ * @author Christian Behon
+ */
+public final class KeyTree extends BundleObject implements IKeyTreeVisitable {
 
     private static String TAG = KeyTree.class.getSimpleName();
     private final Map<String, KeyTreeItem> keyItemsCache = new TreeMap<String, KeyTreeItem>();
@@ -26,36 +33,40 @@ public class KeyTree extends BundleObject {
     private KeyTreeUpdater keyTreeUpdater;
     private BundleGroup bundleGroup;
 
-    public KeyTree(final BundleGroup bundleGroup, KeyTreeUpdater keyTreeUpdater) {
+    private KeyTree(final BundleGroup bundleGroup, final KeyTreeUpdater keyTreeUpdater) {
         super();
         this.keyTreeUpdater = keyTreeUpdater;
         this.bundleGroup = bundleGroup;
         initBundleGroup(bundleGroup);
         loadKeys();
     }
-    
+
+    public static KeyTree create(final BundleGroup bundleGroup, final KeyTreeUpdater keyTreeUpdater) {
+        return new KeyTree(bundleGroup, keyTreeUpdater);
+    }
+
     private void initBundleGroup(final BundleGroup bundleGroup) {
         bundleGroup.addChangeListener(new BundleChangeAdapter() {
 
             @Override
-            public <T> void add(BundleEvent<T> event) {
+            public <T> void add(final BundleEvent<T> event) {
                 initBundle((Bundle) event.data());
             }
         });
-        bundleGroup.getBundles().values().stream().forEach(bundle->initBundle(bundle));
+        bundleGroup.getBundles().values().forEach(bundle -> initBundle(bundle));
     }
 
     protected void initBundle(final Bundle bundle) {
         bundle.addChangeListener(new BundleChangeAdapter() {
 
             @Override
-            public <T> void add(BundleEvent<T> event) {
+            public <T> void add(final BundleEvent<T> event) {
                 String key = ((BundleEntry) event.data()).getKey();
                 addKey(key);
             }
 
             @Override
-            public <T> void remove(BundleEvent<T> event) {
+            public <T> void remove(final BundleEvent<T> event) {
                 String key = ((BundleEntry) event.data()).getKey();
                 Collection<BundleEntry> entries = bundleGroup.getBundleEntries(key);
                 if (entries.size() == 0) {
@@ -64,14 +75,14 @@ public class KeyTree extends BundleObject {
             }
 
             @Override
-            public <T> void modify(BundleEvent<T> event) {
+            public <T> void modify(final BundleEvent<T> event) {
                 String key = ((BundleEntry) event.data()).getKey();
                 modifyKey(key);
             }
         });
     }
 
-    public KeyTreeItem getKeyTreeItem(String key) {
+    public KeyTreeItem getKeyTreeItem(final String key) {
         return keyItemsCache.get(key);
     }
 
@@ -87,35 +98,38 @@ public class KeyTree extends BundleObject {
         return rootKeyItems;
     }
 
-    public void addKey(String key) {
-        keyTreeUpdater.addKey(this, key);
-        fireAdd(keyItemsCache.get(key));
-        Log.d(TAG, "Add key: " + key);
-    }
-
-    public void removeKey(String key) {
-        Object item = keyItemsCache.get(key);
-        keyTreeUpdater.removeKey(this, key);
-        fireRemove(item);
-        Log.d(TAG, "Remove key: " + key);
-    }
-
-    public void modifyKey(String key) {
-        Object item = keyItemsCache.get(key);
-        fireModify(item);
-        Log.d(TAG, "Modify key: " + key);
-    }
-
-    public void selectKey(String key) {
-        if (key == null) return;
-
-        Object item = keyItemsCache.get(key);
-        if ((selectedKey == null) || (!selectedKey.equals(key))) {
-            selectedKey = key;
+    public void addKey(final String key) {
+        if (keyItemsCache.get(key) != null) {
+            keyTreeUpdater.addKey(this, key);
+            fireAdd(keyItemsCache.get(key));
         }
     }
 
-    public void setUpdater(KeyTreeUpdater keyTreeUpdater) {
+    public void removeKey(final String key) {
+        if (keyItemsCache.get(key) != null) {
+            keyTreeUpdater.removeKey(this, key);
+            fireRemove(keyItemsCache.get(key));
+        }
+    }
+
+    public void modifyKey(final String key) {
+        if (keyItemsCache.get(key) != null) {
+            fireModify(keyItemsCache.get(key));
+        }
+    }
+
+    public void selectKey(final String key) {
+        if (key != null) {
+            if (selectedKey == null || !selectedKey.equals(key)) {
+                selectedKey = key;
+                if (keyItemsCache.get(key) != null) {
+                    fireSelect(keyItemsCache.get(key));
+                }
+            }
+        }
+    }
+
+    public void setUpdater(final KeyTreeUpdater keyTreeUpdater) {
         this.keyTreeUpdater = keyTreeUpdater;
         this.keyItemsCache.clear();
         this.rootKeyItems.clear();
@@ -123,28 +137,30 @@ public class KeyTree extends BundleObject {
     }
 
     private void loadKeys() {
-        bundleGroup.getKeys()
-                   .stream()
-                   .forEach((key) -> keyTreeUpdater.addKey(this, key));
+        bundleGroup.getKeys().forEach(key -> keyTreeUpdater.addKey(this, key));
         fireAdd(this);
     }
 
     public BundleGroup getBundleGroup() {
         return bundleGroup;
     }
-    
+
     public void dispose() {
-        
+        keyItemsCache.clear();
+        rootKeyItems.clear();
+    }
+
+    public KeyTreeUpdater getUpdater() {
+        return keyTreeUpdater;
+    }
+    
+    public void applyFilter(final ITreeFilter filter) {
+        rootKeyItems.forEach(treeItem->treeItem.applyFilter(filter));
     }
 
     @Override
-    public String toString() {
-        return "KeyTree [keyItemsCache=, rootKeyItems=, selectedKey=" + selectedKey + ", keyTreeUpdater=" + keyTreeUpdater + ", bundleGroup=" + bundleGroup + "]";
+    public void accept(final IKeyTreeVisitor visitor, final Object passAlongArgument) {
+        keyItemsCache.values().forEach(treeItem -> visitor.visitKeyTreeItem(treeItem, passAlongArgument));
+        visitor.visitKeyTree(this, passAlongArgument);
     }
-
-	public KeyTreeUpdater getUpdater() {
-		return keyTreeUpdater;
-	}
-
-
 }

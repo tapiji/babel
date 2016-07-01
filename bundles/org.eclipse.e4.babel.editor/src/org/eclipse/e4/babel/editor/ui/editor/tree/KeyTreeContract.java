@@ -1,6 +1,5 @@
 package org.eclipse.e4.babel.editor.ui.editor.tree;
 
-
 import org.eclipse.e4.babel.editor.model.tree.KeyTree;
 import org.eclipse.e4.babel.editor.model.tree.KeyTreeItem;
 import org.eclipse.e4.babel.editor.ui.BasePresenter;
@@ -8,44 +7,45 @@ import org.eclipse.e4.babel.editor.ui.BaseView;
 import org.eclipse.e4.babel.editor.ui.editor.tree.provider.KeyTreeContentProvider;
 import org.eclipse.e4.babel.editor.ui.editor.tree.provider.KeyTreeLabelProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
-
+import org.eclipse.jface.viewers.ViewerFilter;
 
 public interface KeyTreeContract {
 
-  interface View extends BaseView<Presenter> {
+    interface View extends BaseView<Presenter> {
 
-    void updateKeyTree(KeyTree keyTree);
+	void updateKeyTree(KeyTree keyTree);
 
-    void setTreeViewerContentProvider(KeyTreeContentProvider provider);
+	void setTreeViewerContentProvider(KeyTreeContentProvider provider);
 
-    void setTreeViewerLabelProvider(KeyTreeLabelProvider provider);
+	void setTreeViewerLabelProvider(KeyTreeLabelProvider provider);
 
-    void setSelectedKeyTreeItem(KeyTreeItem item);
+	void setSelectedKeyTreeItem(KeyTreeItem item);
 
-    KeyTree getKeyTree();
+	KeyTree getKeyTree();
 
-    void collapseAll();
+	void collapseAll();
 
-    void expandAll();
-  }
+	void expandAll();
+    }
 
-  interface Presenter extends BasePresenter {
+    interface Presenter extends BasePresenter {
 
-    void addKey(String text);
+	void addKey(String text);
 
-    boolean isNewKey(String text);
+	boolean isNewKey(String text);
 
-    String getSelectedKey(KeyTreeItem item);
+	String getSelectedKey(KeyTreeItem item);
 
-    KeyTreeItem getSelection(IStructuredSelection selection);
+	KeyTreeItem getSelection(IStructuredSelection selection);
 
-    String getSelectedKeyFromSelection(IStructuredSelection selection);
+	String getSelectedKeyFromSelection(IStructuredSelection selection);
 
-    KeyTree getKeyTree();
+	KeyTree getKeyTree();
 
-    void changeToHierarchicalTree();
+	void changeToHierarchicalTree();
 
-    void changeToFlatTree();
-  }
+	void changeToFlatTree();
+
+	ViewerFilter getTreeFilter();
+    }
 }
-

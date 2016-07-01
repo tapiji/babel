@@ -4,25 +4,29 @@ package org.eclipse.e4.babel.editor.model.tree;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import org.eclipse.e4.babel.editor.model.tree.filter.ITreeFilter;
 
 
-public class KeyTreeItem implements Comparable<KeyTreeItem>, IKeyTreeVisitable {
+public final class KeyTreeItem implements Comparable<KeyTreeItem>, IKeyTreeVisitable {
 
     private final String id;
-
     private final KeyTree keyTree;
-
     private final String name;
-
     private Object parent;
+    private boolean visible;
 
     private final SortedSet<KeyTreeItem> children = new TreeSet<KeyTreeItem>();
 
-    public KeyTreeItem(final KeyTree keyTree, final String id, final String name) {
+    private KeyTreeItem(final KeyTree keyTree, final String id, final String name) {
         super();
         this.keyTree = keyTree;
         this.id = id;
         this.name = name;
+        this.visible = true;
+    }
+
+    public static KeyTreeItem create(final KeyTree keyTree, final String id, final String name) {
+        return new KeyTreeItem(keyTree, id, name);
     }
 
     public String getId() {
@@ -59,7 +63,7 @@ public class KeyTreeItem implements Comparable<KeyTreeItem>, IKeyTreeVisitable {
         }
     }
 
-    public void removeChild(KeyTreeItem keyTreeItem) {
+    public void removeChild(final KeyTreeItem keyTreeItem) {
         if (keyTreeItem != null) {
             children.remove(keyTreeItem);
         }
@@ -73,19 +77,41 @@ public class KeyTreeItem implements Comparable<KeyTreeItem>, IKeyTreeVisitable {
         }
         return nestedChildren;
     }
+    
+    public boolean isVisible() {
+        return visible;
+    }
 
     @Override
     public int compareTo(KeyTreeItem keyTreeItem) {
         return this.id.compareTo((keyTreeItem).getId());
     }
 
-    @Override
-    public String toString() {
-        return "KeyTreeItem [id=" + id + ", keyTree=" + keyTree + ", name=" + name + "]";
+    public void dispose() {
+        children.clear();
     }
 
     @Override
     public void accept(IKeyTreeVisitor visitor, Object passAlongArgument) {
         visitor.visitKeyTreeItem(this, passAlongArgument);
     }
+
+    public boolean applyFilter(final ITreeFilter filter) {
+        if (filter == null) {
+            this.visible = true;
+        }
+
+        if (filter.doFilter(this)) {
+           this.visible = false;
+        }
+        
+        for (KeyTreeItem child : children) {
+            if (child.applyFilter(filter)) {
+                visible = false;
+            }
+        }
+        return this.visible;
+    }
+
+
 }

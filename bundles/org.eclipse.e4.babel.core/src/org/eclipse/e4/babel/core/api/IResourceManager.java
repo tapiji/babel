@@ -3,12 +3,12 @@ package org.eclipse.e4.babel.core.api;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.e4.babel.editor.model.bundle.BundleGroup;
 import org.eclipse.e4.babel.editor.model.tree.KeyTree;
 import org.eclipse.e4.babel.editor.model.tree.KeyTreeItem;
+import org.eclipse.e4.babel.editor.model.tree.filter.ITreeFilter;
 import org.eclipse.e4.babel.editor.text.model.SourceEditor;
 
 public interface IResourceManager {
@@ -40,4 +40,6 @@ public interface IResourceManager {
 	SourceEditor addSourceEditor(IFile resource, Locale locale);
 
 	IFile createPropertiesFile(Locale locale) throws CoreException, IOException;
+
+    void setTreeFilter(ITreeFilter filter);
 }

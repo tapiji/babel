@@ -56,7 +56,7 @@ public class GroupedKeyTreeUpdater extends KeyTreeUpdater {
                 idBuf.append(name);
                 String id = idBuf.toString();
                 if (!keyCache.containsKey(id)) {
-                    KeyTreeItem item = new KeyTreeItem(keyTree, id, name);
+                    KeyTreeItem item = KeyTreeItem.create(keyTree, id, name);
                     item.setParent(parent);
                     if (parent instanceof KeyTree) {
                         keyTree.getRootKeyItems()

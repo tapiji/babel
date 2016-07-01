@@ -1,12 +1,9 @@
 /*
- * Copyright (C) 2003-2014  Pascal Essiembre
- *
+ * Copyright (C) 2003-2014 Pascal Essiembre
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
  * http://www.apache.org/licenses/LICENSE-2.0
- *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -54,21 +51,16 @@ public class SimilarValuesVisitor extends BundleVisitorAdapter {
      */
     @Override
     public void visitBundleEntry(BundleEntry entry, Object passAlongArgument) {
-
-        /*
-         * BundleEntry entryToMatch = (BundleEntry) passAlongArgument;
-         * if (entry != entryToMatch && entry != null && entryToMatch != null && entry.getValue()
-         * .length() > 0
-         * && analyzer.analyse(entry.getValue()
-         * .toLowerCase(),
-         * entryToMatch.getValue()
-         * .toLowerCase()) >= PropertyPreferences.getInstance()
-         * .getReportSimilarValuesPrecision()) {
-         * similars.add(entry);
-         * }
-         */
+        BundleEntry entryToMatch = (BundleEntry) passAlongArgument;
+        if (isSimilar(entry, entryToMatch)) {
+            similars.add(entry);
+        }
     }
 
+    private boolean isSimilar(final BundleEntry entry, final BundleEntry entryToMatch) {
+        return true;//entry != entryToMatch && entry != null && entryToMatch != null && entry.getValue().length() > 0 
+               //         && analyzer.analyse(entry.getValue().toLowerCase(), entryToMatch.getValue().toLowerCase()) >= PropertyPreferences.getInstance().getReportSimilarValuesPrecision();
+    }
 
     /**
      * Gets the proximity analyzer.
@@ -103,5 +95,4 @@ public class SimilarValuesVisitor extends BundleVisitorAdapter {
     public void clear() {
         similars.clear();
     }
-
 }

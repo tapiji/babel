@@ -40,7 +40,7 @@ public class FlatKeyTreeUpdater extends KeyTreeUpdater {
     public void addKey(KeyTree keyTree, String key) {
         Map<String, KeyTreeItem> keyCache = keyTree.getKeyItemsCache();
         if (!keyCache.containsKey(key)) {
-            KeyTreeItem item = new KeyTreeItem(keyTree, key, key);
+            KeyTreeItem item = KeyTreeItem.create(keyTree, key, key);
             item.setParent(keyTree);
             keyTree.getRootKeyItems()
                    .add(item);

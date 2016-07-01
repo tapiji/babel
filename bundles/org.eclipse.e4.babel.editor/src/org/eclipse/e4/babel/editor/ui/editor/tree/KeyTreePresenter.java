@@ -10,6 +10,8 @@ import org.eclipse.e4.babel.editor.ui.editor.tree.KeyTreeContract.View;
 import org.eclipse.e4.babel.editor.ui.editor.tree.provider.KeyTreeContentProvider;
 import org.eclipse.e4.babel.editor.ui.editor.tree.provider.KeyTreeLabelProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerFilter;
 
 
 final class KeyTreePresenter implements KeyTreeContract.Presenter {
@@ -85,6 +87,20 @@ final class KeyTreePresenter implements KeyTreeContract.Presenter {
     @Override
     public void changeToFlatTree() {
         getKeyTree().setUpdater(new FlatKeyTreeUpdater());
+    }
+    
+    @Override
+    public ViewerFilter getTreeFilter() {
+        return new ViewerFilter() {
+            @Override
+            public boolean select(Viewer viewer, Object parentElement, Object element) {
+                if (element instanceof KeyTreeItem) {
+                    KeyTreeItem item = (KeyTreeItem) element;
+                    return item.isVisible();
+                }
+                return true;
+            }
+        };
     }
     
 

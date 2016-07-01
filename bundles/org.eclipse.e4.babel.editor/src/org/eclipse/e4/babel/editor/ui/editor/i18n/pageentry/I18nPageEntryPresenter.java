@@ -1,6 +1,7 @@
 package org.eclipse.e4.babel.editor.ui.editor.i18n.pageentry;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Locale;
 
 import org.eclipse.e4.babel.core.api.IResourceManager;
@@ -143,7 +144,6 @@ public final class I18nPageEntryPresenter implements I18nPageEntryContract.Prese
     public boolean isKeyAvailable(final String key) {
 	return key != null && getResourceManager().getBundleGroup().isKey(key);
     }
-    
 
     @Override
     public void updateDocument(final String key) {
@@ -176,12 +176,12 @@ public final class I18nPageEntryPresenter implements I18nPageEntryContract.Prese
 
     @Override
     public Collection<BundleEntry> getSimilars() {
-	return similarVisitor.getSimilars();
+	return Collections.emptyList();//similarVisitor.getSimilars();
     }
 
     @Override
     public Collection<BundleEntry> getDuplicates() {
-	return duplVisitor.getDuplicates();
+	return Collections.emptyList();//duplVisitor.getDuplicates();
     }
 
     @Override

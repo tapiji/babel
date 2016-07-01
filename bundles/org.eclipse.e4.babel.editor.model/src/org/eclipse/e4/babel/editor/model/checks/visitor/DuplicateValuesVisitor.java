@@ -1,12 +1,9 @@
 /*
- * Copyright (C) 2003-2014  Pascal Essiembre
- *
+ * Copyright (C) 2003-2014 Pascal Essiembre
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
  * http://www.apache.org/licenses/LICENSE-2.0
- *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -28,7 +25,7 @@ import org.eclipse.e4.babel.editor.model.bundle.visitor.BundleVisitorAdapter;
  * 
  * @author Pascal Essiembre
  */
-public class DuplicateValuesVisitor extends BundleVisitorAdapter {
+public final class DuplicateValuesVisitor extends BundleVisitorAdapter {
 
     /** Holder for bundle entries having duplicate values. */
     private final Collection<BundleEntry> duplicates = new ArrayList<>();
@@ -50,10 +47,7 @@ public class DuplicateValuesVisitor extends BundleVisitorAdapter {
     public void visitBundleEntry(BundleEntry entry, Object passAlongArgument) {
 
         BundleEntry entryToMatch = (BundleEntry) passAlongArgument;
-        if (entry != entryToMatch && entry != null && entryToMatch != null && entry.getValue()
-                                                                                   .length() > 0
-                        && entry.getValue()
-                                .equals(entryToMatch.getValue())) {
+        if (entry != entryToMatch && entry != null && entryToMatch != null && entry.getValue().length() > 0 && entry.getValue().equals(entryToMatch.getValue())) {
             duplicates.add(entry);
         }
     }
@@ -73,5 +67,4 @@ public class DuplicateValuesVisitor extends BundleVisitorAdapter {
     public void clear() {
         duplicates.clear();
     }
-
 }

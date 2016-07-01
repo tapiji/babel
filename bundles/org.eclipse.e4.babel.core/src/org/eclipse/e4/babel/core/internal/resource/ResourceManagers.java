@@ -35,6 +35,7 @@ import org.eclipse.e4.babel.editor.model.bundle.listener.BundleChangeAdapter;
 import org.eclipse.e4.babel.editor.model.bundle.listener.BundleEvent;
 import org.eclipse.e4.babel.editor.model.tree.KeyTree;
 import org.eclipse.e4.babel.editor.model.tree.KeyTreeItem;
+import org.eclipse.e4.babel.editor.model.tree.filter.ITreeFilter;
 import org.eclipse.e4.babel.editor.model.updater.FlatKeyTreeUpdater;
 import org.eclipse.e4.babel.editor.model.updater.GroupedKeyTreeUpdater;
 import org.eclipse.e4.babel.editor.model.updater.KeyTreeUpdater;
@@ -97,7 +98,7 @@ public final class ResourceManagers implements IResourceManager {
 		} else {
 			treeUpdater = new FlatKeyTreeUpdater();
 		}
-		this.keyTree = new KeyTree(bundleGroup, treeUpdater);
+		this.keyTree = KeyTree.create(bundleGroup, treeUpdater);
 	}
 
 	/**
@@ -263,6 +264,11 @@ public final class ResourceManagers implements IResourceManager {
 				keyTree.getBundleGroup().renameBundleEntryKey(oldItemKey, newItemKey);
 			}
 		});
+	}
+	
+	@Override
+	public void setTreeFilter(final ITreeFilter filter) {
+	    keyTree.applyFilter(filter);
 	}
 
 	/**

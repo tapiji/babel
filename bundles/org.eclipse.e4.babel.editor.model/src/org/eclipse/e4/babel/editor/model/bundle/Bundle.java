@@ -1,7 +1,6 @@
 package org.eclipse.e4.babel.editor.model.bundle;
 
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -10,164 +9,135 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
-import org.eclipse.e4.babel.editor.model.checks.visitor.DuplicateValuesVisitor;
-import org.eclipse.e4.babel.editor.model.checks.visitor.SimilarValuesVisitor;
+import org.eclipse.e4.babel.editor.model.bundle.visitor.IBundleVisitable;
+import org.eclipse.e4.babel.editor.model.bundle.visitor.IBundleVisitor;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 
-public final class Bundle extends BundleObject {
+public final class Bundle extends BundleObject implements IBundleVisitable {
 
-  private final Map<String, BundleEntry> bundleEntries = new HashMap<>();
-  private Locale locale;
-  private String comment;
-  private BundleGroup bundleGroup;
+    private final Map<String, BundleEntry> bundleEntries = new HashMap<>();
+    private Locale locale;
+    private String comment;
+    private BundleGroup bundleGroup;
 
-  private Bundle() {
-    super();
-  }
-
-  public Locale getLocale() {
-    return locale;
-  }
-
-  public void setLocale(final Locale locale) {
-    this.locale = locale;
-  }
-
-  public String getComment() {
-    return comment;
-  }
-
-  public void setComment(final String comment) {
-    this.comment = comment;
-  }
-
-  public int getBundleEntriesCount() {
-    return bundleEntries.size();
-  }
-
-  public BundleGroup getBundleGroup() {
-    return bundleGroup;
-  }
-
-  public void setBundleGroup(final BundleGroup bundleGroup) {
-    this.bundleGroup = bundleGroup;
-  }
-
-  @Nullable
-  public BundleEntry getBundleEntry(final String key) {
-    return bundleEntries.get(key);
-  }
-
-  public void addBundleEntry(final BundleEntry bundleEntry) {
-    BundleEntry oldBundleEntry = bundleEntries.get(bundleEntry.getKey());
-    if (oldBundleEntry != null && !oldBundleEntry.equals(bundleEntry)) {
-      bundleEntries.put(bundleEntry.getKey(), bundleEntry);
-      bundleEntry.setLocale(locale);
-      fireModify(oldBundleEntry);
-    } else if (bundleEntry.getKey()
-                          .trim()
-                          .length() > 0) {
-      bundleEntries.put(bundleEntry.getKey(), bundleEntry);
-      bundleEntry.setLocale(locale);
-      fireAdd(bundleEntry);
-    } else {
-      // todo log not added message
+    private Bundle() {
+        super();
     }
-  }
 
-  public void removeBundleEntry(final BundleEntry bundleEntry) {
-    if (bundleEntry != null) {
-      BundleEntry bundleEntryToRemove = bundleEntries.get(bundleEntry.getKey());
-      if (bundleEntryToRemove != null) {
-        bundleEntries.remove(bundleEntryToRemove.getKey());
-        fireRemove(bundleEntryToRemove);
-      }
+    public Locale getLocale() {
+        return this.locale;
     }
-  }
 
-  public void removeBundleEntries(final List<String> bundleEntryKeys) {
-    if (bundleEntryKeys != null && bundleEntryKeys.size() > 0) {
-      bundleEntryKeys.stream()
-                     .map(key -> bundleEntries.get(key))
-                     .filter(entry -> entry != null)
-                     .collect(Collectors.toList())
-                     .forEach(entry -> removeBundleEntry(entry));
+    public void setLocale(final Locale locale) {
+        this.locale = locale;
     }
-  }
 
-  public void renameBundleEntryKey(final String oldBundleEntryKey, final String newBundleEntryKey) {
-    final BundleEntry oldBundleEntry = bundleEntries.get(oldBundleEntryKey);
-    if (oldBundleEntry != null) {
-      removeBundleEntry(oldBundleEntry);
-      addBundleEntry(BundleEntry.create(newBundleEntryKey, oldBundleEntry.getValue(), oldBundleEntry.getComment(), oldBundleEntry.isCommented()));
+    public String getComment() {
+        return this.comment;
     }
-  }
 
-  @NonNull
-  public Set<String> getKeys() {
-    final Set<String> keys = new TreeSet<String>();
-    keys.addAll(bundleEntries.keySet());
-    return keys;
-  }
-
-  public Collection<BundleEntry> getBundleEntries() {
-    return bundleEntries.values();
-  }
-
-  public void copyBundleEntry(final String originalBundleEntryKey, final String newBundleEntryKey) {
-    final BundleEntry bundleEntry = bundleEntries.get(originalBundleEntryKey);
-    if (bundleEntry != null) {
-      addBundleEntry(BundleEntry.create(newBundleEntryKey, bundleEntry.getValue(), bundleEntry.getComment()));
+    public void setComment(final String comment) {
+        this.comment = comment;
     }
-  }
 
-  public void copyFrom(final Bundle bundle) {
-      synchronized (getBundleEntries()) {
-          /*List<BundleEntry> entriesToRemove = new ArrayList<>();
-          bundle.getBundleEntries()
-          .stream()
-          .filter(entry -> bundle.getBundleEntry(entry.getKey()) == null)
-          .collect(Collectors.toList())
-          
-          //.forEach(entry -> entriesToRemove.addAll(entry));*/
+    public int getBundleEntriesCount() {
+        return this.bundleEntries.size();
+    }
 
-          List<BundleEntry> entriesToRemove = new ArrayList<>();
-          for (BundleEntry entry : bundle.getBundleEntries()) {
-              BundleEntry localEntry = entry;
-              if (bundle.getBundleEntry(localEntry.getKey()) == null) {
-                  entriesToRemove.add(localEntry);
-              }
-          }    
-          entriesToRemove.stream().forEach(editor -> removeBundleEntry(editor));
-      }
-    bundle.getBundleEntries()
-          .stream()
-          .forEach(entry -> addBundleEntry(entry));
+    public BundleGroup getBundleGroup() {
+        return this.bundleGroup;
+    }
 
-  }
+    public void setBundleGroup(final BundleGroup bundleGroup) {
+        this.bundleGroup = bundleGroup;
+    }
 
-  public static Bundle create() {
-    return new Bundle();
-  }
+    @Nullable
+    public BundleEntry getBundleEntry(final String key) {
+        return this.bundleEntries.get(key);
+    }
 
-  public void setGroup(BundleGroup bundleGroup) {
-    this.bundleGroup = bundleGroup;
-  }
+    public void addBundleEntry(final BundleEntry bundleEntry) {
+        BundleEntry oldBundleEntry = this.bundleEntries.get(bundleEntry.getKey());
+        if (oldBundleEntry != null && !oldBundleEntry.equals(bundleEntry)) {
+            this.bundleEntries.put(bundleEntry.getKey(), bundleEntry);
+            bundleEntry.setLocale(locale);
+            fireModify(oldBundleEntry);
+        } else if (bundleEntry.getKey().trim().length() > 0) {
+            this.bundleEntries.put(bundleEntry.getKey(), bundleEntry);
+            bundleEntry.setLocale(locale);
+            fireAdd(bundleEntry);
+        }
+    }
 
-  @Override
-  public String toString() {
-    return "Bundle [locale=" + locale + ", comment=" + comment + "]";
-  }
+    public void removeBundleEntry(final BundleEntry bundleEntry) {
+        if (bundleEntry != null) {
+            BundleEntry bundleEntryToRemove = this.bundleEntries.get(bundleEntry.getKey());
+            if (bundleEntryToRemove != null) {
+                this.bundleEntries.remove(bundleEntryToRemove.getKey());
+                fireRemove(bundleEntryToRemove);
+            }
+        }
+    }
 
-	public void accept(SimilarValuesVisitor similarVisitor, BundleEntry bundleEntry) {
-	// TODO Auto-generated method stub
-	
-	}
+    public void removeBundleEntries(final List<String> bundleEntryKeys) {
+        if (bundleEntryKeys != null && bundleEntryKeys.size() > 0) {
+            bundleEntryKeys.stream().map(key -> this.bundleEntries.get(key)).filter(entry -> entry != null).collect(Collectors.toList()).forEach(entry -> removeBundleEntry(entry));
+        }
+    }
 
-	public void accept(DuplicateValuesVisitor duplVisitor, BundleEntry bundleEntry) {
-		// TODO Auto-generated method stub
-		
-	}
+    public void renameBundleEntryKey(final String oldBundleEntryKey, final String newBundleEntryKey) {
+        final BundleEntry oldBundleEntry = this.bundleEntries.get(oldBundleEntryKey);
+        if (oldBundleEntry != null) {
+            removeBundleEntry(oldBundleEntry);
+            addBundleEntry(BundleEntry.create(newBundleEntryKey, oldBundleEntry.getValue(), oldBundleEntry.getComment(), oldBundleEntry.isCommented()));
+        }
+    }
+
+    @NonNull
+    public Set<String> getKeys() {
+        final Set<String> keys = new TreeSet<String>();
+        keys.addAll(this.bundleEntries.keySet());
+        return keys;
+    }
+
+    public Collection<BundleEntry> getBundleEntries() {
+        return this.bundleEntries.values();
+    }
+
+    public void copyBundleEntry(final String originalBundleEntryKey, final String newBundleEntryKey) {
+        final BundleEntry bundleEntry = this.bundleEntries.get(originalBundleEntryKey);
+        if (bundleEntry != null) {
+            addBundleEntry(BundleEntry.create(newBundleEntryKey, bundleEntry.getValue(), bundleEntry.getComment()));
+        }
+    }
+
+    @Override
+    public void accept(final IBundleVisitor visitor, final Object passAlongArgument) {
+        this.bundleEntries.values().forEach(entry -> visitor.visitBundleEntry(entry, passAlongArgument));
+        visitor.visitBundle(this, passAlongArgument);
+        visitor.visitBundleGroup(this.bundleGroup, passAlongArgument);
+    }
+
+    public void copyFrom(final Bundle bundle) {
+        synchronized (getBundleEntries()) {
+            bundle.getBundleEntries().stream().parallel().filter(entry -> bundle.getBundleEntry(entry.getKey()) == null).collect(Collectors.toList()).forEach(entry -> removeBundleEntry(entry));
+        }
+        bundle.getBundleEntries().stream().forEach(entry -> addBundleEntry(entry));
+    }
+
+    public static Bundle create() {
+        return new Bundle();
+    }
+
+    public void setGroup(final BundleGroup bundleGroup) {
+        this.bundleGroup = bundleGroup;
+    }
+
+    @Override
+    public String toString() {
+        return "Bundle [bundleEntries=" + bundleEntries.toString() + ", " + "locale=" + locale.toString() + ", comment=" + comment + ", bundleGroup=" + bundleGroup.toString() + "]";
+    }
 }
