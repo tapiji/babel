@@ -17,7 +17,6 @@ package org.eclipse.e4.babel.core.internal.resource;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import org.eclipse.core.resources.IFile;
@@ -49,7 +48,8 @@ public class StandardResourceFactory extends ResourceFactory {
 	 * @param file file used to open all related files
 	 * @throws CoreException problem creating factory
 	 */
-	public void init(IFile file) throws CoreException {
+	@Override
+    public void init(IFile file) throws CoreException {
 		String bundleName = getBundleName(file);
 		//        String regex = ResourceFactory.getPropertiesFileRegEx(file);
 		IResource[] resources = StandardResourceFactory.getResources(file);
@@ -62,8 +62,7 @@ public class StandardResourceFactory extends ResourceFactory {
 				addSourceEditor(sourceEditor.getLocale(), sourceEditor);
 			}
 		}
-		fileCreator = new StandardPropertiesFileCreator(file.getParent().getFullPath().toString(), bundleName,
-				file.getFileExtension());
+		fileCreator = new StandardPropertiesFileCreator(file.getParent().getFullPath().toString(), bundleName,file.getFileExtension());
 		setDisplayName(getDisplayName(file));
 	}
 
@@ -71,7 +70,8 @@ public class StandardResourceFactory extends ResourceFactory {
 	 * @see org.eclipse.e4.babel.core.resource.essiembre.eclipse.rbe.ui.editor.resources.ResourceFactory
 	 *         #getPropertiesFileCreator()
 	 */
-	public PropertiesFileCreator getPropertiesFileCreator() {
+	@Override
+    public PropertiesFileCreator getPropertiesFileCreator() {
 		return fileCreator;
 	}
 
@@ -91,6 +91,6 @@ public class StandardResourceFactory extends ResourceFactory {
 				validResources.add(resource);
 			}
 		});
-		return (IFile[]) validResources.toArray(new IFile[] {});
+		return validResources.toArray(new IFile[] {});
 	}
 }

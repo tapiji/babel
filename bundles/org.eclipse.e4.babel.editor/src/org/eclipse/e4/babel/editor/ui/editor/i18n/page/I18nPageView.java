@@ -1,7 +1,6 @@
 package org.eclipse.e4.babel.editor.ui.editor.i18n.page;
 
 import java.util.List;
-
 import org.eclipse.e4.babel.core.api.IResourceManager;
 import org.eclipse.e4.babel.editor.ui.editor.ResourceBundleEditorContract;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.page.I18nPageContract.Presenter;
@@ -38,11 +37,7 @@ public final class I18nPageView extends ScrolledComposite implements I18nPageCon
 		i18nEntryComposite = new Composite(this, SWT.BORDER);
 		i18nEntryComposite.setLayout(new GridLayout(1, false));
 
-		this.setContent(i18nEntryComposite);
-		this.setMinSize(i18nEntryComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-		this.setExpandHorizontal(true);
-		this.setExpandVertical(true);
-		this.setShowFocusedControl(true);
+		
 	}
 	
 	@Override
@@ -52,6 +47,13 @@ public final class I18nPageView extends ScrolledComposite implements I18nPageCon
 			children[i].dispose();
 		}
 		presenter.createEditingPages();
+
+		        setContent(i18nEntryComposite);
+		        setMinSize(i18nEntryComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		        setExpandHorizontal(true);
+		        setExpandVertical(true);
+		        setShowFocusedControl(true); 
+
 	}
 
 	@Override
@@ -124,7 +126,8 @@ public final class I18nPageView extends ScrolledComposite implements I18nPageCon
 		layout(true, true);
 	}
 
-	public void dispose() {
+	@Override
+    public void dispose() {
 		presenter.dispose();
 		super.dispose();
 	}

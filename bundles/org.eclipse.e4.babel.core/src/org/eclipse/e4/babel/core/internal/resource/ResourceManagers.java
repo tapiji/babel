@@ -151,7 +151,7 @@ public final class ResourceManagers implements IResourceManager {
 	 */
 	public void save() {
 		resourcesFactory.getSourceEditors().stream().forEach(editor -> {
-			//((Object) editor.getEditor()).doSave(monitor)
+			editor.saveDocument();
 		});
 	}
 

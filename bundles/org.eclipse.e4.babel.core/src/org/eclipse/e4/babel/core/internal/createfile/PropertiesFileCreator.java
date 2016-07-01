@@ -26,6 +26,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.e4.babel.core.internal.generator.PropertiesGenerator;
 import org.eclipse.e4.babel.core.preference.PropertyPreferences;
+import org.eclipse.jdt.annotation.Nullable;
 
 /**
  * Creates a properties file.
@@ -34,31 +35,32 @@ import org.eclipse.e4.babel.core.preference.PropertyPreferences;
  * @author Christian Behon
  */
 public abstract class PropertiesFileCreator {
-
+    
 	/**
 	 * Creates a propertiles file.
 	 * 
 	 * @param locale locale representing properties file
 	 * @return the properties file
-	 * @throws CoreException problem creating file
-	 * @throws IOException problem creating file
-	 */
-	public IFile createPropertiesFile(Locale locale) throws CoreException, IOException {
+	 * @return Null when the file already exists
+	 * @throws CoreException when a problem occurs
+	 **/
+    @Nullable
+	public IFile createPropertiesFile(final Locale locale) throws IOException, CoreException {
 		IPath filePath = buildFilePath(locale);
 		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 		IFile file = root.getFile(filePath);
-		if (file.exists()) {
-			//TODO internationalize.
-			throw new IOException("File already exists: " + file.getName());
+		IFile newFile = null;
+		if (!file.exists()) {
+    		String contents = "";
+    		if (PropertyPreferences.getInstance().isGeneratedByEnabled()) {
+    			contents = PropertiesGenerator.GENERATED_BY;
+    		}
+    		InputStream stream = new ByteArrayInputStream(contents.getBytes());
+    		file.create(stream, true, null);
+    		stream.close();
+    		newFile = file;
 		}
-		String contents = "";
-		if (PropertyPreferences.getInstance().isGeneratedByEnabled()) {
-			contents = PropertiesGenerator.GENERATED_BY;
-		}
-		InputStream stream = new ByteArrayInputStream(contents.getBytes());
-		file.create(stream, true, null);
-		stream.close();
-		return file;
+		return newFile;
 	}
 
 	protected abstract IPath buildFilePath(Locale locale) throws CoreException;

@@ -15,6 +15,7 @@ import java.text.Collator;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Locale;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
@@ -118,7 +119,7 @@ public final class LocaleSelector extends Composite implements FocusListener, Se
         final GridData gridData = new GridData();
         gridData.horizontalAlignment = GridData.CENTER;
         final Label lblVariant = new Label(selectionGroup, SWT.NULL);
-        //lblVariant.setText(message); // TODO
+        lblVariant.setText(message);
         lblVariant.setLayoutData(gridData);
     }
 
