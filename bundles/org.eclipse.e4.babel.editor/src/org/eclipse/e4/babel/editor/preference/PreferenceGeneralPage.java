@@ -113,6 +113,7 @@ public final class PreferenceGeneralPage extends APreferencePage {
         createLabel(field, "Schl\u00FCsselgruppenseparator:");
         keyGroupSeparator = new Text(field, SWT.BORDER);
         keyGroupSeparator.setTextLimit(2);
+        setWidthInChars(keyGroupSeparator, 1);
     }
 
     private void initValues() {

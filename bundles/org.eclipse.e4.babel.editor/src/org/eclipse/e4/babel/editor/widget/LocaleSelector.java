@@ -77,7 +77,7 @@ public final class LocaleSelector extends Composite implements FocusListener, Se
         final Group selectionGroup = new Group(this, SWT.NULL);
         layout = new GridLayout(3, false);
         selectionGroup.setLayout(layout);
-        selectionGroup.setText("selector.title");
+        selectionGroup.setText("W\u00E4hle/schreibe den Typ der Locale");
         selectionGroup.setText("");
 
         localesCombo = createLocaleComboBox(selectionGroup);
@@ -86,9 +86,9 @@ public final class LocaleSelector extends Composite implements FocusListener, Se
         countryText = createText(Input.COUNTRY, selectionGroup, 2);
         variantText = createText(Input.VARIANT, selectionGroup, 50);
 
-        createLabel(selectionGroup, "selector.language");
-        createLabel(selectionGroup, "selector.country");
-        createLabel(selectionGroup, "selector.variant");
+        createLabel(selectionGroup, "Sprache");
+        createLabel(selectionGroup, "Land");
+        createLabel(selectionGroup, "Variante");
     }
 
     private Combo createLocaleComboBox(final Group selectionGroup) {
