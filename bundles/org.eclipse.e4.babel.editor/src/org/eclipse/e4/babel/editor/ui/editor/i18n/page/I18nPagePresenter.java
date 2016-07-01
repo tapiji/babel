@@ -69,6 +69,11 @@ public class I18nPagePresenter implements I18nPageContract.Presenter {
     }
 
     @Override
+    public I18nPageEntryContract.View getPageEntryByIndex(int position) {
+	return pageEntries.get(position);
+    }
+    
+    @Override
     public void createEditingPages() {
 	resourceManager.getLocales().stream().forEach(locale -> {
 	    final I18nPageEntryContract.View entry = I18nPageEntryView.create((I18nPageView) i18nPageView, locale);

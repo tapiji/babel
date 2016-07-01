@@ -21,6 +21,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.e4.babel.editor.text.document.SourceViewerDocument;
+import org.eclipse.jface.text.TextSelection;
+import org.eclipse.jface.text.source.SourceViewer;
+import org.eclipselabs.e4.tapiji.logger.Log;
 
 
 /**
@@ -99,7 +102,9 @@ public class SourceEditor {
      * @return <code>true</code> if dirty
      */
     public boolean isCacheDirty() {
-        return !getContent().equals(contentCache);
+         boolean same = !getContent().equals(contentCache);
+         Log.i("CACHE", "Same: "+same); 
+         return same;
     }
 
     /**
@@ -115,9 +120,7 @@ public class SourceEditor {
      * @return content
      */
     public String getContent() {
-        return document
-                       .getDocument()
-                       .get();
+        return document.getDocument().get();
     }
 
     /**
@@ -126,9 +129,7 @@ public class SourceEditor {
      * @param content new content
      */
     public void setContent(String content) {
-        document
-                .getDocument()
-                .set(content);
+        document.getDocument().set(content);
         contentCache = content;
     }
 
@@ -136,8 +137,7 @@ public class SourceEditor {
      * Save content to file
      */
     public void saveDocument() {
-        document
-                .saveDocument();
+        document.saveDocument();
     }
 
     /**
@@ -149,39 +149,32 @@ public class SourceEditor {
         return false;// ((ISourceViewer) editor).isEditorInputReadOnly();
     }
 
-    public void selectKey(String key) {
+    public void selectKey(String key, SourceViewer sourceViewer) {
         if (key != null) {
             String editorContent = getContent();
-            Pattern pattern = Pattern
-                                     .compile("^" + Pattern
-                                                           .quote(key)
-                                                     + ".*$", Pattern.MULTILINE);
-            Matcher matcher = pattern
-                                     .matcher(editorContent);
-            if (matcher
-                       .find()) {
-                int start = matcher
-                                   .start();
-                // textEditor.selectAndReveal(start, 0);
+            Pattern pattern = Pattern.compile("^" + Pattern.quote(key)+ ".*$", Pattern.MULTILINE);
+            Matcher matcher = pattern.matcher(editorContent);
+            if (matcher.find()) {
+                int start = matcher.start();
+                sourceViewer.revealRange(start, 0);
+                sourceViewer.setSelectedRange(start, 0);
             }
-
         }
     }
 
-    public String getCurrentKey() {
-        /*
-         * if (textEditor.getSelectionProvider().getSelection() instanceof
-         * TextSelection) { TextSelection selection = (TextSelection)
-         * textEditor.getSelectionProvider().getSelection(); int selectionStart
-         * = selection.getOffset(); String content = getContent(); int start =
-         * 0, end = 0;
-         * // Extract the bounds of the line containing the selection for (start
-         * = selectionStart; start > 0 && content.charAt(start-1) != '\n';
-         * start--); for (end = start; end < content.length()-1 &&
-         * content.charAt(end+1) != '=' && content.charAt(end+1) != '\n';
-         * end++); String line = content.substring(start, end+1).trim(); return
-         * line; }
-         */
+    public String getCurrentKey(SourceViewer sourceViewer) {
+        if (sourceViewer.getSelectionProvider().getSelection() instanceof TextSelection) {
+            TextSelection selection = (TextSelection) sourceViewer.getSelectionProvider().getSelection();
+            int selectionStart = selection.getOffset();
+            String content = getContent();
+            int start = 0, end = 0;
+            
+            // Extract the bounds of the line containing the selection
+            for (start = selectionStart; start > 0 && content.charAt(start-1) != '\n'; start--);
+            for (end = start; end < content.length()-1 && content.charAt(end+1) != '=' && content.charAt(end+1) != '\n'; end++);
+            String line = content.substring(start, end+1).trim();
+            return line;
+        }
         return null;
     }
 

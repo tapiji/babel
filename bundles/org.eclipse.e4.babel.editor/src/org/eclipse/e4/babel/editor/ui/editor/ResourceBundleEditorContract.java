@@ -34,5 +34,7 @@ public interface ResourceBundleEditorContract {
 	void addResource(IFile newFile, Locale newLocal);
 
 	void updateDirtyState(boolean dirty);
+
+	boolean getDirtyState();
     }
 }

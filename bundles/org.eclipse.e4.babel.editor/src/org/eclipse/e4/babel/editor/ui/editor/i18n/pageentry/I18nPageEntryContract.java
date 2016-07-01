@@ -73,8 +73,7 @@ public interface I18nPageEntryContract {
 
 		I18nPageContract.View getI18nPageView();
 
-		void updateDirtyState(boolean dirty);
-
+		boolean isEditorDirty();
     }
 }
 

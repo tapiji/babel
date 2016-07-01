@@ -38,17 +38,20 @@ import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MWindow;
 import org.eclipse.e4.ui.services.EMenuService;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
+import org.eclipse.jface.text.source.SourceViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipselabs.e4.tapiji.logger.Log;
 
-public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEditorContract.View {
+public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEditorContract.View, SelectionListener {
 
     public static final String TOPIC_TREE_VIEW_VISIBILITY = "TOPIC_GUI/TREE_VIEW_VISIBILITY";
     private static final String TAG = ResourceBundleEditor.class.getSimpleName();
@@ -81,6 +84,9 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
 
     private KeyTreeView keyTreeView;
     private IResourceManager resourceManager;
+    private SourceEditor lastEditor;
+    private List<PropertiesTextEditor> editors = new ArrayList<>();
+    private SourceViewer lastSourceViewer;
 
     @Inject
     public ResourceBundleEditor(Composite parent) {
@@ -109,6 +115,8 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
 
 	ResourcesPlugin.getWorkspace().addResourceChangeListener(resourceChangeListener, IResourceChangeEvent.POST_CHANGE);
 
+	addSelectionListener(this);
+
 	Log.d(TAG, "KEYTREE: " + resourceManager.getKeyTree().toString());
 
 	sashForm = new SashForm(this, SWT.SMOOTH);
@@ -120,6 +128,7 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
 
 	resourceManager.getSourceEditors().stream().forEach(editor -> {
 	    final PropertiesTextEditor textEditor = new PropertiesTextEditor(this, editor.getDocument());
+	    editors.add(textEditor);
 	    createTab(textEditor, UIUtils.getDisplayName(editor.getLocale()), BabelResourceConstants.IMG_RESOURCE_PROPERTY);
 
 	});
@@ -220,6 +229,7 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
     public void addResource(IFile resource, Locale locale) {
 	SourceEditor editor = resourceManager.addSourceEditor(resource, locale);
 	final PropertiesTextEditor textEditor = new PropertiesTextEditor(this, editor.getDocument());
+	editors.add(textEditor);
 	createTab(textEditor, UIUtils.getDisplayName(editor.getLocale()), BabelResourceConstants.IMG_RESOURCE_PROPERTY);
 	i18nPage.refreshView();
 	setSelection(0);
@@ -273,5 +283,48 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
 	if (!dirty.isDirty()) {
 	    dirty.setDirty(isDirty);
 	}
+    }
+
+    @Override
+    public boolean getDirtyState() {
+	return dirty.isDirty();
+    }
+
+    @Override
+    public void widgetSelected(SelectionEvent e) {
+	Log.i(TAG, "widgetSelected");
+	KeyTree keyTree = resourceManager.getKeyTree();
+	int index = getSelectionIndex();
+
+	if (lastEditor != null) {
+	    if (lastEditor.getCurrentKey(lastSourceViewer) != null) {
+		keyTree.selectKey(lastEditor.getCurrentKey(lastSourceViewer));
+	    }
+	}
+
+	if (index == 0) {
+	    resourceManager.reloadProperties();
+	    i18nPage.getPresenter().refreshTextBoxes();
+	    lastEditor = null;
+	    lastSourceViewer = null;
+	    return;
+	}
+
+	if (index == getTabList().length - 1) // switched to last page
+	    return;
+
+	int editorIndex = index - 1; // adjust because first page is tree page
+	if (editorIndex >= 0 && editorIndex < resourceManager.getSourceEditors().size()) {
+	    lastSourceViewer = editors.get(editorIndex).getSourceViewer();
+	    lastEditor = resourceManager.getSourceEditors().get(editorIndex);
+	    if (keyTree.getSelectedKey() != null)
+		lastEditor.selectKey(keyTree.getSelectedKey(), lastSourceViewer);
+	}
+    }
+
+    @Override
+    public void widgetDefaultSelected(SelectionEvent e) {
+	Log.i(TAG, "widgetDefaultSelected" + e);
+
     }
 }

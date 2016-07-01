@@ -12,10 +12,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
@@ -63,11 +59,8 @@ public final class SourceViewerDocument {
 	public IDocument getDocument() {
 		if (null != document) {
 			return document;
-		}
+		}	
 		document = new Document();
-		Job job = new Job("My Job") {
-			@Override
-			protected IStatus run(IProgressMonitor monitor) {
 				try (InputStream content = file.getContents();
 						InputStreamReader inputStreamReader = new InputStreamReader(content, getEncoding());
 						BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
@@ -82,13 +75,7 @@ public final class SourceViewerDocument {
 					document.set(buffer.toString());
 				} catch (final Exception exception) {
 					Log.e(TAG, exception);
-					return Status.CANCEL_STATUS;
 				}
-				return Status.OK_STATUS;
-
-			};
-		};
-		job.schedule();
 		return document;
 	}
 

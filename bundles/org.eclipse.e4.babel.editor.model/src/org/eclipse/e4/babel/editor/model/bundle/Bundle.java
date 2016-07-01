@@ -1,6 +1,7 @@
 package org.eclipse.e4.babel.editor.model.bundle;
 
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -9,7 +10,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
-
 import org.eclipse.e4.babel.editor.model.checks.visitor.DuplicateValuesVisitor;
 import org.eclipse.e4.babel.editor.model.checks.visitor.SimilarValuesVisitor;
 import org.eclipse.jdt.annotation.NonNull;
@@ -124,15 +124,28 @@ public final class Bundle extends BundleObject {
   }
 
   public void copyFrom(final Bundle bundle) {
-    bundle.getBundleEntries()
+      synchronized (getBundleEntries()) {
+          /*List<BundleEntry> entriesToRemove = new ArrayList<>();
+          bundle.getBundleEntries()
           .stream()
           .filter(entry -> bundle.getBundleEntry(entry.getKey()) == null)
           .collect(Collectors.toList())
-          .forEach(entry -> removeBundleEntry(entry));
+          
+          //.forEach(entry -> entriesToRemove.addAll(entry));*/
 
+          List<BundleEntry> entriesToRemove = new ArrayList<>();
+          for (BundleEntry entry : bundle.getBundleEntries()) {
+              BundleEntry localEntry = entry;
+              if (bundle.getBundleEntry(localEntry.getKey()) == null) {
+                  entriesToRemove.add(localEntry);
+              }
+          }    
+          entriesToRemove.stream().forEach(editor -> removeBundleEntry(editor));
+      }
     bundle.getBundleEntries()
           .stream()
           .forEach(entry -> addBundleEntry(entry));
+
   }
 
   public static Bundle create() {

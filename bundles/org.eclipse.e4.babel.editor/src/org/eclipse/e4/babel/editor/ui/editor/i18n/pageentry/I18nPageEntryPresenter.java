@@ -97,6 +97,7 @@ public final class I18nPageEntryPresenter implements I18nPageEntryContract.Prese
 	    final String text = view.getText();
 	    if (entry == null || !text.equals(entry.getValue())) {
 		bundleGroup.addBundleEntry(locale, BundleEntry.create(activeKey, text));
+		resourceBundleEditor.updateDirtyState(true);
 	    }
 	}
     }
@@ -143,10 +144,6 @@ public final class I18nPageEntryPresenter implements I18nPageEntryContract.Prese
 	return key != null && getResourceManager().getBundleGroup().isKey(key);
     }
     
-    @Override
-    public void updateDirtyState(boolean dirty) {
-	  resourceBundleEditor.updateDirtyState(dirty);
-    }
 
     @Override
     public void updateDocument(final String key) {
@@ -185,5 +182,10 @@ public final class I18nPageEntryPresenter implements I18nPageEntryContract.Prese
     @Override
     public Collection<BundleEntry> getDuplicates() {
 	return duplVisitor.getDuplicates();
+    }
+
+    @Override
+    public boolean isEditorDirty() {
+	return resourceBundleEditor.getDirtyState();
     }
 }

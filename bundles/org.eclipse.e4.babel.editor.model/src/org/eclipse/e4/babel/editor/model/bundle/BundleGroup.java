@@ -1,10 +1,8 @@
 package org.eclipse.e4.babel.editor.model.bundle;
 
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.SortedSet;

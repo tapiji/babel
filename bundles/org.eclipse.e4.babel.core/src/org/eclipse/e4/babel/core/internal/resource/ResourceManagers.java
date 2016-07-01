@@ -22,10 +22,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.function.Predicate;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.e4.babel.core.api.IResourceFactory;
 import org.eclipse.e4.babel.core.api.IResourceManager;
 import org.eclipse.e4.babel.core.internal.generator.PropertiesGenerator;
@@ -41,8 +39,6 @@ import org.eclipse.e4.babel.editor.model.updater.FlatKeyTreeUpdater;
 import org.eclipse.e4.babel.editor.model.updater.GroupedKeyTreeUpdater;
 import org.eclipse.e4.babel.editor.model.updater.KeyTreeUpdater;
 import org.eclipse.e4.babel.editor.text.model.SourceEditor;
-import org.eclipse.e4.core.di.annotations.Creatable;
-import org.eclipse.ui.PartInitException;
 import org.eclipselabs.e4.tapiji.logger.Log;
 
 /**
@@ -88,7 +84,7 @@ public final class ResourceManagers implements IResourceManager {
 			public <T> void modify(BundleEvent<T> event) {
 				super.modify(event);
 				final Bundle bundle = (Bundle) event.data();
-				final SourceEditor editor = (SourceEditor) sourceEditors.get(bundle.getLocale());
+				final SourceEditor editor = sourceEditors.get(bundle.getLocale());
 				String editorContent = PropertiesGenerator.generate(bundle);
 				editor.setContent(editorContent);
 			}
@@ -149,7 +145,8 @@ public final class ResourceManagers implements IResourceManager {
 	 * 
 	 * @param monitor progress monitor
 	 */
-	public void save() {
+	@Override
+    public void save() {
 		resourcesFactory.getSourceEditors().stream().forEach(editor -> {
 			editor.saveDocument();
 		});
@@ -197,7 +194,7 @@ public final class ResourceManagers implements IResourceManager {
 	 */
 	@Override
 	public SourceEditor getSourceEditor(Locale locale) {
-		return (SourceEditor) sourceEditors.get(locale);
+		return sourceEditors.get(locale);
 	}
 
 	@Override
@@ -214,11 +211,10 @@ public final class ResourceManagers implements IResourceManager {
 	 */
 	@Override
 	public void reloadProperties() {
-		resourcesFactory.getSourceEditors().stream().forEach(editor -> {
-			if (editor.isCacheDirty()) {
+		resourcesFactory.getSourceEditors().stream().filter(editor->editor.isCacheDirty()).forEach(editor -> {
+		        Log.d(TAG, editor.toString());
 				bundleGroup.addBundle(editor.getLocale(), PropertiesParser.parse(editor.getContent()));
 				editor.resetCache();
-			}
 		});
 	}
 

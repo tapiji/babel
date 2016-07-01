@@ -51,6 +51,9 @@ public final class PropertiesTextEditor extends Composite {
 		partitioner.connect(document);
 		document.setDocumentPartitioner(partitioner);
 		sourceViewer.setDocument(document);
+		
+		
+		//sourceViewer.reva
 	}
 
 	@NonNull
@@ -66,6 +69,7 @@ public final class PropertiesTextEditor extends Composite {
 	public void setTab(CTabItem createTab) {
 		this.tab = createTab;
 	}
+	
 
 	public CTabItem getTab() {
 		return this.tab;

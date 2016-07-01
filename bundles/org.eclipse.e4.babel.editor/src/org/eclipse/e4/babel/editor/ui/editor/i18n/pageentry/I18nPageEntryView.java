@@ -7,7 +7,6 @@ import java.util.Locale;
 
 import org.eclipse.e4.babel.core.preference.PropertyPreferences;
 import org.eclipse.e4.babel.core.utils.UIUtils;
-import org.eclipse.e4.babel.editor.text.document.SourceViewerDocument;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.page.I18nPageContract;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.page.I18nPagePresenter.LocalBehaviour;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.pageentry.I18nPageEntryContract.Presenter;
@@ -238,21 +237,24 @@ public final class I18nPageEntryView extends Composite implements KeyListener, T
 	} else if (isKeyCombination(event, SWT.CTRL, 'a')) {
 	    textView.setSelectedRange(0, textView.getDocument().getLength());
 	} else {
-	    StyledText eventBox = (StyledText) event.widget;
-	    SourceViewerDocument editor = presenter.getResourceManager().getSourceEditor(presenter.getLocale()).getDocument();
-	    // Text field has changed: make editor dirty if not already
-	    if (textBeforeUpdate != null && !textBeforeUpdate.equals(eventBox.getText())) {
-		// Make the editor dirty if not already. If it is,
-		// we wait until field focus lost (or save) to
-		// update it completely.
-		/*
-		 * if (!editor.isDirty()) { int caretPosition =
-		 * eventBox.getCaretOffset(); presenter.updateBundleOnChanges();
-		 * eventBox.setSelection(caretPosition); }
-		 */
+	    markEditorAsDirty((StyledText) event.widget);
+	}
+    }
+
+    /**
+     * Text field has changed: 
+     * make editor dirty if not already
+     * 
+     * @param eventBox
+     */
+    private void markEditorAsDirty(StyledText eventBox) {
+	if (textBeforeUpdate != null && !textBeforeUpdate.equals(eventBox.getText())) {
+	    if (!presenter.isEditorDirty()) {
+		int caretPosition = eventBox.getCaretOffset();
+		presenter.updateBundleOnChanges();
+		eventBox.setSelection(caretPosition);
 	    }
 	}
-	presenter.updateDirtyState(true);
     }
 
     @Override

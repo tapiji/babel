@@ -64,5 +64,7 @@ public interface I18nPageContract {
 	void refreshEditorOnChanges();
 
 	void refreshTextBoxes();
+
+	I18nPageEntryContract.View getPageEntryByIndex(int position);
     }
 }
