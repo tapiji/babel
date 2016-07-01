@@ -1,6 +1,5 @@
 package org.eclipse.e4.babel.editor.ui.editor;
 
-
 import java.util.Locale;
 
 import org.eclipse.core.resources.IFile;
@@ -12,27 +11,28 @@ import org.eclipse.e4.core.commands.EHandlerService;
 import org.eclipse.e4.ui.services.EMenuService;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 
-
 public interface ResourceBundleEditorContract {
 
-  interface View {
+    interface View {
 
-    ECommandService getCommandService();
+	ECommandService getCommandService();
 
-    EHandlerService getHandlerService();
+	EHandlerService getHandlerService();
 
-    EMenuService getMenuService();
+	EMenuService getMenuService();
 
-    IBabelResourceProvider getResourceProvider();
+	IBabelResourceProvider getResourceProvider();
 
-    ESelectionService getSelectionService();
+	ESelectionService getSelectionService();
 
-    KeyTreeView getKeyTreeView();
+	KeyTreeView getKeyTreeView();
 
 	IResourceManager getResourceManager();
 
 	void setActiveTab(Locale locale);
 
 	void addResource(IFile newFile, Locale newLocal);
-  }
+
+	void updateDirtyState(boolean dirty);
+    }
 }

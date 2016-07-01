@@ -35,7 +35,7 @@ public class KeyTree extends BundleObject {
     }
     
     private void initBundleGroup(final BundleGroup bundleGroup) {
-        bundleGroup.addChangeLIstener(new BundleChangeAdapter() {
+        bundleGroup.addChangeListener(new BundleChangeAdapter() {
 
             @Override
             public <T> void add(BundleEvent<T> event) {
@@ -46,7 +46,7 @@ public class KeyTree extends BundleObject {
     }
 
     protected void initBundle(final Bundle bundle) {
-        bundle.addChangeLIstener(new BundleChangeAdapter() {
+        bundle.addChangeListener(new BundleChangeAdapter() {
 
             @Override
             public <T> void add(BundleEvent<T> event) {

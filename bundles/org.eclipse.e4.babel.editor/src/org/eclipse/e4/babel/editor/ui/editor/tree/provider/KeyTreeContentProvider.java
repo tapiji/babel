@@ -29,7 +29,7 @@ public final class KeyTreeContentProvider implements ITreeContentProvider,IBundl
             ((KeyTree) oldInput).removeChangeListener(this);
         }
         if(newInput != null) {
-            ((KeyTree) newInput).addChangeLIstener(this);
+            ((KeyTree) newInput).addChangeListener(this);
         }
     }
 

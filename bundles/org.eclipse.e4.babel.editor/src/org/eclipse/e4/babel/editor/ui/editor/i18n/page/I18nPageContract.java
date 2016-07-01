@@ -1,71 +1,68 @@
 package org.eclipse.e4.babel.editor.ui.editor.i18n.page;
 
-
 import java.util.List;
 
 import org.eclipse.e4.babel.core.api.IResourceManager;
 import org.eclipse.e4.babel.editor.ui.BasePresenter;
 import org.eclipse.e4.babel.editor.ui.BaseView;
 import org.eclipse.e4.babel.editor.ui.editor.ResourceBundleEditorContract;
-import org.eclipse.e4.babel.editor.ui.editor.ResourceBundleEditorContract.View;
-import org.eclipse.e4.babel.editor.ui.editor.i18n.page.I18nPageContract.Presenter;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.page.I18nPagePresenter.LocalBehaviour;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.pageentry.I18nPageEntryContract;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.pageentry.I18nPageEntryView;
 import org.eclipse.e4.babel.resource.IBabelResourceProvider;
 import org.eclipse.swt.widgets.Composite;
 
-
 public interface I18nPageContract {
 
     interface View extends BaseView<Presenter> {
 
-        void onLocaleClick();
+	void onLocaleClick();
 
-        void setNextFocusDown();
+	void setNextFocusDown();
 
-        void setNextFocusUp();
+	void setNextFocusUp();
 
-        void onFocusChange(I18nPageEntryView bundleEntryComposite);
+	void setActiveBundleEntry(I18nPageEntryView bundleEntryComposite);
 
-		Composite getI18NPage();
+	Composite getI18NPage();
 
-		void refreshLayout();
+	void refreshLayout();
 
-		Presenter getPresenter();
+	Presenter getPresenter();
 
-		void createEditingPart();
+	void createEditingPart();
+
+	void dispose();
+
+	void refreshView();
     }
 
     interface Presenter extends BasePresenter {
 
-		void createEditingPages();
+	void createEditingPages();
 
-		IResourceManager getResourceManager();
+	IResourceManager getResourceManager();
 
-		LocalBehaviour getLocalBehaviour();
+	LocalBehaviour getLocalBehaviour();
 
-		List<I18nPageEntryContract.View> getPageEntries();
+	List<I18nPageEntryContract.View> getPageEntries();
 
-		void redrawEditorSize();
+	void redrawEditorSize();
 
-		I18nPageEntryContract.View getActiveEntry();
+	I18nPageEntryContract.View getActiveEntry();
 
-		void selectPreviousTreeEntry();
+	void selectPreviousTreeEntry();
 
-		void selectNextTreeEntry();
+	void selectNextTreeEntry();
 
-		ResourceBundleEditorContract.View getResourceBundleEditor();
+	ResourceBundleEditorContract.View getResourceBundleEditor();
 
-		IBabelResourceProvider getResourceProvider();
+	IBabelResourceProvider getResourceProvider();
 
-		void refreshKeyTree();
+	void refreshKeyTree();
 
-		void refreshEditorOnChanges();
+	void refreshEditorOnChanges();
 
-		void refreshTextBoxes();
-
+	void refreshTextBoxes();
     }
-
-
 }

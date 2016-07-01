@@ -21,7 +21,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.e4.babel.editor.text.document.SourceViewerDocument;
-import org.eclipse.swt.widgets.Link;
 
 
 /**

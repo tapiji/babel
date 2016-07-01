@@ -34,7 +34,7 @@ public abstract class BundleObject {
              .forEach(listener -> listener.modify(BundleEvent.create(object)));
   }
 
-  public void addChangeLIstener(final IBundleChangeListener listener) {
+  public void addChangeListener(final IBundleChangeListener listener) {
     Log.d(TAG, "addChangeLIstener: " + listener.getClass()
                                                .getSimpleName() + " listener cnt: " + listeners.size());
     listeners.add(0, listener);

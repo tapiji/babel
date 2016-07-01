@@ -82,7 +82,7 @@ public final class ResourceManagers implements IResourceManager {
 			bundleGroup.addBundle(locale, PropertiesParser.parse(editor.getContent()));
 		});
 
-		bundleGroup.addChangeLIstener(new BundleChangeAdapter() {
+		bundleGroup.addChangeListener(new BundleChangeAdapter() {
 
 			@Override
 			public <T> void modify(BundleEvent<T> event) {
