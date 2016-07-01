@@ -26,6 +26,8 @@ public interface KeyTreeContract {
 	void collapseAll();
 
 	void expandAll();
+
+	void createView();
     }
 
     interface Presenter extends BasePresenter {

@@ -77,7 +77,7 @@ public final class KeyTreeItem implements Comparable<KeyTreeItem>, IKeyTreeVisit
         }
         return nestedChildren;
     }
-    
+
     public boolean isVisible() {
         return visible;
     }
@@ -96,21 +96,17 @@ public final class KeyTreeItem implements Comparable<KeyTreeItem>, IKeyTreeVisit
         visitor.visitKeyTreeItem(this, passAlongArgument);
     }
 
-    public boolean applyFilter(final ITreeFilter filter) {
+    public void applyFilter(final ITreeFilter filter) {
         if (filter == null) {
             this.visible = true;
+        } else {
+           filter.doFilter(this);
         }
+    }
 
-        if (filter.doFilter(this)) {
-           this.visible = false;
-        }
+    public void setVisible(boolean b) {
+            visible = b;
         
-        for (KeyTreeItem child : children) {
-            if (child.applyFilter(filter)) {
-                visible = false;
-            }
-        }
-        return this.visible;
     }
 
 

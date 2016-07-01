@@ -44,7 +44,7 @@ public final class KeyTreeView extends Composite implements KeyTreeContract.View
 
     public static KeyTreeView create(final Composite sashForm, ResourceBundleEditorContract.View resourceBundleEditor) {
 	KeyTreeView treevIew = new KeyTreeView(sashForm, resourceBundleEditor);
-	KeyTreePresenter.create(treevIew, resourceBundleEditor);
+	treevIew.setPresenter(KeyTreePresenter.create(treevIew, resourceBundleEditor));
 	return treevIew;
     }
 
@@ -53,10 +53,10 @@ public final class KeyTreeView extends Composite implements KeyTreeContract.View
 	this.rbeView = resourceBundleEditor;
 	Log.d(TAG, "treeViewerPart");
 	setLayout(new GridLayout(1, false));
-	createView();
     }
 
-    private void createView() {
+    @Override
+    public void createView() {
 	topView();
 	middleView();
 	bottomView();
@@ -106,7 +106,6 @@ public final class KeyTreeView extends Composite implements KeyTreeContract.View
 		setSelectedKeyTreeItem(presenter.getKeyTree().getKeyTreeItem(addKeyTextBox.getText()));
 		setVisible(true);
 		setCursor(defaultCursor);
-		treeViewer.addFilter(presenter.getTreeFilter());
 		treeViewer.refresh(true);
 
 	    }
@@ -144,6 +143,7 @@ public final class KeyTreeView extends Composite implements KeyTreeContract.View
 	if (PropertyPreferences.getInstance().isEditorTreeExpanded()) {
 	    treeViewer.expandAll();
 	}
+	
 	treeViewer.addSelectionChangedListener((event) -> {
 	    IStructuredSelection selection = (IStructuredSelection) treeViewer.getSelection();
 	    rbeView.getSelectionService().setSelection(presenter.getSelection(selection));
@@ -180,7 +180,7 @@ public final class KeyTreeView extends Composite implements KeyTreeContract.View
 		}
 	    }
 	});
-
+	treeViewer.addFilter(presenter.getTreeFilter());
 	rbeView.getMenuService().registerContextMenu(treeViewer.getTree(), TREE_VIEWER_MENU_ID);
     }
 

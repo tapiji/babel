@@ -1,22 +1,43 @@
 package org.eclipse.e4.babel.editor.model.tree.filter;
 
+
 import java.util.Collection;
 import org.eclipse.e4.babel.editor.model.bundle.BundleEntry;
 import org.eclipse.e4.babel.editor.model.bundle.BundleGroup;
 import org.eclipse.e4.babel.editor.model.tree.KeyTreeItem;
 
+
 public final class MissingKeyFilter implements ITreeFilter {
 
-    private boolean isMissingChildValueOnly;
 
+    private boolean oneMissingChild = false;
+    
     @Override
     public boolean doFilter(KeyTreeItem keyTreeItem) {
-        return true;
-       // isMissingChildValueOnly = isItemMissingValue(keyTreeItem);
-       // return isMissingChildValueOnly;
+        boolean isMissingValue = isItemMissingValue(keyTreeItem);
+     
+
+        if (isMissingValue) {
+            keyTreeItem.setVisible(false);
+        } else {
+           
+            for (KeyTreeItem childItem : keyTreeItem.getNestedChildren()) {
+                if (isItemMissingValue(childItem)) {
+                    childItem.setVisible(false);
+                    
+                } else {
+                    oneMissingChild = true;
+                    childItem.setVisible(true);
+                }
+            }
+
+               keyTreeItem.setVisible(false); 
+  
+        }
+return false;
     }
-    
-    
+
+
     private boolean isItemMissingValue(KeyTreeItem item) {
         String key = item.getId();
         BundleGroup bundleGroup = item.getKeyTree().getBundleGroup();
