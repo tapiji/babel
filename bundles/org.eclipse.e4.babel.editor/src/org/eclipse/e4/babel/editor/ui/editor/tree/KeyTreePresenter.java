@@ -1,9 +1,11 @@
 package org.eclipse.e4.babel.editor.ui.editor.tree;
 
+import org.eclipse.e4.babel.core.preference.PropertyPreferences;
 import org.eclipse.e4.babel.editor.model.tree.KeyTree;
 import org.eclipse.e4.babel.editor.model.tree.KeyTreeItem;
 import org.eclipse.e4.babel.editor.model.updater.FlatKeyTreeUpdater;
 import org.eclipse.e4.babel.editor.model.updater.GroupedKeyTreeUpdater;
+import org.eclipse.e4.babel.editor.model.updater.KeyTreeUpdater;
 import org.eclipse.e4.babel.editor.ui.editor.ResourceBundleEditorContract;
 import org.eclipse.e4.babel.editor.ui.editor.tree.KeyTreeContract.View;
 import org.eclipse.e4.babel.editor.ui.editor.tree.provider.KeyTreeContentProvider;
@@ -18,6 +20,7 @@ final class KeyTreePresenter implements KeyTreeContract.Presenter {
     private KeyTreeContentProvider keyTreeContentProvider;
     private View keyTreeView;
     private ResourceBundleEditorContract.View resourceBundleEditor;
+    private KeyTreeUpdater keyTreeUpdater;
 
     private KeyTreePresenter(View keyTreeView, KeyTreeLabelProvider keyTreeLabelProvider, KeyTreeContentProvider keyTreeContentProvider,
 	    ResourceBundleEditorContract.View resourceBundleEditor) {
@@ -33,6 +36,7 @@ final class KeyTreePresenter implements KeyTreeContract.Presenter {
 	keyTreeView.setTreeViewerContentProvider(keyTreeContentProvider);
 	keyTreeView.setTreeViewerLabelProvider(keyTreeLabelProvider);
 	keyTreeView.updateKeyTree(getKeyTree());
+	keyTreeUpdater = keyTreeView.getKeyTree().getUpdater();
     }
 
     @Override
@@ -80,12 +84,19 @@ final class KeyTreePresenter implements KeyTreeContract.Presenter {
 
     @Override
     public void changeToHierarchicalTree() {
-	getKeyTree().setUpdater(new GroupedKeyTreeUpdater("."));
+	keyTreeUpdater = new GroupedKeyTreeUpdater(PropertyPreferences.getInstance().getKeyGroupSeparator());
+	getKeyTree().setUpdater(keyTreeUpdater);
     }
 
     @Override
     public void changeToFlatTree() {
-	getKeyTree().setUpdater(new FlatKeyTreeUpdater());
+	keyTreeUpdater = new FlatKeyTreeUpdater();
+	getKeyTree().setUpdater(keyTreeUpdater);
+    }
+
+    @Override
+    public KeyTreeUpdater getKeyTreeUpdater() {
+        return keyTreeUpdater;
     }
 
     @Override

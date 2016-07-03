@@ -6,13 +6,12 @@ import java.util.Locale;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IResourceDelta;
-import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.e4.babel.core.BabelExtensionManager;
@@ -20,7 +19,7 @@ import org.eclipse.e4.babel.core.api.IResourceManager;
 import org.eclipse.e4.babel.core.utils.UIUtils;
 import org.eclipse.e4.babel.editor.model.tree.KeyTree;
 import org.eclipse.e4.babel.editor.preference.APreferencePage;
-import org.eclipse.e4.babel.editor.text.PropertiesTextEditor;
+import org.eclipse.e4.babel.editor.text.BundleTextEditor;
 import org.eclipse.e4.babel.editor.text.model.SourceEditor;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.page.I18nPageContract;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.page.I18nPageView;
@@ -48,7 +47,6 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.IFileEditorInput;
 import org.eclipselabs.e4.tapiji.logger.Log;
 
 public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEditorContract.View, SelectionListener {
@@ -85,19 +83,15 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
     private KeyTreeView keyTreeView;
     private IResourceManager resourceManager;
     private SourceEditor lastEditor;
-    private List<PropertiesTextEditor> editors = new ArrayList<>();
+    private List<BundleTextEditor> editors = new ArrayList<>();
     private SourceViewer lastSourceViewer;
 
     @Inject
+    private IWorkspace workspace;
+    
+    @Inject
     public ResourceBundleEditor(Composite parent) {
 	super(parent, SWT.BOTTOM);
-    }
-
-    @Inject
-    @Optional
-    public void setPartInput(@Named("input") Object input) {
-	IFile file = ((IFileEditorInput) input).getFile();
-	Log.d(TAG, "INPUT: " + file.getProject());
     }
 
     @PostConstruct
@@ -113,7 +107,7 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
 	    e.printStackTrace();
 	}
 
-	ResourcesPlugin.getWorkspace().addResourceChangeListener(resourceChangeListener, IResourceChangeEvent.POST_CHANGE);
+	workspace.addResourceChangeListener(resourceChangeListener, IResourceChangeEvent.POST_CHANGE);
 
 	addSelectionListener(this);
 
@@ -127,8 +121,9 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
 	createTab(sashForm, "Properties", BabelResourceConstants.IMG_RESOURCE_BUNDLE);
 
 	resourceManager.getSourceEditors().stream().forEach(editor -> {
-	    final PropertiesTextEditor textEditor = new PropertiesTextEditor(this, editor.getDocument());
+	    final BundleTextEditor textEditor = new BundleTextEditor(this,dirty, editor.getDocument());
 	    editors.add(textEditor);
+	    paths.add( editor.getDocument().getFile().getFullPath() );
 	    createTab(textEditor, UIUtils.getDisplayName(editor.getLocale()), BabelResourceConstants.IMG_RESOURCE_PROPERTY);
 
 	});
@@ -228,12 +223,13 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
     @Override
     public void addResource(IFile resource, Locale locale) {
 	SourceEditor editor = resourceManager.addSourceEditor(resource, locale);
-	final PropertiesTextEditor textEditor = new PropertiesTextEditor(this, editor.getDocument());
+	final BundleTextEditor textEditor = new BundleTextEditor(this,dirty, editor.getDocument());
 	editors.add(textEditor);
 	createTab(textEditor, UIUtils.getDisplayName(editor.getLocale()), BabelResourceConstants.IMG_RESOURCE_PROPERTY);
 	i18nPage.refreshView();
 	setSelection(0);
-	dirty.setDirty(true);
+	editor.setContent(editor.getContent()); 
+	updateDirtyState(true);
     }
 
     @Persist
@@ -249,7 +245,7 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
 	if (key != null) {
 	    keyTree.selectKey(key);
 	}
-	dirty.setDirty(false);
+	updateDirtyState(false);
     }
 
     private class ResourceChangeListener implements IResourceChangeListener {
@@ -274,7 +270,7 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
 	sourceEditors.forEach(editor -> {
 	    editor.getDocument().dispose();
 	});
-	ResourcesPlugin.getWorkspace().removeResourceChangeListener(resourceChangeListener);
+	workspace.removeResourceChangeListener(resourceChangeListener);
 	super.dispose();
     }
 

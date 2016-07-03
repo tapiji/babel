@@ -1,8 +1,10 @@
 package org.eclipse.e4.babel.editor.model.bundle;
 
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -63,10 +65,12 @@ public final class Bundle extends BundleObject implements IBundleVisitable {
         BundleEntry oldBundleEntry = this.bundleEntries.get(bundleEntry.getKey());
         if (oldBundleEntry != null && !oldBundleEntry.equals(bundleEntry)) {
             this.bundleEntries.put(bundleEntry.getKey(), bundleEntry);
+            bundleEntry.setBundle(this);
             bundleEntry.setLocale(locale);
             fireModify(oldBundleEntry);
         } else if (bundleEntry.getKey().trim().length() > 0) {
             this.bundleEntries.put(bundleEntry.getKey(), bundleEntry);
+            bundleEntry.setBundle(this);
             bundleEntry.setLocale(locale);
             fireAdd(bundleEntry);
         }
@@ -122,9 +126,23 @@ public final class Bundle extends BundleObject implements IBundleVisitable {
     }
 
     public void copyFrom(final Bundle bundle) {
-        synchronized (getBundleEntries()) {
-            bundle.getBundleEntries().stream().parallel().filter(entry -> bundle.getBundleEntry(entry.getKey()) == null).collect(Collectors.toList()).forEach(entry -> removeBundleEntry(entry));
+        synchronized (bundleEntries) {
+            List<BundleEntry> entriesToRemove = new ArrayList<>();
+            for (Iterator<BundleEntry> iter = bundleEntries.values().iterator(); iter.hasNext();) {
+                BundleEntry localEntry = iter.next();
+                if (bundle.getBundleEntry(localEntry.getKey()) == null) {
+                    entriesToRemove.add(localEntry);
+                }
+            }    
+            for (Iterator<BundleEntry> iter = 
+                    entriesToRemove.iterator(); iter.hasNext();) {
+                BundleEntry entry = iter.next();
+                removeBundleEntry(entry);
+            }        
         }
+       /* synchronized (getBundleEntries()) {
+            bundle.getBundleEntries().stream().filter(entry -> bundle.getBundleEntry(entry.getKey()) == null).collect(Collectors.toList()).forEach(entry -> removeBundleEntry(entry));
+        }*/
         bundle.getBundleEntries().stream().forEach(entry -> addBundleEntry(entry));
     }
 
@@ -138,6 +156,6 @@ public final class Bundle extends BundleObject implements IBundleVisitable {
 
     @Override
     public String toString() {
-        return "Bundle [bundleEntries=" + bundleEntries.toString() + ", " + "locale=" + locale.toString() + ", comment=" + comment + ", bundleGroup=" + bundleGroup.toString() + "]";
+        return "Bundle [bundleEntries=" + bundleEntries + ", " + "locale=" + locale + ", comment=" + comment + "]";
     }
 }

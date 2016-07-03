@@ -242,6 +242,11 @@ public final class KeyTreeView extends Composite implements KeyTreeContract.View
     }
 
     @Override
+    public Presenter getPresenter() {
+        return presenter;
+    }
+
+    @Override
     public void setSelectedKeyTreeItem(KeyTreeItem item) {
 	if (item != null) {
 	    treeViewer.setSelection(new StructuredSelection(item), true);

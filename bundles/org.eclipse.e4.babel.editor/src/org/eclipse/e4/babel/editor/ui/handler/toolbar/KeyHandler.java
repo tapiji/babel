@@ -1,5 +1,6 @@
 package org.eclipse.e4.babel.editor.ui.handler.toolbar;
 
+import org.eclipse.e4.babel.editor.model.updater.KeyTreeUpdater;
 import org.eclipse.e4.babel.editor.ui.editor.ResourceBundleEditorContract;
 import org.eclipse.e4.core.di.annotations.CanExecute;
 import org.eclipse.e4.core.di.annotations.Execute;
@@ -15,10 +16,8 @@ public final class KeyHandler {
 	Log.d(TAG, "execute sdsdsd");
 	if (part.getObject() instanceof ResourceBundleEditorContract.View) {
 	    ResourceBundleEditorContract.View resourceBundleEditor = (ResourceBundleEditorContract.View) part.getObject();
-	    resourceBundleEditor.getResourceManager().setTreeFilter(null);
-	    resourceBundleEditor.getKeyTreeView().getTreeViewer().getControl().setRedraw(false);
-	    resourceBundleEditor.getKeyTreeView().getTreeViewer().refresh();
-	    resourceBundleEditor.getKeyTreeView().getTreeViewer().getControl().setRedraw(true);
+	    KeyTreeUpdater updater = resourceBundleEditor.getKeyTreeView().getPresenter().getKeyTreeUpdater();
+	    resourceBundleEditor.getKeyTreeView().getKeyTree().setUpdater(updater);
 	}
     }
 

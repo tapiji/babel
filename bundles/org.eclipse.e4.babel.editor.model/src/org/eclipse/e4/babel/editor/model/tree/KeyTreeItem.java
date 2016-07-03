@@ -4,7 +4,6 @@ package org.eclipse.e4.babel.editor.model.tree;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import org.eclipse.e4.babel.editor.model.tree.filter.ITreeFilter;
 
 
 public final class KeyTreeItem implements Comparable<KeyTreeItem>, IKeyTreeVisitable {
@@ -94,14 +93,6 @@ public final class KeyTreeItem implements Comparable<KeyTreeItem>, IKeyTreeVisit
     @Override
     public void accept(IKeyTreeVisitor visitor, Object passAlongArgument) {
         visitor.visitKeyTreeItem(this, passAlongArgument);
-    }
-
-    public void applyFilter(final ITreeFilter filter) {
-        if (filter == null) {
-            this.visible = true;
-        } else {
-           filter.doFilter(this);
-        }
     }
 
     public void setVisible(boolean b) {

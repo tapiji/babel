@@ -29,6 +29,10 @@ public final class SourceViewerDocument {
 		this.file = file;
 	}
 
+	public IFile getFile() {
+	    return file;
+	}
+	
 	public static SourceViewerDocument create(final IFile file) {
 		return new SourceViewerDocument(file);
 	}

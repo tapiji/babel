@@ -10,7 +10,6 @@ Export-Package: org.eclipse.e4.babel.editor.model.bundle,
  org.eclipse.e4.babel.editor.model.checks.proximity,
  org.eclipse.e4.babel.editor.model.checks.visitor,
  org.eclipse.e4.babel.editor.model.tree,
- org.eclipse.e4.babel.editor.model.tree.filter,
  org.eclipse.e4.babel.editor.model.tree.visitor,
  org.eclipse.e4.babel.editor.model.updater
 Import-Package: org.eclipse.core.resources,

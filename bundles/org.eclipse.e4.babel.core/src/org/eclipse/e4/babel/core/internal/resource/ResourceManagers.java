@@ -35,7 +35,6 @@ import org.eclipse.e4.babel.editor.model.bundle.listener.BundleChangeAdapter;
 import org.eclipse.e4.babel.editor.model.bundle.listener.BundleEvent;
 import org.eclipse.e4.babel.editor.model.tree.KeyTree;
 import org.eclipse.e4.babel.editor.model.tree.KeyTreeItem;
-import org.eclipse.e4.babel.editor.model.tree.filter.ITreeFilter;
 import org.eclipse.e4.babel.editor.model.updater.FlatKeyTreeUpdater;
 import org.eclipse.e4.babel.editor.model.updater.GroupedKeyTreeUpdater;
 import org.eclipse.e4.babel.editor.model.updater.KeyTreeUpdater;
@@ -60,6 +59,8 @@ public final class ResourceManagers implements IResourceManager {
 	private KeyTree keyTree;
 	private final Map<Locale, SourceEditor> sourceEditors = new HashMap<>();
 	private final List<Locale> locales = new ArrayList<>();
+
+    private KeyTreeUpdater treeUpdater;
 
 	/**
 	 * Constructor.
@@ -92,7 +93,6 @@ public final class ResourceManagers implements IResourceManager {
 
 		});
 
-		KeyTreeUpdater treeUpdater = null;
 		if (PropertyPreferences.getInstance().isEditorTreeHierachical()) {
 			treeUpdater = new GroupedKeyTreeUpdater(PropertyPreferences.getInstance().getKeyGroupSeparator());
 		} else {
@@ -215,7 +215,14 @@ public final class ResourceManagers implements IResourceManager {
 		resourcesFactory.getSourceEditors().stream().filter(editor->editor.isCacheDirty()).forEach(editor -> {
 		        Log.d(TAG, editor.toString());
 				bundleGroup.addBundle(editor.getLocale(), PropertiesParser.parse(editor.getContent()));
-				editor.resetCache();
+				editor.setContent(editor.getContent());
+			//	editor.resetCache();
+				
+				
+              //  final SourceEditor editor = sourceEditors.get(bundle.getLocale());
+               // String editorContent = PropertiesGenerator.generate(bundle);
+                
+            
 		});
 	}
 
@@ -264,11 +271,6 @@ public final class ResourceManagers implements IResourceManager {
 				keyTree.getBundleGroup().renameBundleEntryKey(oldItemKey, newItemKey);
 			}
 		});
-	}
-	
-	@Override
-	public void setTreeFilter(final ITreeFilter filter) {
-	    keyTree.applyFilter(filter);
 	}
 
 	/**

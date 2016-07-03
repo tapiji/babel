@@ -2,6 +2,7 @@ package org.eclipse.e4.babel.editor.ui.editor.tree;
 
 import org.eclipse.e4.babel.editor.model.tree.KeyTree;
 import org.eclipse.e4.babel.editor.model.tree.KeyTreeItem;
+import org.eclipse.e4.babel.editor.model.updater.KeyTreeUpdater;
 import org.eclipse.e4.babel.editor.ui.BasePresenter;
 import org.eclipse.e4.babel.editor.ui.BaseView;
 import org.eclipse.e4.babel.editor.ui.editor.tree.provider.KeyTreeContentProvider;
@@ -28,6 +29,8 @@ public interface KeyTreeContract {
 	void expandAll();
 
 	void createView();
+
+	Presenter getPresenter();
     }
 
     interface Presenter extends BasePresenter {
@@ -49,5 +52,7 @@ public interface KeyTreeContract {
 	void changeToFlatTree();
 
 	ViewerFilter getTreeFilter();
+
+	KeyTreeUpdater getKeyTreeUpdater();
     }
 }

@@ -12,7 +12,6 @@ import org.eclipse.e4.babel.editor.model.bundle.BundleGroup;
 import org.eclipse.e4.babel.editor.model.bundle.BundleObject;
 import org.eclipse.e4.babel.editor.model.bundle.listener.BundleChangeAdapter;
 import org.eclipse.e4.babel.editor.model.bundle.listener.BundleEvent;
-import org.eclipse.e4.babel.editor.model.tree.filter.ITreeFilter;
 import org.eclipse.e4.babel.editor.model.updater.KeyTreeUpdater;
 
 
@@ -99,10 +98,8 @@ public final class KeyTree extends BundleObject implements IKeyTreeVisitable {
     }
 
     public void addKey(final String key) {
-        if (keyItemsCache.get(key) != null) {
-            keyTreeUpdater.addKey(this, key);
-            fireAdd(keyItemsCache.get(key));
-        }
+        keyTreeUpdater.addKey(this, key);
+        fireAdd(keyItemsCache.get(key));
     }
 
     public void removeKey(final String key) {
@@ -113,9 +110,7 @@ public final class KeyTree extends BundleObject implements IKeyTreeVisitable {
     }
 
     public void modifyKey(final String key) {
-        if (keyItemsCache.get(key) != null) {
-            fireModify(keyItemsCache.get(key));
-        }
+        fireModify(keyItemsCache.get(key));
     }
 
     public void selectKey(final String key) {
@@ -152,10 +147,6 @@ public final class KeyTree extends BundleObject implements IKeyTreeVisitable {
 
     public KeyTreeUpdater getUpdater() {
         return keyTreeUpdater;
-    }
-    
-    public void applyFilter(final ITreeFilter filter) {
-        rootKeyItems.forEach(treeItem->treeItem.applyFilter(filter));
     }
 
     @Override

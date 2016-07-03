@@ -1,6 +1,7 @@
 package org.eclipse.e4.babel.editor.ui.handler.toolbar;
 
-import org.eclipse.e4.babel.editor.model.tree.filter.MissingKeyFilter;
+import org.eclipse.e4.babel.editor.model.updater.IncompletionUpdater;
+import org.eclipse.e4.babel.editor.model.updater.KeyTreeUpdater;
 import org.eclipse.e4.babel.editor.ui.editor.ResourceBundleEditorContract;
 import org.eclipse.e4.core.di.annotations.CanExecute;
 import org.eclipse.e4.core.di.annotations.Execute;
@@ -16,11 +17,8 @@ public final class KeyMissingHandler {
 	Log.d(TAG, "execute sadasd");
 	if (part.getObject() instanceof ResourceBundleEditorContract.View) {
 	    ResourceBundleEditorContract.View resourceBundleEditor = (ResourceBundleEditorContract.View) part.getObject();
-	    resourceBundleEditor.getResourceManager().setTreeFilter(new MissingKeyFilter());
-	    resourceBundleEditor.getKeyTreeView().getTreeViewer().getControl().setRedraw(false);
-	    resourceBundleEditor.getKeyTreeView().getTreeViewer().refresh();
-	    resourceBundleEditor.getKeyTreeView().getTreeViewer().getControl().setRedraw(true);
-
+	    KeyTreeUpdater updater = resourceBundleEditor.getKeyTreeView().getPresenter().getKeyTreeUpdater();
+	    resourceBundleEditor.getKeyTreeView().getKeyTree().setUpdater(new IncompletionUpdater(resourceBundleEditor.getKeyTreeView().getKeyTree().getBundleGroup(), updater));
 	}
     }
 

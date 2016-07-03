@@ -4,7 +4,7 @@ package org.eclipse.e4.babel.editor.text.test;
 import static org.junit.Assert.assertEquals;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.e4.babel.editor.text.PropertiesTextEditor;
+import org.eclipse.e4.babel.editor.text.BundleTextEditor;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
