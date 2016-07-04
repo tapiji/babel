@@ -131,7 +131,7 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
 
 	createTab(sashForm, "Properties", BabelResourceConstants.IMG_RESOURCE_BUNDLE);
 
-	resourceManager.getSourceEditors().stream().forEach(editor -> {
+	resourceManager.getSourceEditors().forEach(editor -> {
 	    final BundleTextEditor textEditor = new BundleTextEditor(this, dirty, editor.getDocument());
 	    editors.add(textEditor);
 	    paths.add(editor.getDocument().getFile().getFullPath());

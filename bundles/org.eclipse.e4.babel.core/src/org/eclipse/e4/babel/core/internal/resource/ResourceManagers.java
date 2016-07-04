@@ -72,8 +72,8 @@ public final class ResourceManagers implements IResourceManager {
     public void init(final IFile file) throws CoreException {
         resourcesFactory = ResourceFactory.createFactory(file);
         bundleGroup = BundleGroup.create();
-        resourcesFactory.getSourceEditors().stream().forEach(editor -> {
-            Locale locale = editor.getLocale();
+        resourcesFactory.getSourceEditors().forEach(editor -> {
+            final Locale locale = editor.getLocale();
             sourceEditors.put(locale, editor);
             locales.add(locale);
             bundleGroup.addBundle(locale, PropertiesParser.parse(editor.getContent()));
@@ -147,7 +147,7 @@ public final class ResourceManagers implements IResourceManager {
      */
     @Override
     public void save() {
-        resourcesFactory.getSourceEditors().stream().forEach(editor -> {
+        resourcesFactory.getSourceEditors().forEach(editor -> {
             editor.saveDocument();
         });
     }
