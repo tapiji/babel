@@ -21,7 +21,6 @@ Import-Package: javax.inject,
  org.eclipse.swt.graphics,
  org.eclipse.swt.layout,
  org.eclipse.swt.widgets,
- org.eclipse.ui.texteditor,
  org.eclipselabs.e4.tapiji.logger
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.12.0"

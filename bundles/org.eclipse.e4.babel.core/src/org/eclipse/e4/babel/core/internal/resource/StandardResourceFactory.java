@@ -25,7 +25,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.e4.babel.core.internal.createfile.PropertiesFileCreator;
 import org.eclipse.e4.babel.core.internal.createfile.StandardPropertiesFileCreator;
 import org.eclipse.e4.babel.editor.text.model.SourceEditor;
-import org.eclipse.ui.PartInitException;
 
 /**
  * Responsible for creating resources related to a standard
@@ -75,15 +74,16 @@ public class StandardResourceFactory extends ResourceFactory {
 		return fileCreator;
 	}
 
-	protected static IFile[] getResources(IFile file) throws PartInitException {
+	protected static IFile[] getResources(IFile file) {
 		String regex = ResourceFactory.getPropertiesFileRegEx(file);
 		List<IResource> resources = new ArrayList<>();
-		try {
-			resources = Arrays.asList(file.getParent().members());
-		} catch (CoreException e) {
-			throw new PartInitException("Can't initialize resource bundle editor.", e);
-		}
-		
+			try {
+                resources = Arrays.asList(file.getParent().members());
+            } catch (CoreException e) {
+
+                e.printStackTrace();
+            }
+
 		List<IResource> validResources = new ArrayList<>();
 		resources.stream().forEach(resource->{
 			String resourceName = resource.getName();

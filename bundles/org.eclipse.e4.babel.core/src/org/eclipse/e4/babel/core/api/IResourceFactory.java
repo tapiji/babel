@@ -2,13 +2,11 @@ package org.eclipse.e4.babel.core.api;
 
 import java.util.List;
 import java.util.Locale;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.e4.babel.core.internal.createfile.PropertiesFileCreator;
 import org.eclipse.e4.babel.editor.text.model.SourceEditor;
-import org.eclipse.ui.PartInitException;
 
 
 

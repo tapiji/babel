@@ -26,7 +26,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
-
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -41,8 +40,6 @@ import org.eclipse.e4.babel.core.internal.createfile.FragmentPropertiesFileCreat
 import org.eclipse.e4.babel.core.preference.PropertyPreferences;
 import org.eclipse.e4.babel.core.utils.PDEUtils;
 import org.eclipse.e4.babel.editor.text.model.SourceEditor;
-import org.eclipse.ui.IEditorSite;
-import org.eclipse.ui.PartInitException;
 
 /**
  * This is a resource factory responsible for creating editors from fragment
@@ -56,7 +53,8 @@ public class FragmentResourceFactory extends NLResourceFactory {
 	/**
 	 * {@inheritDoc}}
 	 */
-	public void init(IFile file) throws CoreException {
+	@Override
+    public void init(IFile file) throws CoreException {
 
 		List<SourceEditor> editors = new ArrayList<>();
 		loadEditors(editors, file, null);
@@ -67,7 +65,8 @@ public class FragmentResourceFactory extends NLResourceFactory {
 		setDisplayName(getDisplayName(file));
 	}
 
-	protected void loadEditors(IEditorSite site, List<SourceEditor> editors, IFile file, IResource nlDir)
+	@Override
+    protected void loadEditors(List<SourceEditor> editors, IFile file, IResource nlDir)
 			throws CoreException {
 
 		/*
@@ -96,7 +95,7 @@ public class FragmentResourceFactory extends NLResourceFactory {
 			super.loadEditors(nlEditors, file, nlDir);
 
 		// load editors from the same folder as the base file
-		List<SourceEditor> fragmentEditors = loadFragmentEditors(site, regex, folder);
+		List<SourceEditor> fragmentEditors = loadFragmentEditors(regex, folder);
 
 		// Load root file, if exists.
 		IProject hostProject = PDEUtils.getFragmentHost(fragment);
@@ -164,8 +163,8 @@ public class FragmentResourceFactory extends NLResourceFactory {
 		return locales;
 	}
 
-	private List<SourceEditor> loadFragmentEditors(IEditorSite site, final String regex, IResource folder)
-			throws CoreException, PartInitException {
+	private List<SourceEditor> loadFragmentEditors(final String regex, IResource folder)
+			throws CoreException {
 		List<SourceEditor> fragmentEditors = new ArrayList<>();
 		if (folder.exists()) {
 			IResource[] members = ((IContainer) folder).members();
@@ -206,7 +205,8 @@ public class FragmentResourceFactory extends NLResourceFactory {
 	 * This method will return true
 	 * </p>
 	 */
-	public boolean isResponsible(IFile file) {
+	@Override
+    public boolean isResponsible(IFile file) {
 		/*
 		 * Check if NL is supported.
 		 */
