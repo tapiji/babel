@@ -43,6 +43,8 @@ public class OpenResourceBundleHandler {
 		final IFile file = FileUtils.getResourceBundleRef(fileName, FileUtils.EXTERNAL_RB_PROJECT_NAME);
 		if (file != null) {
 		    MPartStack mainStack = (MPartStack) modelService.find(PART_STACK_ID, application);
+		    
+			    
 		    MPart part = partService.createPart(PART_ID);
 		    part.getTransientData().put(KEY_FILE, file);
 		    mainStack.getChildren().add(part);

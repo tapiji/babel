@@ -1,10 +1,9 @@
 package org.eclipse.e4.babel.editor.model.bundle;
 
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -15,14 +14,16 @@ import org.eclipse.e4.babel.editor.model.bundle.visitor.IBundleVisitable;
 import org.eclipse.e4.babel.editor.model.bundle.visitor.IBundleVisitor;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipselabs.e4.tapiji.logger.Log;
 
 
 public final class Bundle extends BundleObject implements IBundleVisitable {
 
-    private final Map<String, BundleEntry> bundleEntries = new HashMap<>();
+    private final Map<String, BundleEntry> bundleEntries = new LinkedHashMap<>();
     private Locale locale;
     private String comment;
     private BundleGroup bundleGroup;
+    private boolean sortKeys;
 
     private Bundle() {
         super();
@@ -56,12 +57,21 @@ public final class Bundle extends BundleObject implements IBundleVisitable {
         this.bundleGroup = bundleGroup;
     }
 
+    public void setSortKeys(boolean setSortKeys) {
+        this.sortKeys = setSortKeys;
+    }
+
+    public boolean isSortKeys() {
+        return this.sortKeys;
+    }
+
     @Nullable
     public BundleEntry getBundleEntry(final String key) {
         return this.bundleEntries.get(key);
     }
 
     public void addBundleEntry(final BundleEntry bundleEntry) {
+        Log.d("ADD BUNDLE: ", bundleEntry.getKey());
         BundleEntry oldBundleEntry = this.bundleEntries.get(bundleEntry.getKey());
         if (oldBundleEntry != null && !oldBundleEntry.equals(bundleEntry)) {
             this.bundleEntries.put(bundleEntry.getKey(), bundleEntry);
@@ -102,7 +112,12 @@ public final class Bundle extends BundleObject implements IBundleVisitable {
 
     @NonNull
     public Set<String> getKeys() {
-        final Set<String> keys = new TreeSet<String>();
+        final Set<String> keys;
+        if (sortKeys) {
+            keys = new TreeSet<String>();
+        } else {
+            keys = new LinkedHashSet<>();
+        }
         keys.addAll(this.bundleEntries.keySet());
         return keys;
     }
@@ -126,23 +141,9 @@ public final class Bundle extends BundleObject implements IBundleVisitable {
     }
 
     public void copyFrom(final Bundle bundle) {
-        synchronized (bundleEntries) {
-            List<BundleEntry> entriesToRemove = new ArrayList<>();
-            for (Iterator<BundleEntry> iter = bundleEntries.values().iterator(); iter.hasNext();) {
-                BundleEntry localEntry = iter.next();
-                if (bundle.getBundleEntry(localEntry.getKey()) == null) {
-                    entriesToRemove.add(localEntry);
-                }
-            }    
-            for (Iterator<BundleEntry> iter = 
-                    entriesToRemove.iterator(); iter.hasNext();) {
-                BundleEntry entry = iter.next();
-                removeBundleEntry(entry);
-            }        
-        }
-       /* synchronized (getBundleEntries()) {
+        synchronized (getBundleEntries()) {
             bundle.getBundleEntries().stream().filter(entry -> bundle.getBundleEntry(entry.getKey()) == null).collect(Collectors.toList()).forEach(entry -> removeBundleEntry(entry));
-        }*/
+        }
         bundle.getBundleEntries().stream().forEach(entry -> addBundleEntry(entry));
     }
 
@@ -156,6 +157,6 @@ public final class Bundle extends BundleObject implements IBundleVisitable {
 
     @Override
     public String toString() {
-        return "Bundle [bundleEntries=" + bundleEntries + ", " + "locale=" + locale + ", comment=" + comment + "]";
+        return "Bundle [locale=" + locale + ", comment=" + comment + ", orderEntries=" + sortKeys + "]";
     }
 }

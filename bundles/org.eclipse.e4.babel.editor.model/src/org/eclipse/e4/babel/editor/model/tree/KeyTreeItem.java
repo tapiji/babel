@@ -83,7 +83,7 @@ public final class KeyTreeItem implements Comparable<KeyTreeItem>, IKeyTreeVisit
 
     @Override
     public int compareTo(KeyTreeItem keyTreeItem) {
-        return this.id.compareTo((keyTreeItem).getId());
+      return this.id.compareTo((keyTreeItem).getId());
     }
 
     public void dispose() {

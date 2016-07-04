@@ -16,7 +16,6 @@
 package org.eclipse.e4.babel.core.internal.parser;
 
 import java.util.regex.Pattern;
-
 import org.eclipse.e4.babel.core.preference.PropertyPreferences;
 import org.eclipse.e4.babel.editor.model.bundle.Bundle;
 import org.eclipse.e4.babel.editor.model.bundle.BundleEntry;
@@ -64,6 +63,7 @@ public final class PropertiesParser {
 	 */
 	public static Bundle parse(String properties) {
 		Bundle bundle = Bundle.create();
+		bundle.setSortKeys(PropertyPreferences.getInstance().isSortKeys());
 		String[] lines = PATTERN_LINE_BREAK.split(properties);
 
 		boolean doneWithFileComment = false;

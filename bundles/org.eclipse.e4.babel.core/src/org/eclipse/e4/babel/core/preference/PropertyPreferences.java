@@ -67,6 +67,7 @@ public final class PropertyPreferences {
     private static final String IS_SORT_KEYS = "CORE_FORMAT/IS_SORT_KEYS";
     private static final String IS_WRAP_NEW_LINE = "CORE_FORMAT/IS_WRAP_NEW_LINE";
 
+
     // NONE REMOVE OR ADD
     private static final String DISPLAY_DEFAULT_COMMENT_FIELD = "displayCommentFieldNL";
     private static final String DISPLAY_LANG_COMMENT_FIELDS = "displayLangCommentFieldsNL";
@@ -129,7 +130,7 @@ public final class PropertyPreferences {
     }
 
     public boolean isKeepEmptyFields() {
-        return PREFERENCES.getBoolean(IS_KEEP_EMPTY_FIELDS, false);
+        return PREFERENCES.getBoolean(IS_KEEP_EMPTY_FIELDS, true);
     }
 
     public void isKeepEmptyFields(final boolean isKeepEmptyFields) {
@@ -407,7 +408,7 @@ public final class PropertyPreferences {
     public void isReportSimliarValuesLevensthein(final boolean isSimliarValuesLevensthein) {
         PREFERENCES.putBoolean(REPORT_SIMILAR_VALUES_LEVENSTHEIN, isSimliarValuesLevensthein);
     }
-
+    
     public void resetPerformanceProperties() {
         PREFERENCES.putBoolean(REPORT_SIMILAR_VALUES, false);
         PREFERENCES.putBoolean(REPORT_MISSING_VALUES, true);
@@ -449,5 +450,7 @@ public final class PropertyPreferences {
     public static PropertyPreferences getInstance() {
         return PropertyPreferencesHolder.INSTANCE;
     }
+
+
 
 }

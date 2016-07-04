@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import org.eclipse.core.resources.IFile;
@@ -16,6 +17,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.e4.babel.core.BabelExtensionManager;
 import org.eclipse.e4.babel.core.api.IResourceManager;
+import org.eclipse.e4.babel.core.preference.PropertyPreferences;
 import org.eclipse.e4.babel.core.utils.UIUtils;
 import org.eclipse.e4.babel.editor.model.tree.KeyTree;
 import org.eclipse.e4.babel.editor.preference.APreferencePage;
@@ -34,8 +36,11 @@ import org.eclipse.e4.ui.di.Persist;
 import org.eclipse.e4.ui.di.UIEventTopic;
 import org.eclipse.e4.ui.model.application.ui.MDirtyable;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
 import org.eclipse.e4.ui.model.application.ui.basic.MWindow;
+import org.eclipse.e4.ui.model.application.ui.menu.MToolBar;
 import org.eclipse.e4.ui.services.EMenuService;
+import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.jface.text.source.SourceViewer;
 import org.eclipse.swt.SWT;
@@ -77,6 +82,9 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
     @Inject
     private MDirtyable dirty;
 
+    @Inject
+    private EModelService modelService;
+
     private I18nPageContract.View i18nPage;
     private SashForm sashForm;
 
@@ -88,7 +96,8 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
 
     @Inject
     private IWorkspace workspace;
-    
+    private MWindow window;
+
     @Inject
     public ResourceBundleEditor(Composite parent) {
 	super(parent, SWT.BOTTOM);
@@ -96,6 +105,7 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
 
     @PostConstruct
     public void createControl(final Composite parent, final Shell shell, MWindow window, BabelExtensionManager manager) {
+	this.window = window;
 	Log.d(TAG, "Create ResourceBundleEditor");
 	this.resourceManager = manager.getResourceManager().get();
 	setMinimumCharacters(40);
@@ -106,7 +116,7 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
 	} catch (CoreException e) {
 	    e.printStackTrace();
 	}
-
+	toolbarVisibility();
 	workspace.addResourceChangeListener(resourceChangeListener, IResourceChangeEvent.POST_CHANGE);
 
 	addSelectionListener(this);
@@ -121,13 +131,19 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
 	createTab(sashForm, "Properties", BabelResourceConstants.IMG_RESOURCE_BUNDLE);
 
 	resourceManager.getSourceEditors().stream().forEach(editor -> {
-	    final BundleTextEditor textEditor = new BundleTextEditor(this,dirty, editor.getDocument());
+	    final BundleTextEditor textEditor = new BundleTextEditor(this, dirty, editor.getDocument());
 	    editors.add(textEditor);
-	    paths.add( editor.getDocument().getFile().getFullPath() );
+	    paths.add(editor.getDocument().getFile().getFullPath());
 	    createTab(textEditor, UIUtils.getDisplayName(editor.getLocale()), BabelResourceConstants.IMG_RESOURCE_PROPERTY);
 
 	});
 	setSelection(0);
+    }
+
+    private void toolbarVisibility() {
+	MToolBar trimStack = (MToolBar) modelService.find("org.eclipse.e4.babel.editor.toolbar.main", window);
+	MPartStack mainStack = (MPartStack) modelService.find("org.eclipse.e4.babel.editor.partstack.editorPartStack", window);
+	trimStack.setToBeRendered(mainStack.getChildren().size() > 0);
     }
 
     /**
@@ -165,17 +181,16 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
 	}
     }
 
-    /**
-     * Refresh layout
-     * 
-     * @param visibility
-     */
     @Inject
     @Optional
     public void redrawLayout(@UIEventTopic(APreferencePage.TOPIC_REFRESH_LAYOUT) final String visibility) {
 	Log.d(TAG, "INPUT: UPDATE UI" + visibility);
 	i18nPage.getPresenter().redrawEditorSize();
 	i18nPage.refreshLayout();
+
+	resourceManager.getBundleGroup().getBundles().values().forEach(bundle -> {
+	    bundle.setSortKeys(PropertyPreferences.getInstance().isSortKeys());
+	});
     }
 
     private void createTab(final Control control, final String title, String image) {
@@ -223,12 +238,12 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
     @Override
     public void addResource(IFile resource, Locale locale) {
 	SourceEditor editor = resourceManager.addSourceEditor(resource, locale);
-	final BundleTextEditor textEditor = new BundleTextEditor(this,dirty, editor.getDocument());
+	final BundleTextEditor textEditor = new BundleTextEditor(this, dirty, editor.getDocument());
 	editors.add(textEditor);
 	createTab(textEditor, UIUtils.getDisplayName(editor.getLocale()), BabelResourceConstants.IMG_RESOURCE_PROPERTY);
 	i18nPage.refreshView();
 	setSelection(0);
-	editor.setContent(editor.getContent()); 
+	editor.setContent(editor.getContent());
 	updateDirtyState(true);
     }
 
@@ -322,5 +337,15 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
     public void widgetDefaultSelected(SelectionEvent e) {
 	Log.i(TAG, "widgetDefaultSelected" + e);
 
+    }
+
+    @PreDestroy
+    public void preDestroy() {
+	MPartStack mainStack = (MPartStack) modelService.find("org.eclipse.e4.babel.editor.partstack.editorPartStack", window);
+
+	if (mainStack.getChildren().size() <= 0) {
+	    MToolBar trimStack = (MToolBar) modelService.find("org.eclipse.e4.babel.editor.toolbar.main", window);
+	    trimStack.setToBeRendered(false);
+	}
     }
 }

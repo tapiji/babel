@@ -341,6 +341,7 @@ public final class PreferenceFormattingPage extends APreferencePage {
                 }
             }
         }
+       
         return true;
     }
 

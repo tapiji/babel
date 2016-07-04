@@ -16,18 +16,14 @@
 package org.eclipse.e4.babel.core.internal.resource;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Locale.Builder;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.stream.Stream;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -36,10 +32,6 @@ import org.eclipse.e4.babel.core.internal.createfile.PropertiesFileCreator;
 import org.eclipse.e4.babel.core.utils.UIUtils;
 import org.eclipse.e4.babel.editor.text.document.SourceViewerDocument;
 import org.eclipse.e4.babel.editor.text.model.SourceEditor;
-import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jface.text.IDocument;
-import org.eclipse.ui.PartInitException;
-import org.eclipselabs.e4.tapiji.logger.Log;
 
 /**
  * Responsible for creating resources related to a given file structure.
@@ -279,7 +271,7 @@ abstract class ResourceFactory implements IResourceFactory {
 				validResources.add(resource);
 			}
 		});
-		return (IFile[]) validResources.toArray(new IFile[] {});
+		return validResources.toArray(new IFile[] {});
 	}
 
 }

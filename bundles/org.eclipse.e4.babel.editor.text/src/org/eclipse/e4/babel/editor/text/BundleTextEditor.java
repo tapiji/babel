@@ -53,13 +53,13 @@ public final class BundleTextEditor extends Composite {
         partitioner.connect(document);
         document.setDocumentPartitioner(partitioner);
         sourceViewer.setDocument(document);
-        
+
         sourceViewer.addTextListener(new ITextListener() {
 
             @Override
             public void textChanged(TextEvent event) {
                 if (!dirty.isDirty()) {
-                 //   dirty.setDirty(true);
+                    dirty.setDirty(true);
                 }
             }
         });

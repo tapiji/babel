@@ -95,7 +95,7 @@ public final class BundleEntry implements IBundleVisitable {
 
     @Override
     public String toString() {
-        return "BundleEntry [key=" + key + ", value=" + value + ", locale=" + locale + ", comment=" + comment + ", commented=" + commented + ", bundle=" + bundle + "]";
+        return "BundleEntry [key=" + key + ", value=" + value + ", locale=" + locale + ", comment=" + comment + ", commented=" + commented +  "]";
     }
 
     @Override
