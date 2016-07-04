@@ -106,6 +106,7 @@ public final class PropertiesGenerator {
 					value = value.replaceAll("\r", "\\\\r");
 					value = value.replaceAll("\n", "\\\\n");
 				}
+				value = value.replaceAll("\t", "\\\\t");
 			} else {
 				value = "";
 			}

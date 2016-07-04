@@ -2,7 +2,6 @@ package org.eclipse.e4.babel.core.utils;
 
 
 import java.util.Locale;
-
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
@@ -70,7 +69,7 @@ public final class UIUtils {
      */
     public static String getDisplayName(Locale locale) {
         if (locale == null) {
-            return "DEFAULT";
+            return "Default";
         }
         return locale.getDisplayName();
     }

@@ -31,19 +31,23 @@ public interface KeyTreeContract {
 	void createView();
 
 	Presenter getPresenter();
+
+	void setButtonAddEnabledState(boolean enabled);
+
+	IStructuredSelection getStructuredSelectionSelection();
+
+	void setSyncState(boolean syncState);
     }
 
     interface Presenter extends BasePresenter {
 
 	void addKey(String text);
 
-	boolean isNewKey(String text);
+	boolean checkNewKey(String text);
 
 	String getSelectedKey(KeyTreeItem item);
 
-	KeyTreeItem getSelection(IStructuredSelection selection);
-
-	String getSelectedKeyFromSelection(IStructuredSelection selection);
+	KeyTreeItem getSelection();
 
 	KeyTree getKeyTree();
 
@@ -54,5 +58,7 @@ public interface KeyTreeContract {
 	ViewerFilter getTreeFilter();
 
 	KeyTreeUpdater getKeyTreeUpdater();
+
+	String getSelectedKey();
     }
 }

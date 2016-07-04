@@ -3,6 +3,7 @@ package org.eclipse.e4.babel.editor.ui.editor.tree;
 import org.eclipse.e4.babel.core.preference.PropertyPreferences;
 import org.eclipse.e4.babel.editor.model.tree.KeyTree;
 import org.eclipse.e4.babel.editor.model.tree.KeyTreeItem;
+import org.eclipse.e4.babel.editor.model.tree.visitor.KeysStartingWithVisitor;
 import org.eclipse.e4.babel.editor.model.updater.FlatKeyTreeUpdater;
 import org.eclipse.e4.babel.editor.model.updater.GroupedKeyTreeUpdater;
 import org.eclipse.e4.babel.editor.model.updater.KeyTreeUpdater;
@@ -10,7 +11,6 @@ import org.eclipse.e4.babel.editor.ui.editor.ResourceBundleEditorContract;
 import org.eclipse.e4.babel.editor.ui.editor.tree.KeyTreeContract.View;
 import org.eclipse.e4.babel.editor.ui.editor.tree.provider.KeyTreeContentProvider;
 import org.eclipse.e4.babel.editor.ui.editor.tree.provider.KeyTreeLabelProvider;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 
@@ -43,13 +43,30 @@ final class KeyTreePresenter implements KeyTreeContract.Presenter {
     public void addKey(String key) {
 	resourceBundleEditor.getResourceManager().addNewKey(key);
 	keyTreeView.setSelectedKeyTreeItem(getKeyTree().getKeyTreeItem(key));
-
     }
 
     @Override
-    public boolean isNewKey(String text) {
-	// TODO Auto-generated method stub
-	return true;
+    public boolean checkNewKey(String key) {
+	boolean keyExist = resourceBundleEditor.getResourceManager().getKeyTree().getBundleGroup().isKey(key);
+	if (keyExist || key.length() == 0) {
+	    keyTreeView.setButtonAddEnabledState(false);
+	} else {
+	    keyTreeView.setButtonAddEnabledState(true);
+	}
+	if (key.length() > 0 && !key.equals(getSelectedKey())) {
+	    KeysStartingWithVisitor visitor = new KeysStartingWithVisitor();
+	    resourceBundleEditor.getResourceManager().getKeyTree().accept(visitor, key);
+	    final KeyTreeItem item = visitor.getKeyTreeItem();
+	    if (item != null) {
+		keyTreeView.setSyncState(false);
+		keyTreeView.setSelectedKeyTreeItem(item);
+
+		if (key.equals(getSelectedKey())) {
+		    keyTreeView.getKeyTree().selectKey(getSelectedKey());
+		}
+	    }
+	}
+	return keyExist;
     }
 
     @Override
@@ -62,13 +79,18 @@ final class KeyTreePresenter implements KeyTreeContract.Presenter {
     }
 
     @Override
-    public String getSelectedKeyFromSelection(IStructuredSelection selection) {
-	return getSelectedKey(getSelection(selection));
+    public String getSelectedKey() {
+	String key = null;
+	KeyTreeItem item = getSelection();
+	if (item != null) {
+	    key = item.getId();
+	}
+	return key;
     }
 
     @Override
-    public KeyTreeItem getSelection(IStructuredSelection selection) {
-	return (KeyTreeItem) selection.getFirstElement();
+    public KeyTreeItem getSelection() {
+	return (KeyTreeItem) keyTreeView.getStructuredSelectionSelection().getFirstElement();
     }
 
     @Override
@@ -96,7 +118,7 @@ final class KeyTreePresenter implements KeyTreeContract.Presenter {
 
     @Override
     public KeyTreeUpdater getKeyTreeUpdater() {
-        return keyTreeUpdater;
+	return keyTreeUpdater;
     }
 
     @Override

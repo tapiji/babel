@@ -32,6 +32,7 @@ import org.eclipse.e4.babel.resource.IBabelResourceProvider;
 import org.eclipse.e4.core.commands.ECommandService;
 import org.eclipse.e4.core.commands.EHandlerService;
 import org.eclipse.e4.core.di.annotations.Optional;
+import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.Persist;
 import org.eclipse.e4.ui.di.UIEventTopic;
 import org.eclipse.e4.ui.model.application.ui.MDirtyable;
@@ -241,10 +242,10 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
 	final BundleTextEditor textEditor = new BundleTextEditor(this, dirty, editor.getDocument());
 	editors.add(textEditor);
 	createTab(textEditor, UIUtils.getDisplayName(editor.getLocale()), BabelResourceConstants.IMG_RESOURCE_PROPERTY);
-	i18nPage.refreshView();
-	setSelection(0);
 	editor.setContent(editor.getContent());
 	updateDirtyState(true);
+	i18nPage.refreshView();
+	setSelection(0);
     }
 
     @Persist
@@ -339,6 +340,11 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
 
     }
 
+    @Focus
+    public void requestFocus() {
+	keyTreeView.setFocus();
+    }
+    
     @PreDestroy
     public void preDestroy() {
 	MPartStack mainStack = (MPartStack) modelService.find("org.eclipse.e4.babel.editor.partstack.editorPartStack", window);

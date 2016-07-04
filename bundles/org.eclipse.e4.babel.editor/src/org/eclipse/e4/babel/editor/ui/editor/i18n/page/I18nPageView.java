@@ -6,7 +6,6 @@ import org.eclipse.e4.babel.core.api.IResourceManager;
 import org.eclipse.e4.babel.editor.ui.editor.ResourceBundleEditorContract;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.page.I18nPageContract.Presenter;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.pageentry.I18nPageEntryContract;
-import org.eclipse.e4.babel.editor.ui.editor.i18n.pageentry.I18nPageEntryView;
 import org.eclipse.e4.babel.resource.IBabelResourceProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
@@ -112,12 +111,6 @@ public final class I18nPageView extends ScrolledComposite implements I18nPageCon
     @Override
     public I18nPageContract.Presenter getPresenter() {
 	return presenter;
-    }
-
-    @Override
-    public void setActiveBundleEntry(final I18nPageEntryView bundleEntry) {
-	//presenterbundleEntry;
-	
     }
 
     @Override

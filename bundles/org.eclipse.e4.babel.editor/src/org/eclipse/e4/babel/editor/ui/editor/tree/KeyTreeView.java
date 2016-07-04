@@ -41,6 +41,8 @@ public final class KeyTreeView extends Composite implements KeyTreeContract.View
 
     private Cursor waitCursor;
     private Cursor defaultCursor;
+    private Button btnAddKey;
+    private boolean syncAddKeyTextBox;
 
     public static KeyTreeView create(final Composite sashForm, ResourceBundleEditorContract.View resourceBundleEditor) {
 	KeyTreeView treevIew = new KeyTreeView(sashForm, resourceBundleEditor);
@@ -70,6 +72,15 @@ public final class KeyTreeView extends Composite implements KeyTreeContract.View
 
 	final Button btnHierarchical = new Button(composite, SWT.TOGGLE);
 	final Button btnFlat = new Button(composite, SWT.TOGGLE);
+
+	if (PropertyPreferences.getInstance().isEditorTreeHierachical()) {
+	    btnHierarchical.setSelection(true);
+	    btnHierarchical.setEnabled(false);
+	} else {
+	    btnFlat.setSelection(true);
+	    btnFlat.setEnabled(false);
+	}
+
 	btnFlat.setImage(rbeView.getResourceProvider().loadImage(BabelResourceConstants.IMG_TREE_FLAT));
 	btnFlat.setToolTipText("Tree");
 	btnFlat.addListener(SWT.Selection, (e) -> {
@@ -107,9 +118,7 @@ public final class KeyTreeView extends Composite implements KeyTreeContract.View
 		setVisible(true);
 		setCursor(defaultCursor);
 		treeViewer.refresh(true);
-
 	    }
-
 	});
 
 	Label separator = new Label(composite, SWT.VERTICAL | SWT.SEPARATOR);
@@ -143,16 +152,15 @@ public final class KeyTreeView extends Composite implements KeyTreeContract.View
 	if (PropertyPreferences.getInstance().isEditorTreeExpanded()) {
 	    treeViewer.expandAll();
 	}
-	
+
 	treeViewer.addSelectionChangedListener((event) -> {
-	    IStructuredSelection selection = (IStructuredSelection) treeViewer.getSelection();
-	    rbeView.getSelectionService().setSelection(presenter.getSelection(selection));
-	    String selectedKey = presenter.getSelectedKeyFromSelection(selection);
-	    if (selectedKey != null) {
+	    rbeView.getSelectionService().setSelection(presenter.getSelection());
+	    final String selectedKey = presenter.getSelectedKey();
+	    if (syncAddKeyTextBox && selectedKey != null) {
 		addKeyTextBox.setText(selectedKey);
 		presenter.getKeyTree().selectKey(selectedKey);
 	    }
-	    Log.d(TAG, "Selection:" + ((IStructuredSelection) treeViewer.getSelection()).getFirstElement());
+	    syncAddKeyTextBox = true;
 	});
 
 	treeViewer.getTree().addKeyListener(new KeyAdapter() {
@@ -193,18 +201,25 @@ public final class KeyTreeView extends Composite implements KeyTreeContract.View
 	addKeyTextBox = new Text(composite, SWT.BORDER);
 	addKeyTextBox.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 
-	final Button btnAddKey = new Button(composite, SWT.PUSH);
+	btnAddKey = new Button(composite, SWT.PUSH);
 	btnAddKey.setText("Add");
 	btnAddKey.setEnabled(false);
 	btnAddKey.setToolTipText("Add new key");
-	btnAddKey.addListener(SWT.Selection, (e) -> presenter.addKey(addKeyTextBox.getText()));
+	btnAddKey.addListener(SWT.Selection, event -> presenter.addKey(addKeyTextBox.getText()));
 
-	addKeyTextBox.addListener(SWT.KeyUp, (e) -> {
-	    if (e.character == SWT.CR && btnAddKey.isEnabled()) {
+	addKeyTextBox.addListener(SWT.KeyUp, event -> {
+	    if (event.character == SWT.CR && btnAddKey.isEnabled()) {
 		presenter.addKey(addKeyTextBox.getText());
 	    }
 	});
-	addKeyTextBox.addModifyListener((e) -> btnAddKey.setEnabled(presenter.isNewKey(addKeyTextBox.getText())));
+	addKeyTextBox.addModifyListener(event -> {
+	    presenter.checkNewKey(addKeyTextBox.getText());
+	});
+    }
+
+    @Override
+    public void setButtonAddEnabledState(boolean enabled) {
+	btnAddKey.setEnabled(enabled);
     }
 
     public TreeViewer getTreeViewer() {
@@ -243,7 +258,12 @@ public final class KeyTreeView extends Composite implements KeyTreeContract.View
 
     @Override
     public Presenter getPresenter() {
-        return presenter;
+	return presenter;
+    }
+
+    @Override
+    public void setSyncState(boolean syncState) {
+	this.syncAddKeyTextBox = syncState;
     }
 
     @Override
@@ -251,6 +271,11 @@ public final class KeyTreeView extends Composite implements KeyTreeContract.View
 	if (item != null) {
 	    treeViewer.setSelection(new StructuredSelection(item), true);
 	}
+    }
+
+    @Override
+    public IStructuredSelection getStructuredSelectionSelection() {
+	return (IStructuredSelection) treeViewer.getSelection();
     }
 
     @Override
@@ -275,4 +300,5 @@ public final class KeyTreeView extends Composite implements KeyTreeContract.View
 	addKeyTextBox.dispose();
 	presenter.dispose();
     }
+
 }

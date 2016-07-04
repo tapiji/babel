@@ -8,7 +8,6 @@ import org.eclipse.e4.babel.editor.ui.BaseView;
 import org.eclipse.e4.babel.editor.ui.editor.ResourceBundleEditorContract;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.page.I18nPagePresenter.LocalBehaviour;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.pageentry.I18nPageEntryContract;
-import org.eclipse.e4.babel.editor.ui.editor.i18n.pageentry.I18nPageEntryView;
 import org.eclipse.e4.babel.resource.IBabelResourceProvider;
 import org.eclipse.swt.widgets.Composite;
 
@@ -21,8 +20,6 @@ public interface I18nPageContract {
 	void setNextFocusDown();
 
 	void setNextFocusUp();
-
-	void setActiveBundleEntry(I18nPageEntryView bundleEntryComposite);
 
 	Composite getI18NPage();
 

@@ -15,21 +15,21 @@ public abstract class BundleObject {
 
     protected <T> void fireAdd(final T object) {
         listeners.stream().forEach(listener -> listener.add(BundleEvent.create(object)));
-        Log.d(TAG, "fireAdd: " + object.getClass().getSimpleName() + " listener cnt: " + listeners.size());
+        Log.d(TAG, "fireAdd: " + object+ " listener cnt: " + listeners.size());
     }
 
     protected <T> void fireRemove(final T object) {
-        Log.d(TAG, "fireRemove: " + object.getClass().getSimpleName());
+        Log.d(TAG, "fireRemove: " + object);
         listeners.stream().forEach(listener -> listener.remove(BundleEvent.create(object)));
     }
 
     protected <T> void fireModify(final T object) {
-        Log.d(TAG, "fireModify: " + object.getClass().getSimpleName() + " listener cnt: " + listeners.size());
+        Log.d(TAG, "fireModify: " + object+ " listener cnt: " + listeners.size());
         listeners.stream().forEach(listener -> listener.modify(BundleEvent.create(object)));
     }
 
     protected <T> void fireSelect(final T object) {
-        Log.d(TAG, "fireModify: " + object.getClass().getSimpleName() + " listener cnt: " + listeners.size());
+        Log.d(TAG, "fireModify: " + object + " listener cnt: " + listeners.size());
         listeners.stream().forEach(listener -> listener.select(BundleEvent.create(object)));
     }
 
