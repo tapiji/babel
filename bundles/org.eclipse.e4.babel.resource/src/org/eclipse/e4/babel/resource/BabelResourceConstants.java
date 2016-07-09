@@ -33,8 +33,8 @@ public final class BabelResourceConstants {
     
     public static final String IMG_FOLDER_FLAGS = "icons/flags/";
     
-    public static final String IMG_SIMILAR = "icons/similar.gif";
-    public static final String IMG_DUPLICATE = "icons/duplicate.gif";
+    public static final String IMG_SIMILAR = "icons/16x16/similar.gif";
+    public static final String IMG_DUPLICATE = "icons/16x16/duplicate.png";
 
 
 

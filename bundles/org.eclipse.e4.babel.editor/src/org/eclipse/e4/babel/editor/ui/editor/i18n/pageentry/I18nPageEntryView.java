@@ -127,7 +127,7 @@ public final class I18nPageEntryView extends Composite implements KeyListener, T
 	gridData.horizontalAlignment = GridData.END;
 	gridData.grabExcessHorizontalSpace = true;
 	duplicateButton = new Button(toolBar, SWT.TOGGLE);
-	duplicateButton.setImage(presenter.loadImage(BabelResourceConstants.IMG_SIMILAR));
+	duplicateButton.setImage(presenter.loadImage(BabelResourceConstants.IMG_DUPLICATE));
 	duplicateButton.setLayoutData(gridData);
 	duplicateButton.setVisible(false);
 	duplicateButton.addListener(SWT.Selection, (e) -> {
@@ -136,6 +136,8 @@ public final class I18nPageEntryView extends Composite implements KeyListener, T
 	    presenter.getDuplicates().forEach(duplicate -> {
 		foundKeys.append("        ");
 		foundKeys.append(duplicate.getKey());
+		foundKeys.append(" = ");
+		foundKeys.append(duplicate.getValue());	
 		foundKeys.append("\n");
 	    });
 	    showVisitorDialog("Gleiche(r) Wert(e) gefunden.", "Die Werte folgender Schl\u00FCssel sind innerhalb der Lokalen \"{1}\" beim Schl\u00FCssel \"{0}\" identisch:",

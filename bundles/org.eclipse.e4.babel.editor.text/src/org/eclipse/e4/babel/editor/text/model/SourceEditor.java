@@ -172,7 +172,7 @@ public class SourceEditor {
             // Extract the bounds of the line containing the selection
             for (start = selectionStart; start > 0 && content.charAt(start-1) != '\n'; start--);
             for (end = start; end < content.length()-1 && content.charAt(end+1) != '=' && content.charAt(end+1) != '\n'; end++);
-            String line = content.substring(start, end+1).trim();
+            String line = content.substring(start, end).trim();
             return line;
         }
         return null;

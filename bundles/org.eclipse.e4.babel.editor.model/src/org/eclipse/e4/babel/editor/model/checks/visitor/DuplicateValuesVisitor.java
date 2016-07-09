@@ -45,8 +45,7 @@ public final class DuplicateValuesVisitor extends BundleVisitorAdapter {
      */
     @Override
     public void visitBundleEntry(BundleEntry entry, Object passAlongArgument) {
-
-        BundleEntry entryToMatch = (BundleEntry) passAlongArgument;
+        final BundleEntry entryToMatch = (BundleEntry) passAlongArgument;
         if (entry != entryToMatch && entry != null && entryToMatch != null && entry.getValue().length() > 0 && entry.getValue().equals(entryToMatch.getValue())) {
             duplicates.add(entry);
         }
