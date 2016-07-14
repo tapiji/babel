@@ -28,8 +28,6 @@ public interface KeyTreeContract {
 
 	void expandAll();
 
-	void createView();
-
 	Presenter getPresenter();
 
 	void setButtonAddEnabledState(boolean enabled);
@@ -60,5 +58,7 @@ public interface KeyTreeContract {
 	KeyTreeUpdater getKeyTreeUpdater();
 
 	String getSelectedKey();
+
+	View getKeyTreeView();
     }
 }

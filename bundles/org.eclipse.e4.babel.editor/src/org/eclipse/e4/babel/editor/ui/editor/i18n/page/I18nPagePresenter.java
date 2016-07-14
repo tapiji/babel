@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+
 import org.eclipse.e4.babel.core.api.IResourceManager;
 import org.eclipse.e4.babel.editor.model.bundle.listener.BundleChangeAdapter;
 import org.eclipse.e4.babel.editor.model.bundle.listener.BundleEvent;
@@ -13,6 +16,7 @@ import org.eclipse.e4.babel.editor.ui.editor.i18n.page.I18nPageContract.View;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.pageentry.I18nPageEntryContract;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.pageentry.I18nPageEntryView;
 import org.eclipse.e4.babel.resource.IBabelResourceProvider;
+import org.eclipse.e4.core.di.annotations.Creatable;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -21,8 +25,11 @@ import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.graphics.Point;
 
+@Creatable
 public class I18nPagePresenter implements I18nPageContract.Presenter {
 
+    @Inject
+    private IBabelResourceProvider resourceProvider;
     private IResourceManager resourceManager;
     private final LocalBehaviour localBehaviour = new LocalBehaviour();
     private I18nPageEntryContract.View activeEntry;
@@ -31,21 +38,24 @@ public class I18nPagePresenter implements I18nPageContract.Presenter {
     private final List<I18nPageEntryContract.View> pageEntries = new ArrayList<>();
     private View i18nPageView;
     private ResourceBundleEditorContract.View editorView;
-    private IBabelResourceProvider resourceProvider;
 
-    public I18nPagePresenter(I18nPageContract.View i18nPageView, IResourceManager resourceManager, ResourceBundleEditorContract.View editorView,
-	    IBabelResourceProvider resourceProvider) {
+
+    public I18nPagePresenter(I18nPageContract.View i18nPageView, IResourceManager resourceManager, ResourceBundleEditorContract.View editorView) {
 	this.resourceManager = resourceManager;
 	this.i18nPageView = i18nPageView;
 	this.editorView = editorView;
-	this.resourceProvider = resourceProvider;
     }
 
-    @Override
-    public void init() {
-	i18nPageView.createEditingPart();
+    
+    @PostConstruct
+    public void onCreate(){
 	editorView.getKeyTreeView().getTreeViewer().addSelectionChangedListener(localBehaviour);
 	editorView.getKeyTreeView().getKeyTree().addChangeListener(localBehaviour);
+    }
+    
+    @Override
+    public void init() {
+
     }
 
     @Override
@@ -256,9 +266,8 @@ public class I18nPagePresenter implements I18nPageContract.Presenter {
 	}
     }
 
-    public static I18nPagePresenter create(I18nPageContract.View i18nPageView, IResourceManager resourceManager, ResourceBundleEditorContract.View editorView,
-	    IBabelResourceProvider resourceProvider) {
-	return new I18nPagePresenter(i18nPageView, resourceManager, editorView, resourceProvider);
+    public static I18nPagePresenter create(I18nPageContract.View i18nPageView, IResourceManager resourceManager, ResourceBundleEditorContract.View editorView) {
+	return new I18nPagePresenter(i18nPageView, resourceManager, editorView);
     }
 
     @Override

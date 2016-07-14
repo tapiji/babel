@@ -15,6 +15,7 @@ import org.eclipse.e4.ui.workbench.IWorkbench;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
+import org.eclipse.e4.ui.workbench.modeling.IPartListener;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Shell;
@@ -44,11 +45,44 @@ public class OpenResourceBundleHandler {
 		if (file != null) {
 		    MPartStack mainStack = (MPartStack) modelService.find(PART_STACK_ID, application);
 		    
-			    
+			 
+    partService.addPartListener(new IPartListener() {
+		        
+		        @Override
+		        public void partVisible(MPart part) {
+		            Log.d(TAG, "PART"+part);
+		        }
+		        
+		        @Override
+		        public void partHidden(MPart part) {
+		    		Log.d(TAG, "PART"+part);
+		        }
+		        
+		        @Override
+		        public void partDeactivated(MPart part) {
+		            Log.d(TAG, "PART"+part);
+		    	
+		        }
+		        
+		        @Override
+		        public void partBroughtToTop(MPart part) {
+		            Log.d(TAG, "PART"+part);
+		    	
+		        }
+		        
+		        @Override
+		        public void partActivated(MPart part) {
+		            Log.d(TAG, "PART"+part);
+		    	
+		        }
+		    });
+		    
 		    MPart part = partService.createPart(PART_ID);
 		    part.getTransientData().put(KEY_FILE, file);
 		    mainStack.getChildren().add(part);
 		    partService.showPart(part, PartState.ACTIVATE);
+		    
+		
 
 		} else {
 		    Log.d(TAG, "File input is null!");

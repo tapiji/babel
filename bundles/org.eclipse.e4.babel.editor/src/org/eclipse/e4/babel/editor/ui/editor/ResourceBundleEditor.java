@@ -29,8 +29,7 @@ import org.eclipse.e4.babel.editor.ui.editor.tree.KeyTreeView;
 import org.eclipse.e4.babel.editor.ui.handler.window.OpenResourceBundleHandler;
 import org.eclipse.e4.babel.resource.BabelResourceConstants;
 import org.eclipse.e4.babel.resource.IBabelResourceProvider;
-import org.eclipse.e4.core.commands.ECommandService;
-import org.eclipse.e4.core.commands.EHandlerService;
+import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.Persist;
@@ -72,16 +71,13 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
     private IBabelResourceProvider resourceProvider;
 
     @Inject
-    private ECommandService commandService;
-
-    @Inject
-    private EHandlerService handlerService;
-
-    @Inject
     private ESelectionService selectionService;
 
     @Inject
     private MDirtyable dirty;
+
+    @Inject
+    private IEclipseContext context;
 
     @Inject
     private EModelService modelService;
@@ -125,8 +121,8 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
 	Log.d(TAG, "KEYTREE: " + resourceManager.getKeyTree().toString());
 
 	sashForm = new SashForm(this, SWT.SMOOTH);
-	keyTreeView = KeyTreeView.create(sashForm, this);
-	i18nPage = I18nPageView.create(sashForm, this, resourceProvider, resourceManager);
+	keyTreeView = KeyTreeView.create(sashForm, this, context);
+	i18nPage = I18nPageView.create(sashForm, this, resourceManager, context);
 	sashForm.setWeights(new int[] { 25, 75 });
 
 	createTab(sashForm, "Properties", BabelResourceConstants.IMG_RESOURCE_BUNDLE);
@@ -207,16 +203,6 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
     }
 
     @Override
-    public ECommandService getCommandService() {
-	return commandService;
-    }
-
-    @Override
-    public EHandlerService getHandlerService() {
-	return handlerService;
-    }
-
-    @Override
     public EMenuService getMenuService() {
 	return menuService;
     }
@@ -224,11 +210,6 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
     @Override
     public IBabelResourceProvider getResourceProvider() {
 	return resourceProvider;
-    }
-
-    @Override
-    public ESelectionService getSelectionService() {
-	return selectionService;
     }
 
     @Override
@@ -344,7 +325,7 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
     public void requestFocus() {
 	keyTreeView.setFocus();
     }
-    
+
     @PreDestroy
     public void preDestroy() {
 	MPartStack mainStack = (MPartStack) modelService.find("org.eclipse.e4.babel.editor.partstack.editorPartStack", window);
@@ -353,5 +334,10 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
 	    MToolBar trimStack = (MToolBar) modelService.find("org.eclipse.e4.babel.editor.toolbar.main", window);
 	    trimStack.setToBeRendered(false);
 	}
+    }
+
+    @Override
+    public ESelectionService getSelectionService() {
+	return selectionService;
     }
 }

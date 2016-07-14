@@ -2,17 +2,22 @@ package org.eclipse.e4.babel.editor.ui.editor.i18n.page;
 
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import org.eclipse.e4.babel.core.api.IResourceManager;
 import org.eclipse.e4.babel.editor.ui.editor.ResourceBundleEditorContract;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.page.I18nPageContract.Presenter;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.pageentry.I18nPageEntryContract;
-import org.eclipse.e4.babel.resource.IBabelResourceProvider;
+import org.eclipse.e4.core.contexts.ContextInjectionFactory;
+import org.eclipse.e4.core.contexts.IEclipseContext;
+import org.eclipse.e4.core.di.annotations.Creatable;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
+@Creatable
 public final class I18nPageView extends ScrolledComposite implements I18nPageContract.View {
 
     private static final String TAG = I18nPageView.class.getSimpleName();
@@ -21,11 +26,14 @@ public final class I18nPageView extends ScrolledComposite implements I18nPageCon
 
     private I18nPageContract.Presenter presenter;
 
-    public static I18nPageView create(final Composite sashForm, ResourceBundleEditorContract.View editorView, final IBabelResourceProvider resourceProvider,
-	    IResourceManager resourceManager) {
+    public static I18nPageView create(final Composite sashForm, ResourceBundleEditorContract.View editorView,
+	    IResourceManager resourceManager, IEclipseContext context) {
 	I18nPageView page = new I18nPageView(sashForm, SWT.V_SCROLL | SWT.H_SCROLL);
-	I18nPagePresenter presenter = I18nPagePresenter.create(page, resourceManager, editorView, resourceProvider);
+	I18nPagePresenter presenter = I18nPagePresenter.create(page, resourceManager, editorView);
 	page.setPresenter(presenter);
+	
+	ContextInjectionFactory.inject(presenter, context);
+	ContextInjectionFactory.inject(page, context);
 
 	return page;
     }
@@ -35,6 +43,11 @@ public final class I18nPageView extends ScrolledComposite implements I18nPageCon
 	i18nEntryComposite = new Composite(this, SWT.BORDER);
 	i18nEntryComposite.setLayout(new GridLayout(1, false));
 
+    }
+    
+    @PostConstruct
+    public void onCreate() {
+	createEditingPart();
     }
 
     @Override
@@ -72,7 +85,7 @@ public final class I18nPageView extends ScrolledComposite implements I18nPageCon
     @Override
     public void setNextFocusDown() {
 	final List<I18nPageEntryContract.View> pageEntries = presenter.getPageEntries();
-	final I18nPageEntryContract.View  activeEntry = presenter.getActiveEntry();
+	final I18nPageEntryContract.View activeEntry = presenter.getActiveEntry();
 	if (null != activeEntry) {
 	    final int index = pageEntries.indexOf(activeEntry);
 	    if ((index >= 0) && (index != (pageEntries.size() - 1))) {
@@ -86,7 +99,7 @@ public final class I18nPageView extends ScrolledComposite implements I18nPageCon
     @Override
     public void setNextFocusUp() {
 	final List<I18nPageEntryContract.View> pageEntries = presenter.getPageEntries();
-	final I18nPageEntryContract.View  activeEntry = presenter.getActiveEntry();
+	final I18nPageEntryContract.View activeEntry = presenter.getActiveEntry();
 	if (null != activeEntry) {
 	    final int index = pageEntries.indexOf(activeEntry);
 	    if (index > 0) {

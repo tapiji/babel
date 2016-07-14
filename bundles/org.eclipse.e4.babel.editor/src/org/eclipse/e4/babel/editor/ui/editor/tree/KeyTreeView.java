@@ -2,15 +2,25 @@ package org.eclipse.e4.babel.editor.ui.editor.tree;
 
 import java.util.Collections;
 
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+
 import org.eclipse.e4.babel.core.preference.PropertyPreferences;
 import org.eclipse.e4.babel.editor.model.tree.KeyTree;
 import org.eclipse.e4.babel.editor.model.tree.KeyTreeItem;
 import org.eclipse.e4.babel.editor.ui.editor.ResourceBundleEditorContract;
-import org.eclipse.e4.babel.editor.ui.editor.ResourceBundleEditorContract.View;
 import org.eclipse.e4.babel.editor.ui.editor.tree.KeyTreeContract.Presenter;
 import org.eclipse.e4.babel.editor.ui.editor.tree.provider.KeyTreeContentProvider;
 import org.eclipse.e4.babel.editor.ui.editor.tree.provider.KeyTreeLabelProvider;
 import org.eclipse.e4.babel.resource.BabelResourceConstants;
+import org.eclipse.e4.babel.resource.IBabelResourceProvider;
+import org.eclipse.e4.core.commands.ECommandService;
+import org.eclipse.e4.core.commands.EHandlerService;
+import org.eclipse.e4.core.contexts.ContextInjectionFactory;
+import org.eclipse.e4.core.contexts.IEclipseContext;
+import org.eclipse.e4.core.di.annotations.Creatable;
+import org.eclipse.e4.ui.services.EMenuService;
+import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -26,15 +36,29 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.eclipselabs.e4.tapiji.logger.Log;
 
+@Creatable
 public final class KeyTreeView extends Composite implements KeyTreeContract.View {
 
     private static final String TAG = KeyTreeView.class.getSimpleName();
     private static final String TREE_VIEWER_MENU_ID = "org.eclipse.e4.babel.editor.popupmenu.treePopupMenu";
     private static final String COMMAND_DELETE_KEY = "org.eclipse.e4.babel.editor.command.deleteKey";
+    
+    @Inject
+    private EMenuService menuService;
+    
+    @Inject
+    private IBabelResourceProvider resourceProvider;
+    
+    @Inject
+    private ECommandService commandService;
 
-    private final View rbeView;
+    @Inject
+    private EHandlerService handlerService;
+    
+    @Inject
+    private ESelectionService selectionService;
+
     private Presenter presenter;
     private TreeViewer treeViewer;
     private Text addKeyTextBox;
@@ -44,21 +68,22 @@ public final class KeyTreeView extends Composite implements KeyTreeContract.View
     private Button btnAddKey;
     private boolean syncAddKeyTextBox;
 
-    public static KeyTreeView create(final Composite sashForm, ResourceBundleEditorContract.View resourceBundleEditor) {
-	KeyTreeView treevIew = new KeyTreeView(sashForm, resourceBundleEditor);
-	treevIew.setPresenter(KeyTreePresenter.create(treevIew, resourceBundleEditor));
+    public static KeyTreeView create(final Composite sashForm, ResourceBundleEditorContract.View resourceBundleEditor, IEclipseContext context) {
+	KeyTreeView treevIew = new KeyTreeView(sashForm);
+	Presenter presenter = KeyTreePresenter.create(treevIew, resourceBundleEditor);
+	treevIew.setPresenter(presenter);
+	ContextInjectionFactory.inject(treevIew, context);
+	ContextInjectionFactory.inject(presenter, context);
 	return treevIew;
     }
 
-    private KeyTreeView(final Composite parent, final ResourceBundleEditorContract.View resourceBundleEditor) {
+    private KeyTreeView(final Composite parent) {
 	super(parent, SWT.BORDER);
-	this.rbeView = resourceBundleEditor;
-	Log.d(TAG, "treeViewerPart");
 	setLayout(new GridLayout(1, false));
     }
 
-    @Override
-    public void createView() {
+    @PostConstruct
+    public void onCreate() {
 	topView();
 	middleView();
 	bottomView();
@@ -81,7 +106,7 @@ public final class KeyTreeView extends Composite implements KeyTreeContract.View
 	    btnFlat.setEnabled(false);
 	}
 
-	btnFlat.setImage(rbeView.getResourceProvider().loadImage(BabelResourceConstants.IMG_TREE_FLAT));
+	btnFlat.setImage(resourceProvider.loadImage(BabelResourceConstants.IMG_TREE_FLAT));
 	btnFlat.setToolTipText("Tree");
 	btnFlat.addListener(SWT.Selection, (e) -> {
 	    if (btnFlat.getSelection()) {
@@ -99,7 +124,7 @@ public final class KeyTreeView extends Composite implements KeyTreeContract.View
 	    }
 	});
 
-	btnHierarchical.setImage(rbeView.getResourceProvider().loadImage(BabelResourceConstants.IMG_TREE_HIERARCHICAL));
+	btnHierarchical.setImage(resourceProvider.loadImage(BabelResourceConstants.IMG_TREE_HIERARCHICAL));
 	btnHierarchical.setToolTipText("Tree");
 	btnHierarchical.addListener(SWT.Selection, (e) -> {
 	    if (btnHierarchical.getSelection()) {
@@ -127,13 +152,13 @@ public final class KeyTreeView extends Composite implements KeyTreeContract.View
 	separator.setLayoutData(layoutData);
 
 	final Button btnExpandAll = new Button(composite, SWT.PUSH | SWT.FLAT);
-	btnExpandAll.setImage(rbeView.getResourceProvider().loadImage(BabelResourceConstants.IMG_EXPAND_ALL));
+	btnExpandAll.setImage(resourceProvider.loadImage(BabelResourceConstants.IMG_EXPAND_ALL));
 	btnExpandAll.addListener(SWT.Selection, (e) -> expandAll());
 	btnExpandAll.setToolTipText("Expand all");
 
 	final Button btnCollapseAll = new Button(composite, SWT.PUSH | SWT.FLAT);
 	btnCollapseAll.setToolTipText("Collapse all");
-	btnCollapseAll.setImage(rbeView.getResourceProvider().loadImage(BabelResourceConstants.IMG_COLLAPSE_ALL));
+	btnCollapseAll.setImage(resourceProvider.loadImage(BabelResourceConstants.IMG_COLLAPSE_ALL));
 	btnCollapseAll.addListener(SWT.Selection, (e) -> collapseAll());
 
 	if (PropertyPreferences.getInstance().isEditorTreeHierachical()) {
@@ -154,7 +179,7 @@ public final class KeyTreeView extends Composite implements KeyTreeContract.View
 	}
 
 	treeViewer.addSelectionChangedListener((event) -> {
-	    rbeView.getSelectionService().setSelection(presenter.getSelection());
+	    selectionService.setSelection(presenter.getSelection());
 	    final String selectedKey = presenter.getSelectedKey();
 	    if (syncAddKeyTextBox && selectedKey != null) {
 		addKeyTextBox.setText(selectedKey);
@@ -169,7 +194,7 @@ public final class KeyTreeView extends Composite implements KeyTreeContract.View
 	    @SuppressWarnings("restriction")
 	    public void keyReleased(KeyEvent event) {
 		if (event.character == SWT.DEL) {
-		    rbeView.getHandlerService().executeHandler(rbeView.getCommandService().createCommand(COMMAND_DELETE_KEY, Collections.emptyMap()));
+		    handlerService.executeHandler(commandService.createCommand(COMMAND_DELETE_KEY, Collections.emptyMap()));
 		}
 	    }
 	});
@@ -178,7 +203,7 @@ public final class KeyTreeView extends Composite implements KeyTreeContract.View
 
 	    @Override
 	    public void mouseDoubleClick(MouseEvent event) {
-		final Object element = rbeView.getSelectionService().getSelection();
+		final Object element = selectionService.getSelection();
 		if (treeViewer.isExpandable(element)) {
 		    if (treeViewer.getExpandedState(element)) {
 			treeViewer.collapseToLevel(element, 1);
@@ -189,7 +214,7 @@ public final class KeyTreeView extends Composite implements KeyTreeContract.View
 	    }
 	});
 	treeViewer.addFilter(presenter.getTreeFilter());
-	rbeView.getMenuService().registerContextMenu(treeViewer.getTree(), TREE_VIEWER_MENU_ID);
+	menuService.registerContextMenu(treeViewer.getTree(), TREE_VIEWER_MENU_ID);
     }
 
     private void bottomView() {
@@ -253,7 +278,7 @@ public final class KeyTreeView extends Composite implements KeyTreeContract.View
     @Override
     public void setPresenter(Presenter presenter) {
 	this.presenter = presenter;
-	presenter.init();
+	//presenter.init();
     }
 
     @Override
