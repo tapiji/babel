@@ -27,6 +27,7 @@ import org.eclipse.e4.babel.core.api.IResourceManager;
 import org.eclipse.e4.babel.core.internal.generator.PropertiesGenerator;
 import org.eclipse.e4.babel.core.internal.parser.PropertiesParser;
 import org.eclipse.e4.babel.core.preference.PropertyPreferences;
+import org.eclipse.e4.babel.core.utils.UIUtils;
 import org.eclipse.e4.babel.editor.model.bundle.Bundle;
 import org.eclipse.e4.babel.editor.model.bundle.BundleGroup;
 import org.eclipse.e4.babel.editor.model.bundle.listener.BundleChangeAdapter;
@@ -120,6 +121,12 @@ public final class ResourceManagers implements IResourceManager {
         return locales;
     }
 
+    
+    @Override
+    public List<Locale> getSortedLocales() {
+        return UIUtils.sortLocales(locales);
+    }
+    
     /**
      * Gets the key tree for this bundle.
      * 

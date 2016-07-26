@@ -83,7 +83,7 @@ public class I18nPagePresenter implements I18nPageContract.Presenter {
 
     @Override
     public void createEditingPages() {
-	resourceManager.getLocales().stream().forEach(locale -> {
+	resourceManager.getSortedLocales().stream().forEach(locale -> {
 	    final I18nPageEntryContract.View entry = I18nPageEntryView.create((I18nPageView) i18nPageView, locale);
 	    entry.addLocalListener(localBehaviour);
 	    pageEntries.add(entry);

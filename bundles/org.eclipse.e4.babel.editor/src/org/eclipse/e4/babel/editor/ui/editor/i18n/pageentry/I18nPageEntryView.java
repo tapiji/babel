@@ -137,7 +137,7 @@ public final class I18nPageEntryView extends Composite implements KeyListener, T
 		foundKeys.append("        ");
 		foundKeys.append(duplicate.getKey());
 		foundKeys.append(" = ");
-		foundKeys.append(duplicate.getValue());	
+		foundKeys.append(duplicate.getValue());
 		foundKeys.append("\n");
 	    });
 	    showVisitorDialog("Gleiche(r) Wert(e) gefunden.", "Die Werte folgender Schl\u00FCssel sind innerhalb der Lokalen \"{1}\" beim Schl\u00FCssel \"{0}\" identisch:",
@@ -244,8 +244,7 @@ public final class I18nPageEntryView extends Composite implements KeyListener, T
     }
 
     /**
-     * Text field has changed: 
-     * make editor dirty if not already
+     * Text field has changed: make editor dirty if not already
      * 
      * @param eventBox
      */
@@ -392,7 +391,9 @@ public final class I18nPageEntryView extends Composite implements KeyListener, T
 
     @Override
     public void setDuplicateButtonVisibility(boolean visible) {
-	this.duplicateButton.setVisible(visible);
+	if (!isDisposed()) {
+	    this.duplicateButton.setVisible(visible);
+	}
     }
 
     @Override

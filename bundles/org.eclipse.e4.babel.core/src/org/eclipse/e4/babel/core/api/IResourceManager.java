@@ -39,4 +39,6 @@ public interface IResourceManager {
 	SourceEditor addSourceEditor(IFile resource, Locale locale);
 
 	IFile createPropertiesFile(Locale locale) throws CoreException, IOException;
+
+    List<Locale> getSortedLocales();
 }
