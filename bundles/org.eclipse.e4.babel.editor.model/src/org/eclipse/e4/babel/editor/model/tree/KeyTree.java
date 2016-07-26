@@ -60,14 +60,12 @@ public final class KeyTree extends BundleObject implements IKeyTreeVisitable {
 
             @Override
             public <T> void add(final BundleEvent<T> event) {
-                String key = ((BundleEntry) event.data()).getKey();
-                addKey(key);
+                addKey(((BundleEntry) event.data()).getKey());
             }
 
             @Override
             public <T> void remove(final BundleEvent<T> event) {
-                String key = ((BundleEntry) event.data()).getKey();
-                Collection<BundleEntry> entries = bundleGroup.getBundleEntries(key);
+                Collection<BundleEntry> entries = bundleGroup.getBundleEntries(((BundleEntry) event.data()).getKey());
                 if (entries.size() == 0) {
                     removeKey(((BundleEntry) event.data()).getKey());
                 }
@@ -75,8 +73,7 @@ public final class KeyTree extends BundleObject implements IKeyTreeVisitable {
 
             @Override
             public <T> void modify(final BundleEvent<T> event) {
-                String key = ((BundleEntry) event.data()).getKey();
-                modifyKey(key);
+                modifyKey(((BundleEntry) event.data()).getKey());
             }
         });
     }

@@ -39,20 +39,18 @@ public class I18nPagePresenter implements I18nPageContract.Presenter {
     private View i18nPageView;
     private ResourceBundleEditorContract.View editorView;
 
-
     public I18nPagePresenter(I18nPageContract.View i18nPageView, IResourceManager resourceManager, ResourceBundleEditorContract.View editorView) {
 	this.resourceManager = resourceManager;
 	this.i18nPageView = i18nPageView;
 	this.editorView = editorView;
     }
 
-    
     @PostConstruct
-    public void onCreate(){
+    public void onCreate() {
 	editorView.getKeyTreeView().getTreeViewer().addSelectionChangedListener(localBehaviour);
 	editorView.getKeyTreeView().getKeyTree().addChangeListener(localBehaviour);
     }
-    
+
     @Override
     public void init() {
 
@@ -82,7 +80,7 @@ public class I18nPagePresenter implements I18nPageContract.Presenter {
     public I18nPageEntryContract.View getPageEntryByIndex(int position) {
 	return pageEntries.get(position);
     }
-    
+
     @Override
     public void createEditingPages() {
 	resourceManager.getLocales().stream().forEach(locale -> {
@@ -116,8 +114,9 @@ public class I18nPagePresenter implements I18nPageContract.Presenter {
     public void selectPreviousTreeEntry() {
 	activeEntry.getPresenter().updateBundleOnChanges();
 	String prevKey = resourceManager.getBundleGroup().getPreviousKey(getSelectedKey());
-	if (prevKey == null)
+	if (prevKey == null) {
 	    return;
+	}
 
 	Locale currentLocale = activeEntry.getPresenter().getLocale();
 	resourceManager.getKeyTree().selectKey(prevKey);
@@ -130,10 +129,11 @@ public class I18nPagePresenter implements I18nPageContract.Presenter {
     public void focusPreviousBundleEntryComposite() {
 	int index = pageEntries.indexOf(activeEntry);
 	I18nPageEntryContract.View nextComposite;
-	if (index > 0)
+	if (index > 0) {
 	    nextComposite = pageEntries.get(--index);
-	else
+	} else {
 	    nextComposite = pageEntries.get(pageEntries.size() - 1);
+	}
 
 	if (nextComposite != null)
 	    focusComposite(nextComposite);
@@ -152,10 +152,11 @@ public class I18nPagePresenter implements I18nPageContract.Presenter {
 	Point compSize = ((I18nPageEntryView) comp).getSize();
 	Point size = ((I18nPageView) i18nPageView).getSize();
 	Point origin = ((I18nPageView) i18nPageView).getOrigin();
-	if (compPos.y + compSize.y > size.y + origin.y)
+	if (compPos.y + compSize.y > size.y + origin.y) {
 	    ((I18nPageView) i18nPageView).setOrigin(origin.x, origin.y + (compPos.y + compSize.y) - (origin.y + size.y) + 5);
-	else if (compPos.y < origin.y)
+	} else if (compPos.y < origin.y) {
 	    ((I18nPageView) i18nPageView).setOrigin(origin.x, compPos.y);
+	}
 	comp.focusTextBox();
     }
 
@@ -163,8 +164,9 @@ public class I18nPagePresenter implements I18nPageContract.Presenter {
     public void selectNextTreeEntry() {
 	activeEntry.getPresenter().updateBundleOnChanges();
 	String nextKey = resourceManager.getBundleGroup().getNextKey(getSelectedKey());
-	if (nextKey == null)
+	if (nextKey == null) {
 	    return;
+	}
 
 	Locale currentLocale = activeEntry.getPresenter().getLocale();
 	resourceManager.getKeyTree().selectKey(nextKey);

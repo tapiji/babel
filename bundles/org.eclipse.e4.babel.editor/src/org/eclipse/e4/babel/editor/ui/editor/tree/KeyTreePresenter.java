@@ -27,10 +27,10 @@ final class KeyTreePresenter implements KeyTreeContract.Presenter {
     private View keyTreeView;
     @Inject
     private IBabelResourceProvider resourceProvider;
-    
+
     @Override
     public View getKeyTreeView() {
-        return keyTreeView;
+	return keyTreeView;
     }
 
     private ResourceBundleEditorContract.View resourceBundleEditor;
@@ -54,7 +54,12 @@ final class KeyTreePresenter implements KeyTreeContract.Presenter {
     @Override
     public void addKey(String key) {
 	resourceBundleEditor.getResourceManager().addNewKey(key);
-	keyTreeView.setSelectedKeyTreeItem(getKeyTree().getKeyTreeItem(key));
+	// TODO FIX THIS BUG
+	if (((KeyTreeItem) keyTreeView.getStructuredSelectionSelection().getFirstElement()).getId().equals(key)) {
+	    resourceBundleEditor.getI18nPage().getPresenter().refreshTextBoxes();
+	} else {
+	    keyTreeView.setSelectedKeyTreeItem(getKeyTree().getKeyTreeItem(key));
+	}
     }
 
     @Override
@@ -155,6 +160,6 @@ final class KeyTreePresenter implements KeyTreeContract.Presenter {
     @Override
     public void init() {
 	// TODO Auto-generated method stub
-	
+
     }
 }

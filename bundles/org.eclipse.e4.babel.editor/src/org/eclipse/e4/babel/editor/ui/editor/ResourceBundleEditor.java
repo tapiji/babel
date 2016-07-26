@@ -261,6 +261,11 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
     }
 
     @Override
+    public I18nPageContract.View getI18nPage() {
+        return i18nPage;
+    }
+
+    @Override
     public void dispose() {
 	i18nPage.dispose();
 	List<SourceEditor> sourceEditors = resourceManager.getSourceEditors();
