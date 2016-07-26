@@ -278,7 +278,6 @@ public final class KeyTreeView extends Composite implements KeyTreeContract.View
     @Override
     public void setPresenter(Presenter presenter) {
 	this.presenter = presenter;
-	//presenter.init();
     }
 
     @Override

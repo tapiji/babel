@@ -123,7 +123,7 @@ public final class BundleGroup extends BundleObject implements IBundleVisitable 
     }
 
     public boolean containsKey(final String key) {
-        return bundles.keySet().stream().filter(locale -> getBundleEntry(locale, key) != null).findFirst().isPresent();
+        return bundles.keySet().stream().filter(locale -> getBundleEntry(locale, key) != null && (locale != null)).findAny().isPresent();
     }
 
     public boolean containsLocale(final Locale value) {
