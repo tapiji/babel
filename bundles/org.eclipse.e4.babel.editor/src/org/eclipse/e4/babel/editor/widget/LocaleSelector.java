@@ -16,6 +16,8 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Locale;
 
+import org.eclipse.e4.babel.core.utils.UIUtils;
+import org.eclipse.e4.babel.logger.Log;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
@@ -30,9 +32,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.eclipselabs.e4.tapiji.logger.Log;
-import org.eclipselabs.e4.tapiji.utils.UiUtils;
-
 
 /**
  * Composite for dynamically selecting a locale from a list of available
@@ -108,7 +107,7 @@ public final class LocaleSelector extends Composite implements FocusListener, Se
         final GridData gridData = new GridData();
         final Text text = new Text(selectionGroup, SWT.BORDER);
         text.setData(inputId.toString());
-        gridData.widthHint = UiUtils.getWidthInChars(text, 4);
+        gridData.widthHint = UIUtils.getWidthInChars(text, 4);
         text.setTextLimit(textLimit);
         text.setLayoutData(gridData);
         text.addFocusListener(this);

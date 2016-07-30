@@ -3,6 +3,7 @@ package org.eclipse.e4.babel.editor.preference;
 
 import org.eclipse.e4.babel.core.preference.PropertyPreferences;
 import org.eclipse.e4.babel.editor.preference.validator.NumberTextKeyListener;
+import org.eclipse.e4.babel.logger.Log;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
@@ -10,7 +11,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
-import org.eclipselabs.e4.tapiji.logger.Log;
 
 
 public final class PreferenceGeneralPage extends APreferencePage {

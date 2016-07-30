@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-SymbolicName: org.eclipse.e4.babel.editor.model
+Export-Package: org.eclipse.e4.babel.editor.model.bundle,org.eclipse.e
+ 4.babel.editor.model.bundle.listener,org.eclipse.e4.babel.editor.mode
+ l.bundle.visitor,org.eclipse.e4.babel.editor.model.checks.proximity,o
+ rg.eclipse.e4.babel.editor.model.checks.visitor,org.eclipse.e4.babel.
+ editor.model.tree,org.eclipse.e4.babel.editor.model.tree.visitor,org.
+ eclipse.e4.babel.editor.model.updater
+Bundle-Name: Model
+Bundle-Version: 1.0.1
+Bundle-ManifestVersion: 2
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Import-Package: org.eclipse.core.resources,org.eclipse.core.runtime;ve
+ rsion="3.5.0",org.eclipse.e4.babel.logger,org.eclipse.jdt.annotation,
+ org.eclipse.jface.text,org.eclipse.jface.viewers
+

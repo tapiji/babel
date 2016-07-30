@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 import org.eclipse.e4.babel.core.preference.PropertyPreferences;
 import org.eclipse.e4.babel.editor.model.bundle.Bundle;
 import org.eclipse.e4.babel.editor.model.bundle.BundleEntry;
-import org.eclipselabs.e4.tapiji.logger.Log;
+import org.eclipse.e4.babel.logger.Log;
 
 /**
  * Bundle-related utility methods. 

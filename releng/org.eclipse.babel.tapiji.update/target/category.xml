@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/org.eclipse.babel.tapiji.feature_1.0.0.qualifier.jar" id="org.eclipse.babel.tapiji.feature" version="1.0.0.qualifier">
+      <category name="babel_tapiji"/>
+   </feature>
+   <category-def name="babel_tapiji" label="Babel Tapiji"/>
+</site>

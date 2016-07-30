@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<units size='1'>
+  <unit id='org.eclipse.e4.babel.editor.model' version='1.0.1' singleton='false'>
+    <update id='org.eclipse.e4.babel.editor.model' range='[0.0.0,1.0.1)' severity='0'/>
+    <properties size='4'>
+      <property name='org.eclipse.equinox.p2.name' value='Model'/>
+      <property name='maven-groupId' value='org.eclipse.babel.tapiji'/>
+      <property name='maven-artifactId' value='org.eclipse.e4.babel.editor.model'/>
+      <property name='maven-version' value='1.0.1'/>
+    </properties>
+    <provides size='11'>
+      <provided namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.e4.babel.editor.model' version='1.0.1'/>
+      <provided namespace='osgi.bundle' name='org.eclipse.e4.babel.editor.model' version='1.0.1'/>
+      <provided namespace='java.package' name='org.eclipse.e4.babel.editor.model.bundle' version='0.0.0'/>
+      <provided namespace='java.package' name='org.eclipse.e4.babel.editor.model.bundle.listener' version='0.0.0'/>
+      <provided namespace='java.package' name='org.eclipse.e4.babel.editor.model.bundle.visitor' version='0.0.0'/>
+      <provided namespace='java.package' name='org.eclipse.e4.babel.editor.model.checks.proximity' version='0.0.0'/>
+      <provided namespace='java.package' name='org.eclipse.e4.babel.editor.model.checks.visitor' version='0.0.0'/>
+      <provided namespace='java.package' name='org.eclipse.e4.babel.editor.model.tree' version='0.0.0'/>
+      <provided namespace='java.package' name='org.eclipse.e4.babel.editor.model.tree.visitor' version='0.0.0'/>
+      <provided namespace='java.package' name='org.eclipse.e4.babel.editor.model.updater' version='0.0.0'/>
+      <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+    </provides>
+    <requires size='6'>
+      <required namespace='java.package' name='org.eclipse.core.resources' range='0.0.0'/>
+      <required namespace='java.package' name='org.eclipse.core.runtime' range='3.5.0'/>
+      <required namespace='java.package' name='org.eclipse.e4.babel.logger' range='0.0.0'/>
+      <required namespace='java.package' name='org.eclipse.jdt.annotation' range='0.0.0'/>
+      <required namespace='java.package' name='org.eclipse.jface.text' range='0.0.0'/>
+      <required namespace='java.package' name='org.eclipse.jface.viewers' range='0.0.0'/>
+    </requires>
+    <artifacts size='1'>
+      <artifact classifier='osgi.bundle' id='org.eclipse.e4.babel.editor.model' version='1.0.1'/>
+    </artifacts>
+    <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+    <touchpointData size='1'>
+      <instructions size='1'>
+        <instruction key='manifest'>
+          Bundle-SymbolicName: org.eclipse.e4.babel.editor.model&#xA;Bundle-Version: 1.0.1&#xA;
+        </instruction>
+      </instructions>
+    </touchpointData>
+  </unit>
+</units>

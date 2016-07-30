@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<units size='1'>
+  <unit id='org.eclipse.e4.babel.editor' version='1.0.0'>
+    <update id='org.eclipse.e4.babel.editor' range='[0.0.0,1.0.0)' severity='0'/>
+    <properties size='5'>
+      <property name='org.eclipse.equinox.p2.name' value='Tapiji'/>
+      <property name='org.eclipse.equinox.p2.provider' value='INSO'/>
+      <property name='maven-groupId' value='org.eclipse.babel.tapiji'/>
+      <property name='maven-artifactId' value='org.eclipse.e4.babel.editor'/>
+      <property name='maven-version' value='1.0.0'/>
+    </properties>
+    <provides size='3'>
+      <provided namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.e4.babel.editor' version='1.0.0'/>
+      <provided namespace='osgi.bundle' name='org.eclipse.e4.babel.editor' version='1.0.0'/>
+      <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+    </provides>
+    <requires size='52'>
+      <required namespace='osgi.bundle' name='org.eclipse.core.runtime' range='3.12.0'/>
+      <required namespace='java.package' name='org.eclipse.core.commands' range='0.0.0'/>
+      <required namespace='java.package' name='org.eclipse.core.expressions' range='0.0.0'/>
+      <required namespace='java.package' name='org.eclipse.core.resources' range='0.0.0'/>
+      <required namespace='java.package' name='org.eclipse.e4.babel.core' range='0.0.0'/>
+      <required namespace='java.package' name='org.eclipse.e4.babel.core.api' range='0.0.0'/>
+      <required namespace='java.package' name='org.eclipse.e4.babel.core.preference' range='0.0.0'/>
+      <required namespace='java.package' name='org.eclipse.e4.babel.core.utils' range='0.0.0'/>
+      <required namespace='java.package' name='org.eclipse.e4.babel.editor.model.bundle' range='0.0.0'/>
+      <required namespace='java.package' name='org.eclipse.e4.babel.editor.model.bundle.listener' range='0.0.0'/>
+      <required namespace='java.package' name='org.eclipse.e4.babel.editor.model.bundle.visitor' range='0.0.0'/>
+      <required namespace='java.package' name='org.eclipse.e4.babel.editor.model.checks.proximity' range='0.0.0'/>
+      <required namespace='java.package' name='org.eclipse.e4.babel.editor.model.checks.visitor' range='0.0.0'/>
+      <required namespace='java.package' name='org.eclipse.e4.babel.editor.model.tree' range='0.0.0'/>
+      <required namespace='java.package' name='org.eclipse.e4.babel.editor.model.tree.visitor' range='0.0.0'/>
+      <required namespace='java.package' name='org.eclipse.e4.babel.editor.model.updater' range='0.0.0'/>
+      <required namespace='java.package' name='org.eclipse.e4.babel.editor.text' range='0.0.0'/>
+      <required namespace='java.package' name='org.eclipse.e4.babel.editor.text.document' range='0.0.0'/>
+      <required namespace='java.package' name='org.eclipse.e4.babel.editor.text.model' range='0.0.0'/>
+      <required namespace='java.package' name='org.eclipse.e4.babel.logger' range='0.0.0'/>
+      <required namespace='java.package' name='org.eclipse.e4.babel.resource' range='0.0.0'/>
+      <required namespace='java.package' name='org.eclipse.e4.core.commands' range='0.0.0'/>
+      <required namespace='java.package' name='org.eclipse.e4.core.contexts' range='0.0.0'/>
+      <required namespace='java.package' name='org.eclipse.e4.core.di' range='0.0.0'/>
+      <required namespace='java.package' name='org.eclipse.e4.core.di.annotations' range='0.0.0'/>
+      <required namespace='java.package' name='org.eclipse.e4.core.di.extensions' range='0.0.0'/>
+      <required namespace='java.package' name='org.eclipse.e4.core.services.events' range='0.0.0'/>
+      <required namespace='java.package' name='org.eclipse.e4.core.services.nls' range='0.0.0'/>
+      <required namespace='java.package' name='org.eclipse.e4.ui.di' range='0.0.0'/>
+      <required namespace='java.package' name='org.eclipse.e4.ui.internal.workbench' range='0.0.0'/>
+      <required namespace='java.package' name='org.eclipse.e4.ui.model.application' range='0.0.0'/>
+      <required namespace='java.package' name='org.eclipse.e4.ui.model.application.ui' range='0.0.0'/>
+      <required namespace='java.package' name='org.eclipse.e4.ui.model.application.ui.basic' range='0.0.0'/>
+      <required namespace='java.package' name='org.eclipse.e4.ui.model.application.ui.menu' range='0.0.0'/>
+      <required namespace='java.package' name='org.eclipse.e4.ui.services' range='0.0.0'/>
+      <required namespace='java.package' name='org.eclipse.e4.ui.workbench' range='0.0.0'/>
+      <required namespace='java.package' name='org.eclipse.e4.ui.workbench.modeling' range='0.0.0'/>
+      <required namespace='java.package' name='org.eclipse.jface.dialogs' range='0.0.0'/>
+      <required namespace='java.package' name='org.eclipse.jface.preference' range='0.0.0'/>
+      <required namespace='java.package' name='org.eclipse.jface.resource' range='0.0.0'/>
+      <required namespace='java.package' name='org.eclipse.jface.text' range='0.0.0'/>
+      <required namespace='java.package' name='org.eclipse.jface.text.source' range='0.0.0'/>
+      <required namespace='java.package' name='org.eclipse.jface.viewers' range='0.0.0'/>
+      <required namespace='java.package' name='org.eclipse.jface.window' range='0.0.0'/>
+      <required namespace='java.package' name='org.eclipse.swt' range='0.0.0'/>
+      <required namespace='java.package' name='org.eclipse.swt.custom' range='0.0.0'/>
+      <required namespace='java.package' name='org.eclipse.swt.events' range='0.0.0'/>
+      <required namespace='java.package' name='org.eclipse.swt.graphics' range='0.0.0'/>
+      <required namespace='java.package' name='org.eclipse.swt.layout' range='0.0.0'/>
+      <required namespace='java.package' name='org.eclipse.swt.widgets' range='0.0.0'/>
+      <required namespace='java.package' name='org.eclipse.ui.views.contentoutline' range='0.0.0'/>
+      <required namespace='java.package' name='org.osgi.service.event' range='1.3.0'/>
+    </requires>
+    <artifacts size='1'>
+      <artifact classifier='osgi.bundle' id='org.eclipse.e4.babel.editor' version='1.0.0'/>
+    </artifacts>
+    <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+    <touchpointData size='1'>
+      <instructions size='1'>
+        <instruction key='manifest'>
+          Bundle-SymbolicName: org.eclipse.e4.babel.editor;singleton:=true&#xA;Bundle-Version: 1.0.0&#xA;
+        </instruction>
+      </instructions>
+    </touchpointData>
+  </unit>
+</units>

@@ -21,9 +21,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.e4.babel.editor.text.document.SourceViewerDocument;
+import org.eclipse.e4.babel.logger.Log;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.text.source.SourceViewer;
-import org.eclipselabs.e4.tapiji.logger.Log;
 
 
 /**

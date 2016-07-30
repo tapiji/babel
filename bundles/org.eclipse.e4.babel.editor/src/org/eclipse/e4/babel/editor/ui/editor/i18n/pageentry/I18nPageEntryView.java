@@ -10,6 +10,7 @@ import org.eclipse.e4.babel.core.utils.UIUtils;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.page.I18nPageContract;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.page.I18nPagePresenter.LocalBehaviour;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.pageentry.I18nPageEntryContract.Presenter;
+import org.eclipse.e4.babel.logger.Log;
 import org.eclipse.e4.babel.resource.BabelResourceConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.FontDescriptor;
@@ -39,8 +40,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-import org.eclipselabs.e4.tapiji.logger.Log;
-import org.eclipselabs.e4.tapiji.resource.TapijiResourceConstants;
 
 public final class I18nPageEntryView extends Composite implements KeyListener, TraverseListener, FocusListener, MouseListener, I18nPageEntryContract.View, ITextListener {
 
@@ -204,7 +203,7 @@ public final class I18nPageEntryView extends Composite implements KeyListener, T
 	}
 
 	if (countryCode != null && countryCode.length() > 0) {
-	    Image flag = presenter.loadImage(TapijiResourceConstants.IMG_FOLDER_FLAGS + countryCode + ".png");
+	    Image flag = presenter.loadImage(BabelResourceConstants.IMG_FOLDER_FLAGS + countryCode + ".png");
 	    if (flag != null) {
 		localeImage.setImage(flag);
 	    }
@@ -216,7 +215,7 @@ public final class I18nPageEntryView extends Composite implements KeyListener, T
 	gridData.horizontalAlignment = GridData.END;
 	this.expandIcon = new Label(toolBar, SWT.FLAT);
 	this.expandIcon.setLayoutData(gridData);
-	this.expandIcon.setImage(presenter.loadImage(TapijiResourceConstants.IMG_COLLAPSE));
+	this.expandIcon.setImage(presenter.loadImage(BabelResourceConstants.IMG_COLLAPSE));
 	this.expandIcon.addMouseListener(this);
 	this.expandIcon.setToolTipText("Expand/Collapse");
     }
@@ -287,11 +286,11 @@ public final class I18nPageEntryView extends Composite implements KeyListener, T
 	if (expand) {
 	    data.exclude = expand;
 	    textWidget.setVisible(!expand);
-	    expandIcon.setImage(presenter.loadImage(TapijiResourceConstants.IMG_EXPAND));
+	    expandIcon.setImage(presenter.loadImage(BabelResourceConstants.IMG_EXPAND));
 	} else {
 	    data.exclude = expand;
 	    textWidget.setVisible(!expand);
-	    expandIcon.setImage(presenter.loadImage(TapijiResourceConstants.IMG_COLLAPSE));
+	    expandIcon.setImage(presenter.loadImage(BabelResourceConstants.IMG_COLLAPSE));
 	}
 	presenter.getI18nPageView().refreshLayout();
     }

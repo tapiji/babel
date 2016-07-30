@@ -38,7 +38,7 @@ import org.eclipse.e4.babel.editor.model.updater.FlatKeyTreeUpdater;
 import org.eclipse.e4.babel.editor.model.updater.GroupedKeyTreeUpdater;
 import org.eclipse.e4.babel.editor.model.updater.KeyTreeUpdater;
 import org.eclipse.e4.babel.editor.text.model.SourceEditor;
-import org.eclipselabs.e4.tapiji.logger.Log;
+import org.eclipse.e4.babel.logger.Log;
 
 
 /**

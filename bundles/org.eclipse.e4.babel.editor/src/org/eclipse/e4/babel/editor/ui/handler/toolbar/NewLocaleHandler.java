@@ -7,6 +7,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.e4.babel.editor.ui.editor.ResourceBundleEditorContract;
 import org.eclipse.e4.babel.editor.widget.LocaleSelector;
+import org.eclipse.e4.babel.logger.Log;
 import org.eclipse.e4.core.di.annotations.CanExecute;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -16,7 +17,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipselabs.e4.tapiji.logger.Log;
 
 public final class NewLocaleHandler {
 

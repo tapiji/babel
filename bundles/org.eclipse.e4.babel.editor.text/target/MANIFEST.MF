@@ -1,0 +1,18 @@
+Manifest-Version: 1.0
+Bundle-SymbolicName: org.eclipse.e4.babel.editor.text;singleton:=true
+Export-Package: org.eclipse.e4.babel.editor.text,org.eclipse.e4.babel.
+ editor.text.document,org.eclipse.e4.babel.editor.text.model,org.eclip
+ se.e4.babel.editor.text.property
+Bundle-Name: Text
+Bundle-Version: 1.0.0.201607302135
+Require-Bundle: org.eclipse.core.runtime;bundle-version="3.12.0"
+Bundle-ManifestVersion: 2
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ActivationPolicy: lazy
+Import-Package: javax.inject,org.eclipse.core.resources,org.eclipse.e4
+ .babel.logger,org.eclipse.e4.ui.model.application.ui,org.eclipse.jdt.
+ annotation,org.eclipse.jface.text,org.eclipse.jface.text.presentation
+ ,org.eclipse.jface.text.rules,org.eclipse.jface.text.source,org.eclip
+ se.jface.viewers,org.eclipse.swt,org.eclipse.swt.custom,org.eclipse.s
+ wt.graphics,org.eclipse.swt.layout,org.eclipse.swt.widgets
+

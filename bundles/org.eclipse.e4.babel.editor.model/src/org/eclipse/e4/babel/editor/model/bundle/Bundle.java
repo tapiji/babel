@@ -12,9 +12,9 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 import org.eclipse.e4.babel.editor.model.bundle.visitor.IBundleVisitable;
 import org.eclipse.e4.babel.editor.model.bundle.visitor.IBundleVisitor;
+import org.eclipse.e4.babel.logger.Log;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipselabs.e4.tapiji.logger.Log;
 
 
 public final class Bundle extends BundleObject implements IBundleVisitable {

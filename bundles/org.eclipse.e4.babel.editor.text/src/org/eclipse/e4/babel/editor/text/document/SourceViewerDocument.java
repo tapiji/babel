@@ -12,10 +12,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.e4.babel.logger.Log;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
-import org.eclipselabs.e4.tapiji.logger.Log;
 
 public final class SourceViewerDocument {
 

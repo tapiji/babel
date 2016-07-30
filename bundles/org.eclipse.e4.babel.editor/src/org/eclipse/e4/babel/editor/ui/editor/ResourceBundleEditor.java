@@ -27,6 +27,7 @@ import org.eclipse.e4.babel.editor.ui.editor.i18n.page.I18nPageContract;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.page.I18nPageView;
 import org.eclipse.e4.babel.editor.ui.editor.tree.KeyTreeView;
 import org.eclipse.e4.babel.editor.ui.handler.window.OpenResourceBundleHandler;
+import org.eclipse.e4.babel.logger.Log;
 import org.eclipse.e4.babel.resource.BabelResourceConstants;
 import org.eclipse.e4.babel.resource.IBabelResourceProvider;
 import org.eclipse.e4.core.contexts.IEclipseContext;
@@ -52,7 +53,6 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipselabs.e4.tapiji.logger.Log;
 
 public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEditorContract.View, SelectionListener {
 

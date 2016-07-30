@@ -5,10 +5,12 @@ Bundle-SymbolicName: org.eclipse.e4.babel.editor.text;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Export-Package: org.eclipse.e4.babel.editor.text,
  org.eclipse.e4.babel.editor.text.document,
- org.eclipse.e4.babel.editor.text.model
+ org.eclipse.e4.babel.editor.text.model,
+ org.eclipse.e4.babel.editor.text.property
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Import-Package: javax.inject,
  org.eclipse.core.resources,
+ org.eclipse.e4.babel.logger,
  org.eclipse.e4.ui.model.application.ui,
  org.eclipse.jdt.annotation,
  org.eclipse.jface.text,
@@ -20,7 +22,6 @@ Import-Package: javax.inject,
  org.eclipse.swt.custom,
  org.eclipse.swt.graphics,
  org.eclipse.swt.layout,
- org.eclipse.swt.widgets,
- org.eclipselabs.e4.tapiji.logger
+ org.eclipse.swt.widgets
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.12.0"

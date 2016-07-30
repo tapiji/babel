@@ -5,6 +5,7 @@ import javax.inject.Named;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.e4.babel.core.utils.FileUtils;
+import org.eclipse.e4.babel.logger.Log;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.ui.model.application.MApplication;
@@ -19,7 +20,6 @@ import org.eclipse.e4.ui.workbench.modeling.IPartListener;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipselabs.e4.tapiji.logger.Log;
 
 public class OpenResourceBundleHandler {
 

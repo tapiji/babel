@@ -4,12 +4,12 @@ import org.eclipse.e4.babel.editor.model.bundle.listener.BundleEvent;
 import org.eclipse.e4.babel.editor.model.bundle.listener.IBundleChangeListener;
 import org.eclipse.e4.babel.editor.model.tree.KeyTree;
 import org.eclipse.e4.babel.editor.model.tree.KeyTreeItem;
+import org.eclipse.e4.babel.logger.Log;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipselabs.e4.tapiji.logger.Log;
 
 public final class KeyTreeContentProvider implements ITreeContentProvider, IBundleChangeListener {
 
