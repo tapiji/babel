@@ -4,7 +4,7 @@ Export-Package: org.eclipse.e4.babel.core,org.eclipse.e4.babel.core.ap
  i,org.eclipse.e4.babel.core.preference,org.eclipse.e4.babel.core.util
  s
 Bundle-Name: Core
-Bundle-Version: 1.0.0.201607302135
+Bundle-Version: 1.0.0.201607311749
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.12.0"
 Bundle-ManifestVersion: 2
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8

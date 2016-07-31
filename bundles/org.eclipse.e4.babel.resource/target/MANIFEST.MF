@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-SymbolicName: org.eclipse.e4.babel.resource
 Export-Package: org.eclipse.e4.babel.resource
 Bundle-Name: Resource
-Bundle-Version: 1.0.0.201607302135
+Bundle-Version: 1.0.0.201607311749
 Require-Bundle: org.eclipse.swt,org.eclipse.osgi,org.eclipse.equinox.r
  egistry,org.eclipse.jface
 Bundle-ManifestVersion: 2
