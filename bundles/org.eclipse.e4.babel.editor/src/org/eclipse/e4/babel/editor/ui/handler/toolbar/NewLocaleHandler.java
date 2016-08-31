@@ -51,7 +51,7 @@ public final class NewLocaleHandler {
 			try {
 			    final IFile newFile = resourceBundleEditor.getResourceManager().createPropertiesFile(selectedLocale);
 			    if (newFile != null) {
-				resourceBundleEditor.addResource(newFile, selectedLocale);
+				//resourceBundleEditor.addResource(newFile, selectedLocale);
 			    } else {
 				if (showFileExistDialog()) {
 				    localeDialog.open();

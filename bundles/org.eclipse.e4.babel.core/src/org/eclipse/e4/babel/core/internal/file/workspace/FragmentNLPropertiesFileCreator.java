@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.eclipse.e4.babel.core.internal.createfile;
+package org.eclipse.e4.babel.core.internal.file.workspace;
 
 import java.util.Locale;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.e4.babel.core.internal.resource.NLResourceFactory;
+import org.eclipse.e4.babel.core.internal.resource.workspace.NLResourceFactory;
 import org.eclipse.e4.babel.core.utils.PDEUtils;
 
 /**

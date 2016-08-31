@@ -8,6 +8,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.e4.babel.editor.model.bundle.BundleGroup;
 import org.eclipse.e4.babel.editor.model.tree.KeyTree;
 import org.eclipse.e4.babel.editor.model.tree.KeyTreeItem;
+import org.eclipse.e4.babel.editor.text.document.IFileDocument;
 import org.eclipse.e4.babel.editor.text.model.SourceEditor;
 
 public interface IResourceManager {
@@ -22,7 +23,7 @@ public interface IResourceManager {
 
 	boolean containsKey(final String key);
 
-	void init(IFile file) throws CoreException;
+	void init(IFileDocument fileDocument) throws CoreException;
 
 	SourceEditor getSourceEditor(Locale locale);
 
@@ -36,7 +37,7 @@ public interface IResourceManager {
 
 	void save();
 
-	SourceEditor addSourceEditor(IFile resource, Locale locale);
+	SourceEditor addSourceEditor(IFileDocument fileDocument, Locale locale);
 
 	IFile createPropertiesFile(Locale locale) throws CoreException, IOException;
 

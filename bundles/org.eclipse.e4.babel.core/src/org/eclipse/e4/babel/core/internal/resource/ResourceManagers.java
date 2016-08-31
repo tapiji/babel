@@ -37,6 +37,7 @@ import org.eclipse.e4.babel.editor.model.tree.KeyTreeItem;
 import org.eclipse.e4.babel.editor.model.updater.FlatKeyTreeUpdater;
 import org.eclipse.e4.babel.editor.model.updater.GroupedKeyTreeUpdater;
 import org.eclipse.e4.babel.editor.model.updater.KeyTreeUpdater;
+import org.eclipse.e4.babel.editor.text.document.IFileDocument;
 import org.eclipse.e4.babel.editor.text.model.SourceEditor;
 import org.eclipse.e4.babel.logger.Log;
 
@@ -62,6 +63,8 @@ public final class ResourceManagers implements IResourceManager {
 
     private KeyTreeUpdater treeUpdater;
 
+    // todo: Add dispose method and release listeners and content
+    
     /**
      * Constructor.
      * 
@@ -70,8 +73,8 @@ public final class ResourceManagers implements IResourceManager {
      * @throws CoreException problem creating resource manager
      */
     @Override
-    public void init(final IFile file) throws CoreException {
-        resourcesFactory = ResourceFactory.createFactory(file);
+    public void init(final IFileDocument fileDocument) throws CoreException {
+        resourcesFactory = ResourceFactory.createFactory(fileDocument);
         bundleGroup = BundleGroup.create();
         resourcesFactory.getSourceEditors().forEach(editor -> {
             final Locale locale = editor.getLocale();
@@ -205,8 +208,8 @@ public final class ResourceManagers implements IResourceManager {
     }
 
     @Override
-    public SourceEditor addSourceEditor(IFile resource, Locale locale) {
-        SourceEditor sourceEditor = resourcesFactory.addResource(resource, locale);
+    public SourceEditor addSourceEditor(IFileDocument fileDocument, Locale locale) {
+        SourceEditor sourceEditor = resourcesFactory.addResource(fileDocument, locale);
         sourceEditors.put(sourceEditor.getLocale(), sourceEditor);
         locales.add(locale);
         bundleGroup.addBundle(locale, PropertiesParser.parse(sourceEditor.getContent()));
@@ -248,9 +251,7 @@ public final class ResourceManagers implements IResourceManager {
         final List<KeyTreeItem> items = new ArrayList<>();
         items.add(keyTreeItem);
         items.addAll(keyTreeItem.getNestedChildren());
-        items.stream().forEach((item) -> {
-            keyTree.getBundleGroup().removeBundleEntryKey(item.getId());
-        });
+        items.forEach((item) ->keyTree.getBundleGroup().removeBundleEntryKey(item.getId()));
     }
 
     /**
@@ -265,7 +266,7 @@ public final class ResourceManagers implements IResourceManager {
         final List<KeyTreeItem> items = new ArrayList<>();
         items.add(keyTreeItem);
         items.addAll(keyTreeItem.getNestedChildren());
-        items.stream().forEach((item) -> {
+        items.forEach((item) -> {
             final String oldItemKey = item.getId();
             if (oldItemKey.startsWith(keyTreeItem.getId())) {
                 String newItemKey = checkGroupSeparator(newKey) + oldItemKey.substring(keyTreeItem.getId().length());

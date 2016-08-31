@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.eclipse.e4.babel.core.internal.createfile;
+package org.eclipse.e4.babel.core.internal.file.workspace;
 
 import java.util.Locale;
 import org.eclipse.core.runtime.IPath;
@@ -23,7 +23,7 @@ import org.eclipse.core.runtime.Path;
  * Creates a standard properties file.
  * @author Pascal Essiembre
  */
-public final class StandardPropertiesFileCreator extends PropertiesFileCreator {
+public final class StandardPropertiesFileCreator extends AbstractIFileCreator {
 
 	private final String dir;
 	private final String baseFileName;

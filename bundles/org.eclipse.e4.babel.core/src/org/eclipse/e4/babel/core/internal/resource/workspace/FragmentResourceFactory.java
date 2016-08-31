@@ -18,11 +18,10 @@
  * Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
  * Boston, MA  02111-1307  USA
  */
-package org.eclipse.e4.babel.core.internal.resource;
+package org.eclipse.e4.babel.core.internal.resource.workspace;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -31,14 +30,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.e4.babel.core.api.IResourceFactory;
-import org.eclipse.e4.babel.core.internal.createfile.FragmentNLPropertiesFileCreator;
-import org.eclipse.e4.babel.core.internal.createfile.FragmentPropertiesFileCreator;
-import org.eclipse.e4.babel.core.preference.PropertyPreferences;
-import org.eclipse.e4.babel.core.utils.PDEUtils;
+import org.eclipse.e4.babel.editor.text.document.IFileDocument;
 import org.eclipse.e4.babel.editor.text.model.SourceEditor;
 
 /**
@@ -54,31 +46,26 @@ public class FragmentResourceFactory extends NLResourceFactory {
 	 * {@inheritDoc}}
 	 */
 	@Override
-    public void init(IFile file) throws CoreException {
+    public void init(IFileDocument fileDocument) throws CoreException {
 
-		List<SourceEditor> editors = new ArrayList<>();
+		/*List<SourceEditor> editors = new ArrayList<>();
 		loadEditors(editors, file, null);
 		for (Iterator<SourceEditor> it = editors.iterator(); it.hasNext();) {
 			SourceEditor editor = it.next();
 			addSourceEditor(editor.getLocale(), editor);
 		}
-		setDisplayName(getDisplayName(file));
+		setDisplayName(getDisplayName(file));*/
 	}
 
-	@Override
-    protected void loadEditors(List<SourceEditor> editors, IFile file, IResource nlDir)
-			throws CoreException {
+/*	@Override
+    protected void loadEditors(List<SourceEditor> editors, IFile file, IResource nlDir) throws CoreException {
 
-		/*
 		 * check again and load the fragment
-		 */
 		final IProject fragment = PDEUtils.lookupFragment(file.getProject());
 		if (fragment == null)
 			throw new CoreException(new Status(IStatus.ERROR, "", 0, "no fragment found", null));
 
-		/*
 		 * extract the path to the resource bundle
-		 */
 		final IPath resourceBundlePath = file.getParent().getProjectRelativePath();
 		final String regex = getPropertiesFileRegEx(file);
 
@@ -114,11 +101,11 @@ public class FragmentResourceFactory extends NLResourceFactory {
 			editors.addAll(nlEditors);
 			setPropertiesFileCreator(new FragmentNLPropertiesFileCreator(fragment, file.getName()));
 		} else if (nlEditors.size() > 0 && fragmentEditors.size() > 1) {
-			/*
+			
 			 * if resource bundles have been found within both, the nl-folder 
 			 * and the same folder as the base bundle folder, then ask how to 
 			 * handle that
-			 */
+			
 			if (hostProject != null || hostProject == null && shouldNLCreatorBeUsed(fragment)) {
 				editors.addAll(nlEditors);
 				setPropertiesFileCreator(new FragmentNLPropertiesFileCreator(fragment, file.getName()));
@@ -126,19 +113,19 @@ public class FragmentResourceFactory extends NLResourceFactory {
 		}
 
 		//if (getPropertiesFileCreator() == null) {
-		/*
+		
 		 * If the files creator is still null here, 
 		 * only resources in the same folder as the file could be found.
-		 */
+		
 		editors.addAll(fragmentEditors);
 		setPropertiesFileCreator(new FragmentPropertiesFileCreator(fragment, resourceBundlePath.toString(),
 				getBundleName(file), file.getFullPath().getFileExtension()));
 		//  }
-
+*/
 		/*
 		 * load the resources of host plug-in
 		 */
-		hostProject = PDEUtils.getFragmentHost(fragment);
+		/*hostProject = PDEUtils.getFragmentHost(fragment);
 		if (hostProject != null) {
 			if (!PropertyPreferences.getInstance().isLoadOnlyFragmentResources()) {
 				IResourceFactory parentFactory = ResourceFactory
@@ -153,7 +140,7 @@ public class FragmentResourceFactory extends NLResourceFactory {
 				}
 			}
 		}
-	}
+	}*/
 
 	private Set<Locale> getFragmentLocales(List<SourceEditor> fragmentEditors) {
 		Set<Locale> locales = new HashSet<>();
@@ -172,11 +159,11 @@ public class FragmentResourceFactory extends NLResourceFactory {
 				IResource resource = members[j];
 				if (!(resource instanceof IFile) || !resource.getName().matches(regex))
 					continue;
-				Locale locale = parseBundleName(resource);
-				SourceEditor editor = createEditor(resource, locale);
+				//Locale locale = parseBundleName(resource);
+				/*SourceEditor editor = createEditor(resource, locale);
 				if (editor != null) {
 					fragmentEditors.add(editor);
-				}
+				}*/
 			}
 		}
 		return fragmentEditors;
@@ -206,22 +193,23 @@ public class FragmentResourceFactory extends NLResourceFactory {
 	 * </p>
 	 */
 	@Override
-    public boolean isResponsible(IFile file) {
+    public boolean isResponsible(IFileDocument fileDocument) {
+	    return false;
 		/*
 		 * Check if NL is supported.
 		 */
-		if (!PropertyPreferences.getInstance().isSupportFragments()) {
-			return false;
-		}
+		//if (!PropertyPreferences.getInstance().isSupportFragments()) {
+		//	return false;
+		//}
 
 		/*
 		 * Check whether there is a fragment that extends this project
 		 * or this project itself is a fragment
 		 */
-		if (PDEUtils.lookupFragment(file.getProject()) == null) {
-			return false;
-		}
-		return true;
+		//if (PDEUtils.lookupFragment(file.getProject()) == null) {
+		//	return false;
+	//	}
+		//return true;
 	}
 
 }

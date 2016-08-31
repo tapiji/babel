@@ -8,7 +8,6 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IResourceDelta;
@@ -22,6 +21,7 @@ import org.eclipse.e4.babel.core.utils.UIUtils;
 import org.eclipse.e4.babel.editor.model.tree.KeyTree;
 import org.eclipse.e4.babel.editor.preference.APreferencePage;
 import org.eclipse.e4.babel.editor.text.BundleTextEditor;
+import org.eclipse.e4.babel.editor.text.document.IFileDocument;
 import org.eclipse.e4.babel.editor.text.model.SourceEditor;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.page.I18nPageContract;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.page.I18nPageView;
@@ -43,6 +43,7 @@ import org.eclipse.e4.ui.model.application.ui.menu.MToolBar;
 import org.eclipse.e4.ui.services.EMenuService;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.source.SourceViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
@@ -82,17 +83,16 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
     @Inject
     private EModelService modelService;
 
+    @Inject
+    private IWorkspace workspace;
+
     private I18nPageContract.View i18nPage;
     private SashForm sashForm;
-
     private KeyTreeView keyTreeView;
     private IResourceManager resourceManager;
     private SourceEditor lastEditor;
     private List<BundleTextEditor> editors = new ArrayList<>();
     private SourceViewer lastSourceViewer;
-
-    @Inject
-    private IWorkspace workspace;
     private MWindow window;
 
     @Inject
@@ -101,40 +101,51 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
     }
 
     @PostConstruct
-    public void createControl(final Composite parent, final Shell shell, MWindow window, BabelExtensionManager manager) {
-	this.window = window;
-	Log.d(TAG, "Create ResourceBundleEditor");
-	this.resourceManager = manager.getResourceManager().get();
-	setMinimumCharacters(40);
-
-	IFile file = (IFile) part.getTransientData().get(OpenResourceBundleHandler.KEY_FILE);
+    public void onCreate(final Composite parent, final Shell shell, MWindow window, BabelExtensionManager manager) {
 	try {
-	    resourceManager.init(file);
-	} catch (CoreException e) {
-	    e.printStackTrace();
+	    this.window = window;
+	    Log.d(TAG, "Create ResourceBundleEditor");
+	    this.resourceManager = manager.getResourceManager().get();
+	    setMinimumCharacters(40);
+
+	    Object object = part.getTransientData().get(OpenResourceBundleHandler.KEY_FILE_DOCUMENT);
+	    if (object instanceof IFileDocument) {
+		IFileDocument file = (IFileDocument) object;
+		this.resourceManager.init(file);
+
+		toolbarVisibility();
+		this.workspace.addResourceChangeListener(resourceChangeListener, IResourceChangeEvent.POST_CHANGE);
+
+		addSelectionListener(this);
+
+		Log.d(TAG, "KEYTREE: " + resourceManager.getKeyTree().toString());
+
+		sashForm = new SashForm(this, SWT.SMOOTH);
+		keyTreeView = KeyTreeView.create(sashForm, this, context);
+		i18nPage = I18nPageView.create(sashForm, this, resourceManager, context);
+		sashForm.setWeights(new int[] { 25, 75 });
+
+		createTab(sashForm, "Properties", BabelResourceConstants.IMG_RESOURCE_BUNDLE);
+
+		resourceManager.getSourceEditors().forEach(editor -> {
+		    final BundleTextEditor textEditor = new BundleTextEditor(this, dirty, editor.getDocument());
+		    editors.add(textEditor);
+		    // paths.add(editor.getDocument().getFile().getFullPath());
+		    createTab(textEditor, UIUtils.getDisplayName(editor.getLocale()), BabelResourceConstants.IMG_RESOURCE_PROPERTY);
+
+		});
+		setSelection(0);
+	    } else {
+		throw new ClassCastException("Can not cast object to IFileDocument");
+	    }
+
+	} catch (ClassCastException exception) {
+	    MessageDialog.openError(shell, "Cannot open Resource", exception.getMessage());
+	    Log.e("onCreate(): ", exception);
+	} catch (CoreException exception) {
+	    MessageDialog.openError(shell, "Cannot open Resource", exception.getMessage());
+	    Log.e("onCreate(Can not initialize resource)", exception);
 	}
-	toolbarVisibility();
-	workspace.addResourceChangeListener(resourceChangeListener, IResourceChangeEvent.POST_CHANGE);
-
-	addSelectionListener(this);
-
-	Log.d(TAG, "KEYTREE: " + resourceManager.getKeyTree().toString());
-
-	sashForm = new SashForm(this, SWT.SMOOTH);
-	keyTreeView = KeyTreeView.create(sashForm, this, context);
-	i18nPage = I18nPageView.create(sashForm, this, resourceManager, context);
-	sashForm.setWeights(new int[] { 25, 75 });
-
-	createTab(sashForm, "Properties", BabelResourceConstants.IMG_RESOURCE_BUNDLE);
-
-	resourceManager.getSourceEditors().forEach(editor -> {
-	    final BundleTextEditor textEditor = new BundleTextEditor(this, dirty, editor.getDocument());
-	    editors.add(textEditor);
-	    paths.add(editor.getDocument().getFile().getFullPath());
-	    createTab(textEditor, UIUtils.getDisplayName(editor.getLocale()), BabelResourceConstants.IMG_RESOURCE_PROPERTY);
-
-	});
-	setSelection(0);
     }
 
     private void toolbarVisibility() {
@@ -218,8 +229,8 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
     }
 
     @Override
-    public void addResource(IFile resource, Locale locale) {
-	SourceEditor editor = resourceManager.addSourceEditor(resource, locale);
+    public void addResource(IFileDocument fileDocument, Locale locale) {
+	SourceEditor editor = resourceManager.addSourceEditor(fileDocument, locale);
 	final BundleTextEditor textEditor = new BundleTextEditor(this, dirty, editor.getDocument());
 	editors.add(textEditor);
 	createTab(textEditor, UIUtils.getDisplayName(editor.getLocale()), BabelResourceConstants.IMG_RESOURCE_PROPERTY);
@@ -262,7 +273,7 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
 
     @Override
     public I18nPageContract.View getI18nPage() {
-        return i18nPage;
+	return i18nPage;
     }
 
     @Override

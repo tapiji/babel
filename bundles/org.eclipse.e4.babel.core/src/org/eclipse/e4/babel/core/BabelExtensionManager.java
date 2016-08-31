@@ -1,9 +1,7 @@
 package org.eclipse.e4.babel.core;
 
 import java.util.Optional;
-
 import javax.annotation.PostConstruct;
-
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
@@ -14,8 +12,6 @@ import org.eclipse.e4.core.di.annotations.Creatable;
 public class BabelExtensionManager {
 
 	private static String RESOURCE_MANAGER_EXTENSION_POINT_ID = "org.eclipse.e4.babel.core.api.resourceManager";
-
-	public static String RESOURCE_FACTORY_EXTENSION_POINT_ID = "org.eclipse.e4.babel.core.api.resourceFactory";
 
 	private IExtensionRegistry registry;
 

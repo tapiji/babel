@@ -13,24 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.eclipse.e4.babel.core.internal.resource;
+package org.eclipse.e4.babel.core.internal.resource.workspace;
 
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import org.eclipse.core.resources.IContainer;
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.e4.babel.core.internal.createfile.NLPropertiesFileCreator;
-import org.eclipse.e4.babel.core.internal.createfile.PropertiesFileCreator;
-import org.eclipse.e4.babel.core.preference.PropertyPreferences;
+import org.eclipse.e4.babel.core.internal.resource.ResourceFactory;
+import org.eclipse.e4.babel.editor.text.document.IFileDocument;
 import org.eclipse.e4.babel.editor.text.model.SourceEditor;
 
 
@@ -134,51 +126,53 @@ public class NLResourceFactory extends ResourceFactory {
   // init(site, file);
   // }
 
-  public boolean isResponsible(IFile file) throws CoreException {
+  @Override
+public boolean isResponsible(IFileDocument fileDocument) throws CoreException {
+      return false;
     /*
      * Check if NL is supported.
      */
-    if (!PropertyPreferences.getInstance()
+    /*if (!PropertyPreferences.getInstance()
                             .isSUpportNl()) {
       return false;
-    }
+    }*/
 
     /*
      * Check if there is an NL directory
      */
-    IResource nlDir = lookupNLDir(file);
+   // IResource nlDir = lookupNLDir(file);
 
-    if (!(nlDir instanceof IFolder)) return false;
+    //if (!(nlDir instanceof IFolder)) return false;
 
     /*
      * Ensures NL directory is part of file path, or that file dir is parent
      * of NL directory.
      */
-    IPath filePath = file.getFullPath();
+    /*IPath filePath = file.getFullPath();
     IPath nlDirPath = nlDir.getFullPath();
     if (!nlDirPath.isPrefixOf(filePath) && !filePath.removeLastSegments(1)
                                                     .isPrefixOf(nlDirPath)) {
       return false;
-    }
+    }*/
 
     /*
      * Ensure that there are no other files which could make a standard
      * resource bundle.
      */
-    if (file.exists() && ResourceFactory.getResources(file).length > 1) {
+ /*   if (file.exists() && ResourceFactory.getResources(file).length > 1) {
       return false;
-    }
+    }*/
     /*
      * Ensure file is wihtin nl-structure
      */
-    if (file.getFullPath()
+   /* if (file.getFullPath()
             .toString()
             .startsWith(file.getProject()
                             .findMember("nl")
                             .getFullPath()
                             .toString()))
       return true;
-    else return false;
+    else return false;*/
   }
 
   public static final String ID = "com.essiembre.eclipse.rbe";
@@ -193,7 +187,10 @@ public class NLResourceFactory extends ResourceFactory {
    * @throws CoreException
    *             problem creating factory
    */
-  public void init(IFile file) throws CoreException {
+  @Override
+public void init(IFileDocument fileDocument) throws CoreException {
+     /*
+      
     String filename = file.getName();
 
     IResource nlDir = lookupNLDir(file);
@@ -204,7 +201,7 @@ public class NLResourceFactory extends ResourceFactory {
     List<SourceEditor> editors = new ArrayList<>();
     loadEditors(editors, file, nlDir);
     for (Iterator<SourceEditor> it = editors.iterator(); it.hasNext();) {
-      SourceEditor editor = (SourceEditor) it.next();
+      SourceEditor editor = it.next();
       addSourceEditor(editor.getLocale(), editor);
     }
     IResource resource = nlDir.getParent()
@@ -214,11 +211,12 @@ public class NLResourceFactory extends ResourceFactory {
     setPropertiesFileCreator(new NLPropertiesFileCreator(nlDir.getFullPath()
                                                               .toString(), filename));
     setDisplayName(getDisplayName(file));
+    */
   }
 
-  protected void loadEditors(List<SourceEditor> editors, IFile file, IResource nlDir) throws CoreException {
+  protected void loadEditors(List<SourceEditor> editors, IFileDocument fileDocument, IResource nlDir) throws CoreException {
     // Load "language" matching files in "nl" tree.
-    SourceEditor sourceEditor = null;
+   /* SourceEditor sourceEditor = null;
     IResource[] langResources = nlDir != null ? ((IFolder) nlDir).members() : file.getParent()
                                                                                   .members();
     for (int i = 0; i < langResources.length; i++) {
@@ -260,7 +258,7 @@ public class NLResourceFactory extends ResourceFactory {
           }
         }
       }
-    }
+    }*/
   }
 
   public static IResource lookupNLDir(IResource resource) {

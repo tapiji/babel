@@ -20,7 +20,7 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.e4.babel.editor.text.document.SourceViewerDocument;
+import org.eclipse.e4.babel.editor.text.document.IFileDocument;
 import org.eclipse.e4.babel.logger.Log;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.text.source.SourceViewer;
@@ -37,8 +37,7 @@ import org.eclipse.jface.text.source.SourceViewer;
 public class SourceEditor {
 
     private final Locale locale;
-    private final IFile file;
-    private final SourceViewerDocument document;
+    private final IFileDocument document;
     private String contentCache;
 
     /**
@@ -48,11 +47,10 @@ public class SourceEditor {
      * @param locale a locale
      * @param file properties file
      */
-    private SourceEditor(final SourceViewerDocument document, final Locale locale, final IFile file) {
+    private SourceEditor(final IFileDocument document, final Locale locale) {
         super();
         this.document = document;
         this.locale = locale;
-        this.file = file;
         this.contentCache = getContent();
     }
 
@@ -64,8 +62,8 @@ public class SourceEditor {
      * @param file File
      * @return SourceEditor
      */
-    public static SourceEditor create(final SourceViewerDocument document, final Locale locale, final IFile file) {
-        return new SourceEditor(document, locale, file);
+    public static SourceEditor create(final IFileDocument document, final Locale locale) {
+        return new SourceEditor(document, locale);
     }
 
     /**
@@ -83,7 +81,7 @@ public class SourceEditor {
      * @return properties file
      */
     public IFile getFile() {
-        return file;
+        return document.getIFile();
     }
 
     /**
@@ -91,7 +89,7 @@ public class SourceEditor {
      * 
      * @return text editor
      */
-    public SourceViewerDocument getDocument() {
+    public IFileDocument getDocument() {
         return document;
     }
 

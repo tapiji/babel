@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.eclipse.e4.babel.core.internal.createfile;
+package org.eclipse.e4.babel.core.internal.file.workspace;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +31,7 @@ import org.eclipse.e4.babel.core.utils.PDEUtils;
  *
  * @author Uwe Voigt
  */
-public class FragmentPropertiesFileCreator extends PropertiesFileCreator {
+public class FragmentPropertiesFileCreator extends AbstractIFileCreator {
 
 	private final IProject fragment;
 	private final String targetDir;

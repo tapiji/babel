@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.eclipse.e4.babel.core.internal.createfile;
+package org.eclipse.e4.babel.core.internal.file.workspace;
 
 import java.util.Locale;
 import org.eclipse.core.resources.IContainer;
@@ -30,7 +30,7 @@ import org.eclipse.core.runtime.Path;
  * @author Pascal Essiembre
  * @author Alexander Bieber
  */
-public class NLPropertiesFileCreator extends PropertiesFileCreator {
+public class NLPropertiesFileCreator extends AbstractIFileCreator {
 
 	private String nlDir;
 	private String fileName;
@@ -63,7 +63,7 @@ public class NLPropertiesFileCreator extends PropertiesFileCreator {
 
 	/**
 	 * @throws CoreException
-	 * @see com.essiembre.eclipse.rbe.model.workbench.files
+	 * @see org.eclipse.e4.babel.core.internal.file.workspace.AbstractIFileCreator.eclipse.rbe.model.workbench.files
 	 *      .PropertiesFileCreator#buildFilePath(java.util.Locale)
 	 */
 	protected IPath buildFilePath(Locale locale) throws CoreException {
