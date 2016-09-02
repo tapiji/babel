@@ -4,7 +4,7 @@ Bundle-Name: Text
 Bundle-SymbolicName: org.eclipse.e4.babel.editor.text;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Export-Package: org.eclipse.e4.babel.editor.text,
- org.eclipse.e4.babel.editor.text.document,
+ org.eclipse.e4.babel.editor.text.file,
  org.eclipse.e4.babel.editor.text.model,
  org.eclipse.e4.babel.editor.text.property
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8

@@ -20,12 +20,12 @@ import java.util.Locale;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.e4.babel.core.internal.file.workspace.AbstractIFileCreator;
+import org.eclipse.e4.babel.core.internal.file.AbstractFileCreator;
 import org.eclipse.e4.babel.core.internal.file.workspace.StandardPropertiesFileCreator;
 import org.eclipse.e4.babel.core.internal.resource.ResourceFactory;
 import org.eclipse.e4.babel.core.utils.FileUtils;
-import org.eclipse.e4.babel.editor.text.document.IFileDocument;
-import org.eclipse.e4.babel.editor.text.document.IFileResource;
+import org.eclipse.e4.babel.editor.text.file.IPropertyResource;
+import org.eclipse.e4.babel.editor.text.file.PropertyIFileResource;
 import org.eclipse.e4.babel.editor.text.model.SourceEditor;
 
 
@@ -36,12 +36,16 @@ import org.eclipse.e4.babel.editor.text.model.SourceEditor;
  * @author Pascal Essiembre
  * @author Alexander Bieber
  */
-public class WorkspaceResourceFactory extends ResourceFactory {
+public class StandardResourceFactory extends ResourceFactory {
 
-    private AbstractIFileCreator fileCreator;
+    private AbstractFileCreator fileCreator;
+
+    public StandardResourceFactory() {
+        super();
+    }
 
     @Override
-    public boolean isResponsible(IFileDocument fileDocument) throws CoreException {
+    public boolean isResponsible(IPropertyResource fileDocument) throws CoreException {
         return true;
     }
 
@@ -53,14 +57,12 @@ public class WorkspaceResourceFactory extends ResourceFactory {
      * @throws CoreException problem creating factory
      */
     @Override
-    public void init(IFileDocument fileDocument) throws CoreException {
+    public void init(IPropertyResource fileDocument) throws CoreException {
         IFile file = fileDocument.getIFile();
-        String bundleName = FileUtils.getBundleName(fileDocument);
 
         IFile[] resources = getResources(fileDocument);
-
         for (int i = 0; i < resources.length; i++) {
-            IFileDocument document = IFileResource.create(resources[i]);
+            IPropertyResource document = PropertyIFileResource.create(resources[i]);
             Locale locale = FileUtils.parseBundleName(document);
             SourceEditor sourceEditor = createEditor(document, locale);
             if (sourceEditor != null) {
@@ -68,7 +70,7 @@ public class WorkspaceResourceFactory extends ResourceFactory {
             }
         }
 
-        fileCreator = new StandardPropertiesFileCreator(file.getParent().getFullPath().toString(), bundleName, file.getFileExtension());
+        fileCreator = new StandardPropertiesFileCreator(file.getParent().getFullPath().toString(), FileUtils.getBundleName(fileDocument), file.getFileExtension());
         setDisplayName(FileUtils.getDisplayName(fileDocument));
     }
 
@@ -77,11 +79,11 @@ public class WorkspaceResourceFactory extends ResourceFactory {
      *      #getPropertiesFileCreator()
      */
     @Override
-    public AbstractIFileCreator getPropertiesFileCreator() {
+    public AbstractFileCreator getPropertiesFileCreator() {
         return fileCreator;
     }
 
-    protected static IFile[] getResources(IFileDocument fileDocument) {
+    protected static IFile[] getResources(IPropertyResource fileDocument) {
         String regex = FileUtils.getPropertiesFileRegEx(fileDocument);
         List<IResource> resources = new ArrayList<>();
         try {
@@ -100,4 +102,5 @@ public class WorkspaceResourceFactory extends ResourceFactory {
         });
         return validResources.toArray(new IFile[] {});
     }
+
 }

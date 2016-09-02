@@ -13,6 +13,7 @@
 package org.eclipse.e4.babel.core.internal.resource;
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -26,11 +27,11 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.e4.babel.core.api.IResourceFactory;
-import org.eclipse.e4.babel.core.internal.file.workspace.AbstractIFileCreator;
+import org.eclipse.e4.babel.core.internal.file.AbstractFileCreator;
 import org.eclipse.e4.babel.core.internal.resource.external.ExternalResourceFactory;
 import org.eclipse.e4.babel.core.utils.UIUtils;
-import org.eclipse.e4.babel.editor.text.document.FileType;
-import org.eclipse.e4.babel.editor.text.document.IFileDocument;
+import org.eclipse.e4.babel.editor.text.file.IPropertyResource;
+import org.eclipse.e4.babel.editor.text.file.PropertyFileType;
 import org.eclipse.e4.babel.editor.text.model.SourceEditor;
 
 
@@ -61,6 +62,16 @@ public abstract class ResourceFactory implements IResourceFactory {
     /** Regex to match a properties file. */
     private static final String PROPERTIES_FILE_REGEX = "^(" + TOKEN_BUNDLE_NAME + ")" + "((_[a-z]{2,3})|(_[a-z]{2,3}_[A-Z]{2})" + "|(_[a-z]{2,3}_[A-Z]{2}_\\w*))?(\\." + TOKEN_FILE_EXTENSION + ")$";
 
+    private boolean isExternal;
+    
+    
+    
+    
+    public ResourceFactory() {
+        super();
+    }
+    
+    
     /*
      * Common members of ResourceFactories
      */
@@ -77,9 +88,9 @@ public abstract class ResourceFactory implements IResourceFactory {
     });
 
     /**
-     * The {@link AbstractIFileCreator} used to create new files.
+     * The {@link AbstractFileCreator} used to create new files.
      */
-    private AbstractIFileCreator propertiesFileCreator;
+    private AbstractFileCreator propertiesFileCreator;
     /**
      * The associated editor site.
      */
@@ -113,7 +124,7 @@ public abstract class ResourceFactory implements IResourceFactory {
     }
 
     @Override
-    public SourceEditor addResource(IFileDocument fileDocument, Locale locale) {
+    public SourceEditor addResource(IPropertyResource fileDocument, Locale locale) {
         if (sourceEditors.containsKey(locale)) {
             throw new IllegalArgumentException("ResourceFactory already contains a resource for locale " + locale);
         }
@@ -127,19 +138,19 @@ public abstract class ResourceFactory implements IResourceFactory {
     }
 
     @Override
-    public AbstractIFileCreator getPropertiesFileCreator() {
+    public AbstractFileCreator getPropertiesFileCreator() {
         return propertiesFileCreator;
     }
 
-    protected void setPropertiesFileCreator(AbstractIFileCreator fileCreator) {
+    protected void setPropertiesFileCreator(AbstractFileCreator fileCreator) {
         this.propertiesFileCreator = fileCreator;
     }
 
     @Override
-    public abstract boolean isResponsible(IFileDocument fileDocument) throws CoreException;
+    public abstract boolean isResponsible(IPropertyResource fileDocument) throws CoreException;
 
     @Override
-    public abstract void init(IFileDocument fileDocument) throws CoreException;
+    public abstract void init(IPropertyResource fileDocument) throws CoreException, IOException;
 
     /**
      * Creates a resource factory based on given arguments.
@@ -152,13 +163,14 @@ public abstract class ResourceFactory implements IResourceFactory {
      *         responsible one could be found
      * @throws CoreException
      *         problem creating factory
+     * @throws IOException 
      */
-    public static IResourceFactory createFactory(IFileDocument fileDocument) throws CoreException {
+    public static IResourceFactory createFactory(IPropertyResource fileDocument) throws CoreException, IOException {
 
-        if (fileDocument.getFileType().equals(FileType.IFILE)) {
+        if (fileDocument.getFileType().equals(PropertyFileType.IFILE)) {
             IResourceFactory[] factories = ResourceFactoryDescriptor.getContributedResourceFactories();
 
-            if (fileDocument.getFileType().equals(FileType.IFILE)) {
+            if (fileDocument.getFileType().equals(PropertyFileType.IFILE)) {
                 for (int i = 0; i < factories.length; i++) {
                     IResourceFactory factory = factories[i];
                     if (factory.isResponsible(fileDocument)) {
@@ -193,8 +205,9 @@ public abstract class ResourceFactory implements IResourceFactory {
      *         responsible one could be found
      * @throws CoreException
      *         problem creating factory
+     * @throws IOException 
      */
-    public static IResourceFactory createParentFactory(IFileDocument fileDocument, Class<?> childFactoryClass) throws CoreException {
+    public static IResourceFactory createParentFactory(IPropertyResource fileDocument, Class<?> childFactoryClass) throws CoreException, IOException {
         IResourceFactory[] factories = ResourceFactoryDescriptor.getContributedResourceFactories();
         for (int i = 0; i < factories.length; i++) {
             IResourceFactory factory = factories[i];
@@ -240,7 +253,7 @@ public abstract class ResourceFactory implements IResourceFactory {
         return locale;
     }
 
-    protected SourceEditor createEditor(IFileDocument fileDocument, Locale locale) {
+    protected SourceEditor createEditor(IPropertyResource fileDocument, Locale locale) {
         return SourceEditor.create(fileDocument, locale);
     }
 
@@ -287,7 +300,7 @@ public abstract class ResourceFactory implements IResourceFactory {
      * @return array of file resources, empty if none matches
      * @throws CoreException
      */
-    protected static IFile[] getResources(IFileDocument file) throws CoreException {
+    protected static IFile[] getResources(IPropertyResource file) throws CoreException {
         String regex = ResourceFactory.getPropertiesFileRegEx(file.getIFile());
         final Collection<IResource> validResources = new ArrayList<>();
         Stream.of(file.getIFile().getParent().members()).forEach(resource -> {
@@ -298,5 +311,9 @@ public abstract class ResourceFactory implements IResourceFactory {
         });
         return validResources.toArray(new IFile[] {});
     }
-
+    
+    @Override
+    public boolean isExternal() {
+        return false;
+    }
 }

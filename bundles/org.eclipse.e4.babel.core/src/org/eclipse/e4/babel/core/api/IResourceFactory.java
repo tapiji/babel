@@ -1,11 +1,12 @@
 package org.eclipse.e4.babel.core.api;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.e4.babel.core.internal.file.workspace.AbstractIFileCreator;
-import org.eclipse.e4.babel.editor.text.document.IFileDocument;
+import org.eclipse.e4.babel.core.internal.file.AbstractFileCreator;
+import org.eclipse.e4.babel.editor.text.file.IPropertyResource;
 import org.eclipse.e4.babel.editor.text.model.SourceEditor;
 
 
@@ -36,13 +37,13 @@ public interface IResourceFactory {
      * @param resource The resource to add.
      * @param locale The locale of the resource.
      */
-    public abstract SourceEditor addResource(IFileDocument fileDocument, Locale locale);
+    public abstract SourceEditor addResource(IPropertyResource fileDocument, Locale locale);
 
     /**
      * Gets a properties file creator.
      * @return properties file creator
      */
-   public abstract AbstractIFileCreator getPropertiesFileCreator();
+   public abstract AbstractFileCreator getPropertiesFileCreator();
 
     /**
      * Returns true if the resource factory is responsible for
@@ -52,7 +53,7 @@ public interface IResourceFactory {
      * @return if responsible
      * @throws CoreException
      */
-    public abstract boolean isResponsible(IFileDocument fileDocument) throws CoreException;
+    public abstract boolean isResponsible(IPropertyResource fileDocument) throws CoreException;
 
     /**
      * A factory should initialize its {@link SourceEditor}s
@@ -61,7 +62,14 @@ public interface IResourceFactory {
      * @param site the editor site
      * @param file the file resource
      * @throws CoreException
+     * @throws IOException 
      */
-    public abstract void init(IFileDocument fileDocument) throws CoreException;
+    public abstract void init(IPropertyResource fileDocument) throws CoreException, IOException;
+    
+    /**
+     * TODO
+     * @return
+     */
+    public abstract boolean isExternal();
 
 }

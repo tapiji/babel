@@ -1,13 +1,14 @@
 package org.eclipse.e4.babel.editor.ui.handler.window;
 
 import java.io.File;
+import java.io.IOException;
 
 import javax.inject.Named;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.e4.babel.core.utils.FileUtils;
-import org.eclipse.e4.babel.editor.text.document.FileResource;
+import org.eclipse.e4.babel.editor.text.file.PropertyFileResource;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.ui.model.application.MApplication;
@@ -68,9 +69,14 @@ public class OpenResourceBundleHandler {
 
 		     }*/
 			    MPart part = partService.createPart(PART_ID);
-			   // part.getTransientData().put(KEY_FILE_DOCUMENT, IFileResource.create(filei));
+			  //  part.getTransientData().put(KEY_FILE_DOCUMENT, PropertyIFileResource.create(filei));
 			    
-			    part.getTransientData().put(KEY_FILE_DOCUMENT, FileResource.create(new File(fileName)));
+			    try {
+				part.getTransientData().put(KEY_FILE_DOCUMENT, PropertyFileResource.create(new File(fileName)));
+			    } catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			    }
 			    MPartStack mainStack = (MPartStack) modelService.find(PART_STACK_ID, application);
 			    mainStack.getChildren().add(part);
 			    partService.showPart(part, PartState.ACTIVATE);

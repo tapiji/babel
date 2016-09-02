@@ -1,4 +1,4 @@
-package org.eclipse.e4.babel.editor.text.document;
+package org.eclipse.e4.babel.editor.text.file;
 
 
 import java.io.IOException;
@@ -14,15 +14,15 @@ import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
 
 
-public final class IFileResource implements IFileDocument {
+public final class PropertyIFileResource implements IPropertyResource {
     protected static final int DEFAULT_FILE_CAPACITY = 10 * 1024;
     protected static final String DEFAULT_ENCODING = "UTF-8";
-    protected static final String TAG = IFileDocument.class.getSimpleName();
+    protected static final String TAG = IPropertyResource.class.getSimpleName();
 
     protected Document document;
     private IFile file;
 
-    private IFileResource(IFile file) {
+    private PropertyIFileResource(IFile file) {
         super();
         this.file = file;
     }
@@ -31,8 +31,21 @@ public final class IFileResource implements IFileDocument {
         return file;
     }
 
-    public static IFileResource create(final IFile file) {
-        return new IFileResource(file);
+    public static PropertyIFileResource create(final IFile file, String content) throws IOException {
+        final PropertyIFileResource  newFile =  new PropertyIFileResource(file);
+        if(file.exists() && content != null) {
+            newFile.writeFile(content);
+        }
+        return newFile;
+    }
+    
+    public static PropertyIFileResource create(final IFile file) {
+        try {
+            return create(file, null);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     
@@ -40,7 +53,8 @@ public final class IFileResource implements IFileDocument {
         return  new String(Files.readAllBytes(file.getRawLocation().toFile().toPath()));
       }
 
-      private void writeFile(final String content) throws IOException {
+    @Override
+      public void writeFile(final String content) throws IOException {
           Files.write(file.getRawLocation().toFile().toPath(), content.getBytes());
       }
     
@@ -157,8 +171,8 @@ public final class IFileResource implements IFileDocument {
 
 
     @Override
-    public FileType getFileType() {
-        return FileType.IFILE;
+    public PropertyFileType getFileType() {
+        return PropertyFileType.IFILE;
     }
 
     @Override

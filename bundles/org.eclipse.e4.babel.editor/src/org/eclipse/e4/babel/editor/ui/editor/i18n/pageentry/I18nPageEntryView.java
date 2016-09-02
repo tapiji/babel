@@ -377,6 +377,7 @@ public final class I18nPageEntryView extends Composite implements KeyListener, T
 	    this.duplicateButton.setVisible(false);
 	    this.similarButton.setVisible(false);
 	    this.textWidget.setEnabled(false);
+	    this.textWidget.setEditable(false);
 	    this.textView.setEditable(false);
 	    this.textWidget.setBackground(new Color(getDisplay(), 245, 245, 245));
 	}

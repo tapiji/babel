@@ -37,7 +37,7 @@ import org.eclipse.e4.babel.editor.model.tree.KeyTreeItem;
 import org.eclipse.e4.babel.editor.model.updater.FlatKeyTreeUpdater;
 import org.eclipse.e4.babel.editor.model.updater.GroupedKeyTreeUpdater;
 import org.eclipse.e4.babel.editor.model.updater.KeyTreeUpdater;
-import org.eclipse.e4.babel.editor.text.document.IFileDocument;
+import org.eclipse.e4.babel.editor.text.file.IPropertyResource;
 import org.eclipse.e4.babel.editor.text.model.SourceEditor;
 import org.eclipse.e4.babel.logger.Log;
 
@@ -71,9 +71,10 @@ public final class ResourceManagers implements IResourceManager {
      * @param site eclipse editor site
      * @param file file used to create manager
      * @throws CoreException problem creating resource manager
+     * @throws IOException 
      */
     @Override
-    public void init(final IFileDocument fileDocument) throws CoreException {
+    public void init(final IPropertyResource fileDocument) throws CoreException, IOException {
         resourcesFactory = ResourceFactory.createFactory(fileDocument);
         bundleGroup = BundleGroup.create();
         resourcesFactory.getSourceEditors().forEach(editor -> {
@@ -192,8 +193,8 @@ public final class ResourceManagers implements IResourceManager {
      * @throws IOException problem creating file
      */
     @Override
-    public IFile createPropertiesFile(Locale locale) throws CoreException, IOException {
-        return resourcesFactory.getPropertiesFileCreator().createPropertiesFile(locale);
+    public IPropertyResource createPropertiesFile(Locale locale) throws CoreException, IOException {
+        return resourcesFactory.getPropertiesFileCreator().createPropertyFile(locale, resourcesFactory.isExternal());   
     }
 
     /**
@@ -208,7 +209,7 @@ public final class ResourceManagers implements IResourceManager {
     }
 
     @Override
-    public SourceEditor addSourceEditor(IFileDocument fileDocument, Locale locale) {
+    public SourceEditor addSourceEditor(IPropertyResource fileDocument, Locale locale) {
         SourceEditor sourceEditor = resourcesFactory.addResource(fileDocument, locale);
         sourceEditors.put(sourceEditor.getLocale(), sourceEditor);
         locales.add(locale);

@@ -2,41 +2,57 @@ package org.eclipse.e4.babel.core.internal.resource.external;
 
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.e4.babel.core.internal.file.AbstractFileCreator;
+import org.eclipse.e4.babel.core.internal.file.external.ExternalFileCreator;
 import org.eclipse.e4.babel.core.internal.resource.ResourceFactory;
 import org.eclipse.e4.babel.core.utils.FileUtils;
-import org.eclipse.e4.babel.editor.text.document.FileResource;
-import org.eclipse.e4.babel.editor.text.document.IFileDocument;
+import org.eclipse.e4.babel.editor.text.file.IPropertyResource;
+import org.eclipse.e4.babel.editor.text.file.PropertyFileResource;
 import org.eclipse.e4.babel.editor.text.model.SourceEditor;
 
 
-public class ExternalResourceFactory extends ResourceFactory {
+public final class ExternalResourceFactory extends ResourceFactory {
+
+    private ExternalFileCreator fileCreator;
+
+    public ExternalResourceFactory() {
+        super();
+    }
 
     @Override
-    public boolean isResponsible(IFileDocument fileDocument) throws CoreException {
+    public boolean isResponsible(IPropertyResource fileDocument) throws CoreException {
         return true;
     }
 
     @Override
-    public void init(IFileDocument fileDocument) throws CoreException {
-        FileResource fileRes = (FileResource) fileDocument;
+    public void init(IPropertyResource fileDocument) throws CoreException, IOException {
+        PropertyFileResource fileRes = (PropertyFileResource) fileDocument;
 
         List<File> resources = getResources(fileRes.file);
 
         for (File file : resources) {
-            IFileDocument document = FileResource.create(file);
+            IPropertyResource document = PropertyFileResource.create(file);
             Locale locale = FileUtils.parseBundleName(document);
             SourceEditor sourceEditor = createEditor(document, locale);
             if (sourceEditor != null) {
                 addSourceEditor(sourceEditor.getLocale(), sourceEditor);
             }
         }
+        String absolutePath = fileRes.file.getAbsolutePath();
+        fileCreator = new ExternalFileCreator(absolutePath.substring(0, absolutePath.lastIndexOf(File.separator)), FileUtils.getBundleName(fileDocument), fileRes.getFileExtension());
         setDisplayName(FileUtils.getDisplayName(fileDocument));
+    }
+
+    @Override
+    public AbstractFileCreator getPropertiesFileCreator() {
+        return fileCreator;
     }
 
     private static List<File> getResources(File file) {
@@ -49,8 +65,11 @@ public class ExternalResourceFactory extends ResourceFactory {
             }).collect(Collectors.toCollection(ArrayList::new));
 
         }
-
         return resources;
     }
 
+    @Override
+    public boolean isExternal() {
+        return true;
+    }
 }

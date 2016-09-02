@@ -1,11 +1,12 @@
-package org.eclipse.e4.babel.editor.text.document;
+package org.eclipse.e4.babel.editor.text.file;
 
 
+import java.io.IOException;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.text.IDocument;
 
 
-public interface IFileDocument {
+public interface IPropertyResource {
 
     public void saveDocument();
     
@@ -17,7 +18,7 @@ public interface IFileDocument {
 
     public int getNumberOfLines();
 
-    public FileType getFileType();
+    public PropertyFileType getFileType();
     
     public String getFileName();
     
@@ -28,4 +29,6 @@ public interface IFileDocument {
     public IFile getIFile();
 
     public String getName();
+
+    void writeFile(String content) throws IOException;
 }

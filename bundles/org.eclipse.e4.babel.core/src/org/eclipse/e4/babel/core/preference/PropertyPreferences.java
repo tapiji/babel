@@ -68,19 +68,6 @@ public final class PropertyPreferences {
     private static final String IS_WRAP_NEW_LINE = "CORE_FORMAT/IS_WRAP_NEW_LINE";
 
 
-    // NONE REMOVE OR ADD
-    private static final String DISPLAY_DEFAULT_COMMENT_FIELD = "displayCommentFieldNL";
-    private static final String DISPLAY_LANG_COMMENT_FIELDS = "displayLangCommentFieldsNL";
-    private static final String FILTER_LOCALES_STRING_MATCHERS = "localesFilterStringMatchers";
-    private static final String ADD_MSG_EDITOR_BUILDER_TO_JAVA_PROJECTS = "addMsgEditorBuilderToJavaProjects";
-    private static final String PROPERTIES_DISPLAYED_FILTER = "propertiesFilter";
-    private static final String ENABLE_PROPERTIES_INDEXER = "enablePropertiesIndexer";
-    private static final String SHOW_SUPPORT_ENABLED = "showSupportEnabled";
-    private static final String GROUP_SEP_BLANK_LINE_COUNT = "groupSepBlankLineCount";
-    private static final String GROUP_ALIGN_EQUALS_ENABLED = "groupAlignEqualsEnabled";
-    private static final String GROUP_LEVEL_SEPARATOR = "groupLevelSeparator";
-
-
     private PropertyPreferences() {
         super();
     }
@@ -450,7 +437,4 @@ public final class PropertyPreferences {
     public static PropertyPreferences getInstance() {
         return PropertyPreferencesHolder.INSTANCE;
     }
-
-
-
 }

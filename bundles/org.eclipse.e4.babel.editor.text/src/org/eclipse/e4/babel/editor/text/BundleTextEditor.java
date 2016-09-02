@@ -1,7 +1,7 @@
 package org.eclipse.e4.babel.editor.text;
 
 
-import org.eclipse.e4.babel.editor.text.document.IFileDocument;
+import org.eclipse.e4.babel.editor.text.file.IPropertyResource;
 import org.eclipse.e4.babel.editor.text.property.PropertyConfiguration;
 import org.eclipse.e4.babel.editor.text.property.PropertyPartitionScanner;
 import org.eclipse.e4.ui.model.application.ui.MDirtyable;
@@ -29,10 +29,10 @@ public final class BundleTextEditor extends Composite {
     private static final int SOURCE_VIEWER_STYLE = SWT.V_SCROLL | SWT.H_SCROLL | SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION;
     private static final Font FONT = new Font(Display.getCurrent(), "Tahoma", 10, SWT.NORMAL);
     private SourceViewer sourceViewer;
-    private IFileDocument sourceViewerDocument;
+    private IPropertyResource sourceViewerDocument;
     private CTabItem tab;
 
-    public BundleTextEditor(final CTabFolder parent, MDirtyable dirty, IFileDocument sourceViewerDocument) {
+    public BundleTextEditor(final CTabFolder parent, MDirtyable dirty, IPropertyResource sourceViewerDocument) {
         super(parent, SWT.NONE);
         setLayout(new FillLayout());
         this.sourceViewerDocument = sourceViewerDocument;
@@ -67,7 +67,7 @@ public final class BundleTextEditor extends Composite {
     }
 
     @NonNull
-    public IFileDocument getSourceViewerDocument() {
+    public IPropertyResource getSourceViewerDocument() {
         return sourceViewerDocument;
     }
 

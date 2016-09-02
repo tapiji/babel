@@ -6,15 +6,7 @@
    <extension
          point="org.eclipse.e4.babel.core.api.resourceFactory">
       <resource_factory
-            class="org.eclipse.e4.babel.core.internal.resource.workspace.FragmentResourceFactory"
-            order="1">
-      </resource_factory>
-      <resource_factory
-            class="org.eclipse.e4.babel.core.internal.resource.workspace.NLResourceFactory"
-            order="2">
-      </resource_factory>
-      <resource_factory
-            class="org.eclipse.e4.babel.core.internal.resource.workspace.WorkspaceResourceFactory"
+            class="org.eclipse.e4.babel.core.internal.resource.workspace.StandardResourceFactory"
             order="8888">
       </resource_factory>
    </extension>

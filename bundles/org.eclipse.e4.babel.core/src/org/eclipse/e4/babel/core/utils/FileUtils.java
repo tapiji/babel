@@ -26,7 +26,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.e4.babel.editor.text.document.IFileDocument;
+import org.eclipse.e4.babel.editor.text.file.IPropertyResource;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
@@ -60,7 +60,7 @@ public final class FileUtils {
      * @param fileDocument
      * @return
      */
-    public static String getBundleName(IFileDocument fileDocument) {
+    public static String getBundleName(IPropertyResource fileDocument) {
         final String regex = "^(.*?)((_[a-z]{2,3})|(_[a-z]{2,3}_[A-Z]{2})|(_[a-z]{2,3}_[A-Z]{2}_\\w*))?(\\." + fileDocument.getFileExtension() + ")$";
         return fileDocument.getName().replaceFirst(regex, "$1");
     }
@@ -71,7 +71,7 @@ public final class FileUtils {
      * @param fileDocument
      * @return String 
      */
-    public static String getDisplayName(IFileDocument fileDocument) {
+    public static String getDisplayName(IPropertyResource fileDocument) {
         return getBundleName(fileDocument) + "[...]." + fileDocument.getFileExtension();
     }
 
@@ -80,7 +80,7 @@ public final class FileUtils {
      * @param fileDocument
      * @return
      */
-    public static String getPropertiesFileRegEx(IFileDocument fileDocument) {
+    public static String getPropertiesFileRegEx(IPropertyResource fileDocument) {
         return PROPERTIES_FILE_REGEX.replaceFirst(TOKEN_BUNDLE_NAME, getBundleName(fileDocument)).replaceFirst(TOKEN_FILE_EXTENSION, fileDocument.getFileExtension());
     }
 
@@ -91,7 +91,7 @@ public final class FileUtils {
      * @param resource the resource
      * @return the locale or null if none
      */
-    public static Locale parseBundleName(IFileDocument fileDocument) {
+    public static Locale parseBundleName(IPropertyResource fileDocument) {
         // Build local title
         String regex = getPropertiesFileRegEx(fileDocument);
         String localeText = fileDocument.getName().replaceFirst(regex, "$2");

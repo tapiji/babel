@@ -1,5 +1,6 @@
 package org.eclipse.e4.babel.editor.ui.editor;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -21,7 +22,7 @@ import org.eclipse.e4.babel.core.utils.UIUtils;
 import org.eclipse.e4.babel.editor.model.tree.KeyTree;
 import org.eclipse.e4.babel.editor.preference.APreferencePage;
 import org.eclipse.e4.babel.editor.text.BundleTextEditor;
-import org.eclipse.e4.babel.editor.text.document.IFileDocument;
+import org.eclipse.e4.babel.editor.text.file.IPropertyResource;
 import org.eclipse.e4.babel.editor.text.model.SourceEditor;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.page.I18nPageContract;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.page.I18nPageView;
@@ -109,9 +110,13 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
 	    setMinimumCharacters(40);
 
 	    Object object = part.getTransientData().get(OpenResourceBundleHandler.KEY_FILE_DOCUMENT);
-	    if (object instanceof IFileDocument) {
-		IFileDocument file = (IFileDocument) object;
-		this.resourceManager.init(file);
+	    if (object instanceof IPropertyResource) {
+		IPropertyResource file = (IPropertyResource) object;
+		try {
+		    this.resourceManager.init(file);
+		} catch (IOException e) {
+		    e.printStackTrace();
+		}
 
 		toolbarVisibility();
 		this.workspace.addResourceChangeListener(resourceChangeListener, IResourceChangeEvent.POST_CHANGE);
@@ -229,7 +234,7 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
     }
 
     @Override
-    public void addResource(IFileDocument fileDocument, Locale locale) {
+    public void addResource(IPropertyResource fileDocument, Locale locale) {
 	SourceEditor editor = resourceManager.addSourceEditor(fileDocument, locale);
 	final BundleTextEditor textEditor = new BundleTextEditor(this, dirty, editor.getDocument());
 	editors.add(textEditor);

@@ -3,12 +3,11 @@ package org.eclipse.e4.babel.core.api;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.e4.babel.editor.model.bundle.BundleGroup;
 import org.eclipse.e4.babel.editor.model.tree.KeyTree;
 import org.eclipse.e4.babel.editor.model.tree.KeyTreeItem;
-import org.eclipse.e4.babel.editor.text.document.IFileDocument;
+import org.eclipse.e4.babel.editor.text.file.IPropertyResource;
 import org.eclipse.e4.babel.editor.text.model.SourceEditor;
 
 public interface IResourceManager {
@@ -23,7 +22,7 @@ public interface IResourceManager {
 
 	boolean containsKey(final String key);
 
-	void init(IFileDocument fileDocument) throws CoreException;
+	void init(IPropertyResource fileDocument) throws CoreException, IOException;
 
 	SourceEditor getSourceEditor(Locale locale);
 
@@ -37,9 +36,9 @@ public interface IResourceManager {
 
 	void save();
 
-	SourceEditor addSourceEditor(IFileDocument fileDocument, Locale locale);
+	SourceEditor addSourceEditor(IPropertyResource fileDocument, Locale locale);
 
-	IFile createPropertiesFile(Locale locale) throws CoreException, IOException;
+	IPropertyResource createPropertiesFile(Locale locale) throws CoreException, IOException;
 
     List<Locale> getSortedLocales();
 }

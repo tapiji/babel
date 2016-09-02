@@ -1,4 +1,5 @@
-package org.eclipse.e4.babel.editor.text.document;
+package org.eclipse.e4.babel.editor.text.file;
+
 
 import java.io.File;
 import java.io.IOException;
@@ -10,29 +11,36 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
 
-public final class FileResource implements IFileDocument {
+
+public final class PropertyFileResource implements IPropertyResource {
+
     protected static final int DEFAULT_FILE_CAPACITY = 10 * 1024;
     protected static final String DEFAULT_ENCODING = "UTF-8";
-    protected static final String TAG = IFileDocument.class.getSimpleName();
+    protected static final String TAG = IPropertyResource.class.getSimpleName();
 
     protected Document document;
     public File file;
 
-    private FileResource(final File file) {
+    private PropertyFileResource(final File file) {
         super();
         this.file = file;
     }
 
     @Override
     public void saveDocument() {
-        // TODO Auto-generated method stub
+        try {
+            writeFile(document.get());
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     @Override
     public IDocument getDocument() {
         if (null != document) {
             return document;
-            
+
         }
         document = new Document();
         try {
@@ -48,14 +56,21 @@ public final class FileResource implements IFileDocument {
 
 
     private String readFile() throws IOException {
-      return  new String(Files.readAllBytes(file.toPath()));
+        return new String(Files.readAllBytes(file.toPath()));
     }
 
-    private void writeFile(final String content) throws IOException {
+    @Override
+    public void writeFile(final String content) throws IOException {
         Files.write(file.toPath(), content.getBytes());
     }
-    
-    
+
+    public void createFile(String path, String content) throws IOException {
+        file = new File(path);
+        file.createNewFile();
+        writeFile(content);
+    }
+
+
     @Override
     public String getEncoding() {
         // TODO Auto-generated method stub
@@ -80,8 +95,8 @@ public final class FileResource implements IFileDocument {
     }
 
     @Override
-    public FileType getFileType() {
-        return FileType.FILE;
+    public PropertyFileType getFileType() {
+        return PropertyFileType.FILE;
     }
 
     @Override
@@ -89,8 +104,16 @@ public final class FileResource implements IFileDocument {
         // TODO Auto-generated method stub
     }
 
-    public static IFileDocument create(File file) {
-        return new FileResource(file);
+    public static IPropertyResource create(final File file, final String content) throws IOException {
+        PropertyFileResource newFile = new PropertyFileResource(file);
+        if (!file.exists()) {
+            newFile.writeFile(content);
+        }
+        return newFile;
+    }
+
+    public static IPropertyResource create(final File file) throws IOException {
+        return create(file, null);
     }
 
     @Override
@@ -100,8 +123,13 @@ public final class FileResource implements IFileDocument {
 
     @Override
     public String getFileExtension() {
-        return "properties";
-    }  
+        String fileName = file.getName();
+        if (fileName.lastIndexOf(".") != -1 && fileName.lastIndexOf(".") != 0) {
+            return fileName.substring(fileName.lastIndexOf(".") + 1);
+        } else {
+            return "";
+        }
+    }
 
     @Override
     public IFile getIFile() {
@@ -112,8 +140,7 @@ public final class FileResource implements IFileDocument {
         String projectName = path.substring(lastIndexOf + 1, index - 1);
         String relativeFilePath = path.substring(index, path.length());
 
-        return ResourcesPlugin.getWorkspace().getRoot()
-                .getProject(projectName).getFile(relativeFilePath);
+        return ResourcesPlugin.getWorkspace().getRoot().getProject(projectName).getFile(relativeFilePath);
     }
 
     @Override
