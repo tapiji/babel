@@ -25,6 +25,29 @@ public final class PropertyIFileResource implements IPropertyResource {
     private PropertyIFileResource(IFile file) {
         super();
         this.file = file;
+        
+       /* IWorkspace workspace = ResourcesPlugin.getWorkspace();
+        IResourceChangeListener listener = new IResourceChangeListener() {
+
+         public void resourceChanged(IResourceChangeEvent event) {
+
+
+                if(event.getType() == IResourceChangeEvent.POST_CHANGE && IResourceDelta.MARKERS!=0){  //Filtering listener
+
+
+                 System.out.println("Listener code should be implemented here");  
+
+
+               }
+
+
+                System.out.println("listener is working");  //This line always get executed. That means the listener is working
+workspace.addResourceChangeListener(listener,IResourceChangeEvent.POST_CHANGE);
+
+            }
+        };*/
+
+        
     }
 
     public IFile getFile() {

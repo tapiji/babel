@@ -24,6 +24,9 @@ public final class PropertyFileResource implements IPropertyResource {
     private PropertyFileResource(final File file) {
         super();
         this.file = file;
+        
+        //FileMonitor.getInstance().addFileChangeListener(
+         //               this.fileChangeListener, file, 2000); // TODO make file scan
     }
 
     @Override

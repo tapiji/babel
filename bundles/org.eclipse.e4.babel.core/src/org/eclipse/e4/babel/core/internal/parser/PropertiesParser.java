@@ -24,6 +24,7 @@ import org.eclipse.e4.babel.logger.Log;
 /**
  * Bundle-related utility methods. 
  * @author Pascal Essiembre
+ * @author Christian Behon
  */
 public final class PropertiesParser {
 
@@ -43,8 +44,7 @@ public final class PropertiesParser {
 	private static final Pattern PATTERN_BACKSLASH_R = Pattern.compile("\\\\r");
 	private static final Pattern PATTERN_BACKSLASH_N = Pattern.compile("\\\\n");
 
-    private static final String NEW_LINE = "\n";
-    private static final String CARRIAGE_RETURN = "\r";
+
 	
 	/**
 	 * Constructor.
@@ -150,7 +150,7 @@ public final class PropertiesParser {
 	 * @return converted string
 	 * @see java.util.Properties
 	 */
-	public static String convertEncodedToUnicode(String str) {
+	private static String convertEncodedToUnicode(String str) {
 		char aChar;
 		int len = str.length();
 		StringBuffer outBuffer = new StringBuffer(len);

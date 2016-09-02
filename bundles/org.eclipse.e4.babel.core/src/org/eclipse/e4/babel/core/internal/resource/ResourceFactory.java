@@ -20,7 +20,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.stream.Stream;
 import org.eclipse.core.resources.IFile;
@@ -29,6 +28,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.e4.babel.core.api.IResourceFactory;
 import org.eclipse.e4.babel.core.internal.file.AbstractFileCreator;
 import org.eclipse.e4.babel.core.internal.resource.external.ExternalResourceFactory;
+import org.eclipse.e4.babel.core.utils.FileUtils;
 import org.eclipse.e4.babel.core.utils.UIUtils;
 import org.eclipse.e4.babel.editor.text.file.IPropertyResource;
 import org.eclipse.e4.babel.editor.text.file.PropertyFileType;
@@ -49,32 +49,11 @@ import org.eclipse.e4.babel.editor.text.model.SourceEditor;
  */
 public abstract class ResourceFactory implements IResourceFactory {
 
-
     private final static String TAG = ResourceFactory.class.getSimpleName();
 
-    /** Class name of Properties file editor (Eclipse 3.1). */
-    protected static final String PROPERTIES_EDITOR_CLASS_NAME = "org.eclipse.jdt.internal.ui.propertiesfileeditor." + "PropertiesFileEditor";
-
-    /** Token to replace in a regular expression with a bundle name. */
-    private static final String TOKEN_BUNDLE_NAME = "BUNDLENAME";
-    /** Token to replace in a regular expression with a file extension. */
-    private static final String TOKEN_FILE_EXTENSION = "FILEEXTENSION";
-    /** Regex to match a properties file. */
-    private static final String PROPERTIES_FILE_REGEX = "^(" + TOKEN_BUNDLE_NAME + ")" + "((_[a-z]{2,3})|(_[a-z]{2,3}_[A-Z]{2})" + "|(_[a-z]{2,3}_[A-Z]{2}_\\w*))?(\\." + TOKEN_FILE_EXTENSION + ")$";
-
-    private boolean isExternal;
-    
-    
-    
-    
     public ResourceFactory() {
         super();
     }
-    
-    
-    /*
-     * Common members of ResourceFactories
-     */
 
     /**
      * A sorted map of {@link SourceEditor}s. Sorted by key (Locale).
@@ -163,7 +142,7 @@ public abstract class ResourceFactory implements IResourceFactory {
      *         responsible one could be found
      * @throws CoreException
      *         problem creating factory
-     * @throws IOException 
+     * @throws IOException
      */
     public static IResourceFactory createFactory(IPropertyResource fileDocument) throws CoreException, IOException {
 
@@ -181,9 +160,9 @@ public abstract class ResourceFactory implements IResourceFactory {
             }
             return null;
         } else {
-                ExternalResourceFactory factory = new ExternalResourceFactory();
-                factory.init(fileDocument);
-                return factory;
+            ExternalResourceFactory factory = new ExternalResourceFactory();
+            factory.init(fileDocument);
+            return factory;
         }
     }
 
@@ -205,7 +184,7 @@ public abstract class ResourceFactory implements IResourceFactory {
      *         responsible one could be found
      * @throws CoreException
      *         problem creating factory
-     * @throws IOException 
+     * @throws IOException
      */
     public static IResourceFactory createParentFactory(IPropertyResource fileDocument, Class<?> childFactoryClass) throws CoreException, IOException {
         IResourceFactory[] factories = ResourceFactoryDescriptor.getContributedResourceFactories();
@@ -219,76 +198,8 @@ public abstract class ResourceFactory implements IResourceFactory {
         return null;
     }
 
-    /**
-     * @deprecated
-     * Parses the specified bundle name and returns the locale.
-     * 
-     * @param resource the resource
-     * @return the locale or null if none
-     */
-    @Deprecated
-    protected static Locale parseBundleName(IResource resource) {
-        // Build local title
-        String regex = ResourceFactory.getPropertiesFileRegEx(resource);
-        String localeText = resource.getName().replaceFirst(regex, "$2");
-        StringTokenizer tokens = new StringTokenizer(localeText, "_");
-        List<String> localeSections = new ArrayList<>();
-        while (tokens.hasMoreTokens()) {
-            localeSections.add(tokens.nextToken());
-        }
-        Locale locale = null;
-        switch (localeSections.size()) {
-            case 1:
-                locale = new Locale(localeSections.get(0), localeSections.get(0).toUpperCase());
-                break;
-            case 2:
-                locale = new Locale(localeSections.get(0), localeSections.get(1));
-                break;
-            case 3:
-                locale = new Locale(localeSections.get(0), localeSections.get(1), localeSections.get(2));
-                break;
-            default:
-                break;
-        }
-        return locale;
-    }
-
     protected SourceEditor createEditor(IPropertyResource fileDocument, Locale locale) {
         return SourceEditor.create(fileDocument, locale);
-    }
-
-    /**
-     * @deprecated
-     * @param fileDocument
-     * @return
-     */
-    @Deprecated
-    protected static String getBundleName(IResource fileDocument) {
-        String name = fileDocument.getName();
-        String regex = "^(.*?)" + "((_[a-z]{2,3})|(_[a-z]{2,3}_[A-Z]{2})" + "|(_[a-z]{2,3}_[A-Z]{2}_\\w*))?(\\." + fileDocument.getFileExtension() + ")$";
-        return name.replaceFirst(regex, "$1");
-    }
-
-    /**
-     * @deprecated
-     * @param file
-     * @return
-     */
-    @Deprecated
-    protected static String getDisplayName(IResource file) {
-        if (file instanceof IFile) return getBundleName(file) + "[...]." + file.getFileExtension();
-        else return getBundleName(file);
-    }
-
-    /**
-     * @deprecated
-     * @param file
-     * @return
-     */
-    @Deprecated
-    protected static String getPropertiesFileRegEx(IResource file) {
-        String bundleName = getBundleName(file);
-        return PROPERTIES_FILE_REGEX.replaceFirst(TOKEN_BUNDLE_NAME, bundleName).replaceFirst(TOKEN_FILE_EXTENSION, file.getFileExtension());
     }
 
     /**
@@ -301,7 +212,7 @@ public abstract class ResourceFactory implements IResourceFactory {
      * @throws CoreException
      */
     protected static IFile[] getResources(IPropertyResource file) throws CoreException {
-        String regex = ResourceFactory.getPropertiesFileRegEx(file.getIFile());
+        String regex = FileUtils.getPropertiesFileRegEx(file);
         final Collection<IResource> validResources = new ArrayList<>();
         Stream.of(file.getIFile().getParent().members()).forEach(resource -> {
             String resourceName = resource.getName();
@@ -311,7 +222,7 @@ public abstract class ResourceFactory implements IResourceFactory {
         });
         return validResources.toArray(new IFile[] {});
     }
-    
+
     @Override
     public boolean isExternal() {
         return false;
