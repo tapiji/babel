@@ -28,7 +28,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.e4.babel.core.api.IResourceFactory;
 import org.eclipse.e4.babel.core.internal.file.AbstractFileCreator;
 import org.eclipse.e4.babel.core.internal.resource.external.ExternalResourceFactory;
-import org.eclipse.e4.babel.core.utils.FileUtils;
+import org.eclipse.e4.babel.core.utils.BabelUtils;
 import org.eclipse.e4.babel.core.utils.UIUtils;
 import org.eclipse.e4.babel.editor.text.file.IPropertyResource;
 import org.eclipse.e4.babel.editor.text.file.PropertyFileType;
@@ -70,17 +70,20 @@ public abstract class ResourceFactory implements IResourceFactory {
      * The {@link AbstractFileCreator} used to create new files.
      */
     private AbstractFileCreator propertiesFileCreator;
+
     /**
-     * The associated editor site.
-     */
-    /**
-     * The displayname
+     * The short displayname
      */
     private String displayName;
+    
+    /**
+     * The short displayname
+     */
+    private String resourceLocation;
 
 
     @Override
-    public String getEditorDisplayName() {
+    public String getDisplayName() {
         return displayName;
     }
 
@@ -89,10 +92,26 @@ public abstract class ResourceFactory implements IResourceFactory {
      * 
      * @param displayName
      *        The display name to set.
-     * @see #getEditorDisplayName()
+     * @see #getDisplayName()
      */
     protected void setDisplayName(String displayName) {
         this.displayName = displayName;
+    }
+    
+    @Override
+    public String getResourceLocation() {
+        return resourceLocation;
+    }
+
+    /**
+     * Sets the editor display name of this factory.
+     * 
+     * @param displayName
+     *        The display name to set.
+     * @see #getDisplayName()
+     */
+    protected void setResourceLocation(String resourceLocation) {
+        this.resourceLocation = resourceLocation;
     }
 
     @Override
@@ -212,7 +231,7 @@ public abstract class ResourceFactory implements IResourceFactory {
      * @throws CoreException
      */
     protected static IFile[] getResources(IPropertyResource file) throws CoreException {
-        String regex = FileUtils.getPropertiesFileRegEx(file);
+        String regex = BabelUtils.getPropertiesFileRegEx(file);
         final Collection<IResource> validResources = new ArrayList<>();
         Stream.of(file.getIFile().getParent().members()).forEach(resource -> {
             String resourceName = resource.getName();

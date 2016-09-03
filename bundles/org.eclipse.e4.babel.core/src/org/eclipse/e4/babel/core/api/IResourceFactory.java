@@ -1,5 +1,6 @@
 package org.eclipse.e4.babel.core.api;
 
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
@@ -10,23 +11,33 @@ import org.eclipse.e4.babel.editor.text.file.IPropertyResource;
 import org.eclipse.e4.babel.editor.text.model.SourceEditor;
 
 
-
 public interface IResourceFactory {
 
     /**
-     * Gets the editor display name.
-     * @return editor display name
+     * Gets the editor display name in short form
+     * 
+     * @return editor display name short form
      */
-    public abstract String getEditorDisplayName();
+    public abstract String getDisplayName();
+
+
+    /**
+     * Gets the editor display name in full form
+     * 
+     * @return editor display name full form
+     */
+    public abstract String getResourceLocation();
+
 
     /**
      * Get the {@link SourceEditor}s of this factory,
      * that reference all message/properties files
      * this factory knows of.
      * <p>
-     * This method should only be called after 
+     * This method should only be called after
      * {@link #init(IEditorSite, IFile)} was called.
      * </p>
+     * 
      * @return All {@link SourceEditor}s of this factory.
      */
     public abstract List<SourceEditor> getSourceEditors();
@@ -41,9 +52,10 @@ public interface IResourceFactory {
 
     /**
      * Gets a properties file creator.
+     * 
      * @return properties file creator
      */
-   public abstract AbstractFileCreator getPropertiesFileCreator();
+    public abstract AbstractFileCreator getPropertiesFileCreator();
 
     /**
      * Returns true if the resource factory is responsible for
@@ -62,13 +74,15 @@ public interface IResourceFactory {
      * @param site the editor site
      * @param file the file resource
      * @throws CoreException
-     * @throws IOException 
+     * @throws IOException
      */
     public abstract void init(IPropertyResource fileDocument) throws CoreException, IOException;
-    
+
     /**
-     * TODO
-     * @return
+     * Returns true if the resource is external otherwise
+     * false.
+     * 
+     * @return true if resource is external
      */
     public abstract boolean isExternal();
 

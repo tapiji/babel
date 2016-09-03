@@ -140,6 +140,10 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
 
 		});
 		setSelection(0);
+		part.setLabel(resourceManager.getDisplayName());
+		part.setTooltip(resourceManager.getResourceLocation());
+		part.setDescription("Editor f\u00FCr ResourceBundle:");
+		
 	    } else {
 		throw new ClassCastException("Can not cast object to IFileDocument");
 	    }

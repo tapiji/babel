@@ -23,7 +23,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.e4.babel.core.internal.file.AbstractFileCreator;
 import org.eclipse.e4.babel.core.internal.file.workspace.StandardPropertiesFileCreator;
 import org.eclipse.e4.babel.core.internal.resource.ResourceFactory;
-import org.eclipse.e4.babel.core.utils.FileUtils;
+import org.eclipse.e4.babel.core.utils.BabelUtils;
 import org.eclipse.e4.babel.editor.text.file.IPropertyResource;
 import org.eclipse.e4.babel.editor.text.file.PropertyIFileResource;
 import org.eclipse.e4.babel.editor.text.model.SourceEditor;
@@ -63,15 +63,16 @@ public class StandardResourceFactory extends ResourceFactory {
         IFile[] resources = getResources(fileDocument);
         for (int i = 0; i < resources.length; i++) {
             IPropertyResource document = PropertyIFileResource.create(resources[i]);
-            Locale locale = FileUtils.parseBundleName(document);
+            Locale locale = BabelUtils.parseBundleName(document);
             SourceEditor sourceEditor = createEditor(document, locale);
             if (sourceEditor != null) {
                 addSourceEditor(sourceEditor.getLocale(), sourceEditor);
             }
         }
 
-        fileCreator = new StandardPropertiesFileCreator(file.getParent().getFullPath().toString(), FileUtils.getBundleName(fileDocument), file.getFileExtension());
-        setDisplayName(FileUtils.getDisplayName(fileDocument));
+        fileCreator = new StandardPropertiesFileCreator(file.getParent().getFullPath().toString(), BabelUtils.getBundleName(fileDocument), file.getFileExtension());
+        setDisplayName(BabelUtils.getShortDisplayName(fileDocument));
+        setResourceLocation(file.getParent().getFullPath().toString());
     }
 
     /**
@@ -84,7 +85,7 @@ public class StandardResourceFactory extends ResourceFactory {
     }
 
     protected static IFile[] getResources(IPropertyResource fileDocument) {
-        String regex = FileUtils.getPropertiesFileRegEx(fileDocument);
+        String regex = BabelUtils.getPropertiesFileRegEx(fileDocument);
         List<IResource> resources = new ArrayList<>();
         try {
             resources = Arrays.asList(fileDocument.getIFile().getParent().members());

@@ -12,7 +12,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.e4.babel.core.internal.file.AbstractFileCreator;
 import org.eclipse.e4.babel.core.internal.file.external.ExternalFileCreator;
 import org.eclipse.e4.babel.core.internal.resource.ResourceFactory;
-import org.eclipse.e4.babel.core.utils.FileUtils;
+import org.eclipse.e4.babel.core.utils.BabelUtils;
 import org.eclipse.e4.babel.editor.text.file.IPropertyResource;
 import org.eclipse.e4.babel.editor.text.file.PropertyFileResource;
 import org.eclipse.e4.babel.editor.text.model.SourceEditor;
@@ -39,15 +39,16 @@ public final class ExternalResourceFactory extends ResourceFactory {
 
         for (File file : resources) {
             IPropertyResource document = PropertyFileResource.create(file);
-            Locale locale = FileUtils.parseBundleName(document);
+            Locale locale = BabelUtils.parseBundleName(document);
             SourceEditor sourceEditor = createEditor(document, locale);
             if (sourceEditor != null) {
                 addSourceEditor(sourceEditor.getLocale(), sourceEditor);
             }
         }
         String absolutePath = fileRes.file.getAbsolutePath();
-        fileCreator = new ExternalFileCreator(absolutePath.substring(0, absolutePath.lastIndexOf(File.separator)), FileUtils.getBundleName(fileDocument), fileRes.getFileExtension());
-        setDisplayName(FileUtils.getDisplayName(fileDocument));
+        fileCreator = new ExternalFileCreator(absolutePath.substring(0, absolutePath.lastIndexOf(File.separator)), BabelUtils.getBundleName(fileDocument), fileRes.getFileExtension());
+        setDisplayName(BabelUtils.getShortDisplayName(fileDocument));
+        setResourceLocation(absolutePath);
     }
 
     @Override

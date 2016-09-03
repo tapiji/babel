@@ -168,8 +168,14 @@ public final class ResourceManagers implements IResourceManager {
      * 
      * @return display name
      */
-    public String getEditorDisplayName() {
-        return resourcesFactory.getEditorDisplayName();
+    @Override
+    public String getDisplayName() {
+        return resourcesFactory.getDisplayName();
+    }
+    
+    @Override
+    public String getResourceLocation() {
+        return resourcesFactory.getResourceLocation();
     }
 
     /**

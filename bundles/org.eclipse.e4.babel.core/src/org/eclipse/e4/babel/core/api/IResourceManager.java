@@ -41,4 +41,8 @@ public interface IResourceManager {
 	IPropertyResource createPropertiesFile(Locale locale) throws CoreException, IOException;
 
     List<Locale> getSortedLocales();
+
+    String getDisplayName();
+
+    String getResourceLocation();
 }
