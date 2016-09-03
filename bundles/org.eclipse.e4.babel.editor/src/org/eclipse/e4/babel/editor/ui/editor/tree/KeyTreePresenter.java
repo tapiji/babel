@@ -54,8 +54,8 @@ final class KeyTreePresenter implements KeyTreeContract.Presenter {
     @Override
     public void addKey(String key) {
 	resourceBundleEditor.getResourceManager().addNewKey(key);
-	// TODO FIX THIS BUG
-	if (((KeyTreeItem) keyTreeView.getStructuredSelectionSelection().getFirstElement()).getId().equals(key)) {
+	KeyTreeItem item = (KeyTreeItem) keyTreeView.getStructuredSelectionSelection().getFirstElement();
+	if (item != null && item.getId().equals(key)) {
 	    resourceBundleEditor.getI18nPage().getPresenter().refreshTextBoxes();
 	} else {
 	    keyTreeView.setSelectedKeyTreeItem(getKeyTree().getKeyTreeItem(key));

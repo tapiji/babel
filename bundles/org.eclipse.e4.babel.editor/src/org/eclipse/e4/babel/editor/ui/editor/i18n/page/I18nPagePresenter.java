@@ -138,8 +138,9 @@ public class I18nPagePresenter implements I18nPageContract.Presenter {
 	    nextComposite = pageEntries.get(pageEntries.size() - 1);
 	}
 
-	if (nextComposite != null)
+	if (nextComposite != null) {
 	    focusComposite(nextComposite);
+	}
     }
 
     /**
