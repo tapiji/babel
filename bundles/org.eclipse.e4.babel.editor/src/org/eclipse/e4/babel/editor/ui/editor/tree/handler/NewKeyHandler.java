@@ -20,7 +20,6 @@ public final class NewKeyHandler {
 	if (part.getObject() instanceof ResourceBundleEditorContract.View) {
 	    ResourceBundleEditorContract.View resourceBundleEditorContract = (ResourceBundleEditorContract.View) part.getObject();
 	    if (item != null) {
-		System.out.println("sadadsd " + item.toString());
 		InputDialog dialog = new InputDialog(shell, "Add new key", "Below is the key that will be newly created:", item.getId(), new IInputValidator() {
 
 		    @Override
