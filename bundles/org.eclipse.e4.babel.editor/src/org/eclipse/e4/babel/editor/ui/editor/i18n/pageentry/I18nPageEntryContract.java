@@ -1,6 +1,5 @@
 package org.eclipse.e4.babel.editor.ui.editor.i18n.pageentry;
 
-
 import java.util.Collection;
 import java.util.Locale;
 
@@ -14,66 +13,64 @@ import org.eclipse.e4.babel.resource.IBabelResourceProvider;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.swt.graphics.Image;
 
-
 public interface I18nPageEntryContract {
 
     interface View extends BaseView<Presenter> {
 
-        void updateEditorHeight();
+	void updateEditorHeight();
 
-        void setFocusTextView();
+	void setFocusTextView();
 
-        int getCoordinateY();
+	int getCoordinateY();
 
-		Presenter getPresenter();
+	Presenter getPresenter();
 
-		void updateTextView(IDocument document, boolean enabled);
+	void updateTextView(IDocument document, boolean enabled);
 
-		void setDuplicateButtonVisibility(boolean visible);
+	void setDuplicateButtonVisibility(boolean visible);
 
-		void setSimilarButtonVisibility(boolean visible);
+	void setSimilarButtonVisibility(boolean visible);
 
-		String getText();
+	String getText();
 
-		void focusTextBox();
+	void focusTextBox();
 
-		void dispose();
+	void dispose();
 
-		void addLocalListener(LocalBehaviour localBehaviour);
+	void addLocalListener(LocalBehaviour localBehaviour);
 
     }
 
     interface Presenter extends BasePresenter {
 
-		IResourceManager getResourceManager();
+	IResourceManager getResourceManager();
 
-		IBabelResourceProvider getResourceProvider();
+	IBabelResourceProvider getResourceProvider();
 
-		Image loadImage(String imageId);
+	Image loadImage(String imageId);
 
-		Locale getLocale();
+	Locale getLocale();
 
-		void goToTab();
+	void goToTab();
 
-		void findDuplicates(BundleEntry bundleEntry);
+	void findDuplicates(BundleEntry bundleEntry);
 
-		void findSimilar(BundleEntry bundleEntry);
+	void findSimilar(BundleEntry bundleEntry);
 
-		void updateDocument(String key);
+	void updateDocument(String key);
 
-		boolean isKeyAvailable(String key);
+	boolean isKeyAvailable(String key);
 
-		void updateBundleOnChanges();
+	void updateBundleOnChanges();
 
-		String getActiveKey();
+	String getActiveKey();
 
-		Collection<BundleEntry> getSimilars();
+	Collection<BundleEntry> getSimilars();
 
-		Collection<BundleEntry> getDuplicates();
+	Collection<BundleEntry> getDuplicates();
 
-		I18nPageContract.View getI18nPageView();
+	I18nPageContract.View getI18nPageView();
 
-		boolean isEditorDirty();
+	boolean isEditorDirty();
     }
 }
-

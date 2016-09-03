@@ -28,25 +28,27 @@ import org.eclipse.swt.graphics.Point;
 @Creatable
 public class I18nPagePresenter implements I18nPageContract.Presenter {
 
+    final LocalBehaviour localBehaviour = new LocalBehaviour();
+    final List<I18nPageEntryContract.View> pageEntries = new ArrayList<>();
+
     @Inject
     private IBabelResourceProvider resourceProvider;
     private IResourceManager resourceManager;
-    private final LocalBehaviour localBehaviour = new LocalBehaviour();
+
     private I18nPageEntryContract.View activeEntry;
     private I18nPageEntryContract.View lastActiveEntry;
 
-    private final List<I18nPageEntryContract.View> pageEntries = new ArrayList<>();
     private View i18nPageView;
     private ResourceBundleEditorContract.View editorView;
 
-    public I18nPagePresenter(I18nPageContract.View i18nPageView, IResourceManager resourceManager, ResourceBundleEditorContract.View editorView) {
+    private I18nPagePresenter(I18nPageContract.View i18nPageView, IResourceManager resourceManager, ResourceBundleEditorContract.View editorView) {
 	this.resourceManager = resourceManager;
 	this.i18nPageView = i18nPageView;
 	this.editorView = editorView;
     }
 
     @PostConstruct
-    public void onCreate() {
+    public void onCreate() { // NO_UCD
 	editorView.getKeyTreeView().getTreeViewer().addSelectionChangedListener(localBehaviour);
 	editorView.getKeyTreeView().getKeyTree().addChangeListener(localBehaviour);
     }
@@ -59,6 +61,7 @@ public class I18nPagePresenter implements I18nPageContract.Presenter {
     @Override
     public void dispose() {
 	pageEntries.forEach(entry -> entry.dispose());
+	pageEntries.clear();
     }
 
     @Override

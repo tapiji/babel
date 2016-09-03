@@ -175,7 +175,7 @@ public final class I18nPageEntryView extends Composite implements KeyListener, T
 
 	this.goToButton = new Button(toolBar, SWT.ARROW | SWT.RIGHT);
 	this.goToButton.setText("");
-	this.goToButton.setToolTipText("Go to the corresponding property file.");
+	this.goToButton.setToolTipText("Go to corresponding property file.");
 	this.goToButton.setLayoutData(gridData);
 	this.goToButton.addSelectionListener(new SelectionAdapter() {
 
@@ -400,8 +400,6 @@ public final class I18nPageEntryView extends Composite implements KeyListener, T
     public void setSimilarButtonVisibility(boolean visible) {
 	this.similarButton.setVisible(visible);
     }
-
-    String _oldText = null;
 
     @Override
     public void textChanged(TextEvent event) {

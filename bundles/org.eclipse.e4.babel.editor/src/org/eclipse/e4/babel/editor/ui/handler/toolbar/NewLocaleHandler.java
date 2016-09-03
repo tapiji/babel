@@ -46,17 +46,14 @@ public final class NewLocaleHandler {
 		final Locale selectedLocale = selector.getSelectedLocale();
 		if (part.getObject() instanceof ResourceBundleEditorContract.View) {
 		    ResourceBundleEditorContract.View resourceBundleEditor = (ResourceBundleEditorContract.View) part.getObject();
-		    if (!resourceBundleEditor.getResourceManager().getBundleGroup().containsLocale(selectedLocale)) {
-			try {
-			    final IPropertyResource newFile = resourceBundleEditor.getResourceManager().createPropertiesFile(selectedLocale);
-				resourceBundleEditor.addResource(newFile, selectedLocale);
-			} catch (CoreException | IOException e) {
-			    if (showFileExistDialog(e) >= Dialog.OK) {
-				localeDialog.open();
-			    }
+		    try {
+			final IPropertyResource newFile = resourceBundleEditor.getResourceManager().createPropertiesFile(selectedLocale);
+			resourceBundleEditor.addResource(newFile, selectedLocale);
+		    } catch (CoreException | IOException e) {
+			if (showFileExistDialog(e) >= Dialog.OK) {
+			    localeDialog.open();
 			}
 		    }
-		    ;
 		}
 		super.okPressed();
 	    }
@@ -65,8 +62,8 @@ public final class NewLocaleHandler {
     }
 
     private int showFileExistDialog(Exception e) {
-	 return UIUtils.showErrorDialog(Display.getCurrent().getActiveShell(), e, "Kann keine neue Datei erstellen.");
-	
+	return UIUtils.showErrorDialog(Display.getCurrent().getActiveShell(), e, "Kann keine neue Datei erstellen.");
+
     }
 
     @CanExecute

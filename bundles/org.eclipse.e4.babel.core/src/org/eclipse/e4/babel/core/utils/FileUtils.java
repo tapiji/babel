@@ -103,7 +103,7 @@ public final class FileUtils {
         Locale locale = null;
         switch (localeSections.size()) {
             case 1:
-                locale = new Locale(localeSections.get(0), localeSections.get(0).toUpperCase());
+                locale = new Locale(localeSections.get(0));
                 break;
             case 2:
                 locale = new Locale(localeSections.get(0), localeSections.get(1));

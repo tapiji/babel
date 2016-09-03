@@ -20,7 +20,7 @@ import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.swt.graphics.Image;
 
-public final class I18nPageEntryPresenter implements I18nPageEntryContract.Presenter {
+final class I18nPageEntryPresenter implements I18nPageEntryContract.Presenter {
 
     private View view;
     private IResourceManager resourceManager;
@@ -41,7 +41,7 @@ public final class I18nPageEntryPresenter implements I18nPageEntryContract.Prese
 	this.resourceBundleEditor = i18nPageView.getPresenter().getResourceBundleEditor();
     }
 
-    public static I18nPageEntryPresenter create(final I18nPageEntryContract.View pageView, Locale locale, I18nPageContract.View i18nPageView) {
+    static I18nPageEntryPresenter create(final I18nPageEntryContract.View pageView, Locale locale, I18nPageContract.View i18nPageView) {
 	I18nPageEntryPresenter presenter = new I18nPageEntryPresenter(pageView, locale, i18nPageView);
 	pageView.setPresenter(presenter);
 	return presenter;
@@ -86,7 +86,6 @@ public final class I18nPageEntryPresenter implements I18nPageEntryContract.Prese
     @Override
     public void dispose() {
 	// TODO Auto-generated method stub
-
     }
 
     @Override

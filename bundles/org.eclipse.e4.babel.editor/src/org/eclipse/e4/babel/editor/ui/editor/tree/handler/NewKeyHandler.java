@@ -12,6 +12,7 @@ import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
 
+
 public final class NewKeyHandler {
 
     @Execute

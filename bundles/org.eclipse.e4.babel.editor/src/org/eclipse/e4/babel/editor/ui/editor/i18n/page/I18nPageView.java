@@ -15,7 +15,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 
 @Creatable
 public final class I18nPageView extends ScrolledComposite implements I18nPageContract.View {
@@ -23,15 +22,13 @@ public final class I18nPageView extends ScrolledComposite implements I18nPageCon
     private static final String TAG = I18nPageView.class.getSimpleName();
 
     private Composite i18nEntryComposite;
-
     private I18nPageContract.Presenter presenter;
 
-    public static I18nPageView create(final Composite sashForm, ResourceBundleEditorContract.View editorView,
-	    IResourceManager resourceManager, IEclipseContext context) {
+    public static I18nPageView create(final Composite sashForm, ResourceBundleEditorContract.View editorView, IResourceManager resourceManager, IEclipseContext context) {
 	I18nPageView page = new I18nPageView(sashForm, SWT.V_SCROLL | SWT.H_SCROLL);
 	I18nPagePresenter presenter = I18nPagePresenter.create(page, resourceManager, editorView);
 	page.setPresenter(presenter);
-	
+
 	ContextInjectionFactory.inject(presenter, context);
 	ContextInjectionFactory.inject(page, context);
 
@@ -44,7 +41,7 @@ public final class I18nPageView extends ScrolledComposite implements I18nPageCon
 	i18nEntryComposite.setLayout(new GridLayout(1, false));
 
     }
-    
+
     @PostConstruct
     public void onCreate() {
 	createEditingPart();
@@ -52,10 +49,7 @@ public final class I18nPageView extends ScrolledComposite implements I18nPageCon
 
     @Override
     public void createEditingPart() {
-	Control[] children = i18nEntryComposite.getChildren();
-	for (int i = 0; i < children.length; i++) {
-	    children[i].dispose();
-	}
+	presenter.dispose();
 	presenter.createEditingPages();
 
 	setContent(i18nEntryComposite);
@@ -63,7 +57,6 @@ public final class I18nPageView extends ScrolledComposite implements I18nPageCon
 	setExpandHorizontal(true);
 	setExpandVertical(true);
 	setShowFocusedControl(true);
-
     }
 
     @Override
@@ -139,5 +132,4 @@ public final class I18nPageView extends ScrolledComposite implements I18nPageCon
 	presenter.dispose();
 	super.dispose();
     }
-
 }

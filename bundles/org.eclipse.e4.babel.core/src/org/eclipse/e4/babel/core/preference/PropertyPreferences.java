@@ -292,7 +292,7 @@ public final class PropertyPreferences {
     }
 
     public int getI18nEditorHeight() {
-        return PREFERENCES.getInt(I18N_EDITOR_HEIGHT, 80);
+        return PREFERENCES.getInt(I18N_EDITOR_HEIGHT, 30);
     }
 
     public void setI18nEditorHeight(final int editorHeight) {

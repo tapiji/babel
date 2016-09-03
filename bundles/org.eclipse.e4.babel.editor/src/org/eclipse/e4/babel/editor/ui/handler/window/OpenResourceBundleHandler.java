@@ -5,8 +5,6 @@ import java.io.IOException;
 
 import javax.inject.Named;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.e4.babel.core.utils.FileUtils;
 import org.eclipse.e4.babel.editor.text.file.PropertyFileResource;
 import org.eclipse.e4.core.contexts.IEclipseContext;
@@ -52,9 +50,9 @@ public class OpenResourceBundleHandler {
 	    
 	    
 
-	     try {
-		final IFile filei = FileUtils.getResourceBundleRef(fileName, FileUtils.EXTERNAL_RB_PROJECT_NAME);
-		 System.out.println(filei);
+	   //  try {
+		//final IFile filei = FileUtils.getResourceBundleRef(fileName, FileUtils.EXTERNAL_RB_PROJECT_NAME);
+		// System.out.println(filei);
 		 
 		  /*   if(filei.isLinked()) {
 			 URI uri = filei.getRawLocationURI();
@@ -69,7 +67,7 @@ public class OpenResourceBundleHandler {
 
 		     }*/
 			    MPart part = partService.createPart(PART_ID);
-			  //  part.getTransientData().put(KEY_FILE_DOCUMENT, PropertyIFileResource.create(filei));
+			   // part.getTransientData().put(KEY_FILE_DOCUMENT, IFileResource.create(filei));
 			    
 			    try {
 				part.getTransientData().put(KEY_FILE_DOCUMENT, PropertyFileResource.create(new File(fileName)));
@@ -80,10 +78,10 @@ public class OpenResourceBundleHandler {
 			    MPartStack mainStack = (MPartStack) modelService.find(PART_STACK_ID, application);
 			    mainStack.getChildren().add(part);
 			    partService.showPart(part, PartState.ACTIVATE);
-	     } catch (CoreException e) {
+	   //  } catch (CoreException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-		    }
+		//	e.printStackTrace();
+	//	    }
 /*
 	    MPartStack mainStack = (MPartStack) modelService.find(PART_STACK_ID, application);
 

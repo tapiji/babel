@@ -13,7 +13,7 @@
     <elements xsi:type="commands:Command" xmi:id="__QBEIAFREeWM9o-YRkDifQ" elementId="org.eclipse.e4.babel.editor.command.keyMissingUnused" commandName="%command.key.missing.unused"/>
     <elements xsi:type="commands:Command" xmi:id="_A1vEwAFSEeWM9o-YRkDifQ" elementId="org.eclipse.e4.babel.editor.command.newLocale" commandName="%command.new.locale"/>
     <elements xsi:type="commands:Command" xmi:id="_mhMOcAV5EeWlfcvoOaUVLQ" elementId="org.eclipse.e4.babel.editor.command.openResourceBundle" commandName="%command.open.resource.bundle"/>
-    <elements xsi:type="commands:Command" xmi:id="_R20RAB9rEeWJHOpdl6IN-g" elementId="org.eclipse.e4.babel.editor.command.showPreferences" commandName="Show Preferences"/>
+    <elements xsi:type="commands:Command" xmi:id="_R20RAB9rEeWJHOpdl6IN-g" elementId="org.eclipse.e4.babel.editor.command.showPreferences" commandName="Show Preferences" description="%command.show.preferences"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_qw8X4AFREeWM9o-YRkDifQ" featurename="handlers" parentElementId="org.eclipselabs.e4.tapiji.translator.application">
     <elements xsi:type="commands:Handler" xmi:id="_DAGqkAFSEeWM9o-YRkDifQ" elementId="org.eclipse.e4.babel.editor.handler.keyTreeVisibility" contributionURI="bundleclass://org.eclipse.e4.babel.editor/org.eclipse.e4.babel.editor.ui.handler.toolbar.KeyTreeVisibleHandler" command="_0KndAAFREeWM9o-YRkDifQ"/>
