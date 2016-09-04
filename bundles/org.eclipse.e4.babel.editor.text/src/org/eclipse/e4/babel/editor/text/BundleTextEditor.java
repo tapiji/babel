@@ -28,6 +28,7 @@ public final class BundleTextEditor extends Composite {
 
     private static final int SOURCE_VIEWER_STYLE = SWT.V_SCROLL | SWT.H_SCROLL | SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION;
     private static final Font FONT = new Font(Display.getCurrent(), "Tahoma", 10, SWT.NORMAL);
+    private static final String TAG = BundleTextEditor.class.getSimpleName();
     private SourceViewer sourceViewer;
     private IPropertyResource sourceViewerDocument;
     private CTabItem tab;
@@ -64,6 +65,14 @@ public final class BundleTextEditor extends Composite {
             }
         });
 
+    }
+    
+    
+    
+    @Override
+    public void dispose() {
+        sourceViewerDocument.dispose();
+        super.dispose();
     }
 
     @NonNull

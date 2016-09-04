@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -11,10 +12,8 @@ import javax.inject.Inject;
 
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
-import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.e4.babel.core.BabelExtensionManager;
 import org.eclipse.e4.babel.core.api.IResourceManager;
 import org.eclipse.e4.babel.core.preference.PropertyPreferences;
@@ -61,8 +60,8 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
     public static final String TOPIC_TREE_VIEW_VISIBILITY = "TOPIC_GUI/TREE_VIEW_VISIBILITY";
     private static final String TAG = ResourceBundleEditor.class.getSimpleName();
 
-    private List<IPath> paths = new ArrayList<IPath>();
     private ResourceChangeListener resourceChangeListener = new ResourceChangeListener();
+
     @Inject
     private EMenuService menuService;
 
@@ -110,6 +109,7 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
 	    setMinimumCharacters(40);
 
 	    Object object = part.getTransientData().get(OpenResourceBundleHandler.KEY_FILE_DOCUMENT);
+
 	    if (object instanceof IPropertyResource) {
 		IPropertyResource file = (IPropertyResource) object;
 		try {
@@ -131,19 +131,12 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
 		sashForm.setWeights(new int[] { 25, 75 });
 
 		createTab(sashForm, "Properties", BabelResourceConstants.IMG_RESOURCE_BUNDLE);
+		createTabs();
 
-		resourceManager.getSourceEditors().forEach(editor -> {
-		    final BundleTextEditor textEditor = new BundleTextEditor(this, dirty, editor.getDocument());
-		    editors.add(textEditor);
-		    // paths.add(editor.getDocument().getFile().getFullPath());
-		    createTab(textEditor, UIUtils.getDisplayName(editor.getLocale()), BabelResourceConstants.IMG_RESOURCE_PROPERTY);
-
-		});
 		setSelection(0);
 		part.setLabel(resourceManager.getDisplayName());
 		part.setTooltip(resourceManager.getResourceLocation());
 		part.setDescription("Editor f\u00FCr ResourceBundle:");
-		
 	    } else {
 		throw new ClassCastException("Can not cast object to IFileDocument");
 	    }
@@ -239,61 +232,38 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
 
     @Override
     public void addResource(IPropertyResource fileDocument, Locale locale) {
-	SourceEditor editor = resourceManager.addSourceEditor(fileDocument, locale);
-	final BundleTextEditor textEditor = new BundleTextEditor(this, dirty, editor.getDocument());
-	editors.add(textEditor);
-	createTab(textEditor, UIUtils.getDisplayName(editor.getLocale()), BabelResourceConstants.IMG_RESOURCE_PROPERTY);
-	editor.setContent(editor.getContent());
-	updateDirtyState(true);
+	resourceManager.addSourceEditor(fileDocument, locale);
+	disposeTabs();
+	createTabs();
 	i18nPage.refreshView();
 	setSelection(0);
+	updateDirtyState(true);
     }
 
-    @Persist
-    public void doSave() {
-	Log.d(TAG, "DO SAVE");
-	KeyTree keyTree = resourceManager.getKeyTree();
-	String key = keyTree.getSelectedKey();
+    private void disposeTabs() {
+	Stream.of(getItems()).skip(1).forEach(tab -> tab.dispose());
+    }
 
-	i18nPage.getPresenter().refreshEditorOnChanges();
-	resourceManager.save();
-
-	keyTree.setUpdater(keyTree.getUpdater());
-	if (key != null) {
-	    keyTree.selectKey(key);
-	}
-	updateDirtyState(false);
+    private void createTabs() {
+	editors.clear();
+	resourceManager.getSourceEditors().forEach(editor -> {
+	    final BundleTextEditor textEditor = new BundleTextEditor(this, dirty, editor.getDocument());
+	    editors.add(textEditor);
+	    createTab(textEditor, UIUtils.getDisplayName(editor.getLocale()), BabelResourceConstants.IMG_RESOURCE_PROPERTY);
+	});
     }
 
     private class ResourceChangeListener implements IResourceChangeListener {
 	@Override
 	public void resourceChanged(IResourceChangeEvent event) {
-	    boolean deltaFound = false;
-	    for (IPath path : paths) {
-		IResourceDelta delta = event.getDelta().findMember(path);
-		deltaFound |= delta != null;
-	    }
-	    if (deltaFound) {
-		resourceManager.reloadProperties();
-		i18nPage.getPresenter().refreshTextBoxes();
-	    }
+	    resourceManager.reloadProperties();
+	    i18nPage.getPresenter().refreshTextBoxes();
 	}
     }
 
     @Override
     public I18nPageContract.View getI18nPage() {
 	return i18nPage;
-    }
-
-    @Override
-    public void dispose() {
-	i18nPage.dispose();
-	List<SourceEditor> sourceEditors = resourceManager.getSourceEditors();
-	sourceEditors.forEach(editor -> {
-	    editor.getDocument().dispose();
-	});
-	workspace.removeResourceChangeListener(resourceChangeListener);
-	super.dispose();
     }
 
     @Override
@@ -354,7 +324,6 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
     @PreDestroy
     public void preDestroy() {
 	MPartStack mainStack = (MPartStack) modelService.find("org.eclipse.e4.babel.editor.partstack.editorPartStack", window);
-
 	if (mainStack.getChildren().size() <= 0) {
 	    MToolBar trimStack = (MToolBar) modelService.find("org.eclipse.e4.babel.editor.toolbar.main", window);
 	    trimStack.setToBeRendered(false);
@@ -364,5 +333,32 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
     @Override
     public ESelectionService getSelectionService() {
 	return selectionService;
+    }
+
+    @Persist
+    public void doSave() {
+	Log.d(TAG, "DO SAVE");
+	KeyTree keyTree = resourceManager.getKeyTree();
+	String key = keyTree.getSelectedKey();
+
+	i18nPage.getPresenter().refreshEditorOnChanges();
+	resourceManager.save();
+
+	keyTree.setUpdater(keyTree.getUpdater());
+	if (key != null) {
+	    keyTree.selectKey(key);
+	}
+	updateDirtyState(false);
+    }
+
+    @Override
+    public void dispose() {
+	i18nPage.dispose();
+	List<SourceEditor> sourceEditors = resourceManager.getSourceEditors();
+	sourceEditors.forEach(editor -> {
+	    editor.getDocument().dispose();
+	});
+	workspace.removeResourceChangeListener(resourceChangeListener);
+	super.dispose();
     }
 }

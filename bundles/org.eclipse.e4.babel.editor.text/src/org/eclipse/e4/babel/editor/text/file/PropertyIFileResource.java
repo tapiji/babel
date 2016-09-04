@@ -174,12 +174,7 @@ workspace.addResourceChangeListener(listener,IResourceChangeEvent.POST_CHANGE);
         return date;
     }
 
-    @Override
-    public void dispose() {
-        if (null != document) {
-            document.set("");
-        }
-    }
+
 
     @Override
     public String getEncoding() {
@@ -218,5 +213,12 @@ workspace.addResourceChangeListener(listener,IResourceChangeEvent.POST_CHANGE);
         return file.getName();
     }
     
-   
+    @Override
+    public void dispose() {
+        if (document != null) {
+            document.set(null);
+        }
+        file = null;
+        document = null;
+    }
 }

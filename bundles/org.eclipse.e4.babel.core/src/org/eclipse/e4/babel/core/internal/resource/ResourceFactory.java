@@ -16,7 +16,6 @@ package org.eclipse.e4.babel.core.internal.resource;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -26,13 +25,14 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.e4.babel.core.api.IResourceFactory;
+import org.eclipse.e4.babel.core.internal.comparator.LocaleComparator;
 import org.eclipse.e4.babel.core.internal.file.AbstractFileCreator;
 import org.eclipse.e4.babel.core.internal.resource.external.ExternalResourceFactory;
 import org.eclipse.e4.babel.core.utils.BabelUtils;
-import org.eclipse.e4.babel.core.utils.UIUtils;
 import org.eclipse.e4.babel.editor.text.file.IPropertyResource;
 import org.eclipse.e4.babel.editor.text.file.PropertyFileType;
 import org.eclipse.e4.babel.editor.text.model.SourceEditor;
+import org.eclipse.e4.babel.logger.Log;
 
 
 /**
@@ -58,13 +58,7 @@ public abstract class ResourceFactory implements IResourceFactory {
     /**
      * A sorted map of {@link SourceEditor}s. Sorted by key (Locale).
      */
-    private Map<Locale, SourceEditor> sourceEditors = new TreeMap<>(new Comparator<Locale>() {
-
-        @Override
-        public int compare(final Locale locale1, final Locale locale2) {
-            return UIUtils.getDisplayName(locale1).compareToIgnoreCase(UIUtils.getDisplayName(locale2));
-        }
-    });
+    private Map<Locale, SourceEditor> sourceEditors = new TreeMap<>(LocaleComparator.create());
 
     /**
      * The {@link AbstractFileCreator} used to create new files.
@@ -116,6 +110,7 @@ public abstract class ResourceFactory implements IResourceFactory {
 
     @Override
     public List<SourceEditor> getSourceEditors() {
+        Log.d(TAG, sourceEditors.toString());
         List<SourceEditor> editors = new ArrayList<>(sourceEditors.values().size());
         sourceEditors.values().stream().forEach(editor -> editors.add(editor));
         return editors;
@@ -128,6 +123,7 @@ public abstract class ResourceFactory implements IResourceFactory {
         }
         SourceEditor editor = createEditor(fileDocument, locale);
         addSourceEditor(editor.getLocale(), editor);
+
         return editor;
     }
 
@@ -164,10 +160,8 @@ public abstract class ResourceFactory implements IResourceFactory {
      * @throws IOException
      */
     public static IResourceFactory createFactory(IPropertyResource fileDocument) throws CoreException, IOException {
-
         if (fileDocument.getFileType().equals(PropertyFileType.IFILE)) {
             IResourceFactory[] factories = ResourceFactoryDescriptor.getContributedResourceFactories();
-
             if (fileDocument.getFileType().equals(PropertyFileType.IFILE)) {
                 for (int i = 0; i < factories.length; i++) {
                     IResourceFactory factory = factories[i];

@@ -101,12 +101,7 @@ public final class PropertyFileResource implements IPropertyResource {
     public PropertyFileType getFileType() {
         return PropertyFileType.FILE;
     }
-
-    @Override
-    public void dispose() {
-        // TODO Auto-generated method stub
-    }
-
+    
     public static IPropertyResource create(final File file, final String content) throws IOException {
         PropertyFileResource newFile = new PropertyFileResource(file);
         if (!file.exists()) {
@@ -150,5 +145,12 @@ public final class PropertyFileResource implements IPropertyResource {
     public String getName() {
         return file.getName();
     }
-
+    @Override
+    public void dispose() {
+        if (document != null) {
+            document.set(null);
+        }
+        file = null;
+        document = null;
+    }
 }
