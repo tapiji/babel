@@ -51,27 +51,26 @@ import org.eclipse.e4.babel.logger.Log;
  * @author Christian Behon
  */
 
-public final class ResourceManagers implements IResourceManager {
+public final class ResourceManager implements IResourceManager {
 
-    private static final String TAG = ResourceManagers.class.getSimpleName();
+    private static final String TAG = ResourceManager.class.getSimpleName();
 
     private IResourceFactory resourcesFactory;
     private BundleGroup bundleGroup;
     private KeyTree keyTree;
     private final Map<Locale, SourceEditor> sourceEditors = new HashMap<>();
     private final List<Locale> locales = new ArrayList<>();
-
     private KeyTreeUpdater treeUpdater;
 
     // todo: Add dispose method and release listeners and content
-    
+
     /**
      * Constructor.
      * 
      * @param site eclipse editor site
      * @param file file used to create manager
      * @throws CoreException problem creating resource manager
-     * @throws IOException 
+     * @throws IOException
      */
     @Override
     public void init(final IPropertyResource fileDocument) throws CoreException, IOException {
@@ -125,12 +124,12 @@ public final class ResourceManagers implements IResourceManager {
         return locales;
     }
 
-    
+
     @Override
     public List<Locale> getSortedLocales() {
         return UIUtils.sortLocales(locales);
     }
-    
+
     /**
      * Gets the key tree for this bundle.
      * 
@@ -172,7 +171,7 @@ public final class ResourceManagers implements IResourceManager {
     public String getDisplayName() {
         return resourcesFactory.getDisplayName();
     }
-    
+
     @Override
     public String getResourceLocation() {
         return resourcesFactory.getResourceLocation();
@@ -200,7 +199,7 @@ public final class ResourceManagers implements IResourceManager {
      */
     @Override
     public IPropertyResource createPropertiesFile(Locale locale) throws CoreException, IOException {
-        return resourcesFactory.getPropertiesFileCreator().createPropertyFile(locale, resourcesFactory.isExternal());   
+        return resourcesFactory.getPropertiesFileCreator().createPropertyFile(locale, resourcesFactory.isExternal());
     }
 
     /**
@@ -258,7 +257,7 @@ public final class ResourceManagers implements IResourceManager {
         final List<KeyTreeItem> items = new ArrayList<>();
         items.add(keyTreeItem);
         items.addAll(keyTreeItem.getNestedChildren());
-        items.forEach((item) ->keyTree.getBundleGroup().removeBundleEntryKey(item.getId()));
+        items.forEach((item) -> keyTree.getBundleGroup().removeBundleEntryKey(item.getId()));
     }
 
     /**

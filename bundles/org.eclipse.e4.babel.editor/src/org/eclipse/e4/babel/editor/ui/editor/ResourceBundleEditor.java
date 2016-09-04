@@ -42,7 +42,9 @@ import org.eclipse.e4.ui.model.application.ui.basic.MWindow;
 import org.eclipse.e4.ui.model.application.ui.menu.MToolBar;
 import org.eclipse.e4.ui.services.EMenuService;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
+import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
+import org.eclipse.e4.ui.workbench.modeling.IPartListener;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.source.SourceViewer;
 import org.eclipse.swt.SWT;
@@ -91,6 +93,7 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
     private KeyTreeView keyTreeView;
     private IResourceManager resourceManager;
     private SourceEditor lastEditor;
+    private static List<ResourceBundleEditor> availaibleResourceBundleEditors = new ArrayList<ResourceBundleEditor>();
     private List<BundleTextEditor> editors = new ArrayList<>();
     private SourceViewer lastSourceViewer;
     private MWindow window;
@@ -100,9 +103,70 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
 	super(parent, SWT.BOTTOM);
     }
 
+    @Inject
+    public void initPartListener(EPartService partService) {
+	partService.addPartListener(new IPartListener() {
+
+	    @Override
+	    public void partVisible(MPart part) {
+		final Object obj = part.getObject();
+		if (obj instanceof ResourceBundleEditor) {
+		    Log.d(TAG, "partVisible " + part);
+		    if (!availaibleResourceBundleEditors.contains(obj)) {
+			availaibleResourceBundleEditors.add((ResourceBundleEditor) obj);
+		    }
+		    Log.d(TAG, "Manager Size: " + availaibleResourceBundleEditors.size());
+		}
+
+	    }
+
+	    @Override
+	    public void partHidden(MPart part) {
+		Object obj = part.getObject();
+		if (obj instanceof ResourceBundleEditor) {
+		    Log.d(TAG, "partHidden " + part);
+		    if (availaibleResourceBundleEditors.contains(obj)) {
+			availaibleResourceBundleEditors.remove(obj);
+		    }
+		    Log.d(TAG, "Manager Size: " + availaibleResourceBundleEditors.size());
+		}
+	    }
+
+	    @Override
+	    public void partDeactivated(MPart part) {
+		final Object obj = part.getObject();
+		if (obj instanceof ResourceBundleEditor) {
+		    Log.d(TAG, "partDeactivated " + part);
+		    if (availaibleResourceBundleEditors.contains(obj)) {
+			availaibleResourceBundleEditors.remove(obj);
+		    }
+		    Log.d(TAG, "Manager Size: " + availaibleResourceBundleEditors.size());
+		}
+	    }
+
+	    @Override
+	    public void partBroughtToTop(MPart part) {
+		Log.d(TAG, "partBroughtToTop " + part);
+	    }
+
+	    @Override
+	    public void partActivated(MPart part) {
+		Object obj = part.getObject();
+		if (obj instanceof ResourceBundleEditor) {
+		    Log.d(TAG, "partActivated " + part);
+		    if (!availaibleResourceBundleEditors.contains(obj)) {
+			availaibleResourceBundleEditors.add((ResourceBundleEditor) obj);
+		    }
+		    Log.d(TAG, "Manager Size: " + availaibleResourceBundleEditors.size());
+		}
+	    }
+	});
+    }
+
     @PostConstruct
     public void onCreate(final Composite parent, final Shell shell, MWindow window, BabelExtensionManager manager) {
 	try {
+
 	    this.window = window;
 	    Log.d(TAG, "Create ResourceBundleEditor");
 	    this.resourceManager = manager.getResourceManager().get();
@@ -137,6 +201,7 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
 		part.setLabel(resourceManager.getDisplayName());
 		part.setTooltip(resourceManager.getResourceLocation());
 		part.setDescription("Editor f\u00FCr ResourceBundle:");
+
 	    } else {
 		throw new ClassCastException("Can not cast object to IFileDocument");
 	    }
@@ -323,10 +388,9 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
 
     @PreDestroy
     public void preDestroy() {
-	MPartStack mainStack = (MPartStack) modelService.find("org.eclipse.e4.babel.editor.partstack.editorPartStack", window);
-	if (mainStack.getChildren().size() <= 0) {
-	    MToolBar trimStack = (MToolBar) modelService.find("org.eclipse.e4.babel.editor.toolbar.main", window);
-	    trimStack.setToBeRendered(false);
+	Log.d(TAG, "AVAILABLE RESOURCE BUNDLES: " + availaibleResourceBundleEditors.size());
+	if (availaibleResourceBundleEditors.size() <= 0) {
+	    ((MToolBar) modelService.find("org.eclipse.e4.babel.editor.toolbar.main", window)).setToBeRendered(false);
 	}
     }
 

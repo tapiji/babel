@@ -13,7 +13,7 @@
    <extension
          point="org.eclipse.e4.babel.core.api.resourceManager">
       <resource_manager
-            class="org.eclipse.e4.babel.core.internal.resource.ResourceManagers"
+            class="org.eclipse.e4.babel.core.internal.resource.ResourceManager"
             order="1">
       </resource_manager>
    </extension>
