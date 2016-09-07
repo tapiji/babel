@@ -4,6 +4,14 @@
 /*/local.properties
 /*/.settings/
 /*/target/
-
+target
 # binaries for PDE editor extension
 org.eclipse.babel.core.pdeutils/org.eclipse.babel.core.pdeutils.jar
+
+# PMD
+.pmd
+
+target/
+*~
+.class
+.metadata
