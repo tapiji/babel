@@ -1,17 +1,7 @@
 package org.eclipse.e4.babel.editor.text.test;
 
 
-import static org.junit.Assert.assertEquals;
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.e4.babel.editor.text.BundleTextEditor;
-import org.eclipse.jface.text.IDocument;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipselabs.e4.tapiji.logger.Log;
-import org.eclipselabs.e4.tapiji.utils.FileUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
 

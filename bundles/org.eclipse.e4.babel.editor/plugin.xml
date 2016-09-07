@@ -12,9 +12,6 @@
          id="org.eclipse.e4.babel.editor.toolbar"
          name="Toolbar Core Expression"
          point="org.eclipse.core.expressions.definitions">
-      <definition
-            id="org.eclipse.e4.babel.editor.toolbar.tree.visibility">
-      </definition>
    </extension>
 
 </plugin>
