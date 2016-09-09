@@ -24,16 +24,15 @@ import org.eclipse.swt.widgets.Shell;
 public class OpenResourceBundleHandler {
 
     private static final String TAG = OpenResourceBundleHandler.class.getSimpleName();
-    
+
     private static final String PART_STACK_ID = "org.eclipse.e4.babel.editor.partstack.editorPartStack";
     private static final String PART_ID = "org.eclipse.e4.babel.editor.partdescriptor.resourceBundleEditor";
-    
+
     public static String KEY_FILE_DOCUMENT = OpenResourceBundleHandler.class.getSimpleName() + "_KEY_FILE_DOCUMENT";
 
     @Execute
     public void execute(final MApplication application, final IWorkbench workbench, @Named(IServiceConstants.ACTIVE_SHELL) final Shell shell, final EPartService partService,
 	    final EModelService modelService, IEclipseContext eclipseContext) {
-
 	final String[] fileNames = BabelUtils.queryFileName(shell, "Open Resource-Bundle", SWT.OPEN, BabelUtils.PROPERTY_FILE_ENDINGS);
 	if (fileNames != null) {
 	    final String fileName = fileNames[0];
@@ -41,95 +40,19 @@ public class OpenResourceBundleHandler {
 		MessageDialog.openError(shell, String.format("Cannot open Resource-Bundle %s", fileName), "The choosen file does not represent a Resource-Bundle!");
 		return;
 	    }
-	    
-	    /*File file = new File(fileName);
-	    IFileDocument document = FileResource.create(file);
-	
-	    */
-	    
-	    
-	    
 
-	   //  try {
-		//final IFile filei = FileUtils.getResourceBundleRef(fileName, FileUtils.EXTERNAL_RB_PROJECT_NAME);
-		// System.out.println(filei);
-		 
-		  /*   if(filei.isLinked()) {
-			 URI uri = filei.getRawLocationURI();
-			    File javaFile = EFS.getStore(uri).toLocalFile(0, new NullProgressMonitor());
-			    
-			    
-			   
-			    
-			    System.out.println(javaFile);
-			    
-			    
-
-		     }*/
-			    MPart part = partService.createPart(PART_ID);
-			    
-			   // part.getTransientData().put(KEY_FILE_DOCUMENT, IFileResource.create(filei));
-			    
-			    try {
-				part.getTransientData().put(KEY_FILE_DOCUMENT, PropertyFileResource.create(new File(fileName)));
-			    } catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			    }
-			    MPartStack mainStack = (MPartStack) modelService.find(PART_STACK_ID, application);
-			    mainStack.getChildren().add(part);
-			    partService.showPart(part, PartState.ACTIVATE);
-			   
-	   //  } catch (CoreException e) {
-			// TODO Auto-generated catch block
-		//	e.printStackTrace();
-	//	    }
-/*
+	    // part.getTransientData().put(KEY_FILE_DOCUMENT,
+	    // IFileResource.create(filei));
+	    MPart part = partService.createPart(PART_ID);
+	    try {
+		part.getTransientData().put(KEY_FILE_DOCUMENT, PropertyFileResource.create(new File(fileName)));
+	    } catch (IOException e) {
+		e.printStackTrace();
+	    }
 	    MPartStack mainStack = (MPartStack) modelService.find(PART_STACK_ID, application);
+	    mainStack.getChildren().add(part);
+	    partService.showPart(part, PartState.ACTIVATE);
 
-	    partService.addPartListener(new IPartListener() {
-
-		@Override
-		public void partVisible(MPart part) {
-		    Log.d(TAG, "PART" + part);
-		}
-
-		@Override
-		public void partHidden(MPart part) {
-		    Log.d(TAG, "PART" + part);
-		}
-
-		@Override
-		public void partDeactivated(MPart part) {
-		    Log.d(TAG, "PART" + part);
-
-		}
-
-		@Override
-		public void partBroughtToTop(MPart part) {
-		    Log.d(TAG, "PART" + part);
-
-		}
-
-		@Override
-		public void partActivated(MPart part) {
-		    Log.d(TAG, "PART" + part);
-
-		}
-	    });*/
-
-
-	/*	    } catch (CoreException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		    }
-	    
-		    } catch (CoreException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		    }*/
-	    
-
-	     }
+	}
     }
 }

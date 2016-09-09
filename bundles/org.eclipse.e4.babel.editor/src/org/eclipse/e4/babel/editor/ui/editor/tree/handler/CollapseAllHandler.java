@@ -4,7 +4,7 @@ import org.eclipse.e4.babel.editor.ui.editor.ResourceBundleEditorContract;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 
-public final class CollapseAllHandler {
+public final class CollapseAllHandler {// NO_UCD
 
     @Execute
     public void execute(final MPart part) {

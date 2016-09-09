@@ -53,11 +53,11 @@ public final class I18nPageEntryView extends Composite implements KeyListener, T
     private Label expandIcon;
     private StyledText textWidget;
     private Composite toolbar;
-    private Presenter presenter;
     private Button goToButton;
     private Button duplicateButton;
     private Button similarButton;
     private String textBeforeUpdate;
+    /* default */ Presenter presenter;
 
     private I18nPageEntryView(final Composite parent, final int style) {
 	super(parent, style);

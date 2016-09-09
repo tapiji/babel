@@ -12,9 +12,7 @@ import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
 
-
-public final class NewKeyHandler {
-
+public final class NewKeyHandler {// NO_UCD
     @Execute
     public void execute(@Named(IServiceConstants.ACTIVE_SELECTION) KeyTreeItem item, @Named(IServiceConstants.ACTIVE_SHELL) final Shell shell, MPart part) {
 	if (part.getObject() instanceof ResourceBundleEditorContract.View) {

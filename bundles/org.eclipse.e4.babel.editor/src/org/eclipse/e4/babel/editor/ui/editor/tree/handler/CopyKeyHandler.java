@@ -10,7 +10,7 @@ import org.eclipse.e4.babel.editor.model.tree.KeyTreeItem;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.ui.services.IServiceConstants;
 
-public class CopyKeyHandler {
+public class CopyKeyHandler {// NO_UCD
     @Execute
     public void execute(@Named(IServiceConstants.ACTIVE_SELECTION) KeyTreeItem item) {
 	if (item != null) {
