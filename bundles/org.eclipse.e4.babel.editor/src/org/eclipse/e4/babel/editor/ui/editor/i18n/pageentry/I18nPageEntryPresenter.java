@@ -1,5 +1,6 @@
 package org.eclipse.e4.babel.editor.ui.editor.i18n.pageentry;
 
+import java.awt.ComponentOrientation;
 import java.util.Collection;
 import java.util.Locale;
 
@@ -18,6 +19,7 @@ import org.eclipse.e4.babel.editor.ui.editor.i18n.pageentry.I18nPageEntryContrac
 import org.eclipse.e4.babel.resource.IBabelResourceProvider;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 
 final class I18nPageEntryPresenter implements I18nPageEntryContract.Presenter {
@@ -175,6 +177,22 @@ final class I18nPageEntryPresenter implements I18nPageEntryContract.Presenter {
     @Override
     public Collection<BundleEntry> getSimilars() {
 	return similarVisitor.getSimilars();
+    }
+
+    /**
+     * Gets the orientation suited for a given locale.
+     * 
+     * @return <code>SWT.RIGHT_TO_LEFT</code> or <code>SWT.LEFT_TO_RIGHT</code>
+     */
+    @Override
+    public int getOrientation() {
+	if (locale != null) {
+	    ComponentOrientation orientation = ComponentOrientation.getOrientation(locale);
+	    if (orientation == ComponentOrientation.RIGHT_TO_LEFT) {
+		return SWT.RIGHT_TO_LEFT;
+	    }
+	}
+	return SWT.LEFT_TO_RIGHT;
     }
 
     @Override

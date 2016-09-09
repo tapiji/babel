@@ -72,5 +72,7 @@ public interface I18nPageEntryContract {
 	I18nPageContract.View getI18nPageView();
 
 	boolean isEditorDirty();
+
+	int getOrientation();
     }
 }
