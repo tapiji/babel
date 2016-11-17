@@ -62,7 +62,7 @@ public final class ExternalResourceFactory extends ResourceFactory {
         if (parentDir != null) {
             resources = Stream.of(parentDir.listFiles()).filter(item -> {
                 System.out.println("Item: " + item.getName());
-                return (item instanceof File);
+                return (item instanceof File) && BabelUtils.isResourceBundle(item.getName());
             }).collect(Collectors.toCollection(ArrayList::new));
 
         }
