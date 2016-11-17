@@ -35,6 +35,7 @@ public final class BabelResourceConstants {
     
     public static final String IMG_SIMILAR = "icons/16x16/similar.gif";
     public static final String IMG_DUPLICATE = "icons/16x16/duplicate.png";
+	public static final String IMG_GO_TO = "icons/16x16/go_to.png";
 
 
 

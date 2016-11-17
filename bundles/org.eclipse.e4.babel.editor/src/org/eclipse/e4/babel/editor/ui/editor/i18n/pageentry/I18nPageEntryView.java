@@ -173,17 +173,12 @@ public final class I18nPageEntryView extends Composite implements KeyListener, T
 	GridData gridData = new GridData();
 	gridData.horizontalAlignment = GridData.END;
 
-	this.goToButton = new Button(toolBar, SWT.ARROW | SWT.RIGHT);
+	this.goToButton = new Button(toolBar, SWT.FLAT);
 	this.goToButton.setText("");
 	this.goToButton.setToolTipText("Go to corresponding property file.");
 	this.goToButton.setLayoutData(gridData);
-	this.goToButton.addSelectionListener(new SelectionAdapter() {
-
-	    @Override
-	    public void widgetSelected(SelectionEvent e) {
-		presenter.goToTab();
-	    }
-	});
+	this.goToButton.setImage(presenter.loadImage(BabelResourceConstants.IMG_GO_TO));
+	this.goToButton.addListener(SWT.Selection, e -> {presenter.goToTab();});
     }
 
     private void localeNameLabel(Composite toolBar) {
@@ -371,9 +366,9 @@ public final class I18nPageEntryView extends Composite implements KeyListener, T
 	    this.textWidget.setEnabled(!presenter.getResourceManager().getSourceEditor(presenter.getLocale()).isReadOnly());
 	    this.textWidget.setEditable(true);
 	    this.textWidget.setBackground(getDisplay().getSystemColor(SWT.COLOR_WHITE));
-	    this.goToButton.setEnabled(true);
+	    this.goToButton.setVisible(true);
 	} else {
-	    this.goToButton.setEnabled(false);
+	    this.goToButton.setVisible(false);
 	    this.duplicateButton.setVisible(false);
 	    this.similarButton.setVisible(false);
 	    this.textWidget.setEnabled(false);
