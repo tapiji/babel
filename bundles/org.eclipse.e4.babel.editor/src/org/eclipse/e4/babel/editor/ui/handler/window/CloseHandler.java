@@ -31,6 +31,7 @@ public class CloseHandler {
 		isVisible = true;
 	    }
 	}
+
 	return isVisible;
     }
 }
