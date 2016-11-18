@@ -15,8 +15,6 @@
     <elements xsi:type="commands:Command" xmi:id="_mhMOcAV5EeWlfcvoOaUVLQ" elementId="org.eclipse.e4.babel.editor.command.openResourceBundle" commandName="%command.open.resource.bundle"/>
     <elements xsi:type="commands:Command" xmi:id="_R20RAB9rEeWJHOpdl6IN-g" elementId="org.eclipse.e4.babel.editor.command.showPreferences" commandName="Show Preferences" description="%command.show.preferences"/>
     <elements xsi:type="commands:Command" xmi:id="_7vL9UHHaEeaDT9JgWnMcCg" elementId="org.eclipse.e4.babel.editor.command.copykey" commandName="%command.copy.key"/>
-    <elements xsi:type="commands:Command" xmi:id="_04ywAKzwEeaaHbY2TSQl7A" elementId="org.eclipse.e4.babel.editor.command.close" commandName="Close"/>
-    <elements xsi:type="commands:Command" xmi:id="_2uWjcKzwEeaaHbY2TSQl7A" elementId="org.eclipse.e4.babel.editor.command.closeall" commandName="Close All"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_qw8X4AFREeWM9o-YRkDifQ" featurename="handlers" parentElementId="org.eclipselabs.e4.tapiji.translator.application">
     <elements xsi:type="commands:Handler" xmi:id="_DAGqkAFSEeWM9o-YRkDifQ" elementId="org.eclipse.e4.babel.editor.handler.keyTreeVisibility" contributionURI="bundleclass://org.eclipse.e4.babel.editor/org.eclipse.e4.babel.editor.ui.handler.toolbar.KeyTreeVisibleHandler" command="_0KndAAFREeWM9o-YRkDifQ"/>
@@ -27,8 +25,6 @@
     <elements xsi:type="commands:Handler" xmi:id="_WlR6YAFSEeWM9o-YRkDifQ" elementId="org.eclipse.e4.babel.editor.handler.newLocale" contributionURI="bundleclass://org.eclipse.e4.babel.editor/org.eclipse.e4.babel.editor.ui.handler.toolbar.NewLocaleHandler" command="_A1vEwAFSEeWM9o-YRkDifQ"/>
     <elements xsi:type="commands:Handler" xmi:id="_qjci8AV5EeWlfcvoOaUVLQ" elementId="org.eclipse.e4.babel.editor.handler.openResourceBundle" contributionURI="bundleclass://org.eclipse.e4.babel.editor/org.eclipse.e4.babel.editor.ui.handler.window.OpenResourceBundleHandler" command="_mhMOcAV5EeWlfcvoOaUVLQ"/>
     <elements xsi:type="commands:Handler" xmi:id="_XHgHgB9rEeWJHOpdl6IN-g" elementId="org.eclipse.e4.babel.editor.handler.showPreferences" contributionURI="bundleclass://org.eclipse.e4.babel.editor/org.eclipse.e4.babel.editor.ui.handler.window.ShowPreferenceHandler" command="_R20RAB9rEeWJHOpdl6IN-g"/>
-    <elements xsi:type="commands:Handler" xmi:id="_5flU8KzwEeaaHbY2TSQl7A" elementId="org.eclipse.e4.babel.editor.handler.close" contributionURI="bundleclass://org.eclipse.e4.babel.editor/org.eclipse.e4.babel.editor.ui.handler.window.CloseHandler" command="_04ywAKzwEeaaHbY2TSQl7A"/>
-    <elements xsi:type="commands:Handler" xmi:id="_9mQ2cKzwEeaaHbY2TSQl7A" elementId="org.eclipse.e4.babel.editor.handler.0" contributionURI="bundleclass://org.eclipse.e4.babel.editor/org.eclipse.e4.babel.editor.ui.handler.window.CloseAllHandler" command="_2uWjcKzwEeaaHbY2TSQl7A"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_sebNYAFREeWM9o-YRkDifQ" featurename="trimContributions" parentElementId="org.eclipselabs.e4.tapiji.translator.application" positionInList="">
     <elements xsi:type="menu:TrimContribution" xmi:id="_YEUpAAIHEeWtdqVY5JMCaQ" elementId="org.eclipse.e4.babel.editor.trimcontribution.toolbar" parentId="org.eclipselabs.e4.tapiji.translator.trimbar.main" positionInParent="org.eclipselabs.e4.tapiji.translator.handledmenuitem.openGlosssary">
@@ -49,8 +45,6 @@
     <elements xsi:type="menu:MenuContribution" xmi:id="_vRqwIAV6EeWlfcvoOaUVLQ" elementId="org.eclipse.e4.babel.editor.menucontribution.openResourceBundle" positionInParent="after=org.eclipselabs.e4.tapiji.translator.handledmenuitem.openGlosssary" parentId="org.eclipselabs.e4.tapiji.translator.menu.file">
       <children xsi:type="menu:HandledMenuItem" xmi:id="_tjOb4AV7EeWlfcvoOaUVLQ" elementId="org.eclipse.e4.babel.editor.handledmenuitem.openResourceBundle" label="%handledmenuitem.open.resource.bundle" iconURI="platform:/plugin/org.eclipse.e4.babel.resource/icons/16x16/open_resource_bundle.png" tooltip="%handledmenuitem.tooltip.open.resource.bundle" command="_mhMOcAV5EeWlfcvoOaUVLQ"/>
       <children xsi:type="menu:MenuSeparator" xmi:id="_cWd0QKzxEeaaHbY2TSQl7A"/>
-      <children xsi:type="menu:HandledMenuItem" xmi:id="_CJPSYKzxEeaaHbY2TSQl7A" elementId="org.eclipse.e4.babel.editor.handledmenuitem.close" label="Close" command="_04ywAKzwEeaaHbY2TSQl7A"/>
-      <children xsi:type="menu:HandledMenuItem" xmi:id="_FWn0YKzxEeaaHbY2TSQl7A" elementId="org.eclipse.e4.babel.editor.handledmenuitem.closeall" command="_2uWjcKzwEeaaHbY2TSQl7A"/>
     </elements>
     <elements xsi:type="menu:MenuContribution" xmi:id="_EXlEsB9rEeWJHOpdl6IN-g" elementId="org.eclipse.e4.babel.editor.menucontribution.0" parentId="org.eclipselabs.e4.tapiji.translator.menu.window">
       <children xsi:type="menu:HandledMenuItem" xmi:id="_JenP8B9rEeWJHOpdl6IN-g" elementId="org.eclipse.e4.babel.editor.handledmenuitem.preferences" label="%handledmenuitem.preferences" iconURI="" tooltip="%handledmenuitem.preferences" command="_R20RAB9rEeWJHOpdl6IN-g"/>
