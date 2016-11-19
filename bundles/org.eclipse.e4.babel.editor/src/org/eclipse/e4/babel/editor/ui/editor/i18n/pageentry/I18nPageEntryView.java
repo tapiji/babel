@@ -28,8 +28,6 @@ import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.TraverseEvent;
 import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.graphics.Color;
@@ -94,7 +92,9 @@ public final class I18nPageEntryView extends Composite implements KeyListener, T
     }
 
     private void textViewer() {
-	textView = new TextViewer(this, SWT.MULTI | SWT.WRAP | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
+	final int verticalScroll = PropertyPreferences.getInstance().isAdjustTextView() ? 0 : SWT.V_SCROLL;
+
+	textView = new TextViewer(this, SWT.MULTI | SWT.WRAP | SWT.H_SCROLL | verticalScroll | SWT.BORDER);
 	textView.setDocument(new Document());
 	textView.setUndoManager(undoManager);
 	textView.activatePlugins();
@@ -178,7 +178,9 @@ public final class I18nPageEntryView extends Composite implements KeyListener, T
 	this.goToButton.setToolTipText("Go to corresponding property file.");
 	this.goToButton.setLayoutData(gridData);
 	this.goToButton.setImage(presenter.loadImage(BabelResourceConstants.IMG_GO_TO));
-	this.goToButton.addListener(SWT.Selection, e -> {presenter.goToTab();});
+	this.goToButton.addListener(SWT.Selection, e -> {
+	    presenter.goToTab();
+	});
     }
 
     private void localeNameLabel(Composite toolBar) {
@@ -335,6 +337,7 @@ public final class I18nPageEntryView extends Composite implements KeyListener, T
     public void updateEditorHeight() {
 	((GridData) this.textWidget.getLayoutData()).minimumHeight = PropertyPreferences.getInstance().getI18nEditorHeight();
 	layout(true, true);
+
     }
 
     @Override
@@ -398,6 +401,9 @@ public final class I18nPageEntryView extends Composite implements KeyListener, T
 
     @Override
     public void textChanged(TextEvent event) {
+	if (PropertyPreferences.getInstance().isAdjustTextView()) {
+	    presenter.getI18nPageView().refreshLayout();
+	}
     }
 
     @Override

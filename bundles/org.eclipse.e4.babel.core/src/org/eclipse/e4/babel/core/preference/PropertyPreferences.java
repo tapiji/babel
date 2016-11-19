@@ -12,9 +12,7 @@ public final class PropertyPreferences {
     private static final Preferences PREFERENCES = InstanceScope.INSTANCE.getNode(NODE_PATH);
 
     public enum NewLineType {
-        UNIX(0),
-        WIN(1),
-        MAC(2);
+        UNIX(0), WIN(1), MAC(2);
 
         private final int id;
 
@@ -46,6 +44,7 @@ public final class PropertyPreferences {
     private static final String SUPPORT_FRAGMENTS = "CORE_GENERAL/SUPPORT_FRAGMENTS";
     private static final String LOAD_ONLY_FRAGMENT_RESOURCES = "CORE_GENERAL/LOAD_ONLY_FRAGMENT_RESOURCES";
     private static final String CONVERT_ENCODED_TO_UNICODE = "CORE_GENERAL/CONVERT_ENCODED_TO_UNICODE";
+    private static final String IS_AUTO_ADJUST_TEXT_VIEW = "CORE_GENERAL/AUTO_ADJUST_TEXT_VIEW";
 
     // Format
     private static final String IS_GENERATED_BY_ENABLED = "CORE_FORMAT/IS_GENERATED_BY_ENABLED";
@@ -331,6 +330,14 @@ public final class PropertyPreferences {
         PREFERENCES.putBoolean(EDITOR_TREE_HIERARCHICAL, isEditorTreeHierachical);
     }
 
+    public boolean isAdjustTextView() {
+        return PREFERENCES.getBoolean(IS_AUTO_ADJUST_TEXT_VIEW, true);
+    }
+
+    public void isAdjustTextView(final boolean isAutoAdjustTextView) {
+        PREFERENCES.putBoolean(IS_AUTO_ADJUST_TEXT_VIEW, isAutoAdjustTextView);
+    }
+
     public void resetGeneralProperties() {
         PREFERENCES.putBoolean(CONVERT_ENCODED_TO_UNICODE, true);
         PREFERENCES.putBoolean(LOAD_ONLY_FRAGMENT_RESOURCES, false);
@@ -342,6 +349,7 @@ public final class PropertyPreferences {
         PREFERENCES.putBoolean(EDITOR_TREE_HIDDEN, false);
         PREFERENCES.putBoolean(EDITOR_TREE_HIERARCHICAL, true);
         PREFERENCES.putBoolean(SUPPORT_NL, false);
+        PREFERENCES.putBoolean(IS_AUTO_ADJUST_TEXT_VIEW, true);
     }
 
     //=========================================================
@@ -395,7 +403,7 @@ public final class PropertyPreferences {
     public void isReportSimliarValuesLevensthein(final boolean isSimliarValuesLevensthein) {
         PREFERENCES.putBoolean(REPORT_SIMILAR_VALUES_LEVENSTHEIN, isSimliarValuesLevensthein);
     }
-    
+
     public void resetPerformanceProperties() {
         PREFERENCES.putBoolean(REPORT_SIMILAR_VALUES, false);
         PREFERENCES.putBoolean(REPORT_MISSING_VALUES, true);
@@ -415,7 +423,7 @@ public final class PropertyPreferences {
         }
         return isNodeDeleted;
     }
-    
+
     public void flush() {
         try {
             PREFERENCES.flush();
