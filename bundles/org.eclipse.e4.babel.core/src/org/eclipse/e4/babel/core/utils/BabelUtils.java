@@ -119,7 +119,7 @@ public final class BabelUtils {
     public static String[] queryFileName(final Shell shell, final String title, final int dialogOptions, final String[] endings) {
         final FileDialog dialog = new FileDialog(shell, dialogOptions);
         dialog.setText(title);
-        dialog.setFilterExtensions(endings);
+       // dialog.setFilterExtensions(endings);
 
         final String filepath = dialog.open();
 
@@ -128,20 +128,20 @@ public final class BabelUtils {
             return new String[] {filepath};
         } else {
             // [RAP] In RAP1.5 getFilterPath is always empty!!!
-            final String path = dialog.getFilterPath();
+          //  final String path = dialog.getFilterPath();
             // [RAP] In RAP1.5 getFileNames returns full filename (+ path)!!!
             final String[] filenames = dialog.getFileNames();
 
             // append filenames to path
-            if (!path.isEmpty()) {
-                for (int i = 0; i < filenames.length; i++) {
-                    filenames[i] = path + File.separator + filenames[i];
-                }
+           // if (!path.isEmpty()) {
+           //     for (int i = 0; i < filenames.length; i++) {
+             //       filenames[i] = path + File.separator + filenames[i];
+            //    }
 
-            }
-            if (filenames.length > 0) {
-                return filenames;
-            }
+            //}
+            //if (filenames.length > 0) {
+           //     return filenames;
+           // }
             return null;
         }
     }
