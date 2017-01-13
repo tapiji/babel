@@ -18,6 +18,7 @@ import org.eclipse.e4.babel.editor.text.file.PropertyFileResource;
 import org.eclipse.e4.babel.editor.text.model.SourceEditor;
 
 
+
 public final class ExternalResourceFactory extends ResourceFactory {
 
     private ExternalFileCreator fileCreator;

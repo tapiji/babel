@@ -42,6 +42,7 @@ import org.eclipse.e4.babel.editor.text.model.SourceEditor;
 import org.eclipse.e4.babel.logger.Log;
 
 
+
 /**
  * Mediator holding instances of commonly used items, dealing with
  * important interactions within themselves.

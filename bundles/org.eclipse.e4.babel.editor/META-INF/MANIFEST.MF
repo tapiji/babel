@@ -59,3 +59,4 @@ Import-Package: org.eclipse.core.commands,
  org.eclipse.ui.views.contentoutline,
  org.osgi.service.event;version="1.3.0"
 Bundle-Vendor: INSO
+Export-Package: org.eclipse.e4.babel.editor.ui.handler.window

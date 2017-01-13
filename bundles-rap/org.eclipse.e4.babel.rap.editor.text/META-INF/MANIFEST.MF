@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Text
+Bundle-SymbolicName: org.eclipse.e4.babel.rap.editor.text
+Bundle-Version: 1.0.0.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Import-Package: org.eclipse.core.resources,
+ org.eclipse.e4.ui.model.application.ui,
+ org.eclipse.jface.text,
+ org.eclipse.jface.text.source,
+ org.eclipse.swt.custom,
+ org.eclipse.swt.widgets
+Export-Package: org.eclipse.e4.babel.editor.text,
+ org.eclipse.e4.babel.editor.text.file,
+ org.eclipse.e4.babel.editor.text.model

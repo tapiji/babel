@@ -29,6 +29,7 @@ import org.eclipse.e4.babel.editor.text.file.PropertyIFileResource;
 import org.eclipse.e4.babel.editor.text.model.SourceEditor;
 
 
+
 /**
  * Responsible for creating resources related to a standard
  * directory structure.

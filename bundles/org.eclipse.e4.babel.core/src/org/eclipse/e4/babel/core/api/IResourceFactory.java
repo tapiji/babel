@@ -11,6 +11,7 @@ import org.eclipse.e4.babel.editor.text.file.IPropertyResource;
 import org.eclipse.e4.babel.editor.text.model.SourceEditor;
 
 
+
 public interface IResourceFactory {
 
     /**

@@ -21,7 +21,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Shell;
 
-public class OpenResourceBundleHandler {
+public abstract class OpenResourceBundleHandler {
 
     private static final String TAG = OpenResourceBundleHandler.class.getSimpleName();
     
@@ -34,7 +34,10 @@ public class OpenResourceBundleHandler {
     public void execute(final MApplication application, final IWorkbench workbench, @Named(IServiceConstants.ACTIVE_SHELL) final Shell shell, final EPartService partService,
 	    final EModelService modelService, IEclipseContext eclipseContext) {
 
-	final String[] fileNames = BabelUtils.queryFileName(shell, "Open Resource-Bundle", SWT.OPEN, BabelUtils.PROPERTY_FILE_ENDINGS);
+	 System.out.println("dsdsdadadadasdadadadaada dasd sa saasd");
+	
+	
+	final String[] fileNames = recentlyOpenedFiles(shell);//BabelUtils.queryFileName(shell, "Open Resource-Bundle", SWT.OPEN, BabelUtils.PROPERTY_FILE_ENDINGS);
 	if (fileNames != null) {
 	    final String fileName = fileNames[0];
 	    if (!BabelUtils.isResourceBundle(fileName)) {
@@ -61,7 +64,7 @@ public class OpenResourceBundleHandler {
 			    
 			   
 			    
-			    System.out.println(javaFile);
+			   
 			    
 			    
 
@@ -132,4 +135,5 @@ public class OpenResourceBundleHandler {
 
 	     }
     }
+    protected abstract String[] recentlyOpenedFiles(Shell shell);
 }
