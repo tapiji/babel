@@ -214,6 +214,9 @@ public final class ResourceManager implements IResourceManager {
         return sourceEditors.get(locale);
     }
 
+    /**
+     * Todo
+     */
     @Override
     public SourceEditor addSourceEditor(IPropertyResource fileDocument, Locale locale) {
         SourceEditor sourceEditor = resourcesFactory.addResource(fileDocument, locale);

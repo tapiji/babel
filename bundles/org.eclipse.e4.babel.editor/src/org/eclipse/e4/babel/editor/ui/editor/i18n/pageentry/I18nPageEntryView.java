@@ -47,9 +47,8 @@ public final class I18nPageEntryView extends Composite implements KeyListener, T
     private TextViewerUndoManager undoManager = new TextViewerUndoManager(UNDO_LEVEL);
     private Collection<FocusListener> focusListeners = new LinkedList<FocusListener>();
     private TextViewer textView;
-
     private Label expandIcon;
-   // private StyledText textWidget;
+    StyledText textWidget;
     private Composite toolbar;
     private Presenter presenter;
     private Button goToButton;
@@ -100,11 +99,11 @@ public final class I18nPageEntryView extends Composite implements KeyListener, T
 	textView.activatePlugins();
 	textView.addTextListener(this);
 
-	//textWidget = textView.getTextWidget();
-	//final GridData textViewStyleData = new GridData(SWT.FILL, SWT.BEGINNING, true, true, 0, 0);
-	//textViewStyleData.minimumHeight = PropertyPreferences.getInstance().getI18nEditorHeight();
-	//textWidget.setLayoutData(textViewStyleData);
-	/*textWidget.addFocusListener(new FocusListener() {
+	textWidget = textView.getTextWidget();
+	 final GridData textViewStyleData = new GridData(SWT.FILL, SWT.BEGINNING, true, true, 0, 0);
+	 textViewStyleData.minimumHeight = PropertyPreferences.getInstance().getI18nEditorHeight();
+	 textWidget.setLayoutData(textViewStyleData);
+	textWidget.addFocusListener(new FocusListener() {
 	    @Override
 	    public void focusGained(FocusEvent event) {
 		textBeforeUpdate = textWidget.getText();
@@ -117,7 +116,7 @@ public final class I18nPageEntryView extends Composite implements KeyListener, T
 	});
 	textWidget.addTraverseListener(this);
 	textWidget.addKeyListener(this);
-	textWidget.addFocusListener(this);*/
+	textWidget.addFocusListener(this);
 
     }
 
@@ -235,7 +234,7 @@ public final class I18nPageEntryView extends Composite implements KeyListener, T
 	} else if (isKeyCombination(event, SWT.CTRL, 'a')) {
 	    textView.setSelectedRange(0, textView.getDocument().getLength());
 	} else {
-	    markEditorAsDirty((StyledText) event.widget);
+	   // markEditorAsDirty((StyledText) event.widget);
 	}
     }
 
@@ -279,14 +278,14 @@ public final class I18nPageEntryView extends Composite implements KeyListener, T
     }
 
     private void expandTextView(final boolean expand) {
-	//GridData data = (GridData) textWidget.getLayoutData();
+	GridData data = (GridData) textWidget.getLayoutData();
 	if (expand) {
-	  //  data.exclude = expand;
-	   // textWidget.setVisible(!expand);
+	    data.exclude = expand;
+	    textWidget.setVisible(!expand);
 	    expandIcon.setImage(presenter.loadImage(BabelResourceConstants.IMG_EXPAND));
 	} else {
-	//    data.exclude = expand;
-	//    textWidget.setVisible(!expand);
+	    data.exclude = expand;
+	    textWidget.setVisible(!expand);
 	    expandIcon.setImage(presenter.loadImage(BabelResourceConstants.IMG_COLLAPSE));
 	}
 	presenter.getI18nPageView().refreshLayout();
@@ -335,7 +334,7 @@ public final class I18nPageEntryView extends Composite implements KeyListener, T
 
     @Override
     public void updateEditorHeight() {
-	//((GridData) this.textWidget.getLayoutData()).minimumHeight = PropertyPreferences.getInstance().getI18nEditorHeight();
+	((GridData) this.textWidget.getLayoutData()).minimumHeight = PropertyPreferences.getInstance().getI18nEditorHeight();
 	layout(true, true);
 
     }
@@ -366,18 +365,18 @@ public final class I18nPageEntryView extends Composite implements KeyListener, T
     @Override
     public void updateTextView(IDocument document, boolean enabled) {
 	if (enabled) {
-	  /*  this.textWidget.setEnabled(!presenter.getResourceManager().getSourceEditor(presenter.getLocale()).isReadOnly());
+	    this.textWidget.setEnabled(!presenter.getResourceManager().getSourceEditor(presenter.getLocale()).isReadOnly());
 	    this.textWidget.setEditable(true);
-	    this.textWidget.setBackground(getDisplay().getSystemColor(SWT.COLOR_WHITE));*/
+	    this.textWidget.setBackground(getDisplay().getSystemColor(SWT.COLOR_WHITE));
 	    this.goToButton.setVisible(true);
 	} else {
 	    this.goToButton.setVisible(false);
 	    this.duplicateButton.setVisible(false);
 	    this.similarButton.setVisible(false);
-	    //this.textWidget.setEnabled(false);
-	    //this.textWidget.setEditable(false);
+	    this.textWidget.setEnabled(false);
+	    this.textWidget.setEditable(false);
 	    this.textView.setEditable(false);
-	    //this.textWidget.setBackground(new Color(getDisplay(), 245, 245, 245));
+	    this.textWidget.setBackground(new Color(getDisplay(), 245, 245, 245));
 	}
 	this.textView.setDocument(document);
     }
@@ -408,7 +407,7 @@ public final class I18nPageEntryView extends Composite implements KeyListener, T
 
     @Override
     public void focusTextBox() {
-	//textWidget.setFocus();
+	textWidget.setFocus();
 	textView.setSelectedRange(0, textView.getDocument().getLength());
     }
 

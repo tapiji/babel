@@ -211,6 +211,12 @@ public abstract class ResourceFactory implements IResourceFactory {
         return null;
     }
 
+    /**
+     * Create a new source editor
+     * @param fileDocument
+     * @param locale
+     * @return {@link SourceEditor}
+     */
     protected SourceEditor createEditor(IPropertyResource fileDocument, Locale locale) {
         return SourceEditor.create(fileDocument, locale);
     }
