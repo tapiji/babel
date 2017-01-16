@@ -264,7 +264,7 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
     }
 
     // TODO RAP and RCP
-   /* private class ResourceChangeListener implements IResourceChangeListener {
+ /*   private class ResourceChangeListener implements IResourceChangeListener {
 	@Override
 	public void resourceChanged(IResourceChangeEvent event) {
 	    resourceManager.reloadProperties();

@@ -1,7 +1,5 @@
 package org.eclipse.e4.babel.editor.text;
 
-import java.awt.TextArea;
-
 import org.eclipse.e4.babel.editor.text.file.IPropertyResource;
 import org.eclipse.e4.ui.model.application.ui.MDirtyable;
 import org.eclipse.jface.text.source.SourceViewer;
@@ -20,8 +18,6 @@ public final class BundleTextEditor extends Composite {
 		 this.sourceViewerDocument = sourceViewerDocument;
 		sourceViewer = new SourceViewer(this, 0);
 		sourceViewer.setDocument(sourceViewerDocument.getDocument());
-		
-	
 	}
 
 	@Override

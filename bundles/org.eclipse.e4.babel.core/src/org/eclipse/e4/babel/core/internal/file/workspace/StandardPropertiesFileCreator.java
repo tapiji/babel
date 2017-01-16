@@ -60,6 +60,7 @@ public final class StandardPropertiesFileCreator extends AbstractFileCreator {
      */
     @Override
     protected IPropertyResource createPropertyResource(final Locale locale, final String content) throws IOException {
+        Log.d(TAG, "---------------- renameKey -------------- ");
         IPath path = new Path(dir);
         path = path.append(baseFileName);
         if (locale != null) {

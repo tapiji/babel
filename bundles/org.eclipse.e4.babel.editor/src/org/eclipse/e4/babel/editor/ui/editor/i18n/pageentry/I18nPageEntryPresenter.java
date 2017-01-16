@@ -15,13 +15,16 @@ import org.eclipse.e4.babel.editor.model.checks.visitor.SimilarValuesVisitor;
 import org.eclipse.e4.babel.editor.ui.editor.ResourceBundleEditorContract;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.page.I18nPageContract;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.pageentry.I18nPageEntryContract.View;
+import org.eclipse.e4.babel.logger.Log;
 import org.eclipse.e4.babel.resource.IBabelResourceProvider;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.graphics.Image;
 
 final class I18nPageEntryPresenter implements I18nPageEntryContract.Presenter {
 
+    private static final String TAG = I18nPageEntryPresenter.class.getSimpleName();
     private View view;
     private IResourceManager resourceManager;
     private IBabelResourceProvider resourceProvider;
@@ -94,7 +97,9 @@ final class I18nPageEntryPresenter implements I18nPageEntryContract.Presenter {
 	    final BundleGroup bundleGroup = resourceManager.getBundleGroup();
 	    final BundleEntry entry = bundleGroup.getBundleEntry(locale, activeKey);
 	    final String text = view.getText();
+	    Log.d(TAG, "Text to update" + text +" entry: "+entry);
 	    if (entry == null || !text.equals(entry.getValue())) {
+		Log.d(TAG, "Update Resource Bundle");
 		bundleGroup.addBundleEntry(locale, BundleEntry.create(activeKey, text));
 		resourceBundleEditor.updateDirtyState(true);
 	    }
@@ -155,6 +160,7 @@ final class I18nPageEntryPresenter implements I18nPageEntryContract.Presenter {
 	    } else {
 		document.set(bundleEntry.getValue());
 	    }
+	    Log.i(TAG, "Documemnt content: " + document.get());
 	    if (PropertyPreferences.getInstance().isReportDuplicateValues()) {
 		findDuplicates(bundleEntry);
 	    } else {

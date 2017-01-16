@@ -38,6 +38,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
 
 public final class I18nPageEntryView extends Composite implements KeyListener, TraverseListener, FocusListener, MouseListener, I18nPageEntryContract.View, ITextListener {
 
@@ -234,21 +235,21 @@ public final class I18nPageEntryView extends Composite implements KeyListener, T
 	} else if (isKeyCombination(event, SWT.CTRL, 'a')) {
 	    textView.setSelectedRange(0, textView.getDocument().getLength());
 	} else {
-	   // markEditorAsDirty((StyledText) event.widget);
+	    markEditorAsDirty((Text)event.getSource());
 	}
     }
 
     /**
      * Text field has changed: make editor dirty if not already
      * 
-     * @param eventBox
+     * @param text
      */
-    private void markEditorAsDirty(StyledText eventBox) {
-	if (textBeforeUpdate != null && !textBeforeUpdate.equals(eventBox.getText())) {
+    private void markEditorAsDirty(Text text) {
+	if (textBeforeUpdate != null && !textBeforeUpdate.equals(text.getText())) {
 	    if (!presenter.isEditorDirty()) {
-		int caretPosition = eventBox.getCaretOffset();
+		int caretPosition = text.getCaretPosition();
 		presenter.updateBundleOnChanges();
-		eventBox.setSelection(caretPosition);
+		text.setSelection(caretPosition);
 	    }
 	}
     }
@@ -364,6 +365,7 @@ public final class I18nPageEntryView extends Composite implements KeyListener, T
 
     @Override
     public void updateTextView(IDocument document, boolean enabled) {
+	Log.d(TAG, "UPDATE TEXT VIEW...."+document.get());
 	if (enabled) {
 	    this.textWidget.setEnabled(!presenter.getResourceManager().getSourceEditor(presenter.getLocale()).isReadOnly());
 	    this.textWidget.setEditable(true);

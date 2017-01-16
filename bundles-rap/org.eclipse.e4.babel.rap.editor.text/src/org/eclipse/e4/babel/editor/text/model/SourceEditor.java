@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.e4.babel.editor.text.file.IPropertyResource;
+import org.eclipse.e4.babel.logger.Log;
 import org.eclipse.jface.text.source.SourceViewer;
 
 
@@ -20,7 +21,8 @@ import org.eclipse.jface.text.source.SourceViewer;
  */
 public class SourceEditor {
 
-    private final Locale locale;
+    private static final String TAG = SourceEditor.class.getSimpleName();
+	private final Locale locale;
     private final IPropertyResource document;
     private String contentCache;
 
@@ -101,6 +103,7 @@ public class SourceEditor {
      * @return content
      */
     public String getContent() {
+    	 Log.d(TAG, "getContent " + document.getDocument().get());
         return document.getDocument().get();
     }
 

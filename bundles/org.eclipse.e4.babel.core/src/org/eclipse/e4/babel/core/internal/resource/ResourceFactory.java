@@ -231,6 +231,7 @@ public abstract class ResourceFactory implements IResourceFactory {
      * @throws CoreException
      */
     protected static IFile[] getResources(IPropertyResource file) throws CoreException {
+        Log.d(TAG, "----------- getResources ----------");
       /*  String regex = BabelUtils.getPropertiesFileRegEx(file);
         final Collection<IResource> validResources = new ArrayList<>();
         Stream.of(file.getIFile().getParent().members()).forEach(resource -> {
