@@ -18,17 +18,16 @@ import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Shell;
 
-public abstract class OpenResourceBundleHandler {
+public abstract class AOpenResourceBundleHandler {
 
-    private static final String TAG = OpenResourceBundleHandler.class.getSimpleName();
+    private static final String TAG = AOpenResourceBundleHandler.class.getSimpleName();
     
     private static final String PART_STACK_ID = "org.eclipse.e4.babel.editor.partstack.editorPartStack";
     private static final String PART_ID = "org.eclipse.e4.babel.editor.partdescriptor.resourceBundleEditor";
     
-    public static String KEY_FILE_DOCUMENT = OpenResourceBundleHandler.class.getSimpleName() + "_KEY_FILE_DOCUMENT";
+    public static String KEY_FILE_DOCUMENT = AOpenResourceBundleHandler.class.getSimpleName() + "_KEY_FILE_DOCUMENT";
 
     @Execute
     public void execute(final MApplication application, final IWorkbench workbench, @Named(IServiceConstants.ACTIVE_SHELL) final Shell shell, final EPartService partService,
@@ -37,7 +36,7 @@ public abstract class OpenResourceBundleHandler {
 	 System.out.println("dsdsdadadadasdadadadaada dasd sa saasd");
 	
 	
-	final String[] fileNames = recentlyOpenedFiles(shell);//BabelUtils.queryFileName(shell, "Open Resource-Bundle", SWT.OPEN, BabelUtils.PROPERTY_FILE_ENDINGS);
+	final String[] fileNames = recentlyOpenedFiles(shell);//
 	if (fileNames != null) {
 	    final String fileName = fileNames[0];
 	    if (!BabelUtils.isResourceBundle(fileName)) {

@@ -12,7 +12,6 @@
     <elements xsi:type="commands:Command" xmi:id="_8uwBQAFREeWM9o-YRkDifQ" elementId="org.eclipse.e4.babel.editor.command.keyUnused" commandName="%command.key.unused"/>
     <elements xsi:type="commands:Command" xmi:id="__QBEIAFREeWM9o-YRkDifQ" elementId="org.eclipse.e4.babel.editor.command.keyMissingUnused" commandName="%command.key.missing.unused"/>
     <elements xsi:type="commands:Command" xmi:id="_A1vEwAFSEeWM9o-YRkDifQ" elementId="org.eclipse.e4.babel.editor.command.newLocale" commandName="%command.new.locale"/>
-    <elements xsi:type="commands:Command" xmi:id="_mhMOcAV5EeWlfcvoOaUVLQ" elementId="org.eclipse.e4.babel.editor.command.openResourceBundle" commandName="%command.open.resource.bundle"/>
     <elements xsi:type="commands:Command" xmi:id="_R20RAB9rEeWJHOpdl6IN-g" elementId="org.eclipse.e4.babel.editor.command.showPreferences" commandName="Show Preferences" description="%command.show.preferences"/>
     <elements xsi:type="commands:Command" xmi:id="_7vL9UHHaEeaDT9JgWnMcCg" elementId="org.eclipse.e4.babel.editor.command.copykey" commandName="%command.copy.key"/>
   </fragments>
@@ -23,7 +22,6 @@
     <elements xsi:type="commands:Handler" xmi:id="_RGsKwAFSEeWM9o-YRkDifQ" elementId="org.eclipse.e4.babel.editor.handler.keyUnused" contributionURI="bundleclass://org.eclipse.e4.babel.editor/org.eclipse.e4.babel.editor.ui.handler.toolbar.KeyUnusedHandler" command="_8uwBQAFREeWM9o-YRkDifQ"/>
     <elements xsi:type="commands:Handler" xmi:id="_T3KuUAFSEeWM9o-YRkDifQ" elementId="org.eclipse.e4.babel.editor.handler.keyMissingUnused" contributionURI="bundleclass://org.eclipse.e4.babel.editor/org.eclipse.e4.babel.editor.ui.handler.toolbar.KeyMissingUnusedHandler" command="__QBEIAFREeWM9o-YRkDifQ"/>
     <elements xsi:type="commands:Handler" xmi:id="_WlR6YAFSEeWM9o-YRkDifQ" elementId="org.eclipse.e4.babel.editor.handler.newLocale" contributionURI="bundleclass://org.eclipse.e4.babel.editor/org.eclipse.e4.babel.editor.ui.handler.toolbar.NewLocaleHandler" command="_A1vEwAFSEeWM9o-YRkDifQ"/>
-    <elements xsi:type="commands:Handler" xmi:id="_qjci8AV5EeWlfcvoOaUVLQ" elementId="org.eclipse.e4.babel.editor.handler.openResourceBundle" contributionURI="bundleclass://org.eclipse.e4.babel.editor/org.eclipse.e4.babel.editor.ui.handler.window.OpenResourceBundleHandler" command="_mhMOcAV5EeWlfcvoOaUVLQ"/>
     <elements xsi:type="commands:Handler" xmi:id="_XHgHgB9rEeWJHOpdl6IN-g" elementId="org.eclipse.e4.babel.editor.handler.showPreferences" contributionURI="bundleclass://org.eclipse.e4.babel.editor/org.eclipse.e4.babel.editor.ui.handler.window.ShowPreferenceHandler" command="_R20RAB9rEeWJHOpdl6IN-g"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_sebNYAFREeWM9o-YRkDifQ" featurename="trimContributions" parentElementId="org.eclipselabs.e4.tapiji.application" positionInList="">
@@ -43,8 +41,7 @@
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_x4on0AV5EeWlfcvoOaUVLQ" featurename="menuContributions" parentElementId="org.eclipselabs.e4.tapiji.application" positionInList="">
     <elements xsi:type="menu:MenuContribution" xmi:id="_vRqwIAV6EeWlfcvoOaUVLQ" elementId="org.eclipse.e4.babel.editor.menucontribution.openResourceBundle" positionInParent="?before=org.eclipse.e4.tapiji.glossary.handledmenuitem.openglossary" parentId="org.eclipse.e4.tapiji.glossary.menu.file">
-      <children xsi:type="menu:HandledMenuItem" xmi:id="_tjOb4AV7EeWlfcvoOaUVLQ" elementId="org.eclipse.e4.babel.editor.handledmenuitem.openResourceBundle" label="%handledmenuitem.open.resource.bundle" iconURI="platform:/plugin/org.eclipse.e4.babel.resource/icons/16x16/open_resource_bundle.png" tooltip="%handledmenuitem.tooltip.open.resource.bundle" command="_mhMOcAV5EeWlfcvoOaUVLQ"/>
-      <children xsi:type="menu:MenuSeparator" xmi:id="_cWd0QKzxEeaaHbY2TSQl7A"/>
+      <children xsi:type="menu:MenuSeparator" xmi:id="_cWd0QKzxEeaaHbY2TSQl7A" elementId="org.eclipse.e4.babel.editor.handledmenuitem.seperatorfile"/>
     </elements>
     <elements xsi:type="menu:MenuContribution" xmi:id="_EXlEsB9rEeWJHOpdl6IN-g" elementId="org.eclipse.e4.babel.editor.menucontribution.0" parentId="org.eclipse.e4.tapiji.glossary.menu.window">
       <children xsi:type="menu:HandledMenuItem" xmi:id="_JenP8B9rEeWJHOpdl6IN-g" elementId="org.eclipse.e4.babel.editor.handledmenuitem.preferences" label="%handledmenuitem.preferences" iconURI="" tooltip="%handledmenuitem.preferences" command="_R20RAB9rEeWJHOpdl6IN-g"/>
@@ -75,7 +72,7 @@
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_9FRycKyyEeaaHbY2TSQl7A" featurename="toolBarContributions" parentElementId="org.eclipselabs.e4.tapiji.application">
     <elements xsi:type="menu:ToolBarContribution" xmi:id="__F18AKyyEeaaHbY2TSQl7A" elementId="org.eclipse.e4.babel.editor.toolbarcontribution.0" accessibilityPhrase="" parentId="org.eclipse.e4.tapiji.translator.toolbar.main" positionInParent="?before=org.eclipse.e4.tapiji.rcp.glossary.handledtoolitem.openglossary">
-      <children xsi:type="menu:HandledToolItem" xmi:id="_DZfigKyzEeaaHbY2TSQl7A" elementId="org.eclipse.e4.babel.editor.handledtoolitem.openresource" label="%handledmenuitem.open.resource.bundle" iconURI="platform:/plugin/org.eclipse.e4.babel.resource/icons/16x16/open_resource_bundle.png" tooltip="%handledmenuitem.open.resource.bundle" command="_mhMOcAV5EeWlfcvoOaUVLQ"/>
+      <children xsi:type="menu:HandledToolItem" xmi:id="_DZfigKyzEeaaHbY2TSQl7A" elementId="org.eclipse.e4.babel.editor.handledtoolitem.openresource" label="%handledmenuitem.open.resource.bundle" iconURI="platform:/plugin/org.eclipse.e4.babel.resource/icons/16x16/open_resource_bundle.png" tooltip="%handledmenuitem.open.resource.bundle"/>
     </elements>
   </fragments>
 </fragment:ModelFragments>

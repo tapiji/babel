@@ -365,7 +365,6 @@ public final class I18nPageEntryView extends Composite implements KeyListener, T
 
     @Override
     public void updateTextView(IDocument document, boolean enabled) {
-	Log.d(TAG, "UPDATE TEXT VIEW...."+document.get());
 	if (enabled) {
 	    this.textWidget.setEnabled(!presenter.getResourceManager().getSourceEditor(presenter.getLocale()).isReadOnly());
 	    this.textWidget.setEditable(true);

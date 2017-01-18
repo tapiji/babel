@@ -124,7 +124,7 @@ public final class BabelUtils {
     public static String[] queryFileName(final Shell shell, final String title, final int dialogOptions, final String[] endings) {
         final FileDialog dialog = new FileDialog(shell, dialogOptions);
         dialog.setText(title);
-        // dialog.setFilterExtensions(endings);
+     //   dialog.setFilterExtensions(endings);
 
         final String filepath = dialog.open();
 

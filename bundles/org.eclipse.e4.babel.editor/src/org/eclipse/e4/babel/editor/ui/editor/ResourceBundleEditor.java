@@ -26,7 +26,7 @@ import org.eclipse.e4.babel.editor.text.model.SourceEditor;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.page.I18nPageContract;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.page.I18nPageView;
 import org.eclipse.e4.babel.editor.ui.editor.tree.KeyTreeView;
-import org.eclipse.e4.babel.editor.ui.handler.window.OpenResourceBundleHandler;
+import org.eclipse.e4.babel.editor.ui.handler.window.AOpenResourceBundleHandler;
 import org.eclipse.e4.babel.logger.Log;
 import org.eclipse.e4.babel.resource.BabelResourceConstants;
 import org.eclipse.e4.babel.resource.IBabelResourceProvider;
@@ -115,7 +115,7 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
 	    this.resourceManager = manager.getResourceManager().get();
 	    setMinimumCharacters(40);
 
-	    Object object = part.getTransientData().get(OpenResourceBundleHandler.KEY_FILE_DOCUMENT);
+	    Object object = part.getTransientData().get(AOpenResourceBundleHandler.KEY_FILE_DOCUMENT);
 
 	    if (object instanceof IPropertyResource) {
 		IPropertyResource file = (IPropertyResource) object;

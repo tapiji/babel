@@ -113,6 +113,7 @@ public class SourceEditor {
      * @param content new content
      */
     public void setContent(String content) {
+    	Log.d(TAG, "SET CONTENT: " + content);
         document.getDocument().set(content);
         contentCache = content;
     }
