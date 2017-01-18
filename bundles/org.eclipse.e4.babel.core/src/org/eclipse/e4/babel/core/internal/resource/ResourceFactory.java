@@ -22,7 +22,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Stream;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IResource;
+//import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.e4.babel.core.api.IResourceFactory;
 import org.eclipse.e4.babel.core.internal.comparator.LocaleComparator;
@@ -211,6 +211,12 @@ public abstract class ResourceFactory implements IResourceFactory {
         return null;
     }
 
+    /**
+     * Create a new source editor
+     * @param fileDocument
+     * @param locale
+     * @return {@link SourceEditor}
+     */
     protected SourceEditor createEditor(IPropertyResource fileDocument, Locale locale) {
         return SourceEditor.create(fileDocument, locale);
     }
@@ -225,7 +231,8 @@ public abstract class ResourceFactory implements IResourceFactory {
      * @throws CoreException
      */
     protected static IFile[] getResources(IPropertyResource file) throws CoreException {
-        String regex = BabelUtils.getPropertiesFileRegEx(file);
+        Log.d(TAG, "----------- getResources ----------");
+      /*  String regex = BabelUtils.getPropertiesFileRegEx(file);
         final Collection<IResource> validResources = new ArrayList<>();
         Stream.of(file.getIFile().getParent().members()).forEach(resource -> {
             String resourceName = resource.getName();
@@ -233,7 +240,8 @@ public abstract class ResourceFactory implements IResourceFactory {
                 validResources.add(resource);
             }
         });
-        return validResources.toArray(new IFile[] {});
+        return validResources.toArray(new IFile[] {});*/
+        return null;
     }
 
     @Override

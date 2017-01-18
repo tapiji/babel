@@ -4,10 +4,10 @@ Bundle-Name: Resource
 Bundle-SymbolicName: org.eclipse.e4.babel.resource
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Require-Bundle: org.eclipse.swt,
- org.eclipse.osgi,
- org.eclipse.equinox.registry,
- org.eclipse.jface
+Require-Bundle: org.eclipse.osgi,
+ org.eclipse.equinox.registry
 Service-Component: OSGI-INF/resourceprovider.xml
 Export-Package: org.eclipse.e4.babel.resource
 Bundle-ActivationPolicy: lazy
+Import-Package: org.eclipse.jface.resource,
+ org.eclipse.swt.graphics

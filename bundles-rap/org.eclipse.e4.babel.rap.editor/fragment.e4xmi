@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ASCII"?>
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_8IJOMNmIEeaE7LwdrUH_Zg">
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_JJtAANmJEeaE7LwdrUH_Zg" featurename="menuContributions" parentElementId="org.eclipselabs.e4.tapiji.application">
+    <elements xsi:type="menu:MenuContribution" xmi:id="_MtTCkNmJEeaE7LwdrUH_Zg" elementId="org.eclipse.e4.babel.rap.core.menucontribution.openresourcebundle" parentId="org.eclipse.e4.tapiji.glossary.menu.file">
+      <children xsi:type="menu:HandledMenuItem" xmi:id="_Xln3ANmJEeaE7LwdrUH_Zg" elementId="org.eclipse.e4.babel.rap.core.handledmenuitem.ewqwqewe" label="ewqwqewe" command="_FQWogNmMEeaE7LwdrUH_Zg"/>
+    </elements>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_-jDqENmLEeaE7LwdrUH_Zg" featurename="commands" parentElementId="org.eclipselabs.e4.tapiji.application">
+    <elements xsi:type="commands:Command" xmi:id="_FQWogNmMEeaE7LwdrUH_Zg" elementId="org.eclipse.e4.babel.rap.editor.command.uploadfiles" commandName="Upload Files"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_DcKHANmMEeaE7LwdrUH_Zg" featurename="handlers" parentElementId="org.eclipselabs.e4.tapiji.application">
+    <elements xsi:type="commands:Handler" xmi:id="_GAHRgNmMEeaE7LwdrUH_Zg" elementId="org.eclipse.e4.babel.rap.editor.handler.uploadfiles" contributionURI="bundleclass://org.eclipse.e4.babel.rap.editor/org.eclipse.e4.babel.rap.editor.ui.handler.window.UploadResourceBundleHandler" command="_FQWogNmMEeaE7LwdrUH_Zg"/>
+  </fragments>
+</fragment:ModelFragments>

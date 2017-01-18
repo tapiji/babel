@@ -33,7 +33,7 @@ public final class BabelUtils {
     public static final String[] XML_FILE_ENDINGS = new String[] {"*.xml"};
 
     public static final String ENCODING_TYPE_UTF_16 = "UTF-16";
-    
+
     /** Token to replace in a regular expression with a bundle name. */
     private static final String TOKEN_BUNDLE_NAME = "BUNDLENAME";
 
@@ -52,6 +52,7 @@ public final class BabelUtils {
 
     /**
      * TODO
+     * 
      * @param fileDocument
      * @return
      */
@@ -63,15 +64,17 @@ public final class BabelUtils {
     /**
      * Creates the name for the Resource Bundle Editor
      * TODO
+     * 
      * @param fileDocument
-     * @return String 
+     * @return String
      */
     public static String getShortDisplayName(IPropertyResource fileDocument) {
         return getBundleName(fileDocument) + "[...]." + fileDocument.getFileExtension();
     }
- 
+
     /**
      * TODO
+     * 
      * @param fileDocument
      * @return
      */
@@ -79,10 +82,11 @@ public final class BabelUtils {
         return PROPERTIES_FILE_REGEX.replaceFirst(TOKEN_BUNDLE_NAME, getBundleName(fileDocument)).replaceFirst(TOKEN_FILE_EXTENSION, fileDocument.getFileExtension());
     }
 
-    
+
     /**
      * Parses the specified bundle name and returns the locale.
      * TODO
+     * 
      * @param resource the resource
      * @return the locale or null if none
      */
@@ -98,6 +102,7 @@ public final class BabelUtils {
         Locale locale = null;
         switch (localeSections.size()) {
             case 1:
+                
                 locale = new Locale(localeSections.get(0));
                 break;
             case 2:
@@ -111,15 +116,15 @@ public final class BabelUtils {
         }
         return locale;
     }
-    
+
     public static boolean isResourceBundle(final String fileName) {
         return fileName.toLowerCase().endsWith(".properties");
     }
-  
+
     public static String[] queryFileName(final Shell shell, final String title, final int dialogOptions, final String[] endings) {
         final FileDialog dialog = new FileDialog(shell, dialogOptions);
         dialog.setText(title);
-        dialog.setFilterExtensions(endings);
+     //   dialog.setFilterExtensions(endings);
 
         final String filepath = dialog.open();
 
@@ -145,4 +150,5 @@ public final class BabelUtils {
             return null;
         }
     }
+    
 }

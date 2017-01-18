@@ -23,8 +23,8 @@ import java.util.StringTokenizer;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
+//import org.eclipse.core.resources.IProject;
+//import org.eclipse.core.resources.IResource;
 import org.osgi.framework.Constants;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -55,7 +55,7 @@ public final class PDEUtils {
 	 * @param project the project
 	 * @return the plugin-id or null
 	 */
-	public static String getPluginId(IProject project) {
+	/*public static String getPluginId(IProject project) {
 		if (project == null)
 			return null;
 		IResource manifest = project.findMember(OSGI_BUNDLE_MANIFEST);
@@ -90,7 +90,7 @@ public final class PDEUtils {
 			}
 		}
 		return null;
-	}
+	}*/
 
 	/**
 	 * Returns a project containing plugin/fragment of the specified
@@ -100,7 +100,7 @@ public final class PDEUtils {
 	 * @param pluginProject the plugin project
 	 * @return a project containing a fragment or null if none
 	 */
-	public static IProject lookupFragment(IProject pluginProject) {
+	/*public static IProject lookupFragment(IProject pluginProject) {
 		String pluginId = PDEUtils.getPluginId(pluginProject);
 		if (pluginId == null)
 			return null;
@@ -117,7 +117,7 @@ public final class PDEUtils {
 			return project;
 		}
 		return null;
-	}
+	}*/
 
 	/**
 	 * Returns the fragment-id of the project if it is a fragment project with
@@ -127,7 +127,7 @@ public final class PDEUtils {
 	 * @param hostPluginId the host plugin id
 	 * @return the plugin-id or null
 	 */
-	public static String getFragmentId(IProject project, String hostPluginId) {
+	/*public static String getFragmentId(IProject project, String hostPluginId) {
 		IResource manifest = project.findMember(FRAGMENT_MANIFEST);
 		Node fragmentNode = getXMLElement(getXMLDocument(manifest), "fragment");
 		if (fragmentNode != null) {
@@ -143,7 +143,7 @@ public final class PDEUtils {
 		if (hostId != null && hostId.equals(hostPluginId))
 			return getManifestEntryValue(manifest, Constants.BUNDLE_SYMBOLICNAME);
 		return null;
-	}
+	}*/
 
 	/**
 	 * Returns the host plugin project of the specified project if it contains a fragment.
@@ -151,7 +151,7 @@ public final class PDEUtils {
 	 * @param fragment the fragment project
 	 * @return the host plugin project or null
 	 */
-	public static IProject getFragmentHost(IProject fragment) {
+	/*public static IProject getFragmentHost(IProject fragment) {
 		IResource manifest = fragment.findMember(FRAGMENT_MANIFEST);
 		Node fragmentNode = getXMLElement(getXMLDocument(manifest), "fragment");
 		if (fragmentNode != null) {
@@ -164,7 +164,7 @@ public final class PDEUtils {
 		if (hostId != null)
 			return fragment.getWorkspace().getRoot().getProject(hostId);
 		return null;
-	}
+	}*/
 
 	/**
 	 * Returns the file content as UTF8 string.
@@ -173,7 +173,7 @@ public final class PDEUtils {
 	 * @param charset 
 	 * @return
 	 */
-	public static String getFileContent(IFile file, String charset) {
+	/*public static String getFileContent(IFile file, String charset) {
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		InputStream in = null;
 		try {
@@ -197,9 +197,9 @@ public final class PDEUtils {
 			e.printStackTrace();
 			return outputStream.toString();
 		}
-	}
+	}*/
 
-	private static String getManifestEntryValue(IResource manifest, String entryKey) {
+	/*private static String getManifestEntryValue(IResource manifest, String entryKey) {
 		if (manifest instanceof IFile) {
 			String content = getFileContent((IFile) manifest, "UTF8");
 			int index = content.indexOf(entryKey);
@@ -230,7 +230,7 @@ public final class PDEUtils {
 				e.printStackTrace();
 			}
 		}
-	}
+	}*/
 
 	private static Node getXMLElement(Document document, String name) {
 		if (document == null)

@@ -42,6 +42,7 @@ import org.eclipse.e4.babel.editor.text.model.SourceEditor;
 import org.eclipse.e4.babel.logger.Log;
 
 
+
 /**
  * Mediator holding instances of commonly used items, dealing with
  * important interactions within themselves.
@@ -213,6 +214,9 @@ public final class ResourceManager implements IResourceManager {
         return sourceEditors.get(locale);
     }
 
+    /**
+     * Todo
+     */
     @Override
     public SourceEditor addSourceEditor(IPropertyResource fileDocument, Locale locale) {
         SourceEditor sourceEditor = resourcesFactory.addResource(fileDocument, locale);

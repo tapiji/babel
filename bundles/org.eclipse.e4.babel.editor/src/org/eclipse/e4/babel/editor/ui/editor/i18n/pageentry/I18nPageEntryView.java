@@ -28,8 +28,6 @@ import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.TraverseEvent;
 import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.graphics.Color;
@@ -40,6 +38,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
 
 public final class I18nPageEntryView extends Composite implements KeyListener, TraverseListener, FocusListener, MouseListener, I18nPageEntryContract.View, ITextListener {
 
@@ -49,9 +48,8 @@ public final class I18nPageEntryView extends Composite implements KeyListener, T
     private TextViewerUndoManager undoManager = new TextViewerUndoManager(UNDO_LEVEL);
     private Collection<FocusListener> focusListeners = new LinkedList<FocusListener>();
     private TextViewer textView;
-
     private Label expandIcon;
-    private StyledText textWidget;
+    StyledText textWidget;
     private Composite toolbar;
     private Button goToButton;
     private Button duplicateButton;
@@ -94,7 +92,9 @@ public final class I18nPageEntryView extends Composite implements KeyListener, T
     }
 
     private void textViewer() {
-	textView = new TextViewer(this, SWT.MULTI | SWT.WRAP | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
+	final int verticalScroll = PropertyPreferences.getInstance().isAdjustTextView() ? 0 : SWT.V_SCROLL;
+
+	textView = new TextViewer(this, SWT.MULTI | SWT.WRAP | SWT.H_SCROLL | verticalScroll | SWT.BORDER);
 	textView.setDocument(new Document());
 	textView.setUndoManager(undoManager);
 	textView.activatePlugins();
@@ -102,9 +102,9 @@ public final class I18nPageEntryView extends Composite implements KeyListener, T
 	textView.getTextWidget().setOrientation(presenter.getOrientation());
 
 	textWidget = textView.getTextWidget();
-	final GridData textViewStyleData = new GridData(SWT.FILL, SWT.BEGINNING, true, true, 0, 0);
-	textViewStyleData.minimumHeight = PropertyPreferences.getInstance().getI18nEditorHeight();
-	textWidget.setLayoutData(textViewStyleData);
+	 final GridData textViewStyleData = new GridData(SWT.FILL, SWT.BEGINNING, true, true, 0, 0);
+	 textViewStyleData.minimumHeight = PropertyPreferences.getInstance().getI18nEditorHeight();
+	 textWidget.setLayoutData(textViewStyleData);
 	textWidget.addFocusListener(new FocusListener() {
 	    @Override
 	    public void focusGained(FocusEvent event) {
@@ -174,16 +174,13 @@ public final class I18nPageEntryView extends Composite implements KeyListener, T
 	GridData gridData = new GridData();
 	gridData.horizontalAlignment = GridData.END;
 
-	this.goToButton = new Button(toolBar, SWT.ARROW | SWT.RIGHT);
+	this.goToButton = new Button(toolBar, SWT.FLAT);
 	this.goToButton.setText("");
 	this.goToButton.setToolTipText("Go to corresponding property file.");
 	this.goToButton.setLayoutData(gridData);
-	this.goToButton.addSelectionListener(new SelectionAdapter() {
-
-	    @Override
-	    public void widgetSelected(SelectionEvent e) {
-		presenter.goToTab();
-	    }
+	this.goToButton.setImage(presenter.loadImage(BabelResourceConstants.IMG_GO_TO));
+	this.goToButton.addListener(SWT.Selection, e -> {
+	    presenter.goToTab();
 	});
     }
 
@@ -239,21 +236,21 @@ public final class I18nPageEntryView extends Composite implements KeyListener, T
 	} else if (isKeyCombination(event, SWT.CTRL, 'a')) {
 	    textView.setSelectedRange(0, textView.getDocument().getLength());
 	} else {
-	    markEditorAsDirty((StyledText) event.widget);
+	    markEditorAsDirty((Text)event.getSource());
 	}
     }
 
     /**
      * Text field has changed: make editor dirty if not already
      * 
-     * @param eventBox
+     * @param text
      */
-    private void markEditorAsDirty(StyledText eventBox) {
-	if (textBeforeUpdate != null && !textBeforeUpdate.equals(eventBox.getText())) {
+    private void markEditorAsDirty(Text text) {
+	if (textBeforeUpdate != null && !textBeforeUpdate.equals(text.getText())) {
 	    if (!presenter.isEditorDirty()) {
-		int caretPosition = eventBox.getCaretOffset();
+		int caretPosition = text.getCaretPosition();
 		presenter.updateBundleOnChanges();
-		eventBox.setSelection(caretPosition);
+		text.setSelection(caretPosition);
 	    }
 	}
     }
@@ -341,6 +338,7 @@ public final class I18nPageEntryView extends Composite implements KeyListener, T
     public void updateEditorHeight() {
 	((GridData) this.textWidget.getLayoutData()).minimumHeight = PropertyPreferences.getInstance().getI18nEditorHeight();
 	layout(true, true);
+
     }
 
     @Override
@@ -372,9 +370,9 @@ public final class I18nPageEntryView extends Composite implements KeyListener, T
 	    this.textWidget.setEnabled(!presenter.getResourceManager().getSourceEditor(presenter.getLocale()).isReadOnly());
 	    this.textWidget.setEditable(true);
 	    this.textWidget.setBackground(getDisplay().getSystemColor(SWT.COLOR_WHITE));
-	    this.goToButton.setEnabled(true);
+	    this.goToButton.setVisible(true);
 	} else {
-	    this.goToButton.setEnabled(false);
+	    this.goToButton.setVisible(false);
 	    this.duplicateButton.setVisible(false);
 	    this.similarButton.setVisible(false);
 	    this.textWidget.setEnabled(false);
@@ -404,6 +402,9 @@ public final class I18nPageEntryView extends Composite implements KeyListener, T
 
     @Override
     public void textChanged(TextEvent event) {
+	if (PropertyPreferences.getInstance().isAdjustTextView()) {
+	    presenter.getI18nPageView().refreshLayout();
+	}
     }
 
     @Override

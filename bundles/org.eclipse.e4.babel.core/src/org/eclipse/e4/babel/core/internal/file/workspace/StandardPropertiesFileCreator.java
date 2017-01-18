@@ -16,7 +16,7 @@ package org.eclipse.e4.babel.core.internal.file.workspace;
 import java.io.IOException;
 import java.util.Locale;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.ResourcesPlugin;
+//import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.e4.babel.core.internal.file.AbstractFileCreator;
@@ -60,17 +60,18 @@ public final class StandardPropertiesFileCreator extends AbstractFileCreator {
      */
     @Override
     protected IPropertyResource createPropertyResource(final Locale locale, final String content) throws IOException {
+        Log.d(TAG, "---------------- renameKey -------------- ");
         IPath path = new Path(dir);
         path = path.append(baseFileName);
         if (locale != null) {
             path = new Path(path.toString() + "_" + locale.toString());
         }
         path.addFileExtension(extension);
-        final IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
-        if (file.exists()) {
-            throw new IOException("File already exists: " + file.getName());
-        }
-        Log.d(TAG, "FILE: " + file.toString());
-        return PropertyIFileResource.create(file);
+       // final IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
+       // if (file.exists()) {
+        //    throw new IOException("File already exists: " + file.getName());
+       // }
+       // Log.d(TAG, "FILE: " + file.toString());
+        return null;//PropertyIFileResource.create(file);
     }
 }

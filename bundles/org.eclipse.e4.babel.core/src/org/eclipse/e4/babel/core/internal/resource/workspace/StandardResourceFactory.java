@@ -18,7 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IResource;
+//import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.e4.babel.core.internal.file.AbstractFileCreator;
 import org.eclipse.e4.babel.core.internal.file.workspace.StandardPropertiesFileCreator;
@@ -27,6 +27,7 @@ import org.eclipse.e4.babel.core.utils.BabelUtils;
 import org.eclipse.e4.babel.editor.text.file.IPropertyResource;
 import org.eclipse.e4.babel.editor.text.file.PropertyIFileResource;
 import org.eclipse.e4.babel.editor.text.model.SourceEditor;
+
 
 
 /**
@@ -70,9 +71,9 @@ public class StandardResourceFactory extends ResourceFactory {
             }
         }
 
-        fileCreator = new StandardPropertiesFileCreator(file.getParent().getFullPath().toString(), BabelUtils.getBundleName(fileDocument), file.getFileExtension());
-        setDisplayName(BabelUtils.getShortDisplayName(fileDocument));
-        setResourceLocation(file.getParent().getFullPath().toString());
+       // fileCreator = new StandardPropertiesFileCreator(file.getParent().getFullPath().toString(), BabelUtils.getBundleName(fileDocument), file.getFileExtension());
+       // setDisplayName(BabelUtils.getShortDisplayName(fileDocument));
+       // setResourceLocation(file.getParent().getFullPath().toString());
     }
 
     /**
@@ -85,7 +86,7 @@ public class StandardResourceFactory extends ResourceFactory {
     }
 
     protected static IFile[] getResources(IPropertyResource fileDocument) {
-        String regex = BabelUtils.getPropertiesFileRegEx(fileDocument);
+       /* String regex = BabelUtils.getPropertiesFileRegEx(fileDocument);
         List<IResource> resources = new ArrayList<>();
         try {
             resources = Arrays.asList(fileDocument.getIFile().getParent().members());
@@ -102,6 +103,8 @@ public class StandardResourceFactory extends ResourceFactory {
             }
         });
         return validResources.toArray(new IFile[] {});
+        */
+        return null;
     }
 
 }

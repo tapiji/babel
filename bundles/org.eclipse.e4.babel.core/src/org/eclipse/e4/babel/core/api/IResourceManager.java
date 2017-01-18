@@ -10,6 +10,7 @@ import org.eclipse.e4.babel.editor.model.tree.KeyTreeItem;
 import org.eclipse.e4.babel.editor.text.file.IPropertyResource;
 import org.eclipse.e4.babel.editor.text.model.SourceEditor;
 
+
 public interface IResourceManager {
 
 	KeyTree getKeyTree();

@@ -151,7 +151,6 @@ public class I18nPagePresenter implements I18nPageContract.Presenter {
      *            The {@link BundleEntryComposite} to be focussed.
      */
     private void focusComposite(I18nPageEntryContract.View comp) {
-
 	Point compPos = ((I18nPageEntryView) comp).getLocation();
 	Point compSize = ((I18nPageEntryView) comp).getSize();
 	Point size = ((I18nPageView) i18nPageView).getSize();

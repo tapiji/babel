@@ -10,9 +10,9 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
-import org.eclipse.core.resources.IResourceChangeEvent;
-import org.eclipse.core.resources.IResourceChangeListener;
-import org.eclipse.core.resources.IWorkspace;
+//import org.eclipse.core.resources.IResourceChangeEvent;
+//import org.eclipse.core.resources.IResourceChangeListener;
+//import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.e4.babel.core.BabelExtensionManager;
 import org.eclipse.e4.babel.core.api.IResourceManager;
@@ -26,7 +26,7 @@ import org.eclipse.e4.babel.editor.text.model.SourceEditor;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.page.I18nPageContract;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.page.I18nPageView;
 import org.eclipse.e4.babel.editor.ui.editor.tree.KeyTreeView;
-import org.eclipse.e4.babel.editor.ui.handler.window.OpenResourceBundleHandler;
+import org.eclipse.e4.babel.editor.ui.handler.window.AOpenResourceBundleHandler;
 import org.eclipse.e4.babel.logger.Log;
 import org.eclipse.e4.babel.resource.BabelResourceConstants;
 import org.eclipse.e4.babel.resource.IBabelResourceProvider;
@@ -61,7 +61,7 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
     public static final String TOPIC_TREE_VIEW_VISIBILITY = "TOPIC_GUI/TREE_VIEW_VISIBILITY";
     private static final String TAG = ResourceBundleEditor.class.getSimpleName();
 
-    private ResourceChangeListener resourceChangeListener = new ResourceChangeListener();
+  //  private ResourceChangeListener resourceChangeListener = new ResourceChangeListener();
 
     @Inject
     private EMenuService menuService;
@@ -84,8 +84,9 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
     @Inject
     private EModelService modelService;
 
-    @Inject
-    private IWorkspace workspace;
+    // TODO RAP and RCP
+  //  @Inject
+  //  private IWorkspace workspace;
     
     @Inject
     private EPartService partService;
@@ -114,7 +115,7 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
 	    this.resourceManager = manager.getResourceManager().get();
 	    setMinimumCharacters(40);
 
-	    Object object = part.getTransientData().get(OpenResourceBundleHandler.KEY_FILE_DOCUMENT);
+	    Object object = part.getTransientData().get(AOpenResourceBundleHandler.KEY_FILE_DOCUMENT);
 
 	    if (object instanceof IPropertyResource) {
 		IPropertyResource file = (IPropertyResource) object;
@@ -125,7 +126,9 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
 		}
 
 		toolbarVisibility();
-		this.workspace.addResourceChangeListener(resourceChangeListener, IResourceChangeEvent.POST_CHANGE);
+		
+		// TODO RCP and RAP
+		//this.workspace.addResourceChangeListener(resourceChangeListener, IResourceChangeEvent.POST_CHANGE);
 
 		addSelectionListener(this);
 
@@ -260,13 +263,14 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
 	});
     }
 
-    private class ResourceChangeListener implements IResourceChangeListener {
+    // TODO RAP and RCP
+ /*   private class ResourceChangeListener implements IResourceChangeListener {
 	@Override
 	public void resourceChanged(IResourceChangeEvent event) {
 	    resourceManager.reloadProperties();
 	    i18nPage.getPresenter().refreshTextBoxes();
 	}
-    }
+    }*/
 
     @Override
     public I18nPageContract.View getI18nPage() {
@@ -366,7 +370,8 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
 	});
 	partService.removePartListener(resourceBundleEditorListener);
 	resourceBundleEditorListener.dispose();
-	workspace.removeResourceChangeListener(resourceChangeListener);
+	// TODO RAP and RCP
+	//workspace.removeResourceChangeListener(resourceChangeListener);
 	super.dispose();
     }
 }
