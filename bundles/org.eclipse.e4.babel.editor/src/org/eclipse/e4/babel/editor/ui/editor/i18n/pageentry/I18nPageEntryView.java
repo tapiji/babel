@@ -99,7 +99,7 @@ public final class I18nPageEntryView extends Composite implements KeyListener, T
 	textView.setUndoManager(undoManager);
 	textView.activatePlugins();
 	textView.addTextListener(this);
-
+	
 	textWidget = textView.getTextWidget();
 	 final GridData textViewStyleData = new GridData(SWT.FILL, SWT.BEGINNING, true, true, 0, 0);
 	 textViewStyleData.minimumHeight = PropertyPreferences.getInstance().getI18nEditorHeight();
