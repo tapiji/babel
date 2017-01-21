@@ -236,7 +236,21 @@ public final class I18nPageEntryView extends Composite implements KeyListener, T
 	} else if (isKeyCombination(event, SWT.CTRL, 'a')) {
 	    textView.setSelectedRange(0, textView.getDocument().getLength());
 	} else {
-	    markEditorAsDirty((Text)event.getSource());
+	    if(event.getSource() instanceof Text) {
+		markEditorAsDirty((Text)event.getSource());
+	    } else {
+		markEditorAsDirty((StyledText)event.getSource());
+	    }
+	}
+    }
+
+    private void markEditorAsDirty(StyledText text) {
+	if (textBeforeUpdate != null && !textBeforeUpdate.equals(text.getText())) {
+	    if (!presenter.isEditorDirty()) {
+		int caretPosition = text.getCaretOffset();
+		presenter.updateBundleOnChanges();
+		text.setSelection(caretPosition);
+	    }
 	}
     }
 

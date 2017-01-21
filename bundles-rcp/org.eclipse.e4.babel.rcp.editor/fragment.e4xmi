@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="ASCII"?>
 <fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_W1eHYNz1Eea04oxTaQyF1g">
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_-N-XwNz1Eea04oxTaQyF1g" featurename="menuContributions" parentElementId="org.eclipselabs.e4.tapiji.application">
-    <elements xsi:type="menu:MenuContribution" xmi:id="_Hj6MYNz2Eea04oxTaQyF1g" elementId="org.eclipse.e4.babel.rcp.editor.menucontribution.openresourcebundle" positionInParent="?before=org.eclipse.e4.babel.editor.handledmenuitem.seperatorfile" parentId="org.eclipse.e4.tapiji.glossary.menu.file">
+    <elements xsi:type="menu:MenuContribution" xmi:id="_Hj6MYNz2Eea04oxTaQyF1g" elementId="org.eclipse.e4.babel.rcp.editor.menucontribution.openresourcebundle" positionInParent="?before=org.eclipse.e4.tapiji.glossary.handledmenuitem.openglossary" parentId="org.eclipse.e4.tapiji.rcp.translator.menu.file">
       <children xsi:type="menu:HandledMenuItem" xmi:id="_VX2n8Nz3Eea04oxTaQyF1g" elementId="org.eclipse.e4.babel.rcp.editor.handledmenuitem.openresourcebundle" label="%handledmenuitem.open.resource.bundle" iconURI="platform:/plugin/org.eclipse.e4.babel.resource/icons/16x16/open_resource_bundle.png" tooltip="%handledmenuitem.tooltip.open.resource.bundle" command="_GdfW4Nz2Eea04oxTaQyF1g"/>
+      <children xsi:type="menu:MenuSeparator" xmi:id="_ny6_YOAIEeaKjeU3dF0ytQ" elementId="org.eclipse.e4.babel.rcp.editor.menuseparator.openresourcebundle"/>
     </elements>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_-hmeYNz1Eea04oxTaQyF1g" featurename="commands" parentElementId="org.eclipselabs.e4.tapiji.application">
-    <elements xsi:type="commands:Command" xmi:id="_GdfW4Nz2Eea04oxTaQyF1g" elementId="org.eclipse.e4.babel.rcp.editor.command.openfile" commandName="Open File"/>
+    <elements xsi:type="commands:Command" xmi:id="_GdfW4Nz2Eea04oxTaQyF1g" elementId="org.eclipse.e4.babel.rcp.editor.command.openresourcebundle" commandName="%handledmenuitem.open.resource.bundle"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_-u4FYNz1Eea04oxTaQyF1g" featurename="handlers" parentElementId="org.eclipselabs.e4.tapiji.application">
-    <elements xsi:type="commands:Handler" xmi:id="_E9T9kNz2Eea04oxTaQyF1g" elementId="org.eclipse.e4.babel.rcp.editor.handler.openfile" contributionURI="bundleclass://org.eclipse.e4.babel.rcp.editor/org.eclipse.e4.babel.rcp.editor.ui.handler.window.OpenResourceBundleHandler" command="_GdfW4Nz2Eea04oxTaQyF1g"/>
+    <elements xsi:type="commands:Handler" xmi:id="_E9T9kNz2Eea04oxTaQyF1g" elementId="org.eclipse.e4.babel.rcp.editor.handler.openresourcebundle" contributionURI="bundleclass://org.eclipse.e4.babel.rcp.editor/org.eclipse.e4.babel.rcp.editor.ui.handler.window.OpenResourceBundleHandler" command="_GdfW4Nz2Eea04oxTaQyF1g"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_EFkDsOALEeaKjeU3dF0ytQ" featurename="toolBarContributions" parentElementId="org.eclipselabs.e4.tapiji.application">
+    <elements xsi:type="menu:ToolBarContribution" xmi:id="_pbqiAOAMEeahm60FyqfB4g" elementId="org.eclipse.e4.babel.rcp.editor.toolbarcontribution.openglossary" parentId="org.eclipse.e4.tapiji.translator.toolbar.main" positionInParent="?before=org.eclipse.e4.tapiji.rcp.glossary.handledtoolitem.openglossary">
+      <children xsi:type="menu:HandledToolItem" xmi:id="_JQ3D4OALEeaKjeU3dF0ytQ" elementId="org.eclipse.e4.babel.rcp.editor.handledtoolitem.openresourcebundle" label="%handledmenuitem.open.resource.bundle" iconURI="platform:/plugin/org.eclipse.e4.babel.resource/icons/16x16/open_resource_bundle.png" tooltip="%handledmenuitem.open.resource.bundle" command="_GdfW4Nz2Eea04oxTaQyF1g"/>
+    </elements>
   </fragments>
 </fragment:ModelFragments>
