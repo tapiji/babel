@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="ASCII"?>
 <fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_8IJOMNmIEeaE7LwdrUH_Zg">
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_JJtAANmJEeaE7LwdrUH_Zg" featurename="menuContributions" parentElementId="org.eclipselabs.e4.tapiji.application">
-    <elements xsi:type="menu:MenuContribution" xmi:id="_MtTCkNmJEeaE7LwdrUH_Zg" elementId="org.eclipse.e4.babel.rap.core.menucontribution.openresourcebundle" parentId="org.eclipse.e4.tapiji.glossary.menu.file">
-      <children xsi:type="menu:HandledMenuItem" xmi:id="_Xln3ANmJEeaE7LwdrUH_Zg" elementId="org.eclipse.e4.babel.rap.core.handledmenuitem.ewqwqewe" label="ewqwqewe" command="_FQWogNmMEeaE7LwdrUH_Zg"/>
+    <elements xsi:type="menu:MenuContribution" xmi:id="_MtTCkNmJEeaE7LwdrUH_Zg" elementId="org.eclipse.e4.babel.rap.core.menucontribution.openresourcebundle" positionInParent="?after=org.eclipse.e4.tapiji.rap.translator.menuseparator.openresourcebundle" parentId="org.eclipse.e4.tapiji.rap.translator.menu.file">
+      <children xsi:type="menu:HandledMenuItem" xmi:id="_Xln3ANmJEeaE7LwdrUH_Zg" elementId="org.eclipse.e4.babel.rap.core.handledmenuitem.ewqwqewe" label="Open Resource Bundle" command="_FQWogNmMEeaE7LwdrUH_Zg"/>
     </elements>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_-jDqENmLEeaE7LwdrUH_Zg" featurename="commands" parentElementId="org.eclipselabs.e4.tapiji.application">
