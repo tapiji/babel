@@ -50,6 +50,7 @@ import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
@@ -140,16 +141,17 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
 		setSelection(0);
 		part.setDescription("Editor f\u00FCr ResourceBundle:");
 
+		setCursorWaitVisibility(true);
 		this.resourceManager.init(file).whenComplete((result, exception) -> {
 		    Log.d(TAG, "Create ResourceBundleEditor");
 		    sync.syncExec(() -> {
-
 			createTabs();
 			part.setTooltip(resourceManager.getResourceLocation());
 			part.setLabel(resourceManager.getDisplayName());
 			keyTreeView.getPresenter().createTreeView();
 			i18nPage.getPresenter().setChangeListener();
 			i18nPage.refreshView();
+			setCursorWaitVisibility(false);
 		    });
 		});
 
@@ -166,6 +168,16 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
 	// exception.getMessage());
 	// Log.e("onCreate(Can not initialize resource)", exception);
 	// }
+    }
+
+    public void setCursorWaitVisibility(boolean visibility) {
+	sync.asyncExec(() -> {
+	    if (visibility) {
+		getParent().setCursor(new Cursor(getParent().getDisplay(), SWT.CURSOR_WAIT));
+	    } else {
+		getParent().setCursor(new Cursor(getParent().getDisplay(), SWT.CURSOR_ARROW));
+	    }
+	});
     }
 
     private void toolbarVisibility() {

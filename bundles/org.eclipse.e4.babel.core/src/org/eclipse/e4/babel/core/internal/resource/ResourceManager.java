@@ -127,13 +127,6 @@ public final class ResourceManager implements IResourceManager {
         throw (E) exception;
     }
 
-    public CompletableFuture<Void> test() {
-        return CompletableFuture.supplyAsync(() -> {
-
-            return null;
-        }, executorService);
-    }
-
     private KeyTreeUpdater keyTreeUpdater() {
         if (PropertyPreferences.getInstance().isEditorTreeHierachical()) {
             return new GroupedKeyTreeUpdater(PropertyPreferences.getInstance().getKeyGroupSeparator());
