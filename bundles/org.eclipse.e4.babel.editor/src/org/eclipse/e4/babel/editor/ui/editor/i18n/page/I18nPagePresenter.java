@@ -49,12 +49,6 @@ public class I18nPagePresenter implements I18nPageContract.Presenter {
 
     @PostConstruct
     public void onCreate() { // NO_UCD
-	editorView.getKeyTreeView().getTreeViewer().addSelectionChangedListener(localBehaviour);
-	editorView.getKeyTreeView().getKeyTree().addChangeListener(localBehaviour);
-    }
-
-    @Override
-    public void init() {
 
     }
 
@@ -62,6 +56,12 @@ public class I18nPagePresenter implements I18nPageContract.Presenter {
     public void dispose() {
 	pageEntries.forEach(entry -> entry.dispose());
 	pageEntries.clear();
+    }
+
+    @Override
+    public void setChangeListener() {
+	editorView.getKeyTreeView().getTreeViewer().addSelectionChangedListener(localBehaviour);
+	editorView.getKeyTreeView().getKeyTree().addChangeListener(localBehaviour);
     }
 
     @Override
@@ -146,7 +146,7 @@ public class I18nPagePresenter implements I18nPageContract.Presenter {
     /**
      * Focusses the given {@link BundleEntryComposite} and scrolls the
      * surrounding {@link ScrolledComposite} in order to make it visible.
-     * 
+     *
      * @param comp
      *            The {@link BundleEntryComposite} to be focussed.
      */
@@ -195,7 +195,7 @@ public class I18nPagePresenter implements I18nPageContract.Presenter {
      * This method focusses the {@link BundleEntryComposite} corresponding to
      * the given {@link Locale}. If no such composite exists or the locale is
      * null, nothing happens.
-     * 
+     *
      * @param locale
      *            The locale whose {@link BundleEntryComposite} is to be
      *            focussed.

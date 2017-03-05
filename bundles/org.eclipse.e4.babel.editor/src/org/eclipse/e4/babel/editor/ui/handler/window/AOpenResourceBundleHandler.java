@@ -142,5 +142,11 @@ public abstract class AOpenResourceBundleHandler {
 	}
     }
 
+    private void updateIfAlreadyOpen() {
+	MPartStack mainStack = (MPartStack) modelService.find(PART_STACK_ID, application);
+	// mainStack.getChildren().stream().filter(arg0 -> true).forEach(editor
+	// -> "");
+    }
+
     protected abstract String[] recentlyOpenedFiles(Shell shell);
 }

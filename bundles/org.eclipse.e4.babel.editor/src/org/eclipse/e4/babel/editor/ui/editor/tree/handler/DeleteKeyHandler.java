@@ -31,7 +31,7 @@ public final class DeleteKeyHandler {// NO_UCD
 		msgBox.setMessage(msgBody);
 		msgBox.setText(msgHead);
 		if (msgBox.open() == SWT.OK) {
-		    resourceBundleEditorContract.getResourceManager().removeKey(item, item.getId());
+		    resourceBundleEditorContract.getResourceManager().removeKey(item);
 		}
 	    }
 	}

@@ -60,5 +60,7 @@ public interface KeyTreeContract {
 	String getSelectedKey();
 
 	View getKeyTreeView();
+
+	void createTreeView();
     }
 }

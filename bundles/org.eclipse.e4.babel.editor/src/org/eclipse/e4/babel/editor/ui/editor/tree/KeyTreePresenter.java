@@ -22,68 +22,71 @@ import org.eclipse.jface.viewers.ViewerFilter;
 @Creatable
 final class KeyTreePresenter implements KeyTreeContract.Presenter {
 
-    private KeyTreeLabelProvider keyTreeLabelProvider;
-    private KeyTreeContentProvider keyTreeContentProvider;
-    private View keyTreeView;
+    private KeyTreeLabelProvider treeLabelProvider;
+    private KeyTreeContentProvider treeContentProvider;
+    private ResourceBundleEditorContract.View resourceBundleEditor;
+    private View view;
+
     @Inject
     private IBabelResourceProvider resourceProvider;
 
-    @Override
-    public View getKeyTreeView() {
-	return keyTreeView;
-    }
-
-    private ResourceBundleEditorContract.View resourceBundleEditor;
-    private KeyTreeUpdater keyTreeUpdater;
-
     private KeyTreePresenter(View keyTreeView, ResourceBundleEditorContract.View resourceBundleEditor) {
-	this.keyTreeView = keyTreeView;
+	this.view = keyTreeView;
 	this.resourceBundleEditor = resourceBundleEditor;
     }
 
     @PostConstruct
     public void onCreate() {
-	this.keyTreeLabelProvider = new KeyTreeLabelProvider(resourceProvider);
-	this.keyTreeContentProvider = new KeyTreeContentProvider();
-	this.keyTreeView.setTreeViewerContentProvider(keyTreeContentProvider);
-	this.keyTreeView.setTreeViewerLabelProvider(keyTreeLabelProvider);
-	this.keyTreeView.updateKeyTree(getKeyTree());
-	this.keyTreeUpdater = keyTreeView.getKeyTree().getUpdater();
+
     }
 
     @Override
     public void addKey(String key) {
 	resourceBundleEditor.getResourceManager().addNewKey(key);
-	KeyTreeItem item = (KeyTreeItem) keyTreeView.getStructuredSelectionSelection().getFirstElement();
+	KeyTreeItem item = (KeyTreeItem) view.getStructuredSelectionSelection().getFirstElement();
 	if (item != null && item.getId().equals(key)) {
 	    resourceBundleEditor.getI18nPage().getPresenter().refreshTextBoxes();
 	} else {
-	    keyTreeView.setSelectedKeyTreeItem(getKeyTree().getKeyTreeItem(key));
+	    view.setSelectedKeyTreeItem(getKeyTree().getKeyTreeItem(key));
 	}
+    }
+
+    @Override
+    public View getKeyTreeView() {
+	return view;
     }
 
     @Override
     public boolean checkNewKey(String key) {
 	boolean keyExist = resourceBundleEditor.getResourceManager().getKeyTree().getBundleGroup().isKey(key);
 	if (keyExist || key.length() == 0) {
-	    keyTreeView.setButtonAddEnabledState(false);
+	    view.setButtonAddEnabledState(false);
 	} else {
-	    keyTreeView.setButtonAddEnabledState(true);
+	    view.setButtonAddEnabledState(true);
 	}
 	if (key.length() > 0 && !key.equals(getSelectedKey())) {
 	    KeysStartingWithVisitor visitor = new KeysStartingWithVisitor();
 	    resourceBundleEditor.getResourceManager().getKeyTree().accept(visitor, key);
 	    final KeyTreeItem item = visitor.getKeyTreeItem();
 	    if (item != null) {
-		keyTreeView.setSyncState(false);
-		keyTreeView.setSelectedKeyTreeItem(item);
+		view.setSyncState(false);
+		view.setSelectedKeyTreeItem(item);
 
 		if (key.equals(getSelectedKey())) {
-		    keyTreeView.getKeyTree().selectKey(getSelectedKey());
+		    view.getKeyTree().selectKey(getSelectedKey());
 		}
 	    }
 	}
 	return keyExist;
+    }
+
+    @Override
+    public void createTreeView() {
+	this.treeLabelProvider = new KeyTreeLabelProvider(resourceProvider);
+	this.treeContentProvider = new KeyTreeContentProvider();
+	this.view.setTreeViewerContentProvider(treeContentProvider);
+	this.view.setTreeViewerLabelProvider(treeLabelProvider);
+	this.view.updateKeyTree(getKeyTree());
     }
 
     @Override
@@ -107,7 +110,7 @@ final class KeyTreePresenter implements KeyTreeContract.Presenter {
 
     @Override
     public KeyTreeItem getSelection() {
-	return (KeyTreeItem) keyTreeView.getStructuredSelectionSelection().getFirstElement();
+	return (KeyTreeItem) view.getStructuredSelectionSelection().getFirstElement();
     }
 
     @Override
@@ -117,25 +120,23 @@ final class KeyTreePresenter implements KeyTreeContract.Presenter {
 
     @Override
     public void dispose() {
-	keyTreeContentProvider.dispose();
-	keyTreeLabelProvider.dispose();
+	treeContentProvider.dispose();
+	treeLabelProvider.dispose();
     }
 
     @Override
     public void changeToHierarchicalTree() {
-	keyTreeUpdater = new GroupedKeyTreeUpdater(PropertyPreferences.getInstance().getKeyGroupSeparator());
-	getKeyTree().setUpdater(keyTreeUpdater);
+	getKeyTree().setUpdater(new GroupedKeyTreeUpdater(PropertyPreferences.getInstance().getKeyGroupSeparator()));
     }
 
     @Override
     public void changeToFlatTree() {
-	keyTreeUpdater = new FlatKeyTreeUpdater();
-	getKeyTree().setUpdater(keyTreeUpdater);
+	getKeyTree().setUpdater(new FlatKeyTreeUpdater());
     }
 
     @Override
     public KeyTreeUpdater getKeyTreeUpdater() {
-	return keyTreeUpdater;
+	return view.getKeyTree().getKeyTreeUpdater();
     }
 
     @Override
@@ -157,9 +158,4 @@ final class KeyTreePresenter implements KeyTreeContract.Presenter {
 	return presenter;
     }
 
-    @Override
-    public void init() {
-	// TODO Auto-generated method stub
-
-    }
 }

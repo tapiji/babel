@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.eclipse.core.runtime.CoreException;
@@ -18,12 +19,11 @@ import org.eclipse.e4.babel.editor.text.file.PropertyFileResource;
 import org.eclipse.e4.babel.editor.text.model.SourceEditor;
 
 
-
 public final class ExternalResourceFactory extends ResourceFactory {
 
     private ExternalFileCreator fileCreator;
 
-    public ExternalResourceFactory() {
+    private ExternalResourceFactory() {
         super();
     }
 
@@ -52,26 +52,48 @@ public final class ExternalResourceFactory extends ResourceFactory {
         setResourceLocation(absolutePath);
     }
 
+    /**
+     * Gets file creator
+     */
     @Override
     public AbstractFileCreator getPropertiesFileCreator() {
         return fileCreator;
     }
 
+    /**
+     * Gets resources from directory
+     *
+     * @param file
+     * @return List<File>
+     */
     private static List<File> getResources(File file) {
         File parentDir = file.getParentFile();
         List<File> resources = null;
         if (parentDir != null) {
-            resources = Stream.of(parentDir.listFiles()).filter(item -> {
-                System.out.println("Item: " + item.getName());
-                return (item instanceof File) && BabelUtils.isResourceBundle(item.getName());
-            }).collect(Collectors.toCollection(ArrayList::new));
-
+            resources = Stream.of(parentDir.listFiles()).filter(isResourceBundle).collect(Collectors.toCollection(ArrayList::new));
         }
         return resources;
     }
 
+    /**
+     * Checks if file is a resource bundle
+     */
+    private static Predicate<File> isResourceBundle = file -> file instanceof File && BabelUtils.isResourceBundle(file.getName());
+
     @Override
     public boolean isExternal() {
         return true;
+    }
+
+    /**
+     * @param fileDocument
+     * @return
+     * @throws CoreException
+     * @throws IOException
+     */
+    public static ExternalResourceFactory create(IPropertyResource fileDocument) throws CoreException, IOException {
+        ExternalResourceFactory factory = new ExternalResourceFactory();
+        factory.init(fileDocument);
+        return factory;
     }
 }

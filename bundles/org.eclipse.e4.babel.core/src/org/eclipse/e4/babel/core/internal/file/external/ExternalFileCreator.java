@@ -15,7 +15,7 @@ import org.eclipse.e4.babel.logger.Log;
 
 /**
  * Creates a standard properties file.
- * 
+ *
  * @author Christian Behon
  */
 public final class ExternalFileCreator extends AbstractFileCreator {
@@ -27,19 +27,18 @@ public final class ExternalFileCreator extends AbstractFileCreator {
 
     /**
      * Constructor
-     * 
+     *
      * @param dir directory in which to create the file
      * @param baseFileName base name of file to create
      * @param extension extension of the file
      */
     public ExternalFileCreator(final String dir, final String baseFileName, final String extension) {
         super();
+        Log.d(TAG, "ExternalFileCreator called with: dir = [" + dir + "], baseFilename = [" + baseFileName + "],  extension = [" + extension + "]");
         this.dir = dir;
         this.baseFileName = baseFileName;
         this.extension = extension;
-        Log.d(TAG, "Directory: " + dir + " BaseFilename: " + baseFileName + " Extension: " + extension);
     }
-
 
     /*
      * (non-Javadoc)
@@ -48,7 +47,7 @@ public final class ExternalFileCreator extends AbstractFileCreator {
      */
     @Override
     protected IPropertyResource createPropertyResource(Locale locale, String content) throws CoreException, IOException {
-
+        Log.d(TAG, "createPropertyResource called with: locale = [" + locale + "], content = [" + content + "]");
         Path path = null;
         if (locale != null) {
             path = Paths.get(dir, baseFileName + '_' + locale.toString() + '.' + extension);
@@ -60,7 +59,6 @@ public final class ExternalFileCreator extends AbstractFileCreator {
         if (file.exists()) {
             throw new IOException("File already exists: " + file.getName());
         }
-        Log.d(TAG, "FILE: " + path.toFile().toString());
         return PropertyFileResource.create(file, content);
     }
 }

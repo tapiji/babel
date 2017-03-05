@@ -21,7 +21,6 @@ import org.eclipse.e4.babel.resource.IBabelResourceProvider;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.graphics.Image;
 
 final class I18nPageEntryPresenter implements I18nPageEntryContract.Presenter {
@@ -83,12 +82,6 @@ final class I18nPageEntryPresenter implements I18nPageEntryContract.Presenter {
     }
 
     @Override
-    public void init() {
-	// TODO Auto-generated method stub
-
-    }
-
-    @Override
     public void dispose() {
 	// TODO Auto-generated method stub
     }
@@ -99,7 +92,7 @@ final class I18nPageEntryPresenter implements I18nPageEntryContract.Presenter {
 	    final BundleGroup bundleGroup = resourceManager.getBundleGroup();
 	    final BundleEntry entry = bundleGroup.getBundleEntry(locale, activeKey);
 	    final String text = view.getText();
-	    Log.d(TAG, "Text to update" + text +" entry: "+entry);
+	    Log.d(TAG, "Text to update" + text + " entry: " + entry);
 	    if (entry == null || !text.equals(entry.getValue())) {
 		Log.d(TAG, "Update Resource Bundle");
 		bundleGroup.addBundleEntry(locale, BundleEntry.create(activeKey, text));
@@ -187,7 +180,7 @@ final class I18nPageEntryPresenter implements I18nPageEntryContract.Presenter {
 
     /**
      * Gets the orientation suited for a given locale.
-     * 
+     *
      * @return <code>SWT.RIGHT_TO_LEFT</code> or <code>SWT.LEFT_TO_RIGHT</code>
      */
     @Override

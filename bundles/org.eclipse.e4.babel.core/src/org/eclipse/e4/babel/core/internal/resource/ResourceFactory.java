@@ -15,12 +15,10 @@ package org.eclipse.e4.babel.core.internal.resource;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.stream.Stream;
 import org.eclipse.core.resources.IFile;
 //import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -28,7 +26,6 @@ import org.eclipse.e4.babel.core.api.IResourceFactory;
 import org.eclipse.e4.babel.core.internal.comparator.LocaleComparator;
 import org.eclipse.e4.babel.core.internal.file.AbstractFileCreator;
 import org.eclipse.e4.babel.core.internal.resource.external.ExternalResourceFactory;
-import org.eclipse.e4.babel.core.utils.BabelUtils;
 import org.eclipse.e4.babel.editor.text.file.IPropertyResource;
 import org.eclipse.e4.babel.editor.text.file.PropertyFileType;
 import org.eclipse.e4.babel.editor.text.model.SourceEditor;
@@ -42,7 +39,7 @@ import org.eclipse.e4.babel.logger.Log;
  * {@link ResourceFactory} as well as static entry point to access the
  * responsible one.
  * </p>
- * 
+ *
  * @author Pascal Essiembre
  * @author cuhiodtick
  * @author Christian Behon
@@ -51,6 +48,9 @@ public abstract class ResourceFactory implements IResourceFactory {
 
     private final static String TAG = ResourceFactory.class.getSimpleName();
 
+    /**
+     * Constructor
+     */
     public ResourceFactory() {
         super();
     }
@@ -69,12 +69,11 @@ public abstract class ResourceFactory implements IResourceFactory {
      * The short displayname
      */
     private String displayName;
-    
+
     /**
      * The short displayname
      */
     private String resourceLocation;
-
 
     @Override
     public String getDisplayName() {
@@ -83,15 +82,15 @@ public abstract class ResourceFactory implements IResourceFactory {
 
     /**
      * Sets the editor display name of this factory.
-     * 
+     *
      * @param displayName
-     *        The display name to set.
+     *            The display name to set.
      * @see #getDisplayName()
      */
     protected void setDisplayName(String displayName) {
         this.displayName = displayName;
     }
-    
+
     @Override
     public String getResourceLocation() {
         return resourceLocation;
@@ -99,9 +98,9 @@ public abstract class ResourceFactory implements IResourceFactory {
 
     /**
      * Sets the editor display name of this factory.
-     * 
+     *
      * @param displayName
-     *        The display name to set.
+     *            The display name to set.
      * @see #getDisplayName()
      */
     protected void setResourceLocation(String resourceLocation) {
@@ -148,15 +147,15 @@ public abstract class ResourceFactory implements IResourceFactory {
 
     /**
      * Creates a resource factory based on given arguments.
-     * 
+     *
      * @param site
-     *        eclipse editor site
+     *            eclipse editor site
      * @param file
-     *        file used to create factory
+     *            file used to create factory
      * @return An initialized resource factory, or <code>null</code> if no
      *         responsible one could be found
      * @throws CoreException
-     *         problem creating factory
+     *             problem creating factory
      * @throws IOException
      */
     public static IResourceFactory createFactory(IPropertyResource fileDocument) throws CoreException, IOException {
@@ -173,9 +172,7 @@ public abstract class ResourceFactory implements IResourceFactory {
             }
             return null;
         } else {
-            ExternalResourceFactory factory = new ExternalResourceFactory();
-            factory.init(fileDocument);
-            return factory;
+            return ExternalResourceFactory.create(fileDocument);
         }
     }
 
@@ -186,17 +183,17 @@ public abstract class ResourceFactory implements IResourceFactory {
      * This might be used to get the {@link SourceEditor}s from other factories
      * while initializing an other factory.
      * </p>
-     * 
+     *
      * @param site
-     *        eclipse editor site
+     *            eclipse editor site
      * @param file
-     *        file used to create factory
+     *            file used to create factory
      * @param childFactoryClass
-     *        The class of factory to exclude.
+     *            The class of factory to exclude.
      * @return An initialized resource factory, or <code>null</code> if no
      *         responsible one could be found
      * @throws CoreException
-     *         problem creating factory
+     *             problem creating factory
      * @throws IOException
      */
     public static IResourceFactory createParentFactory(IPropertyResource fileDocument, Class<?> childFactoryClass) throws CoreException, IOException {
@@ -213,6 +210,7 @@ public abstract class ResourceFactory implements IResourceFactory {
 
     /**
      * Create a new source editor
+     *
      * @param fileDocument
      * @param locale
      * @return {@link SourceEditor}
@@ -224,23 +222,25 @@ public abstract class ResourceFactory implements IResourceFactory {
     /**
      * Returns the resource bundle file resources that match the specified file
      * name.
-     * 
+     *
      * @param file
-     *        the file to match
+     *            the file to match
      * @return array of file resources, empty if none matches
      * @throws CoreException
      */
     protected static IFile[] getResources(IPropertyResource file) throws CoreException {
         Log.d(TAG, "----------- getResources ----------");
-      /*  String regex = BabelUtils.getPropertiesFileRegEx(file);
-        final Collection<IResource> validResources = new ArrayList<>();
-        Stream.of(file.getIFile().getParent().members()).forEach(resource -> {
-            String resourceName = resource.getName();
-            if (resource instanceof IFile && resourceName.matches(regex)) {
-                validResources.add(resource);
-            }
-        });
-        return validResources.toArray(new IFile[] {});*/
+        /*
+         * String regex = BabelUtils.getPropertiesFileRegEx(file);
+         * final Collection<IResource> validResources = new ArrayList<>();
+         * Stream.of(file.getIFile().getParent().members()).forEach(resource -> {
+         * String resourceName = resource.getName();
+         * if (resource instanceof IFile && resourceName.matches(regex)) {
+         * validResources.add(resource);
+         * }
+         * });
+         * return validResources.toArray(new IFile[] {});
+         */
         return null;
     }
 

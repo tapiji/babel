@@ -111,7 +111,6 @@ public final class I18nPageView extends ScrolledComposite implements I18nPageCon
     @Override
     public void setPresenter(final Presenter presenter) {
 	this.presenter = presenter;
-	this.presenter.init();
     }
 
     @Override
@@ -125,6 +124,7 @@ public final class I18nPageView extends ScrolledComposite implements I18nPageCon
 	createEditingPart();
 	i18nEntryComposite.layout(true, true);
 	layout(true, true);
+
     }
 
     @Override

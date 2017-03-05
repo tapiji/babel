@@ -63,5 +63,7 @@ public interface I18nPageContract {
 	void refreshTextBoxes();
 
 	I18nPageEntryContract.View getPageEntryByIndex(int position);
+
+	void setChangeListener();
     }
 }

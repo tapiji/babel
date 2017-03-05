@@ -10,9 +10,6 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
-//import org.eclipse.core.resources.IResourceChangeEvent;
-//import org.eclipse.core.resources.IResourceChangeListener;
-//import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.e4.babel.core.BabelExtensionManager;
 import org.eclipse.e4.babel.core.api.IResourceManager;
@@ -35,6 +32,7 @@ import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.Persist;
 import org.eclipse.e4.ui.di.UIEventTopic;
+import org.eclipse.e4.ui.di.UISynchronize;
 import org.eclipse.e4.ui.model.application.ui.MDirtyable;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
@@ -61,7 +59,8 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
     public static final String TOPIC_TREE_VIEW_VISIBILITY = "TOPIC_GUI/TREE_VIEW_VISIBILITY";
     private static final String TAG = ResourceBundleEditor.class.getSimpleName();
 
-  //  private ResourceChangeListener resourceChangeListener = new ResourceChangeListener();
+    // private ResourceChangeListener resourceChangeListener = new
+    // ResourceChangeListener();
 
     @Inject
     private EMenuService menuService;
@@ -85,9 +84,12 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
     private EModelService modelService;
 
     // TODO RAP and RCP
-  //  @Inject
-  //  private IWorkspace workspace;
-    
+    // @Inject
+    // private IWorkspace workspace;
+
+    @Inject
+    UISynchronize sync;
+
     @Inject
     private EPartService partService;
 
@@ -119,20 +121,14 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
 
 	    if (object instanceof IPropertyResource) {
 		IPropertyResource file = (IPropertyResource) object;
-		try {
-		    this.resourceManager.init(file);
-		} catch (IOException e) {
-		    e.printStackTrace();
-		}
 
 		toolbarVisibility();
-		
+
 		// TODO RCP and RAP
-		//this.workspace.addResourceChangeListener(resourceChangeListener, IResourceChangeEvent.POST_CHANGE);
+		// this.workspace.addResourceChangeListener(resourceChangeListener,
+		// IResourceChangeEvent.POST_CHANGE);
 
 		addSelectionListener(this);
-
-		Log.d(TAG, "KEYTREE: " + resourceManager.getKeyTree().toString());
 
 		sashForm = new SashForm(this, SWT.SMOOTH);
 		keyTreeView = KeyTreeView.create(sashForm, this, context);
@@ -140,24 +136,36 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
 		sashForm.setWeights(new int[] { 25, 75 });
 
 		createTab(sashForm, "Properties", BabelResourceConstants.IMG_RESOURCE_BUNDLE);
-		createTabs();
 
 		setSelection(0);
-		part.setLabel(resourceManager.getDisplayName());
-		part.setTooltip(resourceManager.getResourceLocation());
 		part.setDescription("Editor f\u00FCr ResourceBundle:");
+
+		this.resourceManager.init(file).whenComplete((result, exception) -> {
+		    Log.d(TAG, "Create ResourceBundleEditor");
+		    sync.syncExec(() -> {
+
+			createTabs();
+			part.setTooltip(resourceManager.getResourceLocation());
+			part.setLabel(resourceManager.getDisplayName());
+			keyTreeView.getPresenter().createTreeView();
+			i18nPage.getPresenter().setChangeListener();
+			i18nPage.refreshView();
+		    });
+		});
 
 	    } else {
 		throw new ClassCastException("Can not cast object to IFileDocument");
 	    }
 
-	} catch (ClassCastException exception) {
+	} catch (ClassCastException | CoreException | IOException exception) {
 	    MessageDialog.openError(shell, "Cannot open Resource", exception.getMessage());
 	    Log.e("onCreate(): ", exception);
-	} catch (CoreException exception) {
-	    MessageDialog.openError(shell, "Cannot open Resource", exception.getMessage());
-	    Log.e("onCreate(Can not initialize resource)", exception);
 	}
+	// catch (CoreException exception) {
+	// MessageDialog.openError(shell, "Cannot open Resource",
+	// exception.getMessage());
+	// Log.e("onCreate(Can not initialize resource)", exception);
+	// }
     }
 
     private void toolbarVisibility() {
@@ -169,7 +177,7 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
     /**
      * Change current tab based on locale. If there is no editors associated
      * with current locale, do nothing.
-     * 
+     *
      * @param locale
      *            Locale used to identify the tab to change to
      */
@@ -187,7 +195,7 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
 
     /**
      * Change the visibility of tree view.
-     * 
+     *
      * @param visibility
      *            True hide tree view otherwise show tree view
      */
@@ -264,13 +272,13 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
     }
 
     // TODO RAP and RCP
- /*   private class ResourceChangeListener implements IResourceChangeListener {
-	@Override
-	public void resourceChanged(IResourceChangeEvent event) {
-	    resourceManager.reloadProperties();
-	    i18nPage.getPresenter().refreshTextBoxes();
-	}
-    }*/
+    /*
+     * private class ResourceChangeListener implements IResourceChangeListener {
+     *
+     * @Override public void resourceChanged(IResourceChangeEvent event) {
+     * resourceManager.reloadProperties();
+     * i18nPage.getPresenter().refreshTextBoxes(); } }
+     */
 
     @Override
     public I18nPageContract.View getI18nPage() {
@@ -354,7 +362,7 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
 	i18nPage.getPresenter().refreshEditorOnChanges();
 	resourceManager.save();
 
-	keyTree.setUpdater(keyTree.getUpdater());
+	keyTree.setUpdater(keyTree.getKeyTreeUpdater());
 	if (key != null) {
 	    keyTree.selectKey(key);
 	}
@@ -371,7 +379,7 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
 	partService.removePartListener(resourceBundleEditorListener);
 	resourceBundleEditorListener.dispose();
 	// TODO RAP and RCP
-	//workspace.removeResourceChangeListener(resourceChangeListener);
+	// workspace.removeResourceChangeListener(resourceChangeListener);
 	super.dispose();
     }
 }

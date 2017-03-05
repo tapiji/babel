@@ -27,8 +27,6 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.MouseAdapter;
-import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -43,19 +41,19 @@ public final class KeyTreeView extends Composite implements KeyTreeContract.View
     private static final String TAG = KeyTreeView.class.getSimpleName();
     private static final String TREE_VIEWER_MENU_ID = "org.eclipse.e4.babel.editor.popupmenu.treePopupMenu";
     private static final String COMMAND_DELETE_KEY = "org.eclipse.e4.babel.editor.command.deleteKey";
-    
+
     @Inject
     private EMenuService menuService;
-    
+
     @Inject
     private IBabelResourceProvider resourceProvider;
-    
+
     @Inject
     private ECommandService commandService;
 
     @Inject
     private EHandlerService handlerService;
-    
+
     @Inject
     private ESelectionService selectionService;
 
@@ -178,7 +176,7 @@ public final class KeyTreeView extends Composite implements KeyTreeContract.View
 	    treeViewer.expandAll();
 	}
 
-	treeViewer.addSelectionChangedListener((event) -> {
+	treeViewer.addSelectionChangedListener(event -> {
 	    selectionService.setSelection(presenter.getSelection());
 	    final String selectedKey = presenter.getSelectedKey();
 	    if (syncAddKeyTextBox && selectedKey != null) {
@@ -199,22 +197,19 @@ public final class KeyTreeView extends Composite implements KeyTreeContract.View
 	    }
 	});
 
-	treeViewer.getTree().addMouseListener(new MouseAdapter() {
-
-	    @Override
-	    public void mouseDoubleClick(MouseEvent event) {
-		final Object element = selectionService.getSelection();
-		if (treeViewer.isExpandable(element)) {
-		    if (treeViewer.getExpandedState(element)) {
-			treeViewer.collapseToLevel(element, 1);
-		    } else {
-			treeViewer.expandToLevel(element, 1);
-		    }
+	treeViewer.getTree().addListener(SWT.MouseDoubleClick, listener -> {
+	    final Object element = selectionService.getSelection();
+	    if (treeViewer.isExpandable(element)) {
+		if (treeViewer.getExpandedState(element)) {
+		    treeViewer.collapseToLevel(element, 1);
+		} else {
+		    treeViewer.expandToLevel(element, 1);
 		}
 	    }
 	});
 	treeViewer.addFilter(presenter.getTreeFilter());
 	menuService.registerContextMenu(treeViewer.getTree(), TREE_VIEWER_MENU_ID);
+
     }
 
     private void bottomView() {

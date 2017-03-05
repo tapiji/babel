@@ -142,7 +142,7 @@ public final class KeyTree extends BundleObject implements IKeyTreeVisitable {
         rootKeyItems.clear();
     }
 
-    public KeyTreeUpdater getUpdater() {
+    public KeyTreeUpdater getKeyTreeUpdater() {
         return keyTreeUpdater;
     }
 

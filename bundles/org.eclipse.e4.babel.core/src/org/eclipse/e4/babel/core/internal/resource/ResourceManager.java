@@ -19,6 +19,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
@@ -42,11 +46,10 @@ import org.eclipse.e4.babel.editor.text.model.SourceEditor;
 import org.eclipse.e4.babel.logger.Log;
 
 
-
 /**
  * Mediator holding instances of commonly used items, dealing with
  * important interactions within themselves.
- * 
+ *
  * @author Pascal Essiembre
  * @author Alexander Bieber
  * @author Christian Behon
@@ -59,55 +62,89 @@ public final class ResourceManager implements IResourceManager {
     private IResourceFactory resourcesFactory;
     private BundleGroup bundleGroup;
     private KeyTree keyTree;
+
     private final Map<Locale, SourceEditor> sourceEditors = new HashMap<>();
     private final List<Locale> locales = new ArrayList<>();
-    private KeyTreeUpdater treeUpdater;
 
-    // todo: Add dispose method and release listeners and content
+    private ExecutorService executorService;
+
+    public ResourceManager() {
+        super();
+        executorService = Executors.newFixedThreadPool(1);
+    }
 
     /**
      * Constructor.
-     * 
+     *
      * @param site eclipse editor site
      * @param file file used to create manager
+     * @return
      * @throws CoreException problem creating resource manager
      * @throws IOException
      */
     @Override
-    public void init(final IPropertyResource fileDocument) throws CoreException, IOException {
-        resourcesFactory = ResourceFactory.createFactory(fileDocument);
-        bundleGroup = BundleGroup.create();
-        resourcesFactory.getSourceEditors().forEach(editor -> {
-            final Locale locale = editor.getLocale();
-            sourceEditors.put(locale, editor);
-            locales.add(locale);
-            bundleGroup.addBundle(locale, PropertiesParser.parse(editor.getContent()));
-        });
+    public CompletableFuture<Void> init(final IPropertyResource fileDocument) throws CoreException, IOException {
 
-        bundleGroup.addChangeListener(new BundleChangeAdapter() {
+        return CompletableFuture.supplyAsync(() -> {
+            long startTime = System.currentTimeMillis();
 
-            @Override
-            public <T> void modify(BundleEvent<T> event) {
-                super.modify(event);
-                final Bundle bundle = (Bundle) event.data();
-                final SourceEditor editor = sourceEditors.get(bundle.getLocale());
-                String editorContent = PropertiesGenerator.generate(bundle);
-                editor.setContent(editorContent);
+            try {
+                resourcesFactory = ResourceFactory.createFactory(fileDocument);
+                bundleGroup = BundleGroup.create();
+                resourcesFactory.getSourceEditors().forEach(editor -> {
+                    final Locale locale = editor.getLocale();
+                    sourceEditors.put(locale, editor);
+                    locales.add(locale);
+                    bundleGroup.addBundle(locale, PropertiesParser.parse(editor.getContent()));
+
+                });
+                bundleGroup.addChangeListener(new BundleChangeAdapter() {
+
+                    @Override
+                    public <T> void modify(BundleEvent<T> event) {
+                        super.modify(event);
+                        final Bundle bundle = (Bundle) event.data();
+                        sourceEditors.get(bundle.getLocale()).setContent(PropertiesGenerator.generate(bundle));
+                    }
+
+                });
+
+                this.keyTree = KeyTree.create(bundleGroup, keyTreeUpdater());
+
+            } catch (IOException | CoreException e) {
+                throwAsUnchecked(e);
             }
+            long stopTime = System.currentTimeMillis();
+            long elapsedTime = stopTime - startTime;
+            System.out.println(elapsedTime);
+            return null;
+        }, executorService);
 
-        });
+    }
 
+    @SuppressWarnings("unchecked")
+    public static <E extends Exception> void throwAsUnchecked(Exception exception) throws E {
+        throw (E) exception;
+    }
+
+    public CompletableFuture<Void> test() {
+        return CompletableFuture.supplyAsync(() -> {
+
+            return null;
+        }, executorService);
+    }
+
+    private KeyTreeUpdater keyTreeUpdater() {
         if (PropertyPreferences.getInstance().isEditorTreeHierachical()) {
-            treeUpdater = new GroupedKeyTreeUpdater(PropertyPreferences.getInstance().getKeyGroupSeparator());
+            return new GroupedKeyTreeUpdater(PropertyPreferences.getInstance().getKeyGroupSeparator());
         } else {
-            treeUpdater = new FlatKeyTreeUpdater();
+            return new FlatKeyTreeUpdater();
         }
-        this.keyTree = KeyTree.create(bundleGroup, treeUpdater);
     }
 
     /**
-     * Gets a bundle group.
-     * 
+     * Gets bundle group.
+     *
      * @return bundle group
      */
     @Override
@@ -117,7 +154,7 @@ public final class ResourceManager implements IResourceManager {
 
     /**
      * Gets all locales in this bundle.
-     * 
+     *
      * @return locales
      */
     @Override
@@ -125,7 +162,11 @@ public final class ResourceManager implements IResourceManager {
         return locales;
     }
 
-
+    /**
+     * Gets all locales sorted
+     *
+     * @returnlocales
+     */
     @Override
     public List<Locale> getSortedLocales() {
         return UIUtils.sortLocales(locales);
@@ -133,7 +174,7 @@ public final class ResourceManager implements IResourceManager {
 
     /**
      * Gets the key tree for this bundle.
-     * 
+     *
      * @return key tree
      */
     @Override
@@ -143,7 +184,7 @@ public final class ResourceManager implements IResourceManager {
 
     /**
      * Gets the source editors.
-     * 
+     *
      * @return source editors.
      */
     @Override
@@ -153,19 +194,17 @@ public final class ResourceManager implements IResourceManager {
 
     /**
      * Save all dirty editors.
-     * 
+     *
      * @param monitor progress monitor
      */
     @Override
     public void save() {
-        resourcesFactory.getSourceEditors().forEach(editor -> {
-            editor.saveDocument();
-        });
+        resourcesFactory.getSourceEditors().forEach(editor -> editor.saveDocument());
     }
 
     /**
      * Gets the multi-editor display name.
-     * 
+     *
      * @return display name
      */
     @Override
@@ -173,6 +212,11 @@ public final class ResourceManager implements IResourceManager {
         return resourcesFactory.getDisplayName();
     }
 
+    /**
+     * Gets resource location
+     *
+     * @return resource location
+     */
     @Override
     public String getResourceLocation() {
         return resourcesFactory.getResourceLocation();
@@ -181,7 +225,7 @@ public final class ResourceManager implements IResourceManager {
     /**
      * Returns whether a given file is known to the resource manager (i.e.,
      * if it is part of a resource bundle).
-     * 
+     *
      * @param file file to test
      * @return <code>true</code> if a known resource
      */
@@ -192,8 +236,8 @@ public final class ResourceManager implements IResourceManager {
 
     /**
      * Creates a properties file.
-     * 
-     * @param locale a locale
+     *
+     * @param locale file {@link Locale}
      * @return the newly created file
      * @throws CoreException problem creating file
      * @throws IOException problem creating file
@@ -205,20 +249,26 @@ public final class ResourceManager implements IResourceManager {
 
     /**
      * Gets the source editor matching the given locale.
-     * 
+     *
      * @param locale locale matching requested source editor
      * @return source editor or <code>null</code> if no match
      */
     @Override
-    public SourceEditor getSourceEditor(Locale locale) {
+    public SourceEditor getSourceEditor(final Locale locale) {
+        Log.d(TAG, "getSourceEditor() called with: locale = [" + locale + "]");
         return sourceEditors.get(locale);
     }
 
     /**
-     * Todo
+     * Add new source editor with given locale
+     *
+     * @param IPropertyResource of type file or Ifile
+     * @param locale file {@link Locale}
+     * @return SourceEditor
      */
     @Override
     public SourceEditor addSourceEditor(IPropertyResource fileDocument, Locale locale) {
+        Log.d(TAG, "addSourceEditor() called with: fileDocument =  [" + fileDocument + "], locale = [" + locale + "]");
         SourceEditor sourceEditor = resourcesFactory.addResource(fileDocument, locale);
         sourceEditors.put(sourceEditor.getLocale(), sourceEditor);
         locales.add(locale);
@@ -231,8 +281,7 @@ public final class ResourceManager implements IResourceManager {
      */
     @Override
     public void reloadProperties() {
-        resourcesFactory.getSourceEditors().stream().filter(editor -> editor.isCacheDirty()).forEach(editor -> {
-            Log.d(TAG, editor.toString());
+        resourcesFactory.getSourceEditors().stream().filter(isCacheDirty).forEach(editor -> {
             bundleGroup.addBundle(editor.getLocale(), PropertiesParser.parse(editor.getContent()));
             editor.resetCache();
         });
@@ -240,54 +289,50 @@ public final class ResourceManager implements IResourceManager {
 
     /**
      * Add new key
-     * 
-     * @param key
+     *
+     * @param key to add
      */
     @Override
-    public void addNewKey(String newKey) {
-        Log.d(TAG, "addNewKey " + newKey);
+    public void addNewKey(final String newKey) {
+        Log.d(TAG, "addNewKey() called with: newKey =  [" + newKey + "]");
         keyTree.getBundleGroup().addBundleEntryKey(checkGroupSeparator(newKey));
     }
 
     /**
-     * Remove key
-     * 
-     * @param keyTreeItem
-     * @param key
+     * Remove key from tree list
+     *
+     * @param keyTreeItem to remove
      */
     @Override
-    public void removeKey(final KeyTreeItem keyTreeItem, String key) {
-        Log.d(TAG, "removeKey " + key);
+    public void removeKey(final KeyTreeItem keyTreeItem) {
+        Log.d(TAG, "renameKey() called with: keyTreeItem =  [" + keyTreeItem + "]");
         final List<KeyTreeItem> items = new ArrayList<>();
         items.add(keyTreeItem);
         items.addAll(keyTreeItem.getNestedChildren());
-        items.forEach((item) -> keyTree.getBundleGroup().removeBundleEntryKey(item.getId()));
+        items.forEach(item -> keyTree.getBundleGroup().removeBundleEntryKey(item.getId()));
     }
 
     /**
      * Rename key
-     * 
+     *
      * @param keyTreeItem
-     * @param newKey
+     * @param newKey name
      */
     @Override
     public void renameKey(final KeyTreeItem keyTreeItem, final String newKey) {
-        Log.d(TAG, "renameKey " + newKey);
+        Log.d(TAG, "renameKey() called with: keyTreeItem =  [" + keyTreeItem + "], newKey =[" + newKey + "]");
         final List<KeyTreeItem> items = new ArrayList<>();
         items.add(keyTreeItem);
         items.addAll(keyTreeItem.getNestedChildren());
-        items.forEach((item) -> {
-            final String oldItemKey = item.getId();
-            if (oldItemKey.startsWith(keyTreeItem.getId())) {
-                String newItemKey = checkGroupSeparator(newKey) + oldItemKey.substring(keyTreeItem.getId().length());
-                keyTree.getBundleGroup().renameBundleEntryKey(oldItemKey, newItemKey);
-            }
+        items.stream().filter(hasKeyTreeItem.apply(keyTreeItem)).forEach(item -> {
+            String newItemKey = checkGroupSeparator(newKey) + item.getId().substring(keyTreeItem.getId().length());
+            keyTree.getBundleGroup().renameBundleEntryKey(item.getId(), newItemKey);
         });
     }
 
     /**
      * Check group separator
-     * 
+     *
      * @param key
      * @return string
      */
@@ -303,9 +348,23 @@ public final class ResourceManager implements IResourceManager {
         return changedKey;
     }
 
+    /**
+     * Check if key is in bundle group
+     *
+     * @return true if key is in bundle otherwise false
+     */
     @Override
-    public boolean containsKey(String key) {
+    public boolean containsKey(final String key) {
         return keyTree.getBundleGroup().containsKey(key);
     }
 
+    /**
+     * KeyTreeItem filter
+     */
+    private Function<KeyTreeItem, Predicate<KeyTreeItem>> hasKeyTreeItem = keyTreeItem -> item -> item.getId().startsWith(keyTreeItem.getId());
+
+    /**
+     * Checks if cache is dirty
+     */
+    private Predicate<SourceEditor> isCacheDirty = editor -> editor.isCacheDirty();
 }

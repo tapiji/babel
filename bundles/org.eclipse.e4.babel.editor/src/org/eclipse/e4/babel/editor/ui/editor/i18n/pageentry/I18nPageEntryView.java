@@ -102,9 +102,9 @@ public final class I18nPageEntryView extends Composite implements KeyListener, T
 	textView.getTextWidget().setOrientation(presenter.getOrientation());
 
 	textWidget = textView.getTextWidget();
-	 final GridData textViewStyleData = new GridData(SWT.FILL, SWT.BEGINNING, true, true, 0, 0);
-	 textViewStyleData.minimumHeight = PropertyPreferences.getInstance().getI18nEditorHeight();
-	 textWidget.setLayoutData(textViewStyleData);
+	final GridData textViewStyleData = new GridData(SWT.FILL, SWT.BEGINNING, true, true, 0, 0);
+	textViewStyleData.minimumHeight = PropertyPreferences.getInstance().getI18nEditorHeight();
+	textWidget.setLayoutData(textViewStyleData);
 	textWidget.addFocusListener(new FocusListener() {
 	    @Override
 	    public void focusGained(FocusEvent event) {
@@ -236,10 +236,10 @@ public final class I18nPageEntryView extends Composite implements KeyListener, T
 	} else if (isKeyCombination(event, SWT.CTRL, 'a')) {
 	    textView.setSelectedRange(0, textView.getDocument().getLength());
 	} else {
-	    if(event.getSource() instanceof Text) {
-		markEditorAsDirty((Text)event.getSource());
+	    if (event.getSource() instanceof Text) {
+		markEditorAsDirty((Text) event.getSource());
 	    } else {
-		markEditorAsDirty((StyledText)event.getSource());
+		markEditorAsDirty((StyledText) event.getSource());
 	    }
 	}
     }
@@ -256,7 +256,7 @@ public final class I18nPageEntryView extends Composite implements KeyListener, T
 
     /**
      * Text field has changed: make editor dirty if not already
-     * 
+     *
      * @param text
      */
     private void markEditorAsDirty(Text text) {
@@ -363,7 +363,6 @@ public final class I18nPageEntryView extends Composite implements KeyListener, T
     @Override
     public void setPresenter(Presenter presenter) {
 	this.presenter = presenter;
-	presenter.init();
     }
 
     public static I18nPageEntryView create(final Composite parent, Locale locale) {
