@@ -1,7 +1,7 @@
 <project>
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.eclipse.babel.tapiji</groupId>
-    <artifactId>org.eclipse.babel.tapiji.bundles</artifactId>
+    <artifactId>org.eclipse.babel.tapiji.bundles-rcp</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
@@ -12,11 +12,6 @@
     </parent>
 
     <modules>
-		<module>org.eclipse.e4.babel.logger</module>
-        <module>org.eclipse.e4.babel.core</module>
-		<module>org.eclipse.e4.babel.editor.model</module>
-		<module>org.eclipse.e4.babel.editor</module>
-		<module>org.eclipse.e4.babel.editor.text</module>
-		<module>org.eclipse.e4.babel.resource</module>
+		<module>org.eclipse.e4.babel.rcp.editor</module>
     </modules>
 </project>

@@ -12,9 +12,13 @@
       [Enter Copyright Description here.]
    </copyright>
 
-   <license url="http://www.example.com/license">
+   <license url="https://www.eclipse.org/legal/epl-v10.html">
       [Enter License Description here.]
    </license>
+
+   <url>
+      <discovery label="TapiJI - Tooling for Agile and Process Integrated Java Internationalization" url="http://tapiji.github.io/"/>
+   </url>
 
    <plugin
          id="org.eclipse.e4.babel.core"
@@ -53,6 +57,13 @@
 
    <plugin
          id="org.eclipse.e4.babel.resource"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+            <plugin
+         id="org.eclipse.e4.babel.rcp.editor"
          download-size="0"
          install-size="0"
          version="0.0.0"

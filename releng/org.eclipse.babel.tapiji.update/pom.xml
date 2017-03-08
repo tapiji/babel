@@ -8,4 +8,12 @@
     <artifactId>org.eclipse.babel.tapiji.update</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>eclipse-repository</packaging>
+	
+		<distributionManagement>
+		<repository>
+			<id>bintray-tapiji-babel</id>
+			<name>tapiji-babel</name>
+			<url>https://api.bintray.com/maven/tapiji/babel/releases/;publish=1</url>
+		</repository>
+	</distributionManagement>
 </project>

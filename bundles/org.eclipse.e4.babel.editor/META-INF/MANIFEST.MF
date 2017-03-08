@@ -4,9 +4,7 @@ Bundle-Name: Tapiji
 Bundle-SymbolicName: org.eclipse.e4.babel.editor;singleton:=true
 Bundle-Version: 1.0.0
 Require-Bundle: org.eclipse.core.runtime,
- org.eclipse.e4.rap.support;resolution:=optional,
- org.eclipse.swt;resolution:=optional,
- org.eclipse.rap.rwt;resolution:=optional
+ org.eclipse.swt;resolution:=optional
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Import-Package: org.eclipse.core.commands,
  org.eclipse.core.expressions,
@@ -36,7 +34,6 @@ Import-Package: org.eclipse.core.commands,
  org.eclipse.e4.core.di.extensions,
  org.eclipse.e4.core.services.events,
  org.eclipse.e4.core.services.nls,
- org.eclipse.e4.tapiji.git.model.property,
  org.eclipse.e4.ui.di,
  org.eclipse.e4.ui.internal.workbench,
  org.eclipse.e4.ui.model.application,
