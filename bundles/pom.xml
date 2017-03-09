@@ -13,11 +13,6 @@
     </parent>
 
     <modules>
-		<module>org.eclipse.e4.babel.logger</module>
-        <module>org.eclipse.e4.babel.core</module>
-		<module>org.eclipse.e4.babel.editor.model</module>
-		<module>org.eclipse.e4.babel.editor</module>
-		<module>org.eclipse.e4.babel.editor.text</module>
-		<module>org.eclipse.e4.babel.resource</module>
+
     </modules>
 </project>
