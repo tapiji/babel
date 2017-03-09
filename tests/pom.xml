@@ -2,7 +2,7 @@
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.eclipse.babel.tapiji</groupId>
-	<artifactId>org.eclipse.babel.tapiji.features</artifactId>
+	<artifactId>org.eclipse.babel.tests</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
@@ -14,6 +14,9 @@
 	</parent>
 
 	<modules>
-		<module>org.eclipse.babel.tapiji.feature</module>
+		<module>org.eclipse.e4.babel.core.test</module>
+		<module>org.eclipse.e4.babel.editor.model.test</module>
+		<module>org.eclipse.e4.babel.editor.text.test</module>
 	</modules>
+
 </project>

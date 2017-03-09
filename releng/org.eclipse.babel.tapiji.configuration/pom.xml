@@ -1,4 +1,5 @@
 <project>
+	
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.eclipse.babel.tapiji</groupId>
 	<artifactId>org.eclipse.babel.tapiji.configuration</artifactId>
@@ -6,12 +7,10 @@
 	<packaging>pom</packaging>
 
 	<properties>
-		<tycho.version>0.25.0</tycho.version>
+		<tycho.version>1.0.0</tycho.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<neon-repo.url>http://download.eclipse.org/releases/neon</neon-repo.url>
 	</properties>
-
-
 
 	<repositories>
 		<repository>
