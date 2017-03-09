@@ -1,6 +1,15 @@
+sudo: false
+
 language: java
-jdk:
-  - oraclejdk8
+
+jdk: oraclejdk8
+
+cache:
+  directories:
+  - $HOME/.m2
+
+install: true
+
 script:
       - mvn clean verify
   
