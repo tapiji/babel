@@ -11,8 +11,4 @@
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 
-	<properties>
-		<!-- Do not skip the deployment here -->
-		<maven.deploy.skip>false</maven.deploy.skip>
-	</properties>
 </project>

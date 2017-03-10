@@ -13,6 +13,6 @@
     </parent>
 
     <modules>
-        <module>org.eclipse.babel.tapiji.update</module>
+
     </modules>
 </project>
