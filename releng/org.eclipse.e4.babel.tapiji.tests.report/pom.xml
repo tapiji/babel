@@ -51,6 +51,30 @@
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
-		
+
+		<dependency>
+			<groupId>org.eclipse.babel.tapiji</groupId>
+			<artifactId>org.eclipse.e4.babel.core.test</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.babel.tapiji</groupId>
+			<artifactId>org.eclipse.e4.babel.core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.babel.tapiji</groupId>
+			<artifactId>
+				org.eclipse.e4.babel.editor.text.test
+			</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.babel.tapiji</groupId>
+			<artifactId>org.eclipse.e4.babel.editor.text</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 </project>

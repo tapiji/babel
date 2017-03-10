@@ -14,5 +14,7 @@
 
 	<modules>
 		<module>org.eclipse.e4.babel.editor.model.test</module>
+		<module>org.eclipse.e4.babel.core.test</module>
+		<module>org.eclipse.e4.babel.editor.text.test</module>
 	</modules>
 </project>

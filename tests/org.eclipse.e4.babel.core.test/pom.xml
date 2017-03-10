@@ -1,0 +1,12 @@
+<project>
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>org.eclipse.e4.babel.core.test</artifactId>
+	<packaging>eclipse-test-plugin</packaging>
+
+	<parent>
+		<groupId>org.eclipse.babel.tapiji</groupId>
+		<artifactId>org.eclipse.e4.babel.tapiji.tests</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+	</parent>
+
+</project>

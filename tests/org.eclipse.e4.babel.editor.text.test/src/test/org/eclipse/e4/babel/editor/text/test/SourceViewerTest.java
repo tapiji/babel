@@ -1,4 +1,4 @@
-package org.eclipse.e4.babel.editor.text.test;
+package test.org.eclipse.e4.babel.editor.text.test;
 
 
 import org.eclipse.swt.widgets.Display;
