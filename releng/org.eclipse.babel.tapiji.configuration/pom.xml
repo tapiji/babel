@@ -1,5 +1,5 @@
 <project>
-	
+
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.eclipse.babel.tapiji</groupId>
 	<artifactId>org.eclipse.babel.tapiji.configuration</artifactId>
@@ -7,9 +7,9 @@
 	<packaging>pom</packaging>
 
 	<properties>
-		<tycho.version>1.0.0</tycho.version>
+		<tycho.version>0.25.0</tycho.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<neon-repo.url>http://download.eclipse.org/releases/neon</neon-repo.url>
+		<neon-repo.url>http://download.eclipse.org/eclipse/updates/4.6</neon-repo.url>
 	</properties>
 
 	<repositories>
@@ -22,18 +22,29 @@
 
 	<build>
 		<plugins>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-install-plugin</artifactId>
+				<version>2.5.2</version>
+				<configuration>
+					<skip>true</skip>
+				</configuration>
+			</plugin>
+
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>tycho-maven-plugin</artifactId>
 				<version>${tycho.version}</version>
 				<extensions>true</extensions>
 			</plugin>
+
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>target-platform-configuration</artifactId>
 				<version>${tycho.version}</version>
-				<configuration>
-
+				<configuration>	
+				
 					<dependency-resolution>
 						<extraRequirements>
 							<requirement>
