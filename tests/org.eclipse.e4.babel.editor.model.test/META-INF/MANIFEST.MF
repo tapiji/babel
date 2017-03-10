@@ -3,6 +3,6 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Test
 Bundle-SymbolicName: org.eclipse.e4.babel.editor.model.test
 Bundle-Version: 1.0.0.qualifier
-Fragment-Host: org.eclipse.e4.babel.editor.model
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Require-Bundle: org.junit
+Require-Bundle: org.junit, org.eclipse.e4.babel.editor.model
+Fragment-Host: org.eclipse.e4.babel.editor.model;bundle-version="1.0.0.qualifier"

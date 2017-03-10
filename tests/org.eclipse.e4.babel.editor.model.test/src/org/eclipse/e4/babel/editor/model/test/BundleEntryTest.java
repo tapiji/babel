@@ -1,3 +1,4 @@
+package org.eclipse.e4.babel.editor.model.test;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Locale;

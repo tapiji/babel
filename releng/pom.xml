@@ -13,6 +13,6 @@
     </parent>
 
     <modules>
-
+		<module>org.eclipse.e4.babel.tapiji.tests.report</module>
     </modules>
 </project>
