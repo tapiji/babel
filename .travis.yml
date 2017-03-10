@@ -14,5 +14,6 @@ script: "./mvnw --show-version --errors --batch-mode -Prun-its clean verify"
 cache:
     directories:
     - $HOME/.m2
-- mvn -f pom.xml clean verify -Pjacoco coveralls:report
+script:
+ - mvn -f pom.xml clean verify -Pjacoco coveralls:report
   
