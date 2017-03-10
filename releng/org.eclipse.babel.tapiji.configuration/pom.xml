@@ -6,24 +6,15 @@
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
-
 	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<jacoco-version>0.7.9</jacoco-version>
 		<tycho.version>0.25.0</tycho.version>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<tycho.testArgLine></tycho.testArgLine>
 		<neon-repo.url>http://download.eclipse.org/eclipse/updates/4.6</neon-repo.url>
 	</properties>
-
-	<repositories>
-		<repository>
-			<id>neon</id>
-			<url>${neon-repo.url}</url>
-			<layout>p2</layout>
-		</repository>
-	</repositories>
-
 
 	<profiles>
 		<profile>
@@ -32,55 +23,77 @@
 				<activeByDefault>false</activeByDefault>
 			</activation>
 			<build>
+
 				<plugins>
+
 					<plugin>
-						<groupId>org.jacoco</groupId>
-						<artifactId>jacoco-maven-plugin</artifactId>
-						<version>${jacoco-version}</version>
-						<!--<configuration>
-							<excludes>
-								<exclude>**/plugin1/Main.class</exclude>
-							</excludes>
-						</configuration>-->
+						<artifactId>maven-antrun-plugin</artifactId>
 						<executions>
 							<execution>
-								<id>default-prepare-agent</id>
+								<phase>generate-resources</phase>
 								<goals>
-									<goal>prepare-agent</goal>
-								</goals>
-							</execution>
-							<execution>
-								<id>default-report</id>
-								<phase>prepare-package</phase>
-								<goals>
-									<goal>report</goal>
-								</goals>
-							</execution>
-							<execution>
-								<id>default-check</id>
-								<goals>
-									<goal>check</goal>
+									<goal>run</goal>
 								</goals>
 								<configuration>
-									<rules>
-										<!--  implementation is needed only for Maven 2  -->
-										<rule implementation="org.jacoco.maven.RuleConfiguration">
-											<element>BUNDLE</element>
-											<limits>
-												<!--  implementation is needed only for Maven 2  -->
-												<limit implementation="org.jacoco.report.check.Limit">
-													<counter>COMPLEXITY</counter>
-													<value>COVEREDRATIO</value>
-													<minimum>0.60</minimum>
-												</limit>
-											</limits>
-										</rule>
-									</rules>
+									<tasks>
+										<echo>[Project-Dir]: ${project.basedir}</echo>
+										<echo>[Project-Version]: ${project.version}</echo>
+										<echo>[Project-Version]: ${project.build.directory}</echo>
+
+									</tasks>
 								</configuration>
 							</execution>
 						</executions>
 					</plugin>
+
+
+					<plugin>
+						<groupId>org.jacoco</groupId>
+						<artifactId>jacoco-maven-plugin</artifactId>
+						<version>${jacoco-version}</version>
+						<configuration>
+							<excludes>
+								<exclude>**/plugin1/Main.class</exclude>
+							</excludes>
+						</configuration>
+						<executions>
+							<execution>
+								<goals>
+									<goal>prepare-agent</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+
+
+
+
+				<!--	<plugin>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<version>2.14</version>
+						<executions>
+							<execution>
+								<id>default-test</id>
+								<phase>test</phase>
+								<goals>
+									<goal>test</goal>
+								</goals>
+
+								<configuration>
+									<includes>
+										<include>**/*Test.java</include>
+									</includes>
+									<argLine>${surefireArgLine}</argLine>
+								</configuration>
+							</execution>
+						</executions>
+						<configuration>
+							<argLine>-XX:MaxPermSize=512m</argLine>
+						</configuration>
+					</plugin>
+					-->
 				</plugins>
+
 				<pluginManagement>
 					<plugins>
 						<plugin>
@@ -100,70 +113,154 @@
 	</profiles>
 
 	<build>
+		<testSourceDirectory>${project.basedir}/src/test</testSourceDirectory>
 		<plugins>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-install-plugin</artifactId>
-				<version>2.5.2</version>
-				<configuration>
-					<skip>true</skip>
-				</configuration>
-			</plugin>
-
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>tycho-maven-plugin</artifactId>
 				<version>${tycho.version}</version>
 				<extensions>true</extensions>
 			</plugin>
-
-			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>target-platform-configuration</artifactId>
-				<version>${tycho.version}</version>
-				<configuration>	
-
-					<dependency-resolution>
-						<extraRequirements>
-							<requirement>
-								<type>eclipse-plugin</type>
-								<id>org.eclipse.jface.text</id>
-								<versionRange>0.0.0</versionRange>
-							</requirement>
-						</extraRequirements>
-					</dependency-resolution>
-
-					<environments>
-						<environment>
-							<os>linux</os>
-							<ws>gtk</ws>
-							<arch>x86</arch>
-						</environment>
-						<environment>
-							<os>linux</os>
-							<ws>gtk</ws>
-							<arch>x86_64</arch>
-						</environment>
-						<environment>
-							<os>win32</os>
-							<ws>win32</ws>
-							<arch>x86</arch>
-						</environment>
-						<environment>
-							<os>win32</os>
-							<ws>win32</ws>
-							<arch>x86_64</arch>
-						</environment>
-						<environment>
-							<os>macosx</os>
-							<ws>cocoa</ws>
-							<arch>x86_64</arch>
-						</environment>
-					</environments>
-				</configuration>
-			</plugin>
 		</plugins>
+
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											org.apache.maven.plugins
+										</groupId>
+										<artifactId>
+											maven-resources-plugin
+										</artifactId>
+										<versionRange>
+											[2.4.3,)
+										</versionRange>
+										<goals>
+											<goal>resources</goal>
+											<goal>testResources</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore/>
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											org.codehaus.mojo
+										</groupId>
+										<artifactId>
+											build-helper-maven-plugin
+										</artifactId>
+										<versionRange>
+											[1.9.1,)
+										</versionRange>
+										<goals>
+											<goal>add-resource</goal>
+											<goal>add-source</goal>
+											<goal>add-test-resource</goal>
+											<goal>add-test-source</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore/>
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											org.eclipse.tycho
+										</groupId>
+										<artifactId>
+											tycho-compiler-plugin
+										</artifactId>
+										<versionRange>
+											[0.23.1,)
+										</versionRange>
+										<goals>
+											<goal>compile</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore/>
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											org.eclipse.tycho
+										</groupId>
+										<artifactId>
+											tycho-packaging-plugin
+										</artifactId>
+										<versionRange>
+											[0.23.1,)
+										</versionRange>
+										<goals>
+											<goal>build-qualifier</goal>
+											<goal>build-qualifier-aggregator</goal>
+											<goal>validate-id</goal>
+											<goal>validate-version</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore/>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 	</build>
+
+	<repositories>
+
+		<repository>
+			<id>neon</id>
+			<url>http://download.eclipse.org/releases/neon</url>
+			<layout>p2</layout>
+		</repository>
+
+		<repository>
+			<id>codehaus-snapshots</id>
+			<name>disable dead 'Codehaus Snapshots' repository, see https://bugs.eclipse.org/bugs/show_bug.cgi?id=481478</name>
+			<url>http://nexus.codehaus.org/snapshots/</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+
+	<pluginRepositories>
+
+		<pluginRepository>
+			<id>codehaus-snapshots</id>
+			<name>disable dead 'Codehaus Snapshots' repository, see https://bugs.eclipse.org/bugs/show_bug.cgi?id=481478</name>
+			<url>http://nexus.codehaus.org/snapshots/</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</pluginRepository>
+
+	</pluginRepositories>
+
+	<dependencies>
+	</dependencies>
 </project>
 

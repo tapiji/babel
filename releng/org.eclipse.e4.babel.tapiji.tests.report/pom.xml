@@ -37,16 +37,20 @@
 	</profiles>
 
 	<dependencies>
+		
 		<dependency>
 			<groupId>org.eclipse.babel.tapiji</groupId>
 			<artifactId>org.eclipse.e4.babel.editor.model</artifactId>
 			<version>${project.version}</version>
+			<scope>compile</scope>
 		</dependency>
+		
 		<dependency>
 			<groupId>org.eclipse.babel.tapiji</groupId>
 			<artifactId>org.eclipse.e4.babel.editor.model.test</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
+		
 	</dependencies>
 </project>
