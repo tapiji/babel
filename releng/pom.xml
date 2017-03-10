@@ -1,4 +1,5 @@
 <project>
+
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.eclipse.babel.tapiji</groupId>
     <artifactId>org.eclipse.babel.tapiji.releng</artifactId>
@@ -9,6 +10,7 @@
         <groupId>org.eclipse.babel.tapiji</groupId>
         <artifactId>org.eclipse.babel.tapiji.root</artifactId>
         <version>1.0.0-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
     </parent>
 
     <modules>

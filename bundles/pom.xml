@@ -9,14 +9,10 @@
         <groupId>org.eclipse.babel.tapiji</groupId>
         <artifactId>org.eclipse.babel.tapiji.root</artifactId>
         <version>1.0.0-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
     </parent>
 
     <modules>
-		<module>org.eclipse.e4.babel.logger</module>
-        <module>org.eclipse.e4.babel.core</module>
-		<module>org.eclipse.e4.babel.editor.model</module>
-		<module>org.eclipse.e4.babel.editor</module>
-		<module>org.eclipse.e4.babel.editor.text</module>
-		<module>org.eclipse.e4.babel.resource</module>
+
     </modules>
 </project>
