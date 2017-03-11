@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
 <plugin>
 
    <extension
@@ -13,5 +14,26 @@
          name="Toolbar Core Expression"
          point="org.eclipse.core.expressions.definitions">
    </extension>
+   <extension
+         point="org.eclipse.e4.tapiji.translator.preferences">
+      <page
+            class="org.eclipse.e4.babel.editor.preference.PreferenceGeneralPage"
+            id="page_babel_general"
+            order="1">
+      </page>
+      <page
+            category="page_babel_general"
+            class="org.eclipse.e4.babel.editor.preference.PreferenceFormattingPage"
+            id="page_babel_formatting"
+            order="2">
+      </page>
+      <page
+            category="page_babel_general"
+            class="org.eclipse.e4.babel.editor.preference.PreferencePerformancePage"
+            id="page_babel_performance"
+            order="3">
+      </page>
+   </extension>
+
 
 </plugin>

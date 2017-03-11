@@ -1,7 +1,5 @@
 package org.eclipse.e4.babel.editor.ui.editor.tree;
 
-import java.util.Collections;
-
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
@@ -192,7 +190,8 @@ public final class KeyTreeView extends Composite implements KeyTreeContract.View
 	    @SuppressWarnings("restriction")
 	    public void keyReleased(KeyEvent event) {
 		if (event.character == SWT.DEL) {
-		    handlerService.executeHandler(commandService.createCommand(COMMAND_DELETE_KEY, Collections.emptyMap()));
+		    // handlerService.executeHandler(commandService.createCommand(COMMAND_DELETE_KEY,
+		    // Collections.emptyMap()));
 		}
 	    }
 	});

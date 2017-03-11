@@ -3,7 +3,6 @@ package org.eclipse.e4.babel.editor.preference;
 import org.eclipse.e4.babel.core.preference.PropertyPreferences;
 import org.eclipse.e4.babel.editor.preference.validator.NumberTextKeyListener;
 import org.eclipse.e4.babel.logger.Log;
-import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -26,8 +25,8 @@ public final class PreferenceGeneralPage extends APreferencePage {
     private Button editorTreeHidden;
     private Button autoAdjustTextView;
 
-    public PreferenceGeneralPage(IEventBroker eventBroker) {
-	super("ResourceBundle Editor", eventBroker);
+    public PreferenceGeneralPage() {
+	super("ResourceBundle Editor");
     }
 
     @Override
@@ -172,7 +171,7 @@ public final class PreferenceGeneralPage extends APreferencePage {
 	if (null != autoAdjustTextView) {
 	    PropertyPreferences.getInstance().isAdjustTextView(autoAdjustTextView.getSelection());
 	}
-	redrawi18nLayout();
+	redrawLayout();
 	return true;
     }
 
