@@ -12,7 +12,7 @@
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<jacoco-version>0.7.9</jacoco-version>
 		<tycho.version>0.25.0</tycho.version>
-		<tycho.testArgLine></tycho.testArgLine>
+		<tycho.testArgLine/>
 		<neon-repo.url>http://download.eclipse.org/eclipse/updates/4.6</neon-repo.url>
 	</properties>
 
@@ -68,7 +68,7 @@
 
 
 
-				<!--	<plugin>
+					<!--	<plugin>
 						<artifactId>maven-surefire-plugin</artifactId>
 						<version>2.14</version>
 						<executions>
@@ -228,6 +228,12 @@
 		<repository>
 			<id>neon</id>
 			<url>http://download.eclipse.org/releases/neon</url>
+			<layout>p2</layout>
+		</repository>
+
+		<repository>
+			<id>e4Preferences</id>
+			<url>https://dl.bintray.com/nucle/e4preferences/</url>
 			<layout>p2</layout>
 		</repository>
 
