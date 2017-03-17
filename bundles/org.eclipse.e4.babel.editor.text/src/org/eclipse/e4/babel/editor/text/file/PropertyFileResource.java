@@ -24,9 +24,9 @@ public final class PropertyFileResource implements IPropertyResource {
     private PropertyFileResource(final File file) {
         super();
         this.file = file;
-        
+
         //FileMonitor.getInstance().addFileChangeListener(
-         //               this.fileChangeListener, file, 2000); // TODO make file scan
+        //               this.fileChangeListener, file, 2000); // TODO make file scan
     }
 
     @Override
@@ -57,7 +57,6 @@ public final class PropertyFileResource implements IPropertyResource {
 
     }
 
-
     private String readFile() throws IOException {
         return new String(Files.readAllBytes(file.toPath()));
     }
@@ -72,7 +71,6 @@ public final class PropertyFileResource implements IPropertyResource {
         file.createNewFile();
         writeFile(content);
     }
-
 
     @Override
     public String getEncoding() {
@@ -101,7 +99,7 @@ public final class PropertyFileResource implements IPropertyResource {
     public PropertyFileType getFileType() {
         return PropertyFileType.FILE;
     }
-    
+
     public static IPropertyResource create(final File file, final String content) throws IOException {
         PropertyFileResource newFile = new PropertyFileResource(file);
         if (!file.exists()) {
@@ -142,9 +140,15 @@ public final class PropertyFileResource implements IPropertyResource {
     }
 
     @Override
+    public File getFile() {
+        return file;
+    }
+
+    @Override
     public String getName() {
         return file.getName();
     }
+
     @Override
     public void dispose() {
         if (document != null) {

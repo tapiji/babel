@@ -5,7 +5,8 @@ Bundle-SymbolicName: org.eclipse.e4.babel.editor;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.swt;resolution:=optional,
- at.nucle.e4.plugin.preferences.core
+ at.nucle.e4.plugin.preferences.core,
+ org.eclipse.e4.ui.model.workbench
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Import-Package: org.eclipse.core.commands,
  org.eclipse.core.expressions,

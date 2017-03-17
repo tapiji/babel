@@ -1,6 +1,7 @@
 package org.eclipse.e4.babel.editor.text.file;
 
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
@@ -15,6 +16,7 @@ import org.eclipse.jface.text.IDocument;
 
 
 public final class PropertyIFileResource implements IPropertyResource {
+
     protected static final int DEFAULT_FILE_CAPACITY = 10 * 1024;
     protected static final String DEFAULT_ENCODING = "UTF-8";
     protected static final String TAG = IPropertyResource.class.getSimpleName();
@@ -25,43 +27,36 @@ public final class PropertyIFileResource implements IPropertyResource {
     private PropertyIFileResource(IFile file) {
         super();
         this.file = file;
-        
-       /* IWorkspace workspace = ResourcesPlugin.getWorkspace();
-        IResourceChangeListener listener = new IResourceChangeListener() {
 
-         public void resourceChanged(IResourceChangeEvent event) {
+        /*
+         * IWorkspace workspace = ResourcesPlugin.getWorkspace();
+         * IResourceChangeListener listener = new IResourceChangeListener() {
+         * public void resourceChanged(IResourceChangeEvent event) {
+         * if(event.getType() == IResourceChangeEvent.POST_CHANGE && IResourceDelta.MARKERS!=0){ //Filtering listener
+         * System.out.println("Listener code should be implemented here");
+         * }
+         * System.out.println("listener is working"); //This line always get executed. That means the listener is
+         * working
+         * workspace.addResourceChangeListener(listener,IResourceChangeEvent.POST_CHANGE);
+         * }
+         * };
+         */
 
-
-                if(event.getType() == IResourceChangeEvent.POST_CHANGE && IResourceDelta.MARKERS!=0){  //Filtering listener
-
-
-                 System.out.println("Listener code should be implemented here");  
-
-
-               }
-
-
-                System.out.println("listener is working");  //This line always get executed. That means the listener is working
-workspace.addResourceChangeListener(listener,IResourceChangeEvent.POST_CHANGE);
-
-            }
-        };*/
-
-        
     }
 
-    public IFile getFile() {
+    @Override
+    public IFile getIFile() {
         return file;
     }
 
     public static PropertyIFileResource create(final IFile file, String content) throws IOException {
-        final PropertyIFileResource  newFile =  new PropertyIFileResource(file);
-        if(file.exists() && content != null) {
+        final PropertyIFileResource newFile = new PropertyIFileResource(file);
+        if (file.exists() && content != null) {
             newFile.writeFile(content);
         }
         return newFile;
     }
-    
+
     public static PropertyIFileResource create(final IFile file) {
         try {
             return create(file, null);
@@ -71,52 +66,49 @@ workspace.addResourceChangeListener(listener,IResourceChangeEvent.POST_CHANGE);
         return null;
     }
 
-    
     private String readFile() throws IOException {
-        return  new String(Files.readAllBytes(file.getRawLocation().toFile().toPath()));
-      }
+        return new String(Files.readAllBytes(file.getRawLocation().toFile().toPath()));
+    }
 
     @Override
-      public void writeFile(final String content) throws IOException {
-          Files.write(file.getRawLocation().toFile().toPath(), content.getBytes());
-      }
-    
+    public void writeFile(final String content) throws IOException {
+        Files.write(file.getRawLocation().toFile().toPath(), content.getBytes());
+    }
+
     @Override
     public void saveDocument() {
-        
+
         try {
             writeFile(document.get());
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        
-       /* final Charset charset = Charset.forName(getEncoding());
-        final CharsetEncoder encoder = charset.newEncoder();
 
-        ByteBuffer byteBuffer;
-        try {
-            byteBuffer = encoder.encode(CharBuffer.wrap(document.get()));
-
-            byte[] bytes;
-            if (byteBuffer.hasArray()) {
-                bytes = byteBuffer.array();
-            } else {
-                bytes = new byte[byteBuffer.limit()];
-                byteBuffer.get(bytes);
-            }
-
-            try (final ByteArrayInputStream stream = new ByteArrayInputStream(bytes, 0, byteBuffer.limit())) {
-                file.setContents(stream, true, true, null);
-            } catch (CoreException e) {
-                e.printStackTrace();
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-
-        } catch (CharacterCodingException e) {
-            e.printStackTrace();
-        }*/
+        /*
+         * final Charset charset = Charset.forName(getEncoding());
+         * final CharsetEncoder encoder = charset.newEncoder();
+         * ByteBuffer byteBuffer;
+         * try {
+         * byteBuffer = encoder.encode(CharBuffer.wrap(document.get()));
+         * byte[] bytes;
+         * if (byteBuffer.hasArray()) {
+         * bytes = byteBuffer.array();
+         * } else {
+         * bytes = new byte[byteBuffer.limit()];
+         * byteBuffer.get(bytes);
+         * }
+         * try (final ByteArrayInputStream stream = new ByteArrayInputStream(bytes, 0, byteBuffer.limit())) {
+         * file.setContents(stream, true, true, null);
+         * } catch (CoreException e) {
+         * e.printStackTrace();
+         * } catch (IOException e1) {
+         * e1.printStackTrace();
+         * }
+         * } catch (CharacterCodingException e) {
+         * e.printStackTrace();
+         * }
+         */
     }
 
     @Override
@@ -132,19 +124,22 @@ workspace.addResourceChangeListener(listener,IResourceChangeEvent.POST_CHANGE);
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        /*try (InputStream content = file.getContents(); InputStreamReader inputStreamReader = new InputStreamReader(content, getEncoding()); BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
-
-            final StringBuffer buffer = new StringBuffer(DEFAULT_FILE_CAPACITY);
-            final char[] readBuffer = new char[2048];
-            int number = bufferedReader.read(readBuffer);
-            while (number > 0) {
-                buffer.append(readBuffer, 0, number);
-                number = bufferedReader.read(readBuffer);
-            }
-            document.set(buffer.toString());
-        } catch (final Exception exception) {
-            Log.e(TAG, exception);
-        }*/
+        /*
+         * try (InputStream content = file.getContents(); InputStreamReader inputStreamReader = new
+         * InputStreamReader(content, getEncoding()); BufferedReader bufferedReader = new
+         * BufferedReader(inputStreamReader)) {
+         * final StringBuffer buffer = new StringBuffer(DEFAULT_FILE_CAPACITY);
+         * final char[] readBuffer = new char[2048];
+         * int number = bufferedReader.read(readBuffer);
+         * while (number > 0) {
+         * buffer.append(readBuffer, 0, number);
+         * number = bufferedReader.read(readBuffer);
+         * }
+         * document.set(buffer.toString());
+         * } catch (final Exception exception) {
+         * Log.e(TAG, exception);
+         * }
+         */
         return document;
     }
 
@@ -156,7 +151,7 @@ workspace.addResourceChangeListener(listener,IResourceChangeEvent.POST_CHANGE);
             return 0;
         }
     }
-    
+
     public IContainer getParent() {
         return file.getParent();
     }
@@ -174,8 +169,6 @@ workspace.addResourceChangeListener(listener,IResourceChangeEvent.POST_CHANGE);
         return date;
     }
 
-
-
     @Override
     public String getEncoding() {
         String encoding = null;
@@ -186,7 +179,6 @@ workspace.addResourceChangeListener(listener,IResourceChangeEvent.POST_CHANGE);
         }
         return (null == encoding) ? DEFAULT_ENCODING : encoding;
     }
-
 
     @Override
     public PropertyFileType getFileType() {
@@ -204,15 +196,10 @@ workspace.addResourceChangeListener(listener,IResourceChangeEvent.POST_CHANGE);
     }
 
     @Override
-    public IFile getIFile() {
-        return file;
-    }
-
-    @Override
     public String getName() {
         return file.getName();
     }
-    
+
     @Override
     public void dispose() {
         if (document != null) {
@@ -220,5 +207,11 @@ workspace.addResourceChangeListener(listener,IResourceChangeEvent.POST_CHANGE);
         }
         file = null;
         document = null;
+    }
+
+    @Override
+    public File getFile() {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

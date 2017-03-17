@@ -19,8 +19,8 @@ package org.eclipse.e4.babel.editor.text.model;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.eclipse.core.resources.IFile;
 import org.eclipse.e4.babel.editor.text.file.IPropertyResource;
+import org.eclipse.e4.babel.editor.text.file.PropertyFileResource;
 import org.eclipse.e4.babel.logger.Log;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.text.source.SourceViewer;
@@ -29,7 +29,7 @@ import org.eclipse.jface.text.source.SourceViewer;
 /**
  * Wrapper around a properties file text editor
  * providing extra functionality.
- * 
+ *
  * @author Pascal Essiembre
  * @author Tobias Langner
  * @author Christian Behon
@@ -42,7 +42,7 @@ public class SourceEditor {
 
     /**
      * Constructor
-     * 
+     *
      * @param editor text editor
      * @param locale a locale
      * @param file properties file
@@ -56,7 +56,7 @@ public class SourceEditor {
 
     /**
      * Create new instance of {@link SourceEditor}
-     * 
+     *
      * @param document Document to get and save content
      * @param locale Locale
      * @param file File
@@ -68,7 +68,7 @@ public class SourceEditor {
 
     /**
      * Gets the locale associated with this source editor.
-     * 
+     *
      * @return locale
      */
     public Locale getLocale() {
@@ -76,17 +76,20 @@ public class SourceEditor {
     }
 
     /**
-     * Gets the file associated with this source editor.
-     * 
      * @return properties file
      */
-    public IFile getFile() {
-        return document.getIFile();
+    //Gets the file associated with this source editor.
+    public boolean isResource(IPropertyResource resource) {
+        if (resource instanceof PropertyFileResource) {
+            return resource.getFile().equals(document.getFile());
+        } else {
+            return resource.getIFile().equals(document.getIFile());
+        }
     }
 
     /**
      * Gets the text editor associated with this source editor.
-     * 
+     *
      * @return text editor
      */
     public IPropertyResource getDocument() {
@@ -96,13 +99,13 @@ public class SourceEditor {
     /**
      * Checks whether the underlying file content differs from the cached source
      * editor content.
-     * 
+     *
      * @return <code>true</code> if dirty
      */
     public boolean isCacheDirty() {
-         boolean same = !getContent().equals(contentCache);
-         Log.i("CACHE", "Same: "+same); 
-         return same;
+        boolean same = !getContent().equals(contentCache);
+        Log.i("CACHE", "Same: " + same);
+        return same;
     }
 
     /**
@@ -114,7 +117,7 @@ public class SourceEditor {
 
     /**
      * Gets the content of this source editor.
-     * 
+     *
      * @return content
      */
     public String getContent() {
@@ -123,7 +126,7 @@ public class SourceEditor {
 
     /**
      * Sets the content of this source editor (replacing existing content).
-     * 
+     *
      * @param content new content
      */
     public void setContent(String content) {
@@ -140,7 +143,7 @@ public class SourceEditor {
 
     /**
      * Checks whether this source editor is read-only.
-     * 
+     *
      * @return <code>true</code> if read-only.
      */
     public boolean isReadOnly() {
@@ -150,7 +153,7 @@ public class SourceEditor {
     public void selectKey(String key, SourceViewer sourceViewer) {
         if (key != null) {
             String editorContent = getContent();
-            Pattern pattern = Pattern.compile("^" + Pattern.quote(key)+ ".*$", Pattern.MULTILINE);
+            Pattern pattern = Pattern.compile("^" + Pattern.quote(key) + ".*$", Pattern.MULTILINE);
             Matcher matcher = pattern.matcher(editorContent);
             if (matcher.find()) {
                 int start = matcher.start();
@@ -166,10 +169,10 @@ public class SourceEditor {
             int selectionStart = selection.getOffset();
             String content = getContent();
             int start = 0, end = 0;
-            
+
             // Extract the bounds of the line containing the selection
-            for (start = selectionStart; start > 0 && content.charAt(start-1) != '\n'; start--);
-            for (end = start; end < content.length()-1 && content.charAt(end+1) != '=' && content.charAt(end+1) != '\n'; end++);
+            for (start = selectionStart; start > 0 && content.charAt(start - 1) != '\n'; start--);
+            for (end = start; end < content.length() - 1 && content.charAt(end + 1) != '=' && content.charAt(end + 1) != '\n'; end++);
             String line = content.substring(start, end).trim();
             return line;
         }

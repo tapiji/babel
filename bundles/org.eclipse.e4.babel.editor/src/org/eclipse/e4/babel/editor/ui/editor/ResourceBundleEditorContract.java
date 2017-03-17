@@ -7,14 +7,11 @@ import org.eclipse.e4.babel.editor.text.file.IPropertyResource;
 import org.eclipse.e4.babel.editor.ui.editor.i18n.page.I18nPageContract;
 import org.eclipse.e4.babel.editor.ui.editor.tree.KeyTreeView;
 import org.eclipse.e4.babel.resource.IBabelResourceProvider;
-import org.eclipse.e4.ui.services.EMenuService;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 
 public interface ResourceBundleEditorContract {
 
     interface View {
-
-	EMenuService getMenuService();
 
 	IBabelResourceProvider getResourceProvider();
 

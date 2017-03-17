@@ -84,7 +84,6 @@ public final class ResourceManager implements IResourceManager {
      */
     @Override
     public CompletableFuture<Void> init(final IPropertyResource fileDocument) throws CoreException, IOException {
-
         return CompletableFuture.supplyAsync(() -> {
             long startTime = System.currentTimeMillis();
 
@@ -222,9 +221,11 @@ public final class ResourceManager implements IResourceManager {
      * @param file file to test
      * @return <code>true</code> if a known resource
      */
+    @Deprecated
     public boolean isResource(IFile file) {
-        Predicate<SourceEditor> knownFile = editor -> editor.getFile().equals(file);
-        return resourcesFactory.getSourceEditors().stream().anyMatch(knownFile);
+        //  Predicate<SourceEditor> knownFile = editor -> editor.getFile().equals(file);
+        //  return resourcesFactory.getSourceEditors().stream().anyMatch(knownFile);
+        return false;
     }
 
     /**
@@ -342,14 +343,31 @@ public final class ResourceManager implements IResourceManager {
     }
 
     /**
-     * Check if key is in bundle group
+     * Check if key is known to the corresponding bundle group
      *
-     * @return true if key is in bundle otherwise false
+     * @return <code>true</code> if key is known to the corresponding bundle group
      */
     @Override
     public boolean containsKey(final String key) {
         return keyTree.getBundleGroup().containsKey(key);
     }
+
+    /**
+     * Checks if resource is already known to the
+     * resource manager.
+     *
+     * @param resource to test
+     * @return <code>true</code> if a known resource
+     */
+    @Override
+    public boolean containsResource(IPropertyResource resource) {
+        return resourcesFactory.getSourceEditors().stream().anyMatch(knownFile.apply(resource));
+    }
+
+    /**
+     * Resource filter
+     */
+    private Function<IPropertyResource, Predicate<SourceEditor>> knownFile = resource -> editor -> editor.isResource(resource);
 
     /**
      * KeyTreeItem filter

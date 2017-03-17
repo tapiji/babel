@@ -23,8 +23,6 @@ public interface IResourceManager {
 
     void renameKey(final KeyTreeItem keyTreeItem, final String key);
 
-    boolean containsKey(final String key);
-
     CompletableFuture<Void> init(IPropertyResource fileDocument) throws CoreException, IOException;
 
     SourceEditor getSourceEditor(Locale locale);
@@ -48,4 +46,8 @@ public interface IResourceManager {
     String getDisplayName();
 
     String getResourceLocation();
+
+    boolean containsResource(IPropertyResource resource);
+
+    boolean containsKey(final String key);
 }
