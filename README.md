@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/tapiji/babel.svg?branch=feat%2Fgit)](https://travis-ci.org/tapiji/babel) [![Coverage Status](https://coveralls.io/repos/github/tapiji/babel/badge.svg?branch=feat%2Ftycho)](https://coveralls.io/github/tapiji/babel?branch=feat%2git)
+[![Build Status](https://travis-ci.org/tapiji/babel.svg?branch=feat%2Fgit)](https://travis-ci.org/tapiji/babel) [![Coverage Status](https://coveralls.io/repos/github/tapiji/babel/badge.svg?branch=feat%2Fgit)](https://coveralls.io/github/tapiji/babel?branch=feat%2git)
 # <a href="http://tapiji.github.io/"  target="_blank">TapiJI</a> (Tooling for Agile and Process Integrated Java Internationalization)
 
 ## Introduction
