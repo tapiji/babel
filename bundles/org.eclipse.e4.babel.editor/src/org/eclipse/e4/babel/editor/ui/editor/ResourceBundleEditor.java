@@ -29,7 +29,6 @@ import org.eclipse.e4.babel.resource.BabelResourceConstants;
 import org.eclipse.e4.babel.resource.IBabelResourceProvider;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.annotations.Optional;
-import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.Persist;
 import org.eclipse.e4.ui.di.UIEventTopic;
 import org.eclipse.e4.ui.di.UISynchronize;
@@ -54,6 +53,7 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Shell;
 
 public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEditorContract.View, SelectionListener {
@@ -121,7 +121,6 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
 
 		createTab(sashForm, "Properties", BabelResourceConstants.IMG_RESOURCE_BUNDLE);
 
-		setSelection(0);
 		part.setDescription("Editor f\u00FCr ResourceBundle:");
 
 		setCursorWaitVisibility(true);
@@ -134,6 +133,8 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
 			i18nPage.getPresenter().setChangeListener();
 			i18nPage.refreshView();
 			setCursorWaitVisibility(false);
+			setSelection(0);
+			notifyListeners(SWT.Selection, new Event());
 		    });
 		});
 
@@ -307,11 +308,6 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
     @Override
     public void widgetDefaultSelected(SelectionEvent e) {
 	Log.i(TAG, "widgetDefaultSelected" + e);
-    }
-
-    @Focus
-    public void requestFocus() {
-	keyTreeView.setFocus();
     }
 
     @Override
