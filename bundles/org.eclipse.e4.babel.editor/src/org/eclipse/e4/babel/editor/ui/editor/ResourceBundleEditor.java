@@ -249,7 +249,7 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
     private void createTabs() {
 	editors.clear();
 	resourceManager.getSourceEditors().forEach(editor -> {
-	    final BundleTextEditor textEditor = new BundleTextEditor(this, dirtyable, editor.getDocument());
+	    final BundleTextEditor textEditor = new BundleTextEditor(this, dirtyable, editor.getResource());
 	    editors.add(textEditor);
 	    createTab(textEditor, UIUtils.getDisplayName(editor.getLocale()), BabelResourceConstants.IMG_RESOURCE_PROPERTY);
 	});
@@ -352,7 +352,7 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
 	i18nPage.dispose();
 	List<SourceEditor> sourceEditors = resourceManager.getSourceEditors();
 	sourceEditors.forEach(editor -> {
-	    editor.getDocument().dispose();
+	    editor.getResource().dispose();
 	});
     }
 }

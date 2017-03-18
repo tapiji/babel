@@ -21,7 +21,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.eclipse.e4.babel.editor.text.file.IPropertyResource;
 import org.eclipse.e4.babel.editor.text.file.PropertyFileResource;
-import org.eclipse.e4.babel.logger.Log;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.text.source.SourceViewer;
 
@@ -37,8 +36,8 @@ import org.eclipse.jface.text.source.SourceViewer;
 public class SourceEditor {
 
     private final Locale locale;
-    private final IPropertyResource document;
-    private String contentCache;
+    private final IPropertyResource resource;
+    private String cache;
 
     /**
      * Constructor
@@ -47,23 +46,11 @@ public class SourceEditor {
      * @param locale a locale
      * @param file properties file
      */
-    private SourceEditor(final IPropertyResource document, final Locale locale) {
+    private SourceEditor(final IPropertyResource resource, final Locale locale) {
         super();
-        this.document = document;
+        this.resource = resource;
         this.locale = locale;
-        this.contentCache = getContent();
-    }
-
-    /**
-     * Create new instance of {@link SourceEditor}
-     *
-     * @param document Document to get and save content
-     * @param locale Locale
-     * @param file File
-     * @return SourceEditor
-     */
-    public static SourceEditor create(final IPropertyResource document, final Locale locale) {
-        return new SourceEditor(document, locale);
+        this.cache = resource.getDocument().get();
     }
 
     /**
@@ -76,24 +63,25 @@ public class SourceEditor {
     }
 
     /**
-     * @return properties file
+     * Checks if the resource associated with this source editor
+     *
+     * @return <code>true</code> if resource is the same
      */
-    //Gets the file associated with this source editor.
-    public boolean isResource(IPropertyResource resource) {
-        if (resource instanceof PropertyFileResource) {
-            return resource.getFile().equals(document.getFile());
+    public boolean isResource(IPropertyResource propertyResource) {
+        if (propertyResource instanceof PropertyFileResource) {
+            return resource.getFile().equals(propertyResource.getFile());
         } else {
-            return resource.getIFile().equals(document.getIFile());
+            return resource.getIFile().equals(propertyResource.getIFile());
         }
     }
 
     /**
-     * Gets the text editor associated with this source editor.
+     * Gets the resource associated with this source editor.
      *
      * @return text editor
      */
-    public IPropertyResource getDocument() {
-        return document;
+    public IPropertyResource getResource() {
+        return resource;
     }
 
     /**
@@ -103,16 +91,14 @@ public class SourceEditor {
      * @return <code>true</code> if dirty
      */
     public boolean isCacheDirty() {
-        boolean same = !getContent().equals(contentCache);
-        Log.i("CACHE", "Same: " + same);
-        return same;
+        return !this.resource.getDocument().get().equals(this.cache);
     }
 
     /**
      * Resets the source editor cache.
      */
     public void resetCache() {
-        contentCache = getContent();
+        this.cache = this.resource.getDocument().get();
     }
 
     /**
@@ -121,7 +107,7 @@ public class SourceEditor {
      * @return content
      */
     public String getContent() {
-        return document.getDocument().get();
+        return this.resource.getDocument().get();
     }
 
     /**
@@ -130,15 +116,15 @@ public class SourceEditor {
      * @param content new content
      */
     public void setContent(String content) {
-        document.getDocument().set(content);
-        contentCache = content;
+        this.resource.getDocument().set(content);
+        this.cache = content;
     }
 
     /**
      * Save content to file
      */
     public void saveDocument() {
-        document.saveDocument();
+        this.resource.saveDocument();
     }
 
     /**
@@ -179,5 +165,15 @@ public class SourceEditor {
         return null;
     }
 
-    // TODO add save and revertToSave here (spawning a thread)
+    /**
+     * Create new instance of {@link SourceEditor}
+     *
+     * @param document Document to get and save content
+     * @param locale Locale
+     * @param file File
+     * @return SourceEditor
+     */
+    public static SourceEditor create(final IPropertyResource resource, final Locale locale) {
+        return new SourceEditor(resource, locale);
+    }
 }
