@@ -61,6 +61,6 @@ public interface KeyTreeContract {
 
 	View getKeyTreeView();
 
-	void createTreeView();
+	void updateKeyTree();
     }
 }

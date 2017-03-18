@@ -1,7 +1,7 @@
 package org.eclipse.e4.babel.editor.ui.editor.tree;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
+import javax.annotation.PreDestroy;
 
 import org.eclipse.e4.babel.core.preference.PropertyPreferences;
 import org.eclipse.e4.babel.editor.model.tree.KeyTree;
@@ -27,17 +27,17 @@ final class KeyTreePresenter implements KeyTreeContract.Presenter {
     private ResourceBundleEditorContract.View resourceBundleEditor;
     private View view;
 
-    @Inject
-    private IBabelResourceProvider resourceProvider;
-
     private KeyTreePresenter(View keyTreeView, ResourceBundleEditorContract.View resourceBundleEditor) {
 	this.view = keyTreeView;
 	this.resourceBundleEditor = resourceBundleEditor;
     }
 
     @PostConstruct
-    public void onCreate() {
-
+    public void init(IBabelResourceProvider resourceProvider) {
+	this.treeLabelProvider = new KeyTreeLabelProvider(resourceProvider);
+	this.treeContentProvider = new KeyTreeContentProvider();
+	this.view.setTreeViewerContentProvider(treeContentProvider);
+	this.view.setTreeViewerLabelProvider(treeLabelProvider);
     }
 
     @Override
@@ -49,11 +49,6 @@ final class KeyTreePresenter implements KeyTreeContract.Presenter {
 	} else {
 	    view.setSelectedKeyTreeItem(getKeyTree().getKeyTreeItem(key));
 	}
-    }
-
-    @Override
-    public View getKeyTreeView() {
-	return view;
     }
 
     @Override
@@ -81,12 +76,13 @@ final class KeyTreePresenter implements KeyTreeContract.Presenter {
     }
 
     @Override
-    public void createTreeView() {
-	this.treeLabelProvider = new KeyTreeLabelProvider(resourceProvider);
-	this.treeContentProvider = new KeyTreeContentProvider();
-	this.view.setTreeViewerContentProvider(treeContentProvider);
-	this.view.setTreeViewerLabelProvider(treeLabelProvider);
+    public void updateKeyTree() {
 	this.view.updateKeyTree(getKeyTree());
+    }
+
+    @Override
+    public View getKeyTreeView() {
+	return view;
     }
 
     @Override
@@ -119,12 +115,6 @@ final class KeyTreePresenter implements KeyTreeContract.Presenter {
     }
 
     @Override
-    public void dispose() {
-	treeContentProvider.dispose();
-	treeLabelProvider.dispose();
-    }
-
-    @Override
     public void changeToHierarchicalTree() {
 	getKeyTree().setUpdater(new GroupedKeyTreeUpdater(PropertyPreferences.getInstance().getKeyGroupSeparator()));
     }
@@ -153,9 +143,24 @@ final class KeyTreePresenter implements KeyTreeContract.Presenter {
 	};
     }
 
+    @PreDestroy
+    public void preDestroy() {
+	if (treeContentProvider != null) {
+	    treeContentProvider.dispose();
+	}
+	if (treeLabelProvider != null) {
+	    treeLabelProvider.dispose();
+	}
+    }
+
     public static KeyTreePresenter create(KeyTreeContract.View keyTreeView, ResourceBundleEditorContract.View resourceBundleEditor) {
 	KeyTreePresenter presenter = new KeyTreePresenter(keyTreeView, resourceBundleEditor);
 	return presenter;
+    }
+
+    @Override
+    public void dispose() {
+	// no-op
     }
 
 }

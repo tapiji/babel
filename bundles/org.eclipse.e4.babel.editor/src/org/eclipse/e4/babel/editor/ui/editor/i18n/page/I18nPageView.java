@@ -39,7 +39,6 @@ public final class I18nPageView extends ScrolledComposite implements I18nPageCon
 	super(sashForm, style);
 	i18nEntryComposite = new Composite(this, SWT.BORDER);
 	i18nEntryComposite.setLayout(new GridLayout(1, false));
-
     }
 
     @PostConstruct
@@ -49,7 +48,6 @@ public final class I18nPageView extends ScrolledComposite implements I18nPageCon
 
     @Override
     public void createEditingPart() {
-	presenter.dispose();
 	presenter.createEditingPages();
 
 	setContent(i18nEntryComposite);

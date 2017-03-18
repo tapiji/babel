@@ -121,15 +121,16 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
 
 		createTab(sashForm, "Properties", BabelResourceConstants.IMG_RESOURCE_BUNDLE);
 
-		part.setDescription("Editor f\u00FCr ResourceBundle:");
-
 		setCursorWaitVisibility(true);
 		this.resourceManager.init(file).whenComplete((result, exception) -> {
 		    uiSync.syncExec(() -> {
-			createTabs();
+			part.setDescription("Editor f\u00FCr ResourceBundle:");
 			part.setTooltip(resourceManager.getResourceLocation());
 			part.setLabel(resourceManager.getDisplayName());
-			keyTreeView.getPresenter().createTreeView();
+
+			createTabs();
+
+			keyTreeView.getPresenter().updateKeyTree();
 			i18nPage.getPresenter().setChangeListener();
 			i18nPage.refreshView();
 			setCursorWaitVisibility(false);
