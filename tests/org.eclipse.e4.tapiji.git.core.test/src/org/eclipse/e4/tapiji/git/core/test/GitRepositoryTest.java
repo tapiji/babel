@@ -77,7 +77,7 @@ public class GitRepositoryTest {
 
         GitRepository repo = repository();
         repo.checkout("test", true);
-        List<Reference> branches = repo.branches(10);
+        List<Reference> branches = repo.localBranches(10);
 
         assertTrue(branches.contains(new Reference(branch.getName(), branch.getTarget().toString())));
     }
@@ -140,7 +140,11 @@ public class GitRepositoryTest {
 
         stashes = repo.stashes();
         assertEquals(1, stashes.size());
-        assertTrue(stashes.contains(stashToApply));
+
+        Optional<RevCommit> stash = stashes.stream().findFirst();
+        assertTrue(stash.isPresent());
+
+        assertEquals(stash.get().getName(), stashToApply.get().getName());
     }
 
     @Test
