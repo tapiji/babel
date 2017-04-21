@@ -35,7 +35,7 @@
     </elements>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_kb9P4AIOEeWtdqVY5JMCaQ" featurename="children" parentElementId="org.eclipse.e4.tapiji.translator.partsashcontainer.main" positionInList="first">
-    <elements xsi:type="basic:PartStack" xmi:id="_ZUFC4AIWEeWtdqVY5JMCaQ" elementId="org.eclipse.e4.babel.editor.partstack.editorPartStack" containerData=""/>
+    <elements xsi:type="basic:PartStack" xmi:id="_ZUFC4AIWEeWtdqVY5JMCaQ" elementId="org.eclipse.e4.babel.editor.partstack.editorPartStack" toBeRendered="false" visible="false" containerData=""/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_x4on0AV5EeWlfcvoOaUVLQ" featurename="menuContributions" parentElementId="org.eclipselabs.e4.tapiji.application" positionInList="">
     <elements xsi:type="menu:MenuContribution" xmi:id="_vRqwIAV6EeWlfcvoOaUVLQ" elementId="org.eclipse.e4.babel.editor.menucontribution.openResourceBundle" positionInParent="?before=org.eclipse.e4.tapiji.glossary.handledmenuitem.openglossary" parentId="org.eclipse.e4.tapiji.glossary.menu.file">

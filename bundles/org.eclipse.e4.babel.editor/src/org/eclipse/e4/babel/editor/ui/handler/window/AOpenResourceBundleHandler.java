@@ -22,7 +22,10 @@ public abstract class AOpenResourceBundleHandler {
 
     private static final String TAG = AOpenResourceBundleHandler.class.getSimpleName();
 
-    private static final String PART_STACK_ID = "org.eclipse.e4.babel.editor.partstack.editorPartStack";
+    // private static final String PART_STACK_ID =
+    // "org.eclipse.e4.babel.editor.partstack.editorPartStack";
+
+    private static final String PART_STACK_ID = "org.eclipse.e4.tapiji.translator.partstack.main";
     private static final String PART_ID = "org.eclipse.e4.babel.editor.partdescriptor.resourceBundleEditor";
 
     public static String KEY_FILE_DOCUMENT = AOpenResourceBundleHandler.class.getSimpleName() + "_KEY_FILE_DOCUMENT";
