@@ -28,5 +28,8 @@ Export-Package: org.eclipse.e4.babel.core,
  org.eclipse.e4.babel.core.utils
 Require-Bundle: org.eclipse.core.runtime;resolution:=optional,
  org.eclipse.e4.core.di.extensions,
- org.eclipse.e4.core.di
+ org.eclipse.e4.core.di,
+ org.eclipse.osgi.services
 Bundle-Vendor: INSO
+Service-Component: OSGI-INF/org.eclipse.e4.babel.core.internal.resource.ResourceManager.xml
+Bundle-ActivationPolicy: lazy

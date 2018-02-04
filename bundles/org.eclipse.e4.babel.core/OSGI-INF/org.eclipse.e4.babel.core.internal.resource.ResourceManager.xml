@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0" name="org.eclipse.e4.babel.core.internal.resource.ResourceManager">
+   <service scope="prototype">
+      <provide interface="org.eclipse.e4.babel.core.api.IResourceManager"/>
+   </service>
+   <implementation class="org.eclipse.e4.babel.core.internal.resource.ResourceManager"/>
+</scr:component>

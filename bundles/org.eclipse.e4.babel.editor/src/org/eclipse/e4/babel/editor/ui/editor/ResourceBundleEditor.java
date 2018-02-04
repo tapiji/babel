@@ -29,6 +29,7 @@ import org.eclipse.e4.babel.resource.BabelResourceConstants;
 import org.eclipse.e4.babel.resource.IBabelResourceProvider;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.annotations.Optional;
+import org.eclipse.e4.core.di.extensions.Service;
 import org.eclipse.e4.ui.di.Persist;
 import org.eclipse.e4.ui.di.UIEventTopic;
 import org.eclipse.e4.ui.di.UISynchronize;
@@ -98,11 +99,13 @@ public class ResourceBundleEditor extends CTabFolder implements ResourceBundleEd
 
     }
 
+    
+
     @PostConstruct
-    public void onCreate(final Composite parent, final Shell shell, BabelExtensionManager manager, MPart part) {
+    public void onCreate(final Composite parent, final Shell shell, @Service IResourceManager  manager, MPart part) {
 	Log.d(TAG, "Create ResourceBundleEditor");
 	try {
-	    this.resourceManager = manager.getResourceManager().get();
+	    this.resourceManager = manager;
 	    setMinimumCharacters(40);
 
 	    Object object = part.getTransientData().get(AOpenResourceBundleHandler.KEY_FILE_DOCUMENT);

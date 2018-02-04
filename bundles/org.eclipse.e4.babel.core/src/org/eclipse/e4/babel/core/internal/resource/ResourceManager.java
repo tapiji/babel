@@ -44,6 +44,8 @@ import org.eclipse.e4.babel.editor.model.updater.KeyTreeUpdater;
 import org.eclipse.e4.babel.editor.text.file.IPropertyResource;
 import org.eclipse.e4.babel.editor.text.model.SourceEditor;
 import org.eclipse.e4.babel.logger.Log;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ServiceScope;
 
 
 /**
@@ -55,6 +57,7 @@ import org.eclipse.e4.babel.logger.Log;
  * @author Christian Behon
  */
 
+@Component(scope = ServiceScope.PROTOTYPE)
 public final class ResourceManager implements IResourceManager {
 
     private static final String TAG = ResourceManager.class.getSimpleName();
